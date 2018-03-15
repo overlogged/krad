@@ -22,3 +22,5 @@
     # 以下操作不会出错
     git push
     
+## idea notes
+    import project，选择pom.xml
