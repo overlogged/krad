@@ -1,0 +1,6 @@
+/*
+ * define route
+ */
+object HttpRoute {
+
+}
