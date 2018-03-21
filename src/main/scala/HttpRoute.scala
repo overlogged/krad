@@ -1,6 +1,0 @@
-/*
- * define route
- */
-object HttpRoute {
-
-}
