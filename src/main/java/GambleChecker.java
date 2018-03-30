@@ -1,4 +1,4 @@
-public class GambleChecker {
+    1 public class GambleChecker {  
     //constant about judge
     private static final int DRAW=0;
     private static final int AWINS=1;
