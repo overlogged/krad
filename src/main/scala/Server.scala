@@ -11,6 +11,7 @@ import akka.http.scaladsl.server.Directives
 import scala.io.Source
 import spray.json._
 import MyJsonProtocol._
+import game.UserDB
 
 
 object Server extends Directives with SprayJsonSupport {
@@ -22,13 +23,21 @@ object Server extends Directives with SprayJsonSupport {
 
   def log[A](action:String,info:A): Unit = {
     val date = new Date()
-    val s=s"[$action]$info #\t$date\n"
+    val s=s"[$action] $info #\t$date\n"
     print(s)
     log_file.write(s)
     log_file.flush()
   }
 
   def main(args: Array[String]): Unit = {
+    args(0) match {
+      case "migrant" => {
+        UserDB.migrant()
+      }
+      case _ => {
+        UserDB.connect()
+      }
+    }
   }
 
 }
