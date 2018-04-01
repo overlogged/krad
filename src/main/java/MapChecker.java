@@ -1,4 +1,5 @@
-import java.io.File;
+
+import java.io.*;
 public class MapChecker {
 }
 class ArcNode{
@@ -7,7 +8,7 @@ class ArcNode{
 }
 class Factor{
     String name;
-    void function(){};
+    void function(){}
 }
 class MapUnit{
     int mark;     //The sign ofh a unit
@@ -29,5 +30,17 @@ class SetMap{             //Set mapunit attribute to make up map
         }
     }
 }
-
+class LoadFile{
+    public static  void LoadFile(String filepath) throws IOException{
+        try{
+            FileInputStream fis = new FileInputStream(filepath);
+            byte[] buffer= new byte[1024];
+            int count;
+            count = fis.read(buffer);
+        }
+        catch (Exception ioe){
+            System.out.println("File default");
+        }
+    }
+    }
 
