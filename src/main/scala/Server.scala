@@ -20,6 +20,7 @@ import game.UserDB
 
 object Server extends Directives with SprayJsonSupport {
 
+  /// config and log
   final case class Config(db_user:String,
                           db_password:String,
                           db_host:String,
@@ -39,6 +40,12 @@ object Server extends Directives with SprayJsonSupport {
     log_file.write(s)
     log_file.flush()
   }
+
+
+  /// route
+  final case class RequestLogin(email:String,password:String)
+  final case class RequestRegister(email:String,password:String)
+  final case class RequestForgetPassword(email:String)
 
   def main(args: Array[String]): Unit = {
     args(0) match {
@@ -62,6 +69,27 @@ object Server extends Directives with SprayJsonSupport {
       path("hello") {
         get {
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad</h1>"))
+        }
+      }~
+      path("session") {
+        post {
+          entity(as[RequestLogin]){req=>
+            complete(req.toString)
+          }
+        }
+      }~
+      path("user") {
+        post{
+          entity(as[RequestRegister]){req=>
+            complete(req.toString)
+          }
+        }
+      }~
+      path("user"/"forget"){
+        post{
+          entity(as[RequestForgetPassword]){req=>
+            complete(req.toString)
+          }
         }
       }
 
