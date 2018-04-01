@@ -1,6 +1,6 @@
 import Server.config
 import org.apache.commons.mail.HtmlEmail
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 final case class MsgMailForget(to:String,anchor:String)

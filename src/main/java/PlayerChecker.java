@@ -1,4 +1,3 @@
-import javafx.scene.shape.Arc;
 
 public class PlayerChecker{
     //element acquiring and losing
