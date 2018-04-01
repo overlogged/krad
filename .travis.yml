@@ -6,7 +6,6 @@ jdk:
 
 script:
 - mvn clean scala:compile compile package -DskipTests=true
-- "./run.sh"
 
 branches:
   only:
