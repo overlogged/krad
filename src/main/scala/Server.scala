@@ -61,7 +61,7 @@ object Server extends Directives with SprayJsonSupport {
     val route =
       path("hello") {
         get {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad</h1>"))
         }
       }
 
