@@ -2,3 +2,6 @@
 target/
 *.class
 krad-backend.iml
+config.txt
+log.txt
+
