@@ -19,11 +19,7 @@ before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
-- echo "Host github.com" > ~/.ssh/config
-- echo "    User git" >> ~/.ssh/config
-- echo "    StrictHostKeyChecking no" >> ~/.ssh/config
-- echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
-- echo "IdentitiesOnly yes" >> ~/.ssh/config
+- echo "StrictHostKeyChecking no" > ~/.ssh/config
 
 deploy:
   provider: script
