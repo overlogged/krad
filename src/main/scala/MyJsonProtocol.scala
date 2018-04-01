@@ -3,8 +3,8 @@ import game.{Stats, User}
 import spray.json.DefaultJsonProtocol
 
 object MyJsonProtocol extends DefaultJsonProtocol {
-  implicit val ConfigFormat = jsonFormat3(Config)
+  implicit val ConfigFormat = jsonFormat8(Config)
   implicit val StatsFormat = jsonFormat1(Stats.apply)
-  implicit val UserFormat = jsonFormat4(User)
+  implicit val UserFormat = jsonFormat3(User)
 }
 

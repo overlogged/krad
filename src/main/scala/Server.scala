@@ -8,15 +8,26 @@ import java.util.Date
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.server.Directives
 
-import scala.io.Source
+import scala.io.{Source, StdIn}
 import spray.json._
 import MyJsonProtocol._
+import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
+import akka.stream.ActorMaterializer
 import game.UserDB
 
 
 object Server extends Directives with SprayJsonSupport {
 
-  case class Config(db_user:String,db_password:String,db_host:String)
+  final case class Config(db_user:String,
+                          db_password:String,
+                          db_host:String,
+                          web_host:String,
+                          web_port:Int,
+                          email_host:String,
+                          email_username:String,
+                          email_password:String)
 
   val log_file = new FileWriter(new File("log.txt"))
   val config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
@@ -38,6 +49,28 @@ object Server extends Directives with SprayJsonSupport {
         UserDB.connect()
       }
     }
+
+    // http server
+    implicit val system = ActorSystem("my-system")
+    implicit val materializer = ActorMaterializer()
+
+    // needed for the future flatMap/onComplete in the end
+    implicit val executionContext = system.dispatcher
+
+    // restful api
+    val route =
+      path("hello") {
+        get {
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+        }
+      }
+
+    val bindingFuture = Http().bindAndHandle(route, config.web_host, config.web_port)
+    log("server",s"${config.web_host}:${config.web_port}")
+    StdIn.readLine()                          // let it run until user presses return
+    bindingFuture
+      .flatMap(_.unbind())                    // trigger unbinding from the port
+      .onComplete(_ => system.terminate())    // and shutdown when done
   }
 
 }

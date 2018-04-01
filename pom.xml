@@ -67,7 +67,11 @@
             <version>1.8.0-beta2</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.5</version>
+        </dependency>
     </dependencies>
 
     <build>
