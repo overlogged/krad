@@ -1,16 +1,15 @@
 language: java
-
 jdk:
-  - oraclejdk8
-  - openjdk8
-
+- oraclejdk8
+- openjdk8
 script:
-  - mvn clean scala:compile compile package -DskipTests=true
-  - ./run.sh
-
+- mvn clean scala:compile compile package -DskipTests=true
+- "./run.sh"
 branches:
   only:
-    - master
-
+  - master
 notifications:
   email: false
+before_install:
+- openssl aes-256-cbc -K $encrypted_960a1c440339_key -iv $encrypted_960a1c440339_iv
+  -in deploy_rsa.enc -out ~\/.ssh/deploy_rsa -d
