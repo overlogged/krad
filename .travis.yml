@@ -1,0 +1,22 @@
+language: java
+
+jdk:
+  - oraclejdk8
+  - openjdk8
+
+cache:
+  directories:
+  - '$HOME/.m2/repository'
+
+#before_install:
+# - chmod +x gradlew
+
+script:
+  - mvn clean scala:compile compile package -DskipTests=true
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false
