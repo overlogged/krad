@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io
 public class MapChecker {
 }
 class ArcNode{
@@ -5,8 +7,8 @@ class ArcNode{
     int distance;
 }
 class Factor{
-//    toString name;
-//    void function;
+    String name;
+    void function(){};
 }
 
 class MapUnit{
@@ -29,9 +31,5 @@ class SetMap{             //Set mapunit attribute to make up map
         }
     }
 }
-class  LoadFile{
-    public  static void readFile(String pathname){
-        File filename = new File(pathname)
-    }
-}
+
 
