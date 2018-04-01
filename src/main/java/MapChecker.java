@@ -1,5 +1,5 @@
 import java.io.File;
-import java.io
+import java.io;
 public class MapChecker {
 }
 class ArcNode{
@@ -10,24 +10,23 @@ class Factor{
     String name;
     void function(){};
 }
-
 class MapUnit{
     int mark;     //The sign ofh a unit
     ArcNode[] Connect;   //The fist connect
-    int height;
+    int height;    //The height of the unit
     boolean isFactor;
     Factor  key;
 }
 
 class SetMap{             //Set mapunit attribute to make up map
-    public static SetMap(int number, ArcNode[][] arc_gather, int[] height_gather, boolean status_gather, Factor[] factor_gather){
-        MapUnit[] map = new MapUnit[number];    //Set mapunix object
+    public static void SetMap(int number, ArcNode[][] arc_gather, int[] height_gather, boolean[] status_gather, Factor[] factor_gather){
+        MapUnit[] GameMap = new MapUnit[number];    //Set mapunix object
         for (int i=0; i<number; i++){
-            map[i].mark = i;                    //Set mark number,from zero to number-1
-            map[i].Connect = arc_gather[i];     //Set connect
-            map[i].height = height_gather[i];   //Set height
-            map[i].isFactor = status_gather[i]; //Set factor
-            map[i].key = factor_gather[i];
+            GameMap[i].mark = i;                    //Set mark number,from zero to number-1
+            GameMap[i].Connect = arc_gather[i];     //Set connect
+            GameMap[i].height = height_gather[i];   //Set height
+            GameMap[i].isFactor = status_gather[i]; //Set factor
+            GameMap[i].key = factor_gather[i];
         }
     }
 }
