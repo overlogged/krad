@@ -100,12 +100,17 @@ object Server extends Directives with SprayJsonSupport {
       }
 
     val bindingFuture = Http().bindAndHandle(route, config.web_host, config.web_port)
-    log("server",s"${config.web_host}:${config.web_port}")
-    StdIn.readLine()                          // let it run until user presses return
+    log("bind",s"${config.web_host}:${config.web_port}")
+
+    /*
     bindingFuture
-      .flatMap(_.unbind())                    // trigger unbinding from the port
+      .flatMap { x =>
+        log("unbind",s"${config.web_host}:${config.web_port}")
+        x.unbind()
+      }
       .onComplete(_ => system.terminate())    // and shutdown when done
-    log("exit","")
+     log("exit","")
+     */
   }
 
 }
