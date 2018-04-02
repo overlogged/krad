@@ -30,7 +30,7 @@ object Server extends Directives with SprayJsonSupport {
                           email_username:String,
                           email_password:String)
 
-  val log_file = new FileWriter(new File("log.txt"))
+  val log_file = new FileWriter(new File("log.txt"),true)
   val config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
 
   def log[A](action:String,info:A): Unit = {
@@ -70,12 +70,14 @@ object Server extends Directives with SprayJsonSupport {
     val route =
       path("hello") {
         get {
+          log("get","hello")
           complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad</h1>"))
         }
       }~
       path("session") {
         post {
           entity(as[RequestLogin]){req=>
+            log("post","session")
             complete(req.toString)
           }
         }
@@ -83,6 +85,7 @@ object Server extends Directives with SprayJsonSupport {
       path("user") {
         post{
           entity(as[RequestRegister]){req=>
+            log("post","user")
             complete(req.toString)
           }
         }
@@ -90,6 +93,7 @@ object Server extends Directives with SprayJsonSupport {
       path("user"/"forget"){
         post{
           entity(as[RequestForgetPassword]){req=>
+            log("post","user/forget")
             complete(req.toString)
           }
         }
