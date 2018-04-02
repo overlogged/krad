@@ -24,6 +24,6 @@ before_deploy:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target ubuntu@119.29.32.204:/home/ubuntu/krad && ssh ubuntu@119.29.32.204 "cp krad/config.txt target/"
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target ubuntu@119.29.32.204:/home/ubuntu/krad && ssh ubuntu@119.29.32.204 "sudo systemctl restart krad"
   on:
     branch: master
