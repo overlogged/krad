@@ -27,3 +27,8 @@
     
 ## idea notes
     import project，选择pom.xml
+
+
+## deploy notes
+* install maven mongo
+* config.txt
