@@ -26,5 +26,6 @@ deploy:
   skip_cleanup: true
   script:
     - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target ubuntu@119.29.32.204:/home/ubuntu/krad
+    - ssh ubuntu@119.29.32.204 "cp /home/ubuntu/krad/config.txt /home/ubuntu/krad/target"
   on:
     branch: master
