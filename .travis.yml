@@ -20,7 +20,6 @@ before_deploy:
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
 - echo "StrictHostKeyChecking no" > ~/.ssh/config
-- chmod +x deploy.sh
 
 deploy:
   provider: script
