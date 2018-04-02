@@ -48,14 +48,16 @@ object Server extends Directives with SprayJsonSupport {
   final case class RequestForgetPassword(email:String)
 
   def main(args: Array[String]): Unit = {
-    args(0) match {
-      case "migrant" => {
-        UserDB.migrant()
-      }
-      case _ => {
-        UserDB.connect()
+    if(args.length>0) {
+      args(0) match {
+        case "migrant" => {
+          UserDB.migrant()
+        }
+        case _ => {
+        }
       }
     }
+    UserDB.connect()
 
     // http server
     implicit val system = ActorSystem("my-system")
