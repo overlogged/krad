@@ -18,14 +18,11 @@ package game {
  * 2. stats
  */
 
-
-  case class Stats(score: Int)
-  
   object Stats {
     def apply(score: Int = 0): Stats = new Stats(score)
   }
-
-  case class User(id: Int, email: String, password: String, stats: Stats)
+  final case class Stats(score: Int)
+  final case class User(email: String, password: String, stats: Stats)
 
   object UserDB {
     lazy val db:MongoDB = connect()
@@ -70,8 +67,14 @@ package game {
         .guard(email.matches("""^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"""))
         .guard(password.matches("""[a-zA-Z0-9]{6,18}"""))
         .flatMap { _ => Option(col_users.findOne(MongoDBObject("email"->email,"password"->sha1Hex(password))))}
-        .flatMap { _.getAs[String]("stats").flatMap{x=>Some(x.parseJson.convertTo[Stats])}}
+        .flatMap { one =>
+          for(
+            email<-one.getAs[String]("email");
+            stats<-one.getAs[String]("stats").flatMap{x=>Some(x.parseJson.convertTo[Stats])}
+          ) yield User(email,"",stats)
+        }
     }
+
   }
 
 }

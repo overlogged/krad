@@ -4,4 +4,4 @@ target/
 krad-backend.iml
 config.txt
 log.txt
-
+deploy/

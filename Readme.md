@@ -1,3 +1,6 @@
+# krad-backend
+
+![travis](https://www.travis-ci.org/NiceKingWei/krad-backend.svg?branch=master)
 ## git notes
     git branch 查看分支
     git checkout xxxx 切换到分支
@@ -24,3 +27,8 @@
     
 ## idea notes
     import project，选择pom.xml
+
+
+## deploy notes
+* install maven mongo
+* config.txt
