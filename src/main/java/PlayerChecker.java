@@ -19,9 +19,18 @@ public class PlayerChecker{
         if (playerMain.energy >= 0)
             playerMain.energy -= energyVal;
     }
-    void gambleAward(Player playerMain){
+    void gambleAward(Player playerMain,FrontendData awardData){
         if(playerMain.isWin){
             switch(playerMain.decision){
+                case Player.MOVE:
+                    move(playerMain,awardData.moveDirection);
+                    break;
+                case Player.FIRE:
+                    break;
+                case Player.DEPOSIT:
+                    if(playerMain.energy<playerMain.energyLim)
+                        energyAcq(playerMain,1); //each one can only acquire
+                    break;
             }
         }
     }
@@ -78,4 +87,8 @@ class Player {
     MapUnit preLoc;  //present location
     boolean isWin;   //victory or defeat in one turn
     boolean hasElem; //if the player maintains the element
+}
+
+class FrontendData{
+    ArcNode moveDirection;
 }
