@@ -2,30 +2,30 @@
 import java.io.*;
 public class MapChecker {
 }
-class ArcNode{
-    int adjvex;   //The other unit sign
-    int distance;
+class MapEdge{
+    int adjedg;   //The other unit sign
+    int distance;  //The length of the edg
 }
-class Factor{
+class Factor{      //The important thing in the map
     String name;
     void function(){}
 }
 class MapUnit{
     int mark;     //The sign ofh a unit
-    ArcNode[] Connect;   //The fist connect
+    MapEdge[] edg;   //The  connect edg
     int height;    //The height of the unit
-    boolean isFactor;
-    Factor  key;
+    int is_factor;  //Judge the map status
+    Factor  key;    //Store the important thing
 }
 
 class SetMap{             //Set mapunit attribute to make up map
-    public static void SetMap(int number, ArcNode[][] arc_gather, int[] height_gather, boolean[] status_gather, Factor[] factor_gather){
-        MapUnit[] GameMap = new MapUnit[number];    //Set mapunix object
+    public static void SetMap(int number, MapEdge[][] edge_gather, int[] height_gather, int[] status_gather, Factor[] factor_gather){
+        MapUnit[] GameMap = new MapUnit[number];    //Set MapUnit object
         for (int i=0; i<number; i++){
             GameMap[i].mark = i;                    //Set mark number,from zero to number-1
-            GameMap[i].Connect = arc_gather[i];     //Set connect
+            GameMap[i].edg = edge_gather[i];     //Set connect
             GameMap[i].height = height_gather[i];   //Set height
-            GameMap[i].isFactor = status_gather[i]; //Set factor
+            GameMap[i].is_factor = status_gather[i]; //Set factor
             GameMap[i].key = factor_gather[i];
         }
     }
