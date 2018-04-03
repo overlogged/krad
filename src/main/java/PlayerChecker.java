@@ -23,9 +23,10 @@ public class PlayerChecker{
         if(playerMain.isWin){
             switch(playerMain.decision){
                 case Player.MOVE:
-                    move(playerMain,awardData.moveDirection);
+                    move(playerMain,playerMain.energy,awardData.moveDirection);
                     break;
                 case Player.FIRE:
+                    fire(awardData.playerPos,awardData.playerPas,awardData.fireDirection);
                     break;
                 case Player.DEPOSIT:
                     if(playerMain.energy<playerMain.energyLim)
@@ -40,14 +41,14 @@ public class PlayerChecker{
         MapUnit dest=new MapUnit();
         return dest;
     } // in mapchecker
-    void move(Player playerMain,MapEdge direction){
+    void move(Player playerMain,int energy,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
-        energyConsume(playerMain,playerMain.energy);
+        energyConsume(playerMain,energy);
         playerMain.preLoc=dest;
     }
     void fire(Player playerPos,Player playerPas,MapEdge direction){
-     //   move(playerB);
+        move(playerPas,playerPos.energy,direction);
         playerPos.energy=0;
     }
 
@@ -90,5 +91,6 @@ class Player {
 }
 
 class FrontendData{
-    MapEdge moveDirection;
+    Player playerPos,playerPas;
+    MapEdge moveDirection,fireDirection;
 }
