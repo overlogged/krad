@@ -36,25 +36,25 @@ public class PlayerChecker{
     }
 
     //location changing
-    MapUnit destCal(MapUnit preLoc,int engery, ArcNode direction){
+    MapUnit destCal(MapUnit preLoc,int engery, MapEdge direction){
         MapUnit dest=new MapUnit();
         return dest;
     } // in mapchecker
-    void move(Player playerMain,ArcNode direction){
+    void move(Player playerMain,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
         energyConsume(playerMain,playerMain.energy);
         playerMain.preLoc=dest;
     }
-    void fire(Player playerA,Player playerB){
+    void fire(Player playerPos,Player playerPas,MapEdge direction){
      //   move(playerB);
-        playerA.energy=0;
+        playerPos.energy=0;
     }
 
     //team changing
-    void infection(Player playerA,Player playerB){
-        if(playerA.team==Player.ZOMBIE&playerB.team== Player.HUMAN)
-            playerB.team=Player.ZOMBIE;
+    void infection(Player playerPos,Player playerPas){
+        if(playerPos.team==Player.ZOMBIE&playerPas.team== Player.HUMAN)
+            playerPas.team=Player.ZOMBIE;
     }
 }
 
@@ -90,5 +90,5 @@ class Player {
 }
 
 class FrontendData{
-    ArcNode moveDirection;
+    MapEdge moveDirection;
 }
