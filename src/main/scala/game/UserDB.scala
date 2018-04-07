@@ -8,14 +8,15 @@
  */
 package game
 
-import server.MyJsonProtocol._
 import spray.json._
 import com.mongodb.casbah.{MongoClient, MongoClientURI, MongoDB}
 import com.mongodb.casbah.query.Imports._
-import server.Server.{config, log}
-import org.apache.commons.codec.digest.DigestUtils.sha1Hex
-import server.MyUtils._
 import com.mongodb.DBCollection
+import org.apache.commons.codec.digest.DigestUtils.sha1Hex
+
+import server.MyUtils._
+import server.MyJsonProtocol._
+import server.Server.{config, log}
 
 // statistics
 final case class Stats(score: Int)
@@ -27,18 +28,17 @@ object Stats {
 
 // user information
 // related function : login register changePassword
+object User {
+  val boy = 0
+  val girl = 1
+}
+
 final case class User(email: String,
                       nickname: String,
                       avatar: String,
                       gender: Int,
                       password: String,
                       stats: Stats)
-
-object User {
-  val boy = 0
-  val girl = 1
-}
-
 
 
 object UserDB {
@@ -71,11 +71,11 @@ object UserDB {
 
   def register(email: String, nickname: String, avatar: String, gender: String, password: String) = {
     Some(Unit)
-      .guard(email.matches("""^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"""))
-      .guard(!nickname.contains("{};:'"))
-      //      .guard(avatar)  // todo: check avatar
-      .guard(gender == "boy" || gender == "girl")
-      .guard(password.matches("""[a-zA-Z0-9]{6,18}""")) // todo: if encrypted then change the rule
+      .guard(email.is_valid_email)
+      .guard(nickname.is_valid_nickname)
+      .guard(avatar.is_valid_avatar)
+      .guard(gender.is_valid_gender)
+      .guard(password.is_valid_password)
       .guard(col_users.find(MongoDBObject("email" -> email)).count() == 0)
       .flatMap { _ =>
         Some(col_users.insert(MongoDBObject(
@@ -91,8 +91,8 @@ object UserDB {
 
   def login(email: String, password: String) = {
     Some(Unit)
-      .guard(email.matches("""^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"""))
-      .guard(password.matches("""[a-zA-Z0-9]{6,18}"""))
+      .guard(email.is_valid_email)
+      .guard(password.is_valid_password)
       .flatMap { _ => Option(col_users.findOne(MongoDBObject("email" -> email, "password" -> encrypt(password)))) }
       .flatMap { one =>
         for (
@@ -107,9 +107,9 @@ object UserDB {
 
   def changePassword(email: String, old_password: String, new_password: String) = {
     Some(Unit)
-      .guard(email.matches("""^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"""))
-      .guard(old_password.matches("""[a-zA-Z0-9]{6,18}"""))
-      .guard(new_password.matches("""[a-zA-Z0-9]{6,18}"""))
+      .guard(email.is_valid_email)
+      .guard(old_password.is_valid_password)
+      .guard(new_password.is_valid_password)
       .flatMap { _ =>
         Option(col_users.findOne(MongoDBObject(
           "email" -> email,
@@ -124,12 +124,24 @@ object UserDB {
       }
   }
 
+  def setNewPassword(email:String,password:String) = {
+    Some(Unit)
+      .guard(email.is_valid_email)
+      .guard(password.is_valid_password)
+      .map { _ =>
+        col_users.update(
+          MongoDBObject("email"->email),
+          $set("password"->encrypt(password))
+        )
+      }
+  }
+
   def changeProfile(email: String, nickname: String, avatar: String, gender: String) = {
     Some(Unit)
-      .guard(email.matches("""^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"""))
-      .guard(!nickname.contains("{};:'"))
-      //      .guard(avatar)  // todo: check avatar
-      .guard(gender == "boy" || gender == "girl")
+      .guard(email.is_valid_email)
+      .guard(nickname.is_valid_nickname)
+      .guard(avatar.is_valid_avatar)
+      .guard(gender.is_valid_gender)
       .map { _ =>
         col_users.update(MongoDBObject("email" -> email), $set(
           "nickname" -> nickname,
@@ -142,7 +154,7 @@ object UserDB {
 
   def changeStat(email: String, f: Stats => Stats) = {
     Some(Unit)
-      .guard(email.matches("""^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"""))
+      .guard(email.is_valid_email)
       .flatMap { _ =>
         col_users.findOne(MongoDBObject("email" -> email))
           .getAs[String]("stats")

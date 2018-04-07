@@ -44,8 +44,18 @@ object Server extends Directives with SprayJsonSupport{
 
   // requests
   final case class RequestLogin(email:String,password:String)
-  final case class RequestRegister(email:String,password:String)
+  final case class RequestRegister(email:String,
+                                   nickname: String,
+                                   avatar: String,
+                                   gender: Int,
+                                   password: String)
   final case class RequestForgetPassword(email:String)
+  final case class RequestSetNewPassword(sid:Int,new_password:String)
+  final case class RequestChangePassword(sid:Int,old_password:String,new_password:String)
+  final case class RequestChangeProfile(sid:Int,
+                                        nickname: String,
+                                        avatar: String,
+                                        gender: Int)
 
   // http server
   implicit val system = ActorSystem("my-system")
