@@ -85,7 +85,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>Server</mainClass>
+                            <mainClass>server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
