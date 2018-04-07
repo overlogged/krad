@@ -1,9 +1,9 @@
-import Server.config
+package server
+
 import org.apache.commons.mail.HtmlEmail
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
-final case class MsgMailForget(to:String,anchor:String)
+import Server.config
 
 object Mail {
   def send(to:String,subject:String,text:String) = Future {
