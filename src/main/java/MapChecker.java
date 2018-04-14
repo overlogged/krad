@@ -22,13 +22,13 @@ class MapUnit implements Serializable{
         edg=new MapEdge[edgnumber];
         for (int i=0;i<edgnumber;i++)
         {
-            edg[i]=new MapEdge();
+            edg[i]=new MapEdge();   //edg[0] is the next,edg[1]is the before
         }
     }
 
 }
 
-class JavaMainTest{
+class SetMap{           //It just a sample to make others test map
     public static void main(String[] args)throws Exception{
         MapUnit[] sample=new MapUnit[12];
         MapUnit[] show=new  MapUnit[12];
@@ -57,7 +57,7 @@ class JavaMainTest{
         sample[9].key.name="Fate";
         try
         {
-            FileOutputStream fileOut = new FileOutputStream("C:\\Users\\欧阳炳濠\\Desktop\\employee.ser");
+            FileOutputStream fileOut = new FileOutputStream("Mapsample.ser");   //Create a Ser in the krad-backend
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             for (int i=0;i<12;i++)
             {
@@ -65,11 +65,11 @@ class JavaMainTest{
             }
             out.close();
             fileOut.close();
-            System.out.println("Serialized data is saved in /tmp/employee.ser");
+            System.out.println("Serialized data is saved in krad-backend/Mapsample.ser");
         }catch(IOException i) {
             i.printStackTrace();
         }
-        FileInputStream fn = new FileInputStream("C:\\Users\\欧阳炳濠\\Desktop\\employee.ser");
+        FileInputStream fn = new FileInputStream("Mapsample.ser");
         ObjectInputStream ois = new ObjectInputStream(fn);
         for (int i=0;fn.available()>0;i++)
         {
