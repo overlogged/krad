@@ -1,6 +1,8 @@
 # krad-backend
 
 ![travis](https://www.travis-ci.org/NiceKingWei/krad-backend.svg?branch=master)
+
+![travis](https://www.travis-ci.org/NiceKingWei/krad-backend.svg?branch=dev)
 ## git notes
     git branch 查看分支
     git checkout xxxx 切换到分支
