@@ -1,7 +1,8 @@
 .idea/
 target/
 *.class
-krad-backend.iml
+krad.iml
 config.txt
 log.txt
 deploy/
+*.map

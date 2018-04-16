@@ -69,7 +69,7 @@ object Server extends Directives with SprayJsonSupport{
     path("hello") {
       get {
         log("get","hello")
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad</h1>"))
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad api!</h1>"))
       }
     }~
     path("session") {
