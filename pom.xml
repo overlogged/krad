@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>krad</groupId>
-    <artifactId>krad-backend</artifactId>
+    <artifactId>krad</artifactId>
     <version>1.0</version>
 
     <dependencies>
@@ -85,7 +85,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>Server</mainClass>
+                            <mainClass>server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

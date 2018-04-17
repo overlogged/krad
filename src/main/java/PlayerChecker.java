@@ -19,33 +19,43 @@ public class PlayerChecker{
         if (playerMain.energy >= 0)
             playerMain.energy -= energyVal;
     }
-    void gambleAward(Player playerMain){
+    void gambleAward(Player playerMain,FrontendData awardData){
         if(playerMain.isWin){
             switch(playerMain.decision){
+                case Player.MOVE:
+                    move(playerMain,playerMain.energy,awardData.moveDirection);
+                    break;
+                case Player.FIRE:
+                    fire(awardData.playerPos,awardData.playerPas,awardData.fireDirection);
+                    break;
+                case Player.DEPOSIT:
+                    if(playerMain.energy<playerMain.energyLim)
+                        energyAcq(playerMain,1); //each one can only acquire
+                    break;
             }
         }
     }
 
     //location changing
-    MapUnit destCal(MapUnit preLoc,int engery, ArcNode direction){
+    MapUnit destCal(MapUnit preLoc,int engery, MapEdge direction){
         MapUnit dest=new MapUnit();
         return dest;
     } // in mapchecker
-    void move(Player playerMain,ArcNode direction){
+    void move(Player playerMain,int energy,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
-        energyConsume(playerMain,playerMain.energy);
+        energyConsume(playerMain,energy);
         playerMain.preLoc=dest;
     }
-    void fire(Player playerA,Player playerB){
-     //   move(playerB);
-        playerA.energy=0;
+    void fire(Player playerPos,Player playerPas,MapEdge direction){
+        move(playerPas,playerPos.energy,direction);
+        playerPos.energy=0;
     }
 
     //team changing
-    void infection(Player playerA,Player playerB){
-        if(playerA.team==Player.ZOMBIE&playerB.team== Player.HUMAN)
-            playerB.team=Player.ZOMBIE;
+    void infection(Player playerPos,Player playerPas){
+        if(playerPos.team==Player.ZOMBIE&playerPas.team== Player.HUMAN)
+            playerPas.team=Player.ZOMBIE;
     }
 }
 
@@ -78,4 +88,9 @@ class Player {
     MapUnit preLoc;  //present location
     boolean isWin;   //victory or defeat in one turn
     boolean hasElem; //if the player maintains the element
+}
+
+class FrontendData{
+    Player playerPos,playerPas;
+    MapEdge moveDirection,fireDirection;
 }
