@@ -5,7 +5,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import Server.config
 
+/**
+  * Email module
+  */
 object Mail {
+
+  /**
+    * send an email
+    * @return Future
+    */
   def send(to:String,subject:String,text:String) = Future {
     val email = new HtmlEmail
     email.setHostName(config.email_host)

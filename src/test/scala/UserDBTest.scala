@@ -8,7 +8,7 @@ object UserDBTest {
     assert(UserDB.login("nicekinasfsf","fassfsaf").isEmpty)
     assert(UserDB.login("nicekingwei@sina.com","mypassword").nonEmpty)
     UserDB.changePassword("nicekingwei@sina.com","mypassword","mynewpassword")
-    UserDB.changeStat("nicekingwei@sina.com",x=>Stats(x.score+1))
+    UserDB.changeStat("nicekingwei@sina.com",x=>UserDB.Stats(x.score+1))
     assert(UserDB.login("nicekingwei@sina.com","mynewpassword").nonEmpty)
     UserDB.setNewPassword("nicekingwei@sina.com","mypassword")
     assert(UserDB.login("nicekingwei@sina.com","mypassword").nonEmpty)

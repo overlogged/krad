@@ -1,25 +1,22 @@
 package server
 
-/*
- * Server
- */
-
 import java.io.{File, FileWriter}
 import java.util.Date
+
 import scala.io.Source
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives
 import akka.stream.ActorMaterializer
 import spray.json._
-import game.UserDB
-import server.MyJsonProtocol._
+import game.{SessionManager, UserDB}
 
-
-object Server extends Directives with SprayJsonSupport{
-
+/**
+  * http server
+  */
+object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
 
   // config and log
   final case class Config(db_user:String,
@@ -32,8 +29,13 @@ object Server extends Directives with SprayJsonSupport{
                           email_password:String)
 
   val log_file = new FileWriter(new File("log.txt"),true)
-  val config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
+  val config:Config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
 
+  /**
+    * log
+    * @param action action
+    * @param info information
+    */
   def log[A](action:String,info:A): Unit = {
     val date = new Date()
     val s=s"[$action] $info #\t$date\n"
@@ -72,19 +74,25 @@ object Server extends Directives with SprayJsonSupport{
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad api!</h1>"))
       }
     }~
-    path("session") {
+    // login
+    // create session
+    path("session" / "login") {
       post {
         entity(as[RequestLogin]){req=>
-          log("post","session")
-          complete(req.toString)
+          log("post","session/login")
+          SessionManager.login(req) match {
+            case Some(res) => complete(res)
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
         }
       }
     }~
-    path("user") {
-      post{
-        entity(as[RequestRegister]){req=>
-          log("post","user")
-          complete(req.toString)
+    path("session" / "register"){
+      entity(as[RequestRegister]){req=>
+        log("post","session/register")
+        SessionManager.register(req) match {
+          case Some(res) => complete(res)
+          case None => complete(HttpResponse(StatusCodes.BadRequest))
         }
       }
     }~
@@ -100,14 +108,13 @@ object Server extends Directives with SprayJsonSupport{
 
   // main
   def main(args: Array[String]): Unit = {
-    if(args.length > 0 && args(0)=="migrant") {
-      UserDB.migrant()
-    } else {
-      UserDB.connect()
+    val cmd = if(args.length > 0) args(0) else ""
+    cmd match {
+      case "migrant" => UserDB.migrant()
+      case "connect" => UserDB.connect()
+      case _ => {}
     }
-
     Http().bindAndHandle(route, config.web_host, config.web_port)
     log("bind",s"${config.web_host}:${config.web_port}")
   }
-
 }
