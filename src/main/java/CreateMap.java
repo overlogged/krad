@@ -55,7 +55,7 @@ public class CreateMap {
 
     void obtainMap() {                  //Obtain objection from file
         try {
-            FileInputStream fn = new FileInputStream("Mapsample.ser");
+            FileInputStream fn = new FileInputStream("Mapsample.map" );
             ObjectInputStream ois = new ObjectInputStream(fn);
             for (int i = 0; fn.available() > 0; i++) {
                 try {
@@ -64,7 +64,7 @@ public class CreateMap {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
+            System.out.println("Serialized data has benn opened");
         } catch (IOException i) {
             i.printStackTrace();
         }
