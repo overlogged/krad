@@ -26,7 +26,7 @@ public class CreateMap {
             sample[i] = new MapUnit(edge_number);
             sample[i].mark = i + 1;
             sample[i].height = i + 1;
-            sample[i].is_factor = 0;
+            sample[i].status = 0;
             sample[i].edge[0].adjedg = i + 2;
             sample[i].edge[0].distance = 1;
             if (i != 0) {
@@ -37,7 +37,7 @@ public class CreateMap {
         sample[6].edge[2].adjedg = 11;
         sample[6].edge[2].distance = 1;
         sample[11].edge[0].adjedg = 6;
-        sample[9].is_factor = 1;
+        sample[9].status = 1;
         sample[9].key.name = "Fate";
         try {
             FileOutputStream fileOut = new FileOutputStream("Mapsample.map");   //Create a Ser in the krad-backend
