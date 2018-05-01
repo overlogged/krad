@@ -25,11 +25,13 @@ public class GambleChecker {
     void winJudge(FrontEndData gambleData){
         for(int i = 0; i < gambleData.playerNum; i++){
             for(int j = 0; j < gambleData.playerNum; j++){
-                if(i==j)
+                if(i == j)
                     continue;
                 if(gambleData.players[i].team==gambleData.players[j].team)
                     continue;
                 gambleData.players[i].isWin=win(gambleData.players[i],gambleData.players[j]);
+                if(gambleData.players[i].isWin)
+                    break;
             }
         }
     }

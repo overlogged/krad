@@ -1,8 +1,9 @@
+import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class PlayerChecker{
     //element acquiring and losing
     void elemAcq(Player playerMain){
-        if((!playerMain.hasElem)&(playerMain.team!=Player.ZOMBIE))
+        if((!playerMain.hasElem)&(playerMain.team==Player.HUMAN))
             playerMain.hasElem=true;
     }
     void elemLose(Player playerMain){
@@ -43,6 +44,12 @@ public class PlayerChecker{
         MapUnit dest=new MapUnit();
         return dest;
     } // in mapchecker
+    int distanceCal(Player playerA,Player playerB){
+        return 0;
+    }
+    boolean isSameLadder(Player playerPos,Player playerPas){
+        return false;
+    }
     void move(Player playerMain,int energy,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
@@ -50,8 +57,10 @@ public class PlayerChecker{
         playerMain.preLoc=dest;
     }
     void fire(Player playerPos,Player playerPas,MapEdge direction){
-        move(playerPas,playerPos.energy,direction);
-        playerPos.energy=0;
+        if((playerPos.range>=distanceCal(playerPos,playerPas))&(isSameLadder(playerPos,playerPas))) {
+            move(playerPas, playerPos.energy, direction);
+            playerPos.energy = 0;
+        }
     }
 
     //team changing

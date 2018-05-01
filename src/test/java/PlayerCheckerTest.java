@@ -47,6 +47,22 @@ public class PlayerCheckerTest {
         assert playerMain.energy == 0:"consume failed";
     }
 
+    void elemOperationTest(Player playerMain,Player playerPos){
+        playerMain.team=Player.ZOMBIE;
+        playerPos.team=Player.ZOMBIE;
+        pc.elemAcq(playerMain);
+        assert playerMain.hasElem==false;
+        playerMain.team=Player.HUMAN;
+        pc.elemAcq(playerMain);
+        assert playerMain.hasElem==true;
+        pc.elemLose(playerMain);
+        assert playerMain.hasElem==false;
+        pc.elemAcq(playerMain);
+        assert playerMain.hasElem==true;
+        pc.infection(playerPos,playerMain);
+        assert playerMain.hasElem==false;
+    }
+
     public static void main(String argv[]) {
         Player playerA = new Player();
         Player playerB = new Player();
@@ -56,5 +72,6 @@ public class PlayerCheckerTest {
         playerA.team = Player.HUMAN;
         playerB.team = Player.HUMAN;
         test.energyConsumeTest(playerA);
+        test.elemOperationTest(playerA,playerB);
     }
 }
