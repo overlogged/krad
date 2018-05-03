@@ -1,11 +1,4 @@
 
-
-/*
- * hold players' information
- * long-lasting static database
- * 1. auth
- * 2. stats
- */
 package game
 
 import spray.json._
@@ -13,48 +6,65 @@ import com.mongodb.casbah.{MongoClient, MongoClientURI, MongoDB}
 import com.mongodb.casbah.query.Imports._
 import com.mongodb.DBCollection
 import org.apache.commons.codec.digest.DigestUtils.sha1Hex
-
+import server.MyJsonProtocol
 import server.MyUtils._
-import server.MyJsonProtocol._
 import server.Server.{config, log}
 
-// statistics
-final case class Stats(score: Int)
+/**
+  * UserDB
+  * hold players' information
+  * long-lasting static database
+  * 1. auth
+  * 2. stats
+ */
+object UserDB extends MyJsonProtocol{
+  /**
+    * statistics
+    */
+  final case class Stats(score: Int)
 
-object Stats {
-  def apply(score: Int = 0): Stats = new Stats(score)
-}
-
-
-// user information
-// related function : login register changePassword
-object User {
-  val boy = 0
-  val girl = 1
-}
-
-final case class User(email: String,
-                      nickname: String,
-                      avatar: String,
-                      gender: Int,
-                      password: String,
-                      stats: Stats)
+  object Stats {
+    def apply(score: Int = 0): Stats = new Stats(score)
+  }
 
 
-object UserDB {
+  /**
+    * @param avatar image url
+    * @param gender boy:0 girl:1
+    * @param password encrypted
+    */
+  final case class User(email: String,
+                        nickname: String,
+                        avatar: String,
+                        gender: Int,
+                        password: String,
+                        stats: Stats) {
+    def uid:String = email
+  }
+  object User {
+    val boy = 0
+    val girl = 1
+  }
 
   // database
   lazy val db: MongoDB = connect()
   lazy val col_users: DBCollection = db.getCollection("user")
 
-  def connect() = {
+  /**
+    * connect to db
+    * @return MongoDB
+    */
+  def connect():MongoDB = {
     val url = MongoClientURI(s"mongodb://${config.db_user}:${config.db_password}@${config.db_host}/?authMechanism=SCRAM-SHA-1")
     val mongoClient = MongoClient(url)
     log("start", "connect db")
     mongoClient.getDB("krad")
   }
 
-  def migrant() = {
+  /**
+    * migrant db
+    */
+  def migrant():Unit = {
     val url = MongoClientURI(s"mongodb://${config.db_host}/?authMechanism=SCRAM-SHA-1")
     val mongoClient = MongoClient(url)
     val admin_db = mongoClient.getDB("admin")
@@ -66,10 +76,19 @@ object UserDB {
     log("info", "please restart mongodb with `auth=true`")
   }
 
-  // user
-  def encrypt(str: String) = sha1Hex(str)
+  /**
+    * encrypt
+    * @param str src
+    * @return dest
+    */
+  private def encrypt(str: String):String = sha1Hex(str)
 
-  def register(email: String, nickname: String, avatar: String, gender: String, password: String) = {
+  /**
+    * register
+    * will check the input
+    * @return None if failed
+    */
+  def register(email: String, nickname: String, avatar: String, gender: String, password: String):Option[Unit] = {
     Some(Unit)
       .guard(email.is_valid_email)
       .guard(nickname.is_valid_nickname)
@@ -78,18 +97,24 @@ object UserDB {
       .guard(password.is_valid_password)
       .guard(col_users.find(MongoDBObject("email" -> email)).count() == 0)
       .flatMap { _ =>
-        Some(col_users.insert(MongoDBObject(
+        col_users.insert(MongoDBObject(
           "email" -> email,
           "nickname" -> nickname,
           "avatar" -> avatar,
           "gender" -> (if (gender == "boy") User.boy else User.girl),
           "password" -> encrypt(password), // todo: encrypt the password at frontend
           "stats" -> Stats().toJson.toString()
-        )))
+        ))
+        Some(Unit)
       }
   }
 
-  def login(email: String, password: String) = {
+  /**
+    * login
+    * will check the input
+    * @return None if failed
+    */
+  def login(email: String, password: String):Option[User] = {
     Some(Unit)
       .guard(email.is_valid_email)
       .guard(password.is_valid_password)
@@ -105,7 +130,11 @@ object UserDB {
       }
   }
 
-  def changePassword(email: String, old_password: String, new_password: String) = {
+  /**
+    * change password
+    * @return None if failed
+    */
+  def changePassword(email: String, old_password: String, new_password: String) : Option[Unit]= {
     Some(Unit)
       .guard(email.is_valid_email)
       .guard(old_password.is_valid_password)
@@ -121,10 +150,16 @@ object UserDB {
           MongoDBObject("email" -> email),
           $set("password" -> encrypt(new_password))
         )
+        Unit
       }
   }
 
-  def setNewPassword(email:String,password:String) = {
+  /**
+    * set new password
+    * will check the input
+    * @return None if failed
+    */
+  def setNewPassword(email:String,password:String):Option[Unit] = {
     Some(Unit)
       .guard(email.is_valid_email)
       .guard(password.is_valid_password)
@@ -133,10 +168,16 @@ object UserDB {
           MongoDBObject("email"->email),
           $set("password"->encrypt(password))
         )
+        Unit
       }
   }
 
-  def changeProfile(email: String, nickname: String, avatar: String, gender: String) = {
+  /**
+    * change profile
+    * will check the input
+    * @return None if failed
+    */
+  def changeProfile(email: String, nickname: String, avatar: String, gender: String):Option[Unit] = {
     Some(Unit)
       .guard(email.is_valid_email)
       .guard(nickname.is_valid_nickname)
@@ -149,10 +190,16 @@ object UserDB {
           "gender" -> (if (gender == "boy") User.boy else User.girl),
           "stats" -> Stats().toJson.toString()
         ))
+        Unit
       }
   }
 
-  def changeStat(email: String, f: Stats => Stats) = {
+  /**
+    * change statistics
+    * @param f update function
+    * @return None if failed
+    */
+  def changeStat(email: String, f: Stats => Stats):Option[Unit] = {
     Some(Unit)
       .guard(email.is_valid_email)
       .flatMap { _ =>
@@ -165,6 +212,7 @@ object UserDB {
           MongoDBObject("email" -> email),
           $set("stats" -> f(old_stats).toJson.toString())
         )
+        Unit
       }
   }
 }

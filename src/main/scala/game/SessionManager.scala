@@ -2,34 +2,69 @@ package game
 
 import java.util.Date
 
-import akka.actor.Actor
+import game.UserDB.User
+import server.Bimap
+import server.Server.{RequestLogin, RequestRegister}
 
-import scala.collection.mutable
 
-final case class Session(sid:Int,email:String)
-
-object Session{
-  def apply(sid: Int, email: String): Session = new Session(sid, email)
-}
 
 object SessionManager {
 
-  // Sid -> Session
-  val session_map = new mutable.TreeMap[Int,Session]()
+  /**
+    * Session
+    * @param sid session id
+    * @param uid user id (email)
+    * @param user user's information
+    */
+  final case class Session(sid:Int,uid:String,user:User)
 
+  // map: sid - uid
+  val map = new Bimap[Int,String]()
 
-  // create a session for user
-  //
-  def createSession(email:String):Int = {
-    val sid = s"${new Date().getTime}$email".hashCode
-    if(session_map.get(sid).isEmpty){
-      session_map(sid) = Session(sid,email)
-      sid
-    } else {
-      Thread.sleep(10)
-      createSession(email)
+  /**
+    * create a session or return an existing session for user
+    * @param uid user id
+    * @return session id
+    */
+  def createSession(uid:String):Int = {
+    val sid = s"${new Date().getTime}$uid".hashCode
+    map.getA(uid).getOrElse {
+      if(map.getB(sid).isEmpty){
+        map.set(sid,uid)
+        sid
+      } else {
+        Thread.sleep(10)
+        createSession(uid)
+      }
     }
   }
 
+  // api for http server
 
+  /**
+    * login
+    * @param req request
+    */
+  def login(req:RequestLogin): Option[Session] = {
+    UserDB.login(req.email, req.password).flatMap { user =>
+      val uid = user.uid
+      val sid = createSession(uid)
+      Some(Session(sid, uid, user))
+    }
+  }
+
+  /**
+    * register
+    * call login after doing register
+    * @param req request
+    */
+  def register(req:RequestRegister): Option[Session] = {
+    UserDB.register(req.email,req.nickname,req.avatar,req.gender.toString,req.password).flatMap{ _=>
+      login(RequestLogin(req.email,req.password))
+    }
+  }
+
+  /**
+    *
+    */
 }

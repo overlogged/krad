@@ -1,8 +1,9 @@
+import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class PlayerChecker{
     //element acquiring and losing
     void elemAcq(Player playerMain){
-        if(!playerMain.hasElem)
+        if((!playerMain.hasElem)&(playerMain.team==Player.HUMAN))
             playerMain.hasElem=true;
     }
     void elemLose(Player playerMain){
@@ -16,10 +17,12 @@ public class PlayerChecker{
             playerMain.energy+=energyVal;
     }
     void energyConsume(Player playerMain,int energyVal) {
-        if (playerMain.energy >= 0)
-            playerMain.energy -= energyVal;
+        if(playerMain.energy>=energyVal)
+            playerMain.energy-=energyVal;
+        else
+            playerMain.energy=0;
     }
-    void gambleAward(Player playerMain,FrontendData awardData){
+    void gambleAward(Player playerMain,FrontEndData awardData){
         if(playerMain.isWin){
             switch(playerMain.decision){
                 case Player.MOVE:
@@ -30,7 +33,7 @@ public class PlayerChecker{
                     break;
                 case Player.DEPOSIT:
                     if(playerMain.energy<playerMain.energyLim)
-                        energyAcq(playerMain,1); //each one can only acquire
+                        energyAcq(playerMain,1);
                     break;
             }
         }
@@ -41,6 +44,12 @@ public class PlayerChecker{
         MapUnit dest=new MapUnit();
         return dest;
     } // in mapchecker
+    int distanceCal(Player playerA,Player playerB){
+        return 0;
+    }
+    boolean isSameLadder(Player playerPos,Player playerPas){
+        return false;
+    }
     void move(Player playerMain,int energy,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
@@ -48,49 +57,22 @@ public class PlayerChecker{
         playerMain.preLoc=dest;
     }
     void fire(Player playerPos,Player playerPas,MapEdge direction){
-        move(playerPas,playerPos.energy,direction);
-        playerPos.energy=0;
+        if((playerPos.range>=distanceCal(playerPos,playerPas))&(isSameLadder(playerPos,playerPas))) {
+            move(playerPas, playerPos.energy, direction);
+            playerPos.energy = 0;
+        }
     }
 
     //team changing
     void infection(Player playerPos,Player playerPas){
-        if(playerPos.team==Player.ZOMBIE&playerPas.team== Player.HUMAN)
-            playerPas.team=Player.ZOMBIE;
+        if(playerPos.team==Player.ZOMBIE&playerPas.team== Player.HUMAN) {
+            playerPas.team = Player.ZOMBIE;
+            playerPas.energy=0;
+            playerPas.hasElem=false;
+            playerPas.firePow=0;
+            playerPas.range=0;
+            playerPas.energyLim=0;
+        }
     }
 }
 
-//Properties of a player
-class Player {
-    //constant about gamble
-    private static final int PAPER = 1;
-    private static final int SCISSORS = 2;
-    private static final int STONE = 3;
-    //constant about teams
-    public static final int HUMAN=0;
-    public static final int ZOMBIE=1;
-    //constant about decision
-    public static final int MOVE=1;
-    public static final int DEPOSIT=2;
-    public static final int FIRE=3;
-    public static final int SKILL=4;
-
-    //static properties
-    int mot;  //motility
-    int firePow; //firepower
-    int range;  //range
-    int energyLim;  //energy limit
-
-    //dynamic properties
-    int energy; //present energy
-    int team;  //the team of the player:zombie or human
-    int gamble;  //gamble choices
-    int decision;
-    MapUnit preLoc;  //present location
-    boolean isWin;   //victory or defeat in one turn
-    boolean hasElem; //if the player maintains the element
-}
-
-class FrontendData{
-    Player playerPos,playerPas;
-    MapEdge moveDirection,fireDirection;
-}
