@@ -1,6 +1,9 @@
 import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class PlayerChecker{
+    MapChecker myMap = new MapChecker();
+    private int distance;
+
     //element acquiring and losing
     void elemAcq(Player playerMain){
         if((!playerMain.hasElem)&(playerMain.team==Player.HUMAN))
@@ -40,16 +43,12 @@ public class PlayerChecker{
     }
 
     //location changing
+    // in mapchecker
     MapUnit destCal(MapUnit preLoc,int engery, MapEdge direction){
         MapUnit dest=new MapUnit();
         return dest;
-    } // in mapchecker
-    int distanceCal(Player playerA,Player playerB){
-        return 0;
     }
-    boolean isSameLadder(Player playerPos,Player playerPas){
-        return false;
-    }
+    //in playerchecker
     void move(Player playerMain,int energy,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
@@ -57,7 +56,8 @@ public class PlayerChecker{
         playerMain.preLoc=dest;
     }
     void fire(Player playerPos,Player playerPas,MapEdge direction){
-        if((playerPos.range>=distanceCal(playerPos,playerPas))&(isSameLadder(playerPos,playerPas))) {
+        distance = myMap.outDistance(playerPas.preLoc,playerPos.preLoc);
+        if(playerPos.range>=distance) {
             move(playerPas, playerPos.energy, direction);
             playerPos.energy = 0;
         }

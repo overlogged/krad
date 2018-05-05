@@ -25,6 +25,10 @@ public class GambleCheckerTest {
         assert frontEndData.players[1].isWin==true: "player1 false";
         assert frontEndData.players[2].isWin==false: "player2 false";
         assert frontEndData.players[3].isWin==true: "player3 false";
+        assert frontEndData.players[0].energy==1;
+        assert frontEndData.players[1].energy==1;
+        assert frontEndData.players[2].energy==0;
+        assert frontEndData.players[3].energy==1;
     }
 
     public static void main(String argv[]){
