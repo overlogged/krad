@@ -24,5 +24,6 @@ object Mail {
     email.setCharset("utf-8")
     email.setHtmlMsg(text)
     email.send
+    ()
   }
 }
