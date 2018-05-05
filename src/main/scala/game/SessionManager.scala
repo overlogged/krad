@@ -3,10 +3,9 @@ package game
 import java.util.Date
 
 import game.UserDB.User
-import server.Bimap
-import server.Server.{RequestLogin, RequestRegister}
-
-
+import server.{Bimap, Mail}
+import server.Server.{RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestLogin, RequestRegister, RequestSetNewPassword, config}
+import server.MyUtils._
 
 object SessionManager {
 
@@ -59,12 +58,48 @@ object SessionManager {
     * @param req request
     */
   def register(req:RequestRegister): Option[Session] = {
-    UserDB.register(req.email,req.nickname,req.avatar,req.gender.toString,req.password).flatMap{ _=>
+    UserDB.register(req.email,req.nickname,req.avatar,req.gender,req.password).flatMap{ _ =>
       login(RequestLogin(req.email,req.password))
     }
   }
 
   /**
-    *
+    * forget password
     */
+  def forget(req:RequestForgetPassword) : Option[Unit] = {
+    val uid = req.email
+    UserDB.checkUser(uid).flatMap { _ =>
+      val sid = createSession(uid)
+      val title = "[Krad] 重置密码"
+      val text = s"请点击以下链接以重置密码： ${config.web_url}/session/reset.html?sid=$sid"
+      Some(Mail.send(req.email, title, text))
+    }.succ()
+  }
+
+  /**
+    * set new password
+    */
+  def setNewPassword(req:RequestSetNewPassword) : Option[Unit] = {
+    map.getB(req.sid).flatMap { uid =>
+        UserDB.setNewPassword(uid, req.new_password)
+      }
+  }
+
+  /**
+    * change password
+    */
+  def changePassword(req:RequestChangePassword) : Option[Unit] = {
+    map.getB(req.sid).flatMap { uid =>
+        UserDB.changePassword(uid,req.old_password,req.new_password)
+      }
+  }
+
+  /**
+    * change profile
+    */
+  def changeProfile(req:RequestChangeProfile) : Option[Unit] = {
+    map.getB(req.sid).flatMap { uid =>
+      UserDB.changeProfile(uid,req.nickname,req.avatar,req.gender)
+    }
+  }
 }

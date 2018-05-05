@@ -9,7 +9,7 @@ import spray.json.DefaultJsonProtocol
   * json formatter
   */
 trait MyJsonProtocol extends DefaultJsonProtocol {
-  implicit val ConfigFormat = jsonFormat8(Config)
+  implicit val ConfigFormat = jsonFormat9(Config)
   implicit val StatsFormat = jsonFormat1(Stats.apply)
   implicit val UserFormat = jsonFormat6(User.apply)
   implicit val RequestLoginFormat = jsonFormat2(RequestLogin)
