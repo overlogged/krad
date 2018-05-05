@@ -65,14 +65,17 @@ public class PlayerChecker{
 
     //team changing
     void infection(Player playerPos,Player playerPas){
-        if(playerPos.team==Player.ZOMBIE&playerPas.team== Player.HUMAN) {
-            playerPas.team = Player.ZOMBIE;
-            playerPas.energy=0;
-            playerPas.hasElem=false;
-            playerPas.firePow=0;
-            playerPas.range=0;
-            playerPas.energyLim=0;
+        if(playerPos.preLoc == playerPas.preLoc) {
+            if(playerPos.preLoc.status==1) {
+                if (playerPos.team == Player.ZOMBIE & playerPas.team == Player.HUMAN) {
+                    playerPas.team = Player.ZOMBIE;
+                    playerPas.energy = 0;
+                    playerPas.hasElem = false;
+                    playerPas.firePow = 0;
+                    playerPas.range = 0;
+                    playerPas.energyLim = 0;
+                }
+            }
         }
     }
 }
-
