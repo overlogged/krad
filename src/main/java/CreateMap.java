@@ -4,8 +4,8 @@ public class CreateMap {
     int array_number;                      //Means the number of obj
     MapUnit[] sample;                      //Means obj array of mapunit
 
-    CreateMap() {
-    }
+    /*CreateMap() {
+    }*/
 
     CreateMap(int number) {                 //Create a obj array
         array_number = number;
@@ -33,6 +33,11 @@ public class CreateMap {
                 sample[i].edge[1].adjedg = i;
                 sample[i].edge[1].distance = 1;
             }
+            sample[i].rank=1;
+        }
+        for (int i=array_number-1;i>9;i--)
+        {
+            sample[i].rank=2;
         }
         sample[6].edge[2].adjedg = 11;
         sample[6].edge[2].distance = 1;
@@ -55,9 +60,9 @@ public class CreateMap {
 
     void obtainMap() {                  //Obtain objection from file
         try {
-            FileInputStream fn = new FileInputStream("Mapsample.map" );
-            ObjectInputStream ois = new ObjectInputStream(fn);
-            for (int i = 0; fn.available() > 0; i++) {
+            FileInputStream fileInput = new FileInputStream("Mapsample.map" );
+            ObjectInputStream ois = new ObjectInputStream(fileInput);
+            for (int i = 0; fileInput.available() > 0; i++) {
                 try {
                     sample[i] = (MapUnit) ois.readObject();
                 } catch (ClassNotFoundException e) {
