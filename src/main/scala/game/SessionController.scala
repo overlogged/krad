@@ -2,13 +2,11 @@ package game
 
 import java.util.Date
 
-import game.UserDB.User
-import server.Bimap
+import common.Bimap
+import game.UserModel.User
 import server.Server.{RequestLogin, RequestRegister}
 
-
-
-object SessionManager {
+object SessionController {
 
   /**
     * Session
@@ -46,7 +44,7 @@ object SessionManager {
     * @param req request
     */
   def login(req:RequestLogin): Option[Session] = {
-    UserDB.login(req.email, req.password).flatMap { user =>
+    UserModel.login(req.email, req.password).flatMap { user =>
       val uid = user.uid
       val sid = createSession(uid)
       Some(Session(sid, uid, user))
@@ -59,12 +57,9 @@ object SessionManager {
     * @param req request
     */
   def register(req:RequestRegister): Option[Session] = {
-    UserDB.register(req.email,req.nickname,req.avatar,req.gender.toString,req.password).flatMap{ _=>
+    UserModel.register(req.email,req.nickname,req.avatar,req.gender,req.password).flatMap{ _ =>
       login(RequestLogin(req.email,req.password))
     }
   }
 
-  /**
-    *
-    */
 }

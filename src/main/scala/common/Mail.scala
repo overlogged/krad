@@ -1,9 +1,10 @@
-package server
+package common
 
 import org.apache.commons.mail.HtmlEmail
+import server.Server.config
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import Server.config
 
 /**
   * Email module
@@ -24,5 +25,6 @@ object Mail {
     email.setCharset("utf-8")
     email.setHtmlMsg(text)
     email.send
+    ()
   }
 }

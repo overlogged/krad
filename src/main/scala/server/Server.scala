@@ -8,10 +8,13 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives
+import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
+import common.MyJsonProtocol
 import spray.json._
-import game.{SessionManager, UserDB}
+import game.{SessionController, UserController, UserModel}
+
+import scala.concurrent.ExecutionContextExecutor
 
 /**
   * http server
@@ -24,6 +27,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                           db_host:String,
                           web_host:String,
                           web_port:Int,
+                          web_url:String,
                           email_host:String,
                           email_username:String,
                           email_password:String)
@@ -45,11 +49,18 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   }
 
   // requests
+  /*
+  var req = {
+    email:"affd@asf.com",
+    password:"asdfassaf"
+  };
+  Json.Stringfy(req)
+   */
   final case class RequestLogin(email:String,password:String)
   final case class RequestRegister(email:String,
                                    nickname: String,
                                    avatar: String,
-                                   gender: Int,
+                                   gender: String,
                                    password: String)
   final case class RequestForgetPassword(email:String)
   final case class RequestSetNewPassword(sid:Int,new_password:String)
@@ -57,30 +68,28 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   final case class RequestChangeProfile(sid:Int,
                                         nickname: String,
                                         avatar: String,
-                                        gender: Int)
+                                        gender: String)
 
   // http server
-  implicit val system = ActorSystem("my-system")
-  implicit val materializer = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem("my-system")
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   // needed for the future flatMap/onComplete in the end
-  implicit val executionContext = system.dispatcher
+  implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
   // api
-  val route =
+  val route: Route =
     path("hello") {
       get {
         log("get","hello")
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad api!</h1>"))
       }
     }~
-    // login
-    // create session
     path("session" / "login") {
       post {
         entity(as[RequestLogin]){req=>
           log("post","session/login")
-          SessionManager.login(req) match {
+          SessionController.login(req) match {
             case Some(res) => complete(res)
             case None => complete(HttpResponse(StatusCodes.BadRequest))
           }
@@ -88,19 +97,57 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       }
     }~
     path("session" / "register"){
-      entity(as[RequestRegister]){req=>
-        log("post","session/register")
-        SessionManager.register(req) match {
-          case Some(res) => complete(res)
-          case None => complete(HttpResponse(StatusCodes.BadRequest))
+      post{
+        entity(as[RequestRegister]){req=>
+          log("post","session/register")
+          SessionController.register(req) match {
+            case Some(res) => complete(res)
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
         }
       }
     }~
-    path("user"/"forget"){
+    path("user" / "forget"){
       post{
         entity(as[RequestForgetPassword]){req=>
           log("post","user/forget")
-          complete(req.toString)
+          UserController.forget(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
+        }
+      }
+    }~
+    path("user" / "setpw"){
+      post{
+        entity(as[RequestSetNewPassword]){req=>
+          log("post","user/setpw")
+          UserController.setNewPassword(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
+        }
+      }
+    }~
+    path("user" / "changepw"){
+      post{
+        entity(as[RequestChangePassword]){req=>
+          log("post","user/changepw")
+          UserController.changePassword(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
+        }
+      }
+    }~
+    path("user"/"changeprofile"){
+      post{
+        entity(as[RequestChangeProfile]){req=>
+          log("post","user/changeprofile")
+          UserController.changeProfile(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
         }
       }
     }
@@ -110,8 +157,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   def main(args: Array[String]): Unit = {
     val cmd = if(args.length > 0) args(0) else ""
     cmd match {
-      case "migrant" => UserDB.migrant()
-      case "connect" => UserDB.connect()
+      case "migrant" => UserModel.migrant()
+      case "connect" => UserModel.connect()
       case _ => {}
     }
     Http().bindAndHandle(route, config.web_host, config.web_port)

@@ -1,4 +1,4 @@
-package server
+package common
 
 import scala.collection.mutable
 

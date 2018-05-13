@@ -6,8 +6,9 @@ public class MapUnit implements Serializable {
     private int edge_number;     // The number of edg
     MapEdge[] edge;              // The connect edg of unit
     int height;                  // The height of the unit
-    int is_factor;               // Judge the map status
+    int status;                  // Judge the mapunit status,1 represent factor area.
     Factor key = new Factor();   // Store the important thing
+    int rank;                    // Store the levels of the unit
 
     MapUnit() {
     }

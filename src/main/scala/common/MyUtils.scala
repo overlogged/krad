@@ -1,4 +1,4 @@
-package server
+package common
 
 /**
   * some useful functions
@@ -9,9 +9,17 @@ object MyUtils {
     * implicit class Guard
     */
   implicit class Guard[+A](x:Option[A]) {
-    def guard(exp:Boolean): Option[A] = x.flatMap { a=>
+
+    def guard(exp:Boolean): Option[A] = x.flatMap { a =>
       if(exp) Some(a) else None
     }
+
+    def also[B](fn : A=>B):Option[A] = x.flatMap { a =>
+      fn(a)
+      Some(a)
+    }
+
+    def succ() = Some(())
   }
 
   /**

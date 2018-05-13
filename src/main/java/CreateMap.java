@@ -1,11 +1,12 @@
 import java.io.*;
+import server.Server;
 
 public class CreateMap {
     int array_number;                      //Means the number of obj
     MapUnit[] sample;                      //Means obj array of mapunit
 
-    CreateMap() {
-    }
+    /*CreateMap() {
+    }*/
 
     CreateMap(int number) {                 //Create a obj array
         array_number = number;
@@ -26,28 +27,34 @@ public class CreateMap {
             sample[i] = new MapUnit(edge_number);
             sample[i].mark = i + 1;
             sample[i].height = i + 1;
-            sample[i].is_factor = 0;
+            sample[i].status = 0;
             sample[i].edge[0].adjedg = i + 2;
             sample[i].edge[0].distance = 1;
             if (i != 0) {
                 sample[i].edge[1].adjedg = i;
                 sample[i].edge[1].distance = 1;
             }
+            sample[i].rank=1;
+        }
+        for (int i=array_number-1;i>9;i--)
+        {
+            sample[i].rank=2;
         }
         sample[6].edge[2].adjedg = 11;
         sample[6].edge[2].distance = 1;
         sample[11].edge[0].adjedg = 6;
-        sample[9].is_factor = 1;
+        sample[9].status = 1;
         sample[9].key.name = "Fate";
         try {
-            FileOutputStream fileOut = new FileOutputStream("Mapsample.map");   //Create a Ser in the krad-backend
+            FileOutputStream fileOut = new FileOutputStream("sample.map");   //Create a Ser in the krad-backend
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             for (int i = 0; i < array_number; i++) {
                 out.writeObject(sample[i]);
             }
             out.close();
             fileOut.close();
-            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
+            Server.log("serialize","sample.map");
+//            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
         } catch (IOException i) {
             i.printStackTrace();
         }
@@ -55,16 +62,16 @@ public class CreateMap {
 
     void obtainMap() {                  //Obtain objection from file
         try {
-            FileInputStream fn = new FileInputStream("Mapsample.ser");
-            ObjectInputStream ois = new ObjectInputStream(fn);
-            for (int i = 0; fn.available() > 0; i++) {
+            FileInputStream fileInput = new FileInputStream("Mapsample.map" );
+            ObjectInputStream ois = new ObjectInputStream(fileInput);
+            for (int i = 0; fileInput.available() > 0; i++) {
                 try {
                     sample[i] = (MapUnit) ois.readObject();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
+            System.out.println("Serialized data has benn opened");
         } catch (IOException i) {
             i.printStackTrace();
         }
