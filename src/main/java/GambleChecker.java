@@ -7,7 +7,7 @@ public class GambleChecker {
     /*
      judge the result of one pair of gamble
      if the return value is true, playerA wins
-     */
+    */
     boolean win(Player playerA, Player playerB){
         switch (playerA.gamble-playerB.gamble){
             case 1:
@@ -21,15 +21,20 @@ public class GambleChecker {
     /*
      judge if a player is win this turn
      if he wins then he can get one point of energy
-     */
+    */
     void winJudge(FrontEndData gambleData){
         for(int i = 0; i < gambleData.playerNum; i++){
             for(int j = 0; j < gambleData.playerNum; j++){
-                if(i==j)
+                if(i == j)
                     continue;
                 if(gambleData.players[i].team==gambleData.players[j].team)
                     continue;
                 gambleData.players[i].isWin=win(gambleData.players[i],gambleData.players[j]);
+                if(gambleData.players[i].isWin) {
+                    if(gambleData.players[i].energy<gambleData.players[i].energyLim)
+                        gambleData.players[i].energy += 1;
+                    break;
+                }
             }
         }
     }

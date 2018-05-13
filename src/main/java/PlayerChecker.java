@@ -1,8 +1,12 @@
+import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class PlayerChecker{
+    MapChecker myMap = new MapChecker();
+    private int distance;
+
     //element acquiring and losing
     void elemAcq(Player playerMain){
-        if((!playerMain.hasElem)&(playerMain.team!=Player.ZOMBIE))
+        if((!playerMain.hasElem)&(playerMain.team==Player.HUMAN))
             playerMain.hasElem=true;
     }
     void elemLose(Player playerMain){
@@ -34,15 +38,19 @@ public class PlayerChecker{
                     if(playerMain.energy<playerMain.energyLim)
                         energyAcq(playerMain,1);
                     break;
+                case Player.SKILL:
+                    break;
             }
         }
     }
 
     //location changing
+    // in mapchecker
     MapUnit destCal(MapUnit preLoc,int engery, MapEdge direction){
         MapUnit dest=new MapUnit();
         return dest;
-    } // in mapchecker
+    }
+    //in playerchecker
     void move(Player playerMain,int energy,MapEdge direction){
         MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
         //energy cost
@@ -50,20 +58,26 @@ public class PlayerChecker{
         playerMain.preLoc=dest;
     }
     void fire(Player playerPos,Player playerPas,MapEdge direction){
-        move(playerPas,playerPos.energy,direction);
-        playerPos.energy=0;
+        distance = myMap.outDistance(playerPas.preLoc,playerPos.preLoc);
+        if(playerPos.range>=distance) {
+            move(playerPas, playerPos.energy, direction);
+            playerPos.energy = 0;
+        }
     }
 
     //team changing
     void infection(Player playerPos,Player playerPas){
-        if(playerPos.team==Player.ZOMBIE&playerPas.team== Player.HUMAN) {
-            playerPas.team = Player.ZOMBIE;
-            playerPas.energy=0;
-            playerPas.hasElem=false;
-            playerPas.firePow=0;
-            playerPas.range=0;
-            playerPas.energyLim=0;
+        if(playerPos.preLoc == playerPas.preLoc) {
+            if(playerPos.preLoc.status==1) {
+                if (playerPos.team == Player.ZOMBIE & playerPas.team == Player.HUMAN) {
+                    playerPas.team = Player.ZOMBIE;
+                    playerPas.energy = 0;
+                    playerPas.hasElem = false;
+                    playerPas.firePow = 0;
+                    playerPas.range = 0;
+                    playerPas.energyLim = 0;
+                }
+            }
         }
     }
 }
-

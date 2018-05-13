@@ -1,11 +1,15 @@
-package server
+package common
 
-import game.{Stats, User}
+import game.SessionController.Session
+import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestLogin, RequestRegister, RequestSetNewPassword}
 import spray.json.DefaultJsonProtocol
 
-object MyJsonProtocol extends DefaultJsonProtocol {
-  implicit val ConfigFormat = jsonFormat8(Config)
+/**
+  * json formatter
+  */
+trait MyJsonProtocol extends DefaultJsonProtocol {
+  implicit val ConfigFormat = jsonFormat9(Config)
   implicit val StatsFormat = jsonFormat1(Stats.apply)
   implicit val UserFormat = jsonFormat6(User.apply)
   implicit val RequestLoginFormat = jsonFormat2(RequestLogin)
@@ -14,6 +18,5 @@ object MyJsonProtocol extends DefaultJsonProtocol {
   implicit val RequestSetNewFormat = jsonFormat2(RequestSetNewPassword)
   implicit val RequestChangePasswordFormat = jsonFormat3(RequestChangePassword)
   implicit val RequestChangeProfileFormat = jsonFormat4(RequestChangeProfile)
-
+  implicit val SessionFormat = jsonFormat3(Session)
 }
-
