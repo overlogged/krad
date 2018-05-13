@@ -8,7 +8,7 @@ public class GambleChecker {
      judge the result of one pair of gamble
      if the return value is true, playerA wins
     */
-    boolean win(Player playerA, Player playerB){
+    static boolean win(Player playerA, Player playerB){
         switch (playerA.gamble-playerB.gamble){
             case 1:
             case -2:
