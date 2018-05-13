@@ -1,4 +1,5 @@
 import java.io.*;
+import server.Server;
 
 public class CreateMap {
     int array_number;                      //Means the number of obj
@@ -45,14 +46,15 @@ public class CreateMap {
         sample[9].status = 1;
         sample[9].key.name = "Fate";
         try {
-            FileOutputStream fileOut = new FileOutputStream("Mapsample.map");   //Create a Ser in the krad-backend
+            FileOutputStream fileOut = new FileOutputStream("sample.map");   //Create a Ser in the krad-backend
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             for (int i = 0; i < array_number; i++) {
                 out.writeObject(sample[i]);
             }
             out.close();
             fileOut.close();
-            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
+            Server.log("serialize","sample.map");
+//            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
         } catch (IOException i) {
             i.printStackTrace();
         }
