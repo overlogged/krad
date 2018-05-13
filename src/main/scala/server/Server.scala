@@ -8,10 +8,12 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives
+import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
 import spray.json._
 import game.{SessionManager, UserDB}
+
+import scala.concurrent.ExecutionContextExecutor
 
 /**
   * http server
@@ -24,6 +26,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                           db_host:String,
                           web_host:String,
                           web_port:Int,
+                          web_url:String,
                           email_host:String,
                           email_username:String,
                           email_password:String)
@@ -49,7 +52,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   final case class RequestRegister(email:String,
                                    nickname: String,
                                    avatar: String,
-                                   gender: Int,
+                                   gender: String,
                                    password: String)
   final case class RequestForgetPassword(email:String)
   final case class RequestSetNewPassword(sid:Int,new_password:String)
@@ -57,25 +60,23 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   final case class RequestChangeProfile(sid:Int,
                                         nickname: String,
                                         avatar: String,
-                                        gender: Int)
+                                        gender: String)
 
   // http server
-  implicit val system = ActorSystem("my-system")
-  implicit val materializer = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem("my-system")
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   // needed for the future flatMap/onComplete in the end
-  implicit val executionContext = system.dispatcher
+  implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
   // api
-  val route =
+  val route: Route =
     path("hello") {
       get {
         log("get","hello")
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad api!</h1>"))
       }
     }~
-    // login
-    // create session
     path("session" / "login") {
       post {
         entity(as[RequestLogin]){req=>
@@ -88,19 +89,44 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       }
     }~
     path("session" / "register"){
-      entity(as[RequestRegister]){req=>
-        log("post","session/register")
-        SessionManager.register(req) match {
-          case Some(res) => complete(res)
-          case None => complete(HttpResponse(StatusCodes.BadRequest))
+      post{
+        entity(as[RequestRegister]){req=>
+          log("post","session/register")
+          SessionManager.register(req) match {
+            case Some(res) => complete(res)
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
         }
       }
     }~
-    path("user"/"forget"){
+    path("session" / "forget"){
       post{
         entity(as[RequestForgetPassword]){req=>
-          log("post","user/forget")
-          complete(req.toString)
+          log("post","session/forget")
+          SessionManager.forget(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
+        }
+      }
+    }~
+    path("session" / "setpw"){
+      post{
+        entity(as[RequestSetNewPassword]){req=>
+          SessionManager.setNewPassword(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
+        }
+      }
+    }~
+    path("session" / "changepw"){
+      post{
+        entity(as[RequestChangePassword]){req=>
+          SessionManager.changePassword(req) match {
+            case Some(_) => complete(HttpResponse(StatusCodes.Accepted))
+            case None => complete(HttpResponse(StatusCodes.BadRequest))
+          }
         }
       }
     }

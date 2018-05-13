@@ -89,7 +89,7 @@ object UserDB extends MyJsonProtocol{
     * @return None if failed
     */
   def register(email: String, nickname: String, avatar: String, gender: String, password: String):Option[Unit] = {
-    Some(Unit)
+    Some(())
       .guard(email.is_valid_email)
       .guard(nickname.is_valid_nickname)
       .guard(avatar.is_valid_avatar)
@@ -97,16 +97,15 @@ object UserDB extends MyJsonProtocol{
       .guard(password.is_valid_password)
       .guard(col_users.find(MongoDBObject("email" -> email)).count() == 0)
       .flatMap { _ =>
-        col_users.insert(MongoDBObject(
+        Some(col_users.insert(MongoDBObject(
           "email" -> email,
           "nickname" -> nickname,
           "avatar" -> avatar,
           "gender" -> (if (gender == "boy") User.boy else User.girl),
           "password" -> encrypt(password), // todo: encrypt the password at frontend
           "stats" -> Stats().toJson.toString()
-        ))
-        Some(Unit)
-      }
+        )))
+      }.succ()
   }
 
   /**
@@ -115,7 +114,7 @@ object UserDB extends MyJsonProtocol{
     * @return None if failed
     */
   def login(email: String, password: String):Option[User] = {
-    Some(Unit)
+    Some(())
       .guard(email.is_valid_email)
       .guard(password.is_valid_password)
       .flatMap { _ => Option(col_users.findOne(MongoDBObject("email" -> email, "password" -> encrypt(password)))) }
@@ -135,7 +134,7 @@ object UserDB extends MyJsonProtocol{
     * @return None if failed
     */
   def changePassword(email: String, old_password: String, new_password: String) : Option[Unit]= {
-    Some(Unit)
+    Some(())
       .guard(email.is_valid_email)
       .guard(old_password.is_valid_password)
       .guard(new_password.is_valid_password)
@@ -145,13 +144,13 @@ object UserDB extends MyJsonProtocol{
           "password" -> encrypt(old_password)
         )))
       }
-      .map { _ =>
+      .also { _ =>
         col_users.update(
           MongoDBObject("email" -> email),
           $set("password" -> encrypt(new_password))
         )
-        Unit
       }
+      .succ()
   }
 
   /**
@@ -160,17 +159,26 @@ object UserDB extends MyJsonProtocol{
     * @return None if failed
     */
   def setNewPassword(email:String,password:String):Option[Unit] = {
-    Some(Unit)
+    Some(())
       .guard(email.is_valid_email)
       .guard(password.is_valid_password)
-      .map { _ =>
+      .also { _ =>
         col_users.update(
           MongoDBObject("email"->email),
           $set("password"->encrypt(password))
         )
-        Unit
       }
   }
+
+  /**
+    *
+    */
+  def checkUser(email:String):Option[Unit] = {
+    Some(())
+      .guard(email.is_valid_email)
+      .guard(col_users.find(MongoDBObject("email"->email)).count()==1)
+  }
+
 
   /**
     * change profile
@@ -178,19 +186,18 @@ object UserDB extends MyJsonProtocol{
     * @return None if failed
     */
   def changeProfile(email: String, nickname: String, avatar: String, gender: String):Option[Unit] = {
-    Some(Unit)
+    Some(())
       .guard(email.is_valid_email)
       .guard(nickname.is_valid_nickname)
       .guard(avatar.is_valid_avatar)
       .guard(gender.is_valid_gender)
-      .map { _ =>
+      .also { _ =>
         col_users.update(MongoDBObject("email" -> email), $set(
           "nickname" -> nickname,
           "avatar" -> avatar,
           "gender" -> (if (gender == "boy") User.boy else User.girl),
           "stats" -> Stats().toJson.toString()
         ))
-        Unit
       }
   }
 
@@ -200,19 +207,19 @@ object UserDB extends MyJsonProtocol{
     * @return None if failed
     */
   def changeStat(email: String, f: Stats => Stats):Option[Unit] = {
-    Some(Unit)
+    Some(())
       .guard(email.is_valid_email)
       .flatMap { _ =>
         col_users.findOne(MongoDBObject("email" -> email))
           .getAs[String]("stats")
           .flatMap { x => Some(x.parseJson.convertTo[Stats]) }
       }
-      .map { old_stats =>
+      .also { old_stats =>
         col_users.update(
           MongoDBObject("email" -> email),
           $set("stats" -> f(old_stats).toJson.toString())
         )
-        Unit
       }
+      .succ()
   }
 }
