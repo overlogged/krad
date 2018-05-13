@@ -38,6 +38,8 @@ public class PlayerChecker{
                     if(playerMain.energy<playerMain.energyLim)
                         energyAcq(playerMain,1);
                     break;
+                case Player.SKILL:
+                    break;
             }
         }
     }

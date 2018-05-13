@@ -34,6 +34,7 @@ public class PlayerCheckerTest {
     void infectionTest(Player playerA, Player playerB) {
         playerA.team = Player.ZOMBIE;
         playerB.team = Player.HUMAN;
+        playerB.preLoc.status = 1;
         playerA.preLoc=playerB.preLoc;
         pc.elemAcq(playerB);
         pc.infection(playerA, playerB);
