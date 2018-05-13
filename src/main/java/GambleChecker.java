@@ -31,7 +31,8 @@ public class GambleChecker {
                     continue;
                 gambleData.players[i].isWin=win(gambleData.players[i],gambleData.players[j]);
                 if(gambleData.players[i].isWin) {
-                    gambleData.players[i].energy += 1;
+                    if(gambleData.players[i].energy<gambleData.players[i].energyLim)
+                        gambleData.players[i].energy += 1;
                     break;
                 }
             }
