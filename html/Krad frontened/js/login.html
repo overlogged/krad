@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="Keywords" content="游戏登录界面">
+<meta name="Description" content="这是一个很好玩的游戏">
+<title>登录界面</title>
+<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+	/*function warning_name(){
+		var name =document.forms["myForm"]["fname"].value;
+		if(name == null||name ==""){
+			alert("需要输入名字。")；
+			return false；
+		}
+	}*/
+	$(document).ready(function(){
+		$("input.btn").click(function(){
+			alert("sds");
+			var emailStr="nicekingwei@foxmai.com";
+		    var passwordStr="password";
+		    var emailrRsult=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(emailStr);
+		    var passwordResult=/[a-zA-Z0-9]{6,18}/.test(passwordStr);
+		    if(!emailrRsult||!passwordResult){
+			    alert("邮箱格式或密码格式不正确");
+		    }
+		});
+		
+	});
+
+	$(document).ready(function(){
+		$("submit").click(function(){
+			$.ajax({
+				url:"api/session/login",
+				type:"POST",
+				contentType:'application/json',
+				data:JSON.stringify({
+				    email:"2998868901@qq.com",
+				    password:"password"
+			    }),
+		        success:function(data,status){
+				    alert("登录成功");
+				    console.log(data);
+				    console.log(data.sid);
+					window.location.href="";//需要跳转的地址
+			     },
+			    Error:function(data,status){
+				   alert("用户名或密码错误");
+				   console.log(data);
+				}
+			    });
+		});
+	});
+	/*$(".login_form_name").focus(function(){
+		var oldValue = $(this).val();
+		if(oldValue == this.defaultValue){
+			$(this).val("").addClass('focus-fon');
+		}
+	}).blur(function(){
+		var oldValue = $(this).val();
+		if(oldValue ==""){
+			$(this).val(this.defaultValue).removeClass('focus-fon');
+		}
+	});*/
+</script>
+<link href="../css/login.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	
+	<div id="main_body">
+		<div class="login_wrap">
+		    <div class="login_title">
+				游戏登录
+			</div>
+				<div class="login_widget1">
+					<div class="login_attribute">
+						<span class="login_attribute_name">用户名：</span>
+						<br><br>
+						<span class="login_attribute_name">密码：</span>
+					</div>
+				  <div class="login_form">
+					  <div class="login_form_name"><input type="text" name="fname" id="t1" class="login_form_name_style" placeholder="请输入邮箱"></div>
+					    <br><br>
+					    <div class="login_form_name"><input type="password" name="fpassword" id="t2" class="login_form_password_style" placeholder="请输入密码"></div>
+					</div>
+					
+				</div>
+				<div class="search_password">
+					<a href="file:///E:/Krad%20frontened/js/findPassword.html">忘记密码？</a>
+				</div>
+				<div class="login_submit_log">
+					<input  type="submit" value="登录" class="btn">
+				</div>
+				<div class="login_submit_register">
+					<br><a href="file:///E:/Krad%20frontened/js/register.html">注册新账号</a>
+				</div>
+			    <div class="login_embellish">
+			
+			    </div>
+				 
+			
+			
+	    </div>
+	</div>
+</body>
+</html>
