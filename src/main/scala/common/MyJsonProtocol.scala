@@ -1,7 +1,7 @@
-package server
+package common
 
-import game.SessionManager.Session
-import game.UserDB.{Stats, User}
+import game.SessionController.Session
+import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestLogin, RequestRegister, RequestSetNewPassword}
 import spray.json.DefaultJsonProtocol
 

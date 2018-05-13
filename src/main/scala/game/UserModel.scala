@@ -5,9 +5,9 @@ import spray.json._
 import com.mongodb.casbah.{MongoClient, MongoClientURI, MongoDB}
 import com.mongodb.casbah.query.Imports._
 import com.mongodb.DBCollection
+import common.MyJsonProtocol
 import org.apache.commons.codec.digest.DigestUtils.sha1Hex
-import server.MyJsonProtocol
-import server.MyUtils._
+import common.MyUtils._
 import server.Server.{config, log}
 
 /**
@@ -17,7 +17,7 @@ import server.Server.{config, log}
   * 1. auth
   * 2. stats
  */
-object UserDB extends MyJsonProtocol{
+object UserModel extends MyJsonProtocol{
   /**
     * statistics
     */
