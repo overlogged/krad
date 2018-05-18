@@ -11,19 +11,32 @@
         game.add.plugin(PhaserInput.Plugin);
 
         function preload () {
-            game.load.image('background','assets/img/background1.jpg');
+            game.load.image('background','assets/img/background1.png');
+            game.load.image('input','assets/img/inputbox1.png');
             game.add.plugin(PhaserInput.Plugin);
         }
 
         function create () {
-            game.add.sprite(0, 0, 'background');
-            game.add.inputField(400,200);
+            var background = game.add.sprite(0, 0, 'background');
+            background.smoothed = true;
+            background.height = game.height;
+            background.width = game.width;
+
+            var input_username = game.add.inputField(400,200,{
+                font: '36px Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"',
+                fontWeight: 'normal',
+                width:200,
+                height:36
+            });
+
+            var input_username_back = game.add.sprite(400,200,'input');
+            input_username_back.width = 200;
+            input_username_back.height = 36;
         }
 
         function update () {
+
         }
-
-
         </script>
     </body>
 </html>
