@@ -1,6 +1,7 @@
 <html>
     <head>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.7.1/dist/phaser.min.js"></script>
+        <script src="assets/js/phaser-input.min.js"></script>
     </head>
 
     <body>
@@ -17,6 +18,8 @@
         };
 
         var game = new Phaser.Game(config);
+        
+        game.add.plugin(PhaserInput.Plugin);
 
         function preload ()
         {
@@ -26,6 +29,7 @@
         function create ()
         {
             this.add.image(400, 300, 'back');
+            var input = game.add.inputField(10, 90);
         }
 
         function update ()
