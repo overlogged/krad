@@ -1,40 +1,29 @@
 <html>
     <head>
-        <script src="//cdn.jsdelivr.net/npm/phaser@3.7.1/dist/phaser.min.js"></script>
-        <script src="assets/js/phaser-input.min.js"></script>
+        <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+        <script type="text/javascript" src="assets/js/phaser-nineslice.min.js"></script>
+        <script type="text/javascript" src="assets/js/phaser-input.min.js"></script>
     </head>
 
     <body>
         <script>
-        var config = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            scene: {
-                preload: preload,
-                create: create,
-                update: update
-            }
-        };
-
-        var game = new Phaser.Game(config);
-        
+        var game = new Phaser.Game(800,600,Phaser.AUTO,'',{ preload: preload, create: create, update: update });
         game.add.plugin(PhaserInput.Plugin);
 
-        function preload ()
-        {
-            this.load.image('back','assets/img/back.png');
+        function preload () {
+            game.load.image('background','assets/img/background1.jpg');
+            game.add.plugin(PhaserInput.Plugin);
         }
 
-        function create ()
-        {
-            this.add.image(400, 300, 'back');
-            var input = game.add.inputField(10, 90);
+        function create () {
+            game.add.sprite(0, 0, 'background');
+            game.add.inputField(400,200);
         }
 
-        function update ()
-        {
+        function update () {
         }
+
+
         </script>
     </body>
 </html>
