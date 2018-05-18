@@ -22,7 +22,7 @@ public class PlayerCheckerTest {
         System.out.println("present location: " + playerMain.preLoc);
         System.out.println("gamble this turn: " + playerMain.gamble);
         System.out.println("win or not this turn: " + playerMain.isWin);
-        System.out.println("decision this turn: " + playerMain.decision);
+        System.out.println("decision this turn: " + playerMain.stratDecision);
         System.out.println("present energy: " + playerMain.energy);
         System.out.println("has elem or not: " + playerMain.hasElem);
         System.out.println("energy limit: " + playerMain.energyLim);
@@ -32,6 +32,8 @@ public class PlayerCheckerTest {
     }
 
     void infectionTest(Player playerA, Player playerB) {
+        playerA = new Player();
+        playerB = new Player();
         playerA.team = Player.ZOMBIE;
         playerB.team = Player.HUMAN;
         playerB.preLoc.status = 1;

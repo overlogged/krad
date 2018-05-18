@@ -28,7 +28,7 @@ public class GambleCheckerTest {
     }
 
     void winJudgeTest(FrontEndData frontEndData){
-        gc.winJudge(frontEndData);
+        gc.winJudge(frontEndData.playerNum,frontEndData.players);
         assert frontEndData.players[0].isWin==true: "player0 false";
         assert frontEndData.players[1].isWin==true: "player1 false";
         assert frontEndData.players[2].isWin==false: "player2 false";
