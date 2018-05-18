@@ -7,11 +7,10 @@ public class Player {
     //constant about teams
     public static final int HUMAN = 0;
     public static final int ZOMBIE = 1;
-    //constant about decision
+    //constant about strategy decision
     public static final int MOVE = 1;
     public static final int DEPOSIT = 2;
     public static final int FIRE = 3;
-    public static final int SKILL = 4;
 
     String name;
 
@@ -29,7 +28,8 @@ public class Player {
                                    if one player does not choose his gamble choice one turn
                                    then the choice is the same as the last turn
                                   */
-    int decision;
+    int stratDecision;
+    int skillsDecision;
     MapUnit preLoc;              //present location
     boolean isWin=false;       /*
                                   victory or defeat in one turn

@@ -27,7 +27,7 @@ public class PlayerChecker{
     }
     void gambleAward(Player playerMain,FrontEndData awardData){
         if(playerMain.isWin){
-            switch(playerMain.decision){
+            switch(playerMain.stratDecision){
                 case Player.MOVE:
                     move(playerMain,playerMain.energy,awardData.moveDirection);
                     break;
@@ -37,8 +37,6 @@ public class PlayerChecker{
                 case Player.DEPOSIT:
                     if(playerMain.energy<playerMain.energyLim)
                         energyAcq(playerMain,1);
-                    break;
-                case Player.SKILL:
                     break;
             }
         }
