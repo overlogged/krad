@@ -2,12 +2,17 @@
 
 <head>
   <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+<<<<<<< HEAD
   <script type="text/javascript" src="assets/js/phaser-nineslice.min.js"></script>
   <script type="text/javascript" src="assets/js/phaser-input.min.js"></script>
+=======
+  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
+>>>>>>> c4ecbc0197f944cd2f8814aff9069480df879103
 </head>
 
 <body>
   <script>
+<<<<<<< HEAD
     var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
     game.add.plugin(PhaserInput.Plugin);
 
@@ -53,6 +58,50 @@
     function update() {
 
     }
+=======
+    var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
+      preload: function () {
+        game.load.image('background', 'assets/img/background1.png');
+        game.load.image('input', 'assets/img/inputbox1.png',20,20);
+      },
+
+      create: function () {
+        var background = game.add.sprite(0, 0, 'background');
+        background.smoothed = true;
+        background.height = game.height;
+        background.width = game.width;
+
+        var myInput = this.createInput(400, 200);
+        // this.myInput.anchor.set(0.5);
+        myInput.canvasInput.value("username");
+        myInput.canvasInput.focus();
+      },
+      inputFocus: function (sprite) {
+        sprite.canvasInput.focus();
+      },
+      createInput: function (x, y) {
+        var bmd = this.add.bitmapData(400, 50);
+        var myInput = game.add.sprite(x, y, bmd);
+
+        myInput.canvasInput = new CanvasInput({
+          canvas: bmd.canvas,
+          fontSize: 30,
+          fontFamily: 'Arial',
+          borderWidth: 0,
+          backgroundImage:'assets/img/inputbox1.png',
+          borderColor: 'none',
+          innerShadow: 'none',
+          boxShadow: 'none',
+          borderRadius: 0,
+        });
+        myInput.inputEnabled = true;
+        // myInput.input.useHandCursor = true;
+        myInput.events.onInputUp.add(this.inputFocus, this);
+
+        return myInput;
+      }
+    });
+>>>>>>> c4ecbc0197f944cd2f8814aff9069480df879103
   </script>
 </body>
 
