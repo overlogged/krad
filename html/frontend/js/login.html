@@ -5,9 +5,10 @@
 <meta name="Keywords" content="游戏登录界面">
 <meta name="Description" content="这是一个很好玩的游戏">
 <title>登录界面</title>
-<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
 <link href="../css/login.css" rel="stylesheet" type="text/css">
+	
 </head>
 <body>
 	
@@ -30,13 +31,13 @@
 					
 				</div>
 				<div class="search_password">
-					<a href="file:///E:/Krad%20frontened/js/findPassword.html">忘记密码？</a>
+					<a href="findPassword.html">忘记密码？</a>
 				</div>
 				<div class="login_submit_log">
 					<input  type="submit" value="登录" class="btn">
 				</div>
 				<div class="login_submit_register">
-					<br><a href="file:///E:/Krad%20frontened/js/register.html">注册新账号</a>
+					<br><a href="register.html">注册新账号</a>
 				</div>
 			    <div class="login_embellish">
 			
@@ -65,7 +66,7 @@
 		
 	});
 
-	$(document).ready(function(){
+	/*$(document).ready(function(){
 		$("submit").click(function(){
 			$.ajax({
 				url:"api/session/login",
@@ -87,7 +88,7 @@
 				}
 			    });
 		});
-	});
+	});*/
 	/*$(".login_form_name").focus(function(){
 		var oldValue = $(this).val();
 		if(oldValue == this.defaultValue){

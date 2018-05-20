@@ -3,53 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>用户注册</title>
-	<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
 <link href="../css/register.css" rel="stylesheet" type="text/css">
-	<script>
-		$(document).ready(function(){
-			$("input.reSubmit").click(function(){
-				alert("aaa");
-				var nicknameStr="why";
-				var emailStr="2998868901@qq.com";
-				var passwordStr="password";
-				var nickResult=/{};:'/.test(nicknameStr);
-				var emailResult=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(emailStr);
-				var passwordResult=/[a-zA-Z0-9]{6,18}/.test(passwordStr);
-				if(nickResult){
-					alert("昵称非法");
-				}
-				if(!emailResult){
-					alert("邮箱格式错误");
-				}
-				if(!passwordResult){
-					alert("密码格式错误");
-				}
-			});
-		});
-		$(document).ready(function(){
-			$("button").click(function(){
-				$.ajax({
-					  url:"api/session/register",
-					  data:JSON.stringify({
-					  email:"2998868901@qq.com",
-					  nickname:"why",
-					  avatar:,
-					  gender:1,
-					  password:"password"
-					}),
-			        success:function(data,status){
-					    alert("注册成功");
-						console.log(data);
-				    }
-				    error:function(data,satus){
-						alert("注册失败");
-					    console.log(data);
-					}
-				});
-			});
-		});
-	</script>
+	
 </head>
 
 <body>
@@ -87,5 +44,49 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(document).ready(function(){
+			$("input.reSubmit").click(function(){
+				alert("aaa");
+				var nicknameStr="why";
+				var emailStr="2998868901@qq.com";
+				var passwordStr="password";
+				var nickResult=/{};:'/.test(nicknameStr);
+				var emailResult=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(emailStr);
+				var passwordResult=/[a-zA-Z0-9]{6,18}/.test(passwordStr);
+				if(nickResult){
+					alert("昵称非法");
+				}
+				if(!emailResult){
+					alert("邮箱格式错误");
+				}
+				if(!passwordResult){
+					alert("密码格式错误");
+				}
+			});
+		});
+		/*$(document).ready(function(){
+			$("button").click(function(){
+				$.ajax({
+					  url:"api/session/register",
+					  data:JSON.stringify({
+					  email:"2998868901@qq.com",
+					  nickname:"why",
+					  avatar:,
+					  gender:1,
+					  password:"password"
+					}),
+			        success:function(data,status){
+					    alert("注册成功");
+						console.log(data);
+				    }
+				    error:function(data,satus){
+						alert("注册失败");
+					    console.log(data);
+					}
+				});
+			});
+		});*/
+	</script>
 </body>
 </html>
