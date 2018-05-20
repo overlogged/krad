@@ -1,0 +1,21 @@
+input {
+    font: 18px sans-serif;
+    position: absolute;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: repeat;
+    border: 0px;
+    border-radius: 4.5px;
+    padding: 10px;
+    outline-color: dodgerblue;
+}
+
+.inputbox1 {
+    background-image: url('../img/inputbox1.png');
+    height:35px;
+}
+
+.inputbox2 {
+    background-image: url('../img/inputbox2.png');
+    height:35px;
+}
