@@ -13,10 +13,6 @@
       preload: function () {
         game.load.image('background', 'assets/img/background1.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.spritesheet('buttonOver','assets/testbutton/testbutton1.png',20,20);
-        game.load.spritesheet('buttonOut','assets/testbutton/testbutton2.png',20,20);
-        game.load.spritesheet('buttonDown','assets/testbutton/testbutton3.png',20,20);
-        game.load.spritesheet('buttonUp','assets/testbutton/testbutton4.png',20,20);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml')
       },
 
@@ -25,10 +21,7 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-
-        button = game.add.button(game.world.centerX, game.world.centerY,'buttonOver', game.actionOnClick, this, 0,1,2,3);
-        button.anchor.setTo(0.5, 0.5);
-
+        
         var loginText = game.add.bitmapText(350,130,'chiller','Log In',70);
         var usernameText = game.add.bitmapText(250,190,'chiller','UserName',54);
         var passwordText = game.add.bitmapText(250,250,'chiller','PassWord',54);
