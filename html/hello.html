@@ -3,31 +3,25 @@
 <head>
   <script type="text/javascript" src="assets/js/phaser.min.js"></script>
   <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
+  <link href="assets/css/global.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
+<input type="text" id="text" class="inputbox1" style="left:410px;top:210px">
+<input type="password" id="password" class="inputbox1" style="left:410px;top:270px">
   <script>
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
         game.load.image('background', 'assets/img/background1.png');
-        game.load.image('input', 'assets/img/inputbox1.png',20,20);
-        game.load.bitmapFont('chiller','assets/fonts/chiller.png','assets/fonts/chiller.xml')
+        game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
+        game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml')
       },
-      
+
       create: function () {
         var background = game.add.sprite(0, 0, 'background');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-
-        var usernameInput = this.createInput(400, 200);
-        // this.usernameInput.anchor.set(0.5);
-        usernameInput.canvasInput.value("username");
-        usernameInput.canvasInput.focus();
-
-        var passwordInput = this.createInput(400, 255);
-        passwordInput.canvasInput.value("password");
-        passwordInput.canvasInput.focus();
 
         var loginText = game.add.bitmapText(350,130,'chiller','Log In',70);
         var usernameText = game.add.bitmapText(250,190,'chiller','UserName',54);
@@ -46,20 +40,20 @@
           fontSize: 30,
           fontFamily: 'YandereFont',
           borderWidth: 0,
-          backgroundImage:'assets/img/inputbox1.png',
+          backgroundImage: 'assets/img/inputbox1.png',
           borderColor: 'none',
           innerShadow: 'none',
           boxShadow: 'none',
           borderRadius: 0,
         });
         usernameInput.inputEnabled = true;
-        // usernameInput.input.useHandCursor = true;
         usernameInput.events.onInputUp.add(this.inputFocus, this);
 
         return usernameInput;
       }
     });
   </script>
+ 
 </body>
 
 </html>
