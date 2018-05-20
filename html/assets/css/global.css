@@ -1,5 +1,6 @@
 input {
-    font: 18px sans-serif;
+    font-family: 'Indie Flower',sans-serif;
+    font-size: 18px;
     position: absolute;
     background-color: transparent;
     background-size: contain;
@@ -12,7 +13,7 @@ input {
 
 .inputbox1 {
     background-image: url('../img/inputbox1.png');
-    height:35px;
+    height:36px;
 }
 
 .inputbox2 {

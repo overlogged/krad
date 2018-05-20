@@ -3,11 +3,8 @@
 <head>
   <script type="text/javascript" src="assets/js/phaser.min.js"></script>
   <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
-<<<<<<< HEAD
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
-=======
   <link href="assets/css/global.css" rel="stylesheet" type="text/css"/>
->>>>>>> 0c5a35644553ac36df48b228b6ab33044941a36e
 </head>
 <body>
 <input type="text" id="text" class="inputbox1" style="left:410px;top:210px">
@@ -16,13 +13,8 @@
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
         game.load.image('background', 'assets/img/background1.png');
-<<<<<<< HEAD
         game.load.image('input', 'assets/img/inputbox1.png',20,20);
         game.load.bitmapFont('chiller','assets/fonts/chiller.png','assets/fonts/chiller.xml');
-=======
-        game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml')
->>>>>>> dev
       },
 
       create: function () {
@@ -34,39 +26,6 @@
         var loginText = game.add.bitmapText(350,130,'chiller','Log In',70);
         var usernameText = game.add.bitmapText(250,190,'chiller','UserName',54);
         var passwordText = game.add.bitmapText(250,250,'chiller','PassWord',54);
-<<<<<<< HEAD
-        
-=======
-<<<<<<< HEAD
->>>>>>> dev
-      },
-
-      inputFocus: function (sprite) {
-        sprite.canvasInput.focus();
-      },
-      createInput: function (x, y) {
-        var bmd = this.add.bitmapData(400, 50);
-        var usernameInput = game.add.sprite(x, y, bmd);
-
-        usernameInput.canvasInput = new CanvasInput({
-          canvas: bmd.canvas,
-          fontSize: 30,
-          fontFamily: 'Indie Flower',
-          borderWidth: 0,
-          backgroundImage:'assets/img/inputbox1.png',
-          borderColor: 'none',
-          innerShadow: 'none',
-          boxShadow: 'none',
-          borderRadius: 0,
-        });
-        usernameInput.inputEnabled = true;
-        // usernameInput.input.useHandCursor = true;
-        usernameInput.events.onInputUp.add(this.inputFocus, this);
-
-        return usernameInput;
-=======
-        var buttonText = game.add.bitmapText(270,300,'chiller','sign up',40)
->>>>>>> 0c5a35644553ac36df48b228b6ab33044941a36e
       }
     });
   </script>
