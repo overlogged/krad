@@ -32,6 +32,7 @@
         var loginText = game.add.bitmapText(350,130,'chiller','Log In',70);
         var usernameText = game.add.bitmapText(250,190,'chiller','UserName',54);
         var passwordText = game.add.bitmapText(250,250,'chiller','PassWord',54);
+        var buttonText = game.add.bitmapText(270,300,'chiller','sign up',40)
       },
       inputFocus: function (sprite) {
         sprite.canvasInput.focus();
@@ -43,7 +44,7 @@
         usernameInput.canvasInput = new CanvasInput({
           canvas: bmd.canvas,
           fontSize: 30,
-          fontFamily: 'Arial',
+          fontFamily: 'YandereFont',
           borderWidth: 0,
           backgroundImage:'assets/img/inputbox1.png',
           borderColor: 'none',
