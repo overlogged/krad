@@ -66,10 +66,10 @@
 		
 	});
 
-	/*$(document).ready(function(){
-		$("submit").click(function(){
+	$(document).ready(function(){
+		$("input.btn").click(function(){
 			$.ajax({
-				url:"api/session/login",
+				url:"/api/session/login",
 				type:"POST",
 				contentType:'application/json',
 				data:JSON.stringify({
@@ -88,7 +88,7 @@
 				}
 			    });
 		});
-	});*/
+	});
 	/*$(".login_form_name").focus(function(){
 		var oldValue = $(this).val();
 		if(oldValue == this.defaultValue){
