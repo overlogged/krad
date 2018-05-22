@@ -31,50 +31,52 @@
         var usernameText = game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
         var passwordText = game.add.bitmapText(250, 255, 'chiller', 'PassWord', 54);
 
-        var signUpButton = game.add.button(270, 320, 'button', game.do_signup, this, 1, 0, 2);
+        var signUpButton = game.add.button(270, 320, 'button', do_signup, this, 1, 0, 2);
         var signUpButtonText = game.add.bitmapText(290, 316, 'chiller', 'Sign Up', 33);
 
-        var logInButton = game.add.button(450, 320, 'button', game.do_login, this, 1, 0, 2);
+        var logInButton = game.add.button(450, 320, 'button', do_login, this, 1, 0, 2);
         var logInButtonText = game.add.bitmapText(480, 318, 'chiller', 'Login', 33);
-      },
-
-      do_signup: function () {
-
-      },
-
-      do_login: function () {
-        var email = $("#email").val();
-        var password = $("#password").val();
-        var req = {
-          'email': email,
-          'password': password
-        };
-        console.log(req);
-        var v_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email);
-        var v_password = /[a-zA-Z0-9]{6,18}/.test(password);
-        if (!v_email || !v_password) {
-          alert("邮箱格式或密码格式不正确");
-          return;
-        }
-        $.ajax({
-          url: "/api/session/login",
-          type: "POST",
-          contentType: 'application/json',
-          data: JSON.stringify(req),
-          success: function (data, status) {
-            alert("登录成功");
-            console.log(data);
-            console.log(data.sid);
-            console.log(data.user);
-            window.location.href = ""; //需要跳转的地址
-          },
-          Error: function (data, status) {
-            alert("用户名或密码错误");
-            console.log(data);
-          }
-        });
       }
     });
+
+    function do_signup() {
+
+    }
+
+    function do_login() {
+      $("#email").hide();
+      var email = $("#email").val();
+      var password = $("#password").val();
+      var req = {
+        'email': email,
+        'password': password
+      };
+      console.log(req);
+      var v_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email);
+      var v_password = /[a-zA-Z0-9]{6,18}/.test(password);
+      if (!v_email || !v_password) {
+        alert("邮箱格式或密码格式不正确");
+        return;
+      }
+      $.ajax({
+        url: "/api/session/login",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(req),
+        success: function (data, status) {
+          alert("登录成功");
+          console.log(data);
+          console.log(data.sid);
+          console.log(data.user);
+          window.location.href = ""; //需要跳转的地址
+        },
+        Error: function (data, status) {
+          alert("用户名或密码错误");
+          console.log(data);
+        }
+      });
+    }
+
 
     $.ajax({
       url: "/api/session/register",
