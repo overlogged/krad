@@ -73,6 +73,27 @@
         });
       }
     });
+
+    $.ajax({
+      url: "/api/session/register",
+      type: "POST",
+      contentType: 'application/json',
+      data: JSON.stringify({
+        email: "2998868901@qq.com",
+        nickname: "why",
+        avatar: "assets/img/figure/figure1.png",
+        gender: 1,
+        password: "password"
+      }),
+      success: function (data, status) {
+        alert("测试账号注册成功");
+        console.log(data);
+      },
+      Error: function (data, status) {
+        alert("测试账号已注册");
+        console.log(data);
+      }
+    });
   </script>
 
 </body>
