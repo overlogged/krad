@@ -29,10 +29,10 @@
         var usernameText = game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
         var passwordText = game.add.bitmapText(250, 255, 'chiller', 'PassWord', 54);
 
-        var signUpButton = game.add.button(270, 320, 'button', game.actionOnClick, this, 1, 0, 2);
+        var signUpButton = game.add.button(270, 320, 'button', game.do_signup, this, 1, 0, 2);
         var signUpButtonText = game.add.bitmapText(290, 316, 'chiller', 'Sign Up', 33);
 
-        var logInButton = game.add.button(450, 320, 'button', game.actionOnClick, this, 1, 0, 2);
+        var logInButton = game.add.button(450, 320, 'button', game.do_login, this, 1, 0, 2);
         var logInButtonText = game.add.bitmapText(480, 318, 'chiller', 'Login', 33);
       },
 
