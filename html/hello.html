@@ -44,7 +44,6 @@
     }
 
     function do_login() {
-      $("#email").hide();
       var email = $("#email").val();
       var password = $("#password").val();
       var req = {
@@ -86,7 +85,7 @@
         email: "2998868901@qq.com",
         nickname: "why",
         avatar: "assets/img/figure/figure1.png",
-        gender: "boy",
+        gender: 0,
         password: "password"
       }),
       success: function (data, status) {

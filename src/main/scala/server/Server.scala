@@ -60,7 +60,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   final case class RequestRegister(email:String,
                                    nickname: String,
                                    avatar: String,
-                                   gender: String,
+                                   gender: Int,
                                    password: String)
   final case class RequestForgetPassword(email:String)
   final case class RequestSetNewPassword(sid:Int,new_password:String)
@@ -68,7 +68,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   final case class RequestChangeProfile(sid:Int,
                                         nickname: String,
                                         avatar: String,
-                                        gender: String)
+                                        gender: Int)
 
   // http server
   implicit val system: ActorSystem = ActorSystem("my-system")

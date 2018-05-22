@@ -88,12 +88,11 @@ object UserModel extends MyJsonProtocol{
     * will check the input
     * @return None if failed
     */
-  def register(email: String, nickname: String, avatar: String, gender: String, password: String):Option[Unit] = {
+  def register(email: String, nickname: String, avatar: String, gender: Int, password: String):Option[Unit] = {
     Some(())
       .guard(email.is_valid_email)
       .guard(nickname.is_valid_nickname)
       .guard(avatar.is_valid_avatar)
-      .guard(gender.is_valid_gender)
       .guard(password.is_valid_password)
       .guard(col_users.find(MongoDBObject("email" -> email)).count() == 0)
       .flatMap { _ =>
@@ -101,7 +100,7 @@ object UserModel extends MyJsonProtocol{
           "email" -> email,
           "nickname" -> nickname,
           "avatar" -> avatar,
-          "gender" -> (if (gender == "boy") User.boy else User.girl),
+          "gender" -> gender,
           "password" -> encrypt(password), // todo: encrypt the password at frontend
           "stats" -> Stats().toJson.toString()
         )))
@@ -185,17 +184,16 @@ object UserModel extends MyJsonProtocol{
     * will check the input
     * @return None if failed
     */
-  def changeProfile(email: String, nickname: String, avatar: String, gender: String):Option[Unit] = {
+  def changeProfile(email: String, nickname: String, avatar: String, gender: Int):Option[Unit] = {
     Some(())
       .guard(email.is_valid_email)
       .guard(nickname.is_valid_nickname)
       .guard(avatar.is_valid_avatar)
-      .guard(gender.is_valid_gender)
       .also { _ =>
         col_users.update(MongoDBObject("email" -> email), $set(
           "nickname" -> nickname,
           "avatar" -> avatar,
-          "gender" -> (if (gender == "boy") User.boy else User.girl),
+          "gender" -> gender,
           "stats" -> Stats().toJson.toString()
         ))
       }
