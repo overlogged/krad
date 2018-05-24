@@ -7,6 +7,7 @@
   <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
   <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -17,7 +18,7 @@
       preload: function () {
         game.load.image('background', 'assets/img/background1.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.spritesheet('button', 'assets/buttons/loginbutton.png', 100, 26);
+        game.load.spritesheet('button', 'assets/buttons/button.png', 100, 26);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
 
@@ -67,7 +68,7 @@
           console.log(data);
           console.log(data.sid);
           console.log(data.user);
-          window.location.href = ""; //需要跳转的地址
+          // window.location.href = ""; //需要跳转的地址
         },
         Error: function (data, status) {
           alert("用户名或密码错误");

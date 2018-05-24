@@ -7,13 +7,13 @@ input {
     background-repeat: repeat;
     border: 0px;
     border-radius: 4.5px;
-    padding: 10px;
+    padding: 5px;
     outline-color: dodgerblue;
 }
 
 .inputbox1 {
     background-image: url('../img/inputbox1.png');
-    height:36px;
+    height:28px;
 }
 
 .inputbox2 {
