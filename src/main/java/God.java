@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 public class God {
-/*    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // class: store all Player
     // function initialPlayerCharacter: 1. get the choice of players from initialPlayer
     //                                  2. set the value of character value

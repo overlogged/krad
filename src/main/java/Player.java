@@ -14,6 +14,10 @@ public class Player {
 
     String name;
 
+    //cards{strategy,skills}
+    //least energy consume = 4
+    //energyLim = cardNumLimit = healthPoint
+
     //static properties
     int mot;                       //motility
     int firePow;                  //firepower
