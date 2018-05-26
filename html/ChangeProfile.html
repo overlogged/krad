@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
+  <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+</head>
+<body>
+        <input type="password" id="password" class="inputbox1" style="left:410px;top:210px">
+        <input type="password" id="confirm" class="inputbox1" style="left:410px;top:270px">
+
+   <script>
+  var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
+      preload: function () {
+        game.load.image('background', 'assets/img/background1.png');
+        game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
+        game.load.spritesheet('button','assets/buttons/button1.jpg',100,34);
+        game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+      },
+   
+      create: function () {
+        var background = game.add.sprite(0, 0, 'background');
+        background.smoothed = true;
+        background.height = game.height;
+        background.width = game.width;
+
+        var changeText = game.add.bitmapText(280, 130, 'chiller', 'Change Profile', 70);
+        var nicknameText = game.add.bitmapText(260, 190, 'chiller', 'Nickname', 54);
+        var avatarText = game.add.bitmapText(290, 345, 'chiller', 'Avatar', 54);
+        var cofirmButton = game.add.button(395, 320, 'button', do_forget, this, 1, 0, 2);
+        var confirmButtonText = game.add.bitmapText(415, 325, 'chiller', 'Confirm', 28);
+        var genderText = game.add.bitmapText(280, 185, 'chiller', 'Gender', 54);
+        var maleText = game.add.bitmapText(435, 185, 'chiller', 'Boy', 54);
+        var femaleText = game.add.bitmapText(530, 185, 'chiller', 'Girl', 54);
+        var passwordText = game.add.bitmapText(265, 235, 'chiller', 'Password', 54);
+        var confirmText = game.add.bitmapText(275, 290, 'chiller', 'Confirm', 54);
+      }
+    });
+    
+   </script>
+
+</body>
+
+</html>
