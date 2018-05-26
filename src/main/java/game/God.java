@@ -14,7 +14,8 @@ public class God {
         int playerNum;
         Player[] allPlayers;
 
-        void initialPlayer(int playerNum, Player[] allPlayers, int[] playerSID) throws IOException {
+        void initialPlayer(int[] playerSID) throws IOException {
+            playerNum = playerSID.length;
 
             for (int i = 0; i < playerNum; i++){
                 allPlayers[i].SID = playerSID[i];
