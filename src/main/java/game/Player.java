@@ -35,19 +35,25 @@ public class Player {
                                          cardsOnHand[0] -> number of PAPERS
                                          cardsOnHand[1] -> number of SCISSORS
                                          cardsOnHand[2] -> number of STONES
-                                         */
+                                        */
 
-    int gamble=PAPER;                  /*
+    //properties about gamble
+    int gamble = PAPER;                /*
                                          gamble choices
                                          if one player does not choose his gamble choice one turn
                                          then the choice is the same as the last turn
                                         */
+    int gambleNum = 1;                 /*the number of the same gamble cards of one player in one turn
+                                           for example, one player shows 3 PAPERS in one turn, then gamble == PAPER
+                                           and gambleNum == 3
+                                         */
     int stratDecision;
     int skillsDecision;
-    MapUnit preLoc;                    //present location
-    boolean isWin=false;             /*
+    boolean isWin = false;            /*
                                         victory or defeat in one turn
                                         this variable should be set as false each turn ends
                                        */
-    boolean hasElem;                 //if the player maintains the element
+
+    MapUnit preLoc;                    //present location
+    boolean hasElem;                  //if the player maintains the element
 }
