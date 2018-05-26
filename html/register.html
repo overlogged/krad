@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 
@@ -110,3 +111,27 @@
 </body>
 
 </html>
+=======
+<script>
+    $.ajax({
+        url: "/api/session/register",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            email: "2998868901@qq.com",
+            nickname: "why",
+            avatar: "assets/img/figure/figure1.png",
+            gender: 0,
+            password: "password"
+        }),
+        success: function (data, status) {
+            alert("测试账号注册成功");
+            console.log(data);
+        },
+        error: function (data, status) {
+            alert("测试账号已注册");
+            console.log(data);
+        }
+    });
+</script>
+>>>>>>> 1545cc422d2dc6fb89d82814fa66dbf6f4dc5796

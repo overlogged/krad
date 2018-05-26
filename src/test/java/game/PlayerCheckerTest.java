@@ -1,4 +1,4 @@
-import scala.concurrent.java8.FuturesConvertersImpl;
+package game;
 
 public class PlayerCheckerTest {
     public final static int INF = 2147483647;

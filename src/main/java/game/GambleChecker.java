@@ -1,3 +1,5 @@
+package game;
+
 public class GambleChecker {
     //constant about gamble
     public static final int PAPER = 1;

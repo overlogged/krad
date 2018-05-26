@@ -1,3 +1,5 @@
+package game;
+
 // properties of a player
 public class Player {
     //constant about gamble
@@ -14,11 +16,16 @@ public class Player {
 
     String name;
 
+    //cards{strategy,skills}
+    //least energy consume = 4
+    //energyLim = cardNumLimit = healthPoint
+
     //static properties
     int mot;                       //motility
     int firePow;                  //firepower
     int range;                    //range
     int energyLim;               //energy limit
+    int SID;                      //session ID
 
     //dynamic properties
     int energy;                  //present energy

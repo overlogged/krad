@@ -1,3 +1,5 @@
+package game;
+
 public class FrontEndData {
     Player playerPos,playerPas;
     int playerNum;

@@ -1,3 +1,5 @@
+package game;
+
 public class GambleCheckerTest {
     static GambleCheckerTest test = new GambleCheckerTest();
     static GambleChecker gc = new GambleChecker();
