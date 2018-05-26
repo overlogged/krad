@@ -2,7 +2,7 @@ package game;
 
 // properties of a player
 public class Player {
-    //constant about gamble
+    //constant about gamble cards
     public static final int PAPER = 1;
     public static final int SCISSORS = 2;
     public static final int STONE = 3;
@@ -21,26 +21,39 @@ public class Player {
     //energyLim = cardNumLimit = healthPoint
 
     //static properties
-    int mot;                       //motility
-    int firePow;                  //firepower
-    int range;                    //range
-    int energyLim;               //energy limit
-    int SID;                      //session ID
+    int mot;                             //motility
+    int firePow;                        //firepower
+    int range;                          //range
+    int SID;                            //session ID
 
     //dynamic properties
-    int energy;                  //present energy
-    int team;                    //the team of the player:zombie or human
-    int gamble=PAPER;           /*
-                                   gamble choices
-                                   if one player does not choose his gamble choice one turn
-                                   then the choice is the same as the last turn
-                                  */
+    int energyLim;                      //energy limit
+    int energy;                         //present energy
+    int team;                           //the team of the player:zombie or human
+    int[] cardsOnHand = new int[3];   /*
+                                         the numbers of cards on players hands each turn
+                                         cardsOnHand[0] -> number of PAPERS
+                                         cardsOnHand[1] -> number of SCISSORS
+                                         cardsOnHand[2] -> number of STONES
+                                        */
+
+    //properties about gamble
+    int gamble = PAPER;                /*
+                                         gamble choices
+                                         if one player does not choose his gamble choice one turn
+                                         then the choice is the same as the last turn
+                                        */
+    int gambleNum = 1;                 /*the number of the same gamble cards of one player in one turn
+                                           for example, one player shows 3 PAPERS in one turn, then gamble == PAPER
+                                           and gambleNum == 3
+                                         */
     int stratDecision;
     int skillsDecision;
-    MapUnit preLoc;              //present location
-    boolean isWin=false;       /*
-                                  victory or defeat in one turn
-                                  this variable should be set as false each turn ends
-                                 */
-    boolean hasElem;           //if the player maintains the element
+    boolean isWin = false;            /*
+                                        victory or defeat in one turn
+                                        this variable should be set as false each turn ends
+                                       */
+
+    MapUnit preLoc;                    //present location
+    boolean hasElem;                  //if the player maintains the element
 }

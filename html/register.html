@@ -100,9 +100,33 @@
         alert("昵称含有非法字符");
         return;
       }
+<<<<<<< HEAD
+=======
+
+      $.ajax({
+        url: "/api/session/register",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(rep),
+        success: function (data, status) {
+          alert("账号注册成功");
+          console.log(data);
+          window.location.href = 'hello.html';
+        },
+        error: function (data, status) {
+          alert("账号注册失败");
+          console.log(data);
+        }
+      });
+>>>>>>> 6a41bac72295bca2b4f335f2f2985b5e22013388
     }
     </script>
 
 </body>
 
+<<<<<<< HEAD
 </html>
+=======
+</html>
+</html>
+>>>>>>> 6a41bac72295bca2b4f335f2f2985b5e22013388

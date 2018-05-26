@@ -6,6 +6,8 @@ public class GambleChecker {
     public static final int SCISSORS = 2;
     public static final int STONE = 3;
 
+    //TODO:Cards system{cards heap and cards distributing}
+
     /*
      judge the result of one pair of gamble
      if the return value is true, playerA wins
