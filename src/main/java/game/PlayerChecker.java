@@ -58,8 +58,8 @@ public class PlayerChecker{
     void fire(Player playerPos,Player playerPas,MapEdge direction){
         distance = myMap.outDistance(playerPas.preLoc,playerPos.preLoc);
         if(playerPos.range>=distance) {
-            move(playerPas, playerPos.energy, direction);
-            playerPos.energy = 0;
+            playerPas.energyLim -= playerPos.firePow;
+            //TODO:energy consuming
         }
     }
 
