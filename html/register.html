@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 
@@ -30,7 +29,7 @@
       preload: function () {
         game.load.image('background', 'assets/img/background1.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.spritesheet('button','assets/buttons/buttontest.png',100,34);
+        game.load.spritesheet('button','assets/buttons/button1.jpg',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
 
@@ -111,27 +110,3 @@
 </body>
 
 </html>
-=======
-<script>
-    $.ajax({
-        url: "/api/session/register",
-        type: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify({
-            email: "2998868901@qq.com",
-            nickname: "why",
-            avatar: "assets/img/figure/figure1.png",
-            gender: 0,
-            password: "password"
-        }),
-        success: function (data, status) {
-            alert("测试账号注册成功");
-            console.log(data);
-        },
-        error: function (data, status) {
-            alert("测试账号已注册");
-            console.log(data);
-        }
-    });
-</script>
->>>>>>> 1545cc422d2dc6fb89d82814fa66dbf6f4dc5796
