@@ -20,3 +20,16 @@ input {
     background-image: url('../img/inputbox2.png');
     height:35px;
 }
+
+.link1 {
+    font-family: 'Indie Flower',sans-serif;
+    font-size: 24px;
+    position: absolute;
+}
+
+.select{
+    font-family: 'Indie Flower',sans-serif;
+    position: absolute;
+    font-size: 18px;
+    width: 185px;
+}
