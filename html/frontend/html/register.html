@@ -24,7 +24,7 @@
 						<span></span><span class="mark">由3-6位英文字母、数字或下划线组成</span>
 					</li>
 					<li>
-						<span class="mustItem">性别:</span><input type="radio" name="sex" id="tSex" class="sex" value="1" checked>男<input type="radio" name="sex" class="sex" value="2">女
+						<span class="mustItem">性别:</span><input type="radio" name="sex" id="tSex" class="sex" value="1" checked>男<input type="radio" name="sex" class="sex" value="2">女<input type="radio" name="sex" class="sex">
 					</li>
 					<li><span></span><span class="mark"></span></li>
 					<li>
@@ -70,18 +70,19 @@
 				$.ajax({
 					  url:"/api/session/register",
 					  type:"POST",
+					  contentType: 'application/json',
 					  data:JSON.stringify({
-					  email:"2998868901@qq.com",
-					  nickname:"why",
-					  avatar:"assets/img/figure/figure.png",
-					  gender:"boy",
-					  password:"password"
+					    email:"2998868901@qq.com",
+					    nickname:"why",
+					    avatar:"assets/img/figure/figure1.png",
+					    gender:0,
+					    password:"password"
 					}),
 			        success:function(data,status){
 					    alert("注册成功");
 						console.log(data);
 				    },
-				    Error:function(data,status){
+				    error:function(data,status){
 						alert("注册失败");
 					    console.log(data);
 					}
