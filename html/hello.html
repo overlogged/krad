@@ -12,6 +12,7 @@
 <body>
   <input type="text" id="email" class="inputbox1" style="left:410px;top:210px">
   <input type="password" id="password" class="inputbox1" style="left:410px;top:270px">
+  <a href="forgetpassword.html" class="link1" style="left:620px;top:270px">Forget</a>
   <script>
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
@@ -29,39 +30,18 @@
 
         var loginText = game.add.bitmapText(350, 130, 'chiller', 'Log In', 70);
         var usernameText = game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
-        var passwordText = game.add.bitmapText(250, 255, 'chiller', 'PassWord', 54);
+        var passwordText = game.add.bitmapText(250, 255, 'chiller', 'Password', 54);
 
         var signUpButton = game.add.button(270, 320, 'button', do_signup, this, 1, 0, 2);
         var signUpButtonText = game.add.bitmapText(290, 320, 'chiller', 'Sign Up', 28);
 
         var logInButton = game.add.button(450, 320, 'button', do_login, this, 1, 0, 2);
         var logInButtonText = game.add.bitmapText(480, 322, 'chiller', 'Login', 28);
-
-        $.ajax({
-          url: "/api/session/register",
-          type: "POST",
-          contentType: 'application/json',
-          data: JSON.stringify({
-            email: "2998868901@qq.com",
-            nickname: "why",
-            avatar: "assets/img/figure/figure1.png",
-            gender: 0,
-            password: "password"
-          }),
-          success: function (data, status) {
-            alert("测试账号注册成功");
-            console.log(data);
-          },
-          error: function (data, status) {
-            alert("测试账号已注册");
-            console.log(data);
-          }
-        });
       }
     });
 
     function do_signup() {
-
+        window.location.href = "register.html"
     }
 
     function do_login() {

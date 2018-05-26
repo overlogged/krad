@@ -1,3 +1,5 @@
+package game;
+
 import game.CreateMap;
 import game.MapUnit;
 

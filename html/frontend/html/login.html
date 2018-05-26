@@ -55,12 +55,13 @@
 	$(document).ready(function(){
 		$("input.btn").click(function(){
 			alert("sds");
-			var emailStr="nicekingwei@foxmai.com";
+			var emailStr="2998868901@qq.com";
 		    var passwordStr="password";
 		    var emailrRsult=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(emailStr);
 		    var passwordResult=/[a-zA-Z0-9]{6,18}/.test(passwordStr);
 		    if(!emailrRsult||!passwordResult){
 			    alert("邮箱格式或密码格式不正确");
+				return;
 		    }
 		});
 		
@@ -80,9 +81,10 @@
 				    alert("登录成功");
 				    console.log(data);
 				    console.log(data.sid);
+					console.log(data.user);
 					window.location.href="";//需要跳转的地址
 			     },
-			    Error:function(data,status){
+			    error:function(data,status){
 				   alert("用户名或密码错误");
 				   console.log(data);
 				}
