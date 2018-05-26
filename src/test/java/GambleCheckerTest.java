@@ -1,3 +1,7 @@
+import game.FrontEndData;
+import game.GambleChecker;
+import game.Player;
+
 public class GambleCheckerTest {
     static GambleCheckerTest test = new GambleCheckerTest();
     static GambleChecker gc = new GambleChecker();

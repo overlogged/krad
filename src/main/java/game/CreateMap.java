@@ -1,3 +1,5 @@
+package game;
+
 import java.io.*;
 import server.Server;
 
@@ -5,7 +7,7 @@ public class CreateMap {
     int array_number;                      //Means the number of obj
     MapUnit[] sample;                      //Means obj array of mapunit
 
-    /*CreateMap() {
+    /*game.CreateMap() {
     }*/
 
     CreateMap(int number) {                 //Create a obj array

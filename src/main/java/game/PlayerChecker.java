@@ -1,4 +1,4 @@
-import scala.concurrent.java8.FuturesConvertersImpl;
+package game;
 
 public class PlayerChecker{
     MapChecker myMap = new MapChecker();

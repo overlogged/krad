@@ -1,5 +1,4 @@
-
-import java.io.*;
+package game;
 
 public class MapChecker {
     public static int outDistance(MapUnit des_location,MapUnit src_location){

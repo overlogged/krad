@@ -1,3 +1,5 @@
+package game;
+
 // properties of a player
 public class Player {
     //constant about gamble

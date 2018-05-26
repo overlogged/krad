@@ -1,3 +1,5 @@
+package game;
+
 import java.io.Serializable;
 
 public class MapEdge implements Serializable{

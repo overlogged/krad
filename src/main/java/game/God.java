@@ -1,8 +1,10 @@
+package game;
+
 import java.io.IOException;
 
 public class God {
 /*  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // class: store all Player
+    // class: store all game.Player
     // function initialPlayerCharacter: 1. get the choice of players from initialPlayer
     //                                  2. set the value of character value
     // function initialPlayerCharacter: 1. get the default birth unit from map
@@ -10,9 +12,9 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     class AllPlayer{
         int playerNum;
-        Player[] allPlayers;
+        game.Player[] allPlayers;
 
-        void initialPlayer(int playerNum, Player[] allPlayers) throws IOException {
+        void initialPlayer(int playerNum, game.Player[] allPlayers) throws IOException {
             // TODO: get the playersCharacterChoice from 前端
             int[] playersCharacterChoice=new int[playerNum];
             // begin
@@ -23,20 +25,20 @@ public class God {
             this.initialPlayerPos();
         }
 
-        private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
+        private void initialPlayerCharacter(int playerNum, game.Player[] allPlayers, int[] playersCharacterChoice) {
 
             for(int i = 0; i < playerNum; i++){
                 // TODO: 从player里面例化出来character，然后赋值
                 //begin
-                allPlayers[i].energyLim = Player.character[playersCharacterChoice].energyLim;
-                allPlayers[i].mot = Player.character[playersCharacterChoice].mot;
-                allPlayers[i].firePow = Player.character[playersCharacterChoice].firePow;
-                allPlayers[i].range = Player.character[playersCharacterChoice].range;
+                allPlayers[i].energyLim = game.Player.character[playersCharacterChoice].energyLim;
+                allPlayers[i].mot = game.Player.character[playersCharacterChoice].mot;
+                allPlayers[i].firePow = game.Player.character[playersCharacterChoice].firePow;
+                allPlayers[i].range = game.Player.character[playersCharacterChoice].range;
                 //end
             }
         }
 
-        private void initialPlayerPos(int playerNum, Player[] allPlayers, MapUnit[] defaultMap) {
+        private void initialPlayerPos(int playerNum, game.Player[] allPlayers, game.MapUnit[] defaultMap) {
             for(int i = 0; i < playerNum; i++){
                 //TODO: create birth place in map
                 //begin
@@ -58,7 +60,7 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     void initialGame(int playerNum) throws IOException {
         AllPlayer defaultNewPlayer = new AllPlayer();
-        defaultNewPlayer.allPlayers = new Player[playerNum];
+        defaultNewPlayer.allPlayers = new game.Player[playerNum];
         //TODO: setmap
         //begin
         //end
@@ -76,7 +78,7 @@ public class God {
         // TODO: 2.从前端知道这人搞不搞事
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
             System.out.print("你想用技能吗？");
-            //TODO: Player::skillDecision
+            //TODO: game.Player::skillDecision
             //begin
             defaultAllPlayer.allPlayers[i].skillDecision = System.in.read();
             //end
@@ -92,7 +94,7 @@ public class God {
         // TODO: 2.从前端知道这人搞不搞事
         for(int i = 0; i < defaultAllPlayer.playerNum; i++) {
             System.out.print("你想做什么行动？");
-            //TODO: Player::moveDecision
+            //TODO: game.Player::moveDecision
             //begin
             defaultAllPlayer.allPlayers[i].moveDecision = System.in.read();
             //end
@@ -108,9 +110,9 @@ public class God {
     void useSkill(AllPlayer defaultAllPlayer) throws IOException{
         // TODO 安排顺序，体现在下面是怎么for的
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            // TODO: SkillsChecker, Player::skillDecision
+            // TODO: game.SkillsChecker, game.Player::skillDecision
             // begin
-            if(defaultAllPlayer.allPlayers[i].skillDecision == Player.SKILL)
+            if(defaultAllPlayer.allPlayers[i].skillDecision == game.Player.SKILL)
                 ;
             // end
             else
@@ -125,9 +127,9 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     void firePosition(AllPlayer defaultAllPlayer){
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            // TODO: fire是什么操作, Player::skillDecision
+            // TODO: fire是什么操作, game.Player::skillDecision
             // begin
-            if(defaultAllPlayer.allPlayers[i].moveDecision == Player.FIRE)
+            if(defaultAllPlayer.allPlayers[i].moveDecision == game.Player.FIRE)
                 ;
             // end
             else
@@ -148,7 +150,7 @@ public class God {
             // begin
             defaultAllPlayer.allPlayers[i].gamble = System.in.read();
             // end
-            GambleChecker.winJudge(defaultAllPlayer.playerNum, defaultAllPlayer.allPlayers);
+            game.GambleChecker.winJudge(defaultAllPlayer.playerNum, defaultAllPlayer.allPlayers);
         }
     }
 
@@ -159,7 +161,7 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     void movePlayers(AllPlayer defaultAllPlayer){
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(defaultAllPlayer.allPlayers[i].moveDecision == Player.MOVE){
+            if(defaultAllPlayer.allPlayers[i].moveDecision == game.Player.MOVE){
                 //TODO: 懒得写了
             }
         }
@@ -176,7 +178,7 @@ public class God {
         boolean zombieWin = checkWhetherZombieWin(defaultAllPlayer);
         //TODO: if (zombieWin), tell 前端
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN)
+            if(defaultAllPlayer.allPlayers[i].team == game.Player.HUMAN)
                 System.out.print("Zombie win, game over!");
             else
                 System.out.print("Congratulation, zombies win!");
@@ -184,7 +186,7 @@ public class God {
         boolean humanWin = checkWhetherHumanWin(defaultAllPlayer);
         //TODO: if (humanWin), tell 前端
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(defaultAllPlayer.allPlayers[i].team == Player.ZOMBIE)
+            if(defaultAllPlayer.allPlayers[i].team == game.Player.ZOMBIE)
                 System.out.print("Human win, game over!");
             else
                 System.out.print("Congratulation, human win!");
@@ -194,7 +196,7 @@ public class God {
     boolean checkWhetherZombieWin(AllPlayer defaultAllPlayer){
         boolean win = true;
         for (int i = 0; i < defaultAllPlayer.playerNum; i++)
-            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN){
+            if(defaultAllPlayer.allPlayers[i].team == game.Player.HUMAN){
                 win = false;
                 break;
             }
@@ -205,8 +207,8 @@ public class God {
         for (int i = 0; i < defaultAllPlayer.playerNum; i++)
             //TODO: status加一个离开点leave
             //begin
-            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN &&
-                    defaultAllPlayer.allPlayers[i].preLoc.status == MapUnit.LEAVE &&
+            if(defaultAllPlayer.allPlayers[i].team == game.Player.HUMAN &&
+                    defaultAllPlayer.allPlayers[i].preLoc.status == game.MapUnit.LEAVE &&
                     defaultAllPlayer.allPlayers[i].hasElem == true){
                 win = true;
                 break;
@@ -224,17 +226,17 @@ public class God {
         for (int i = 0; i < defaultAllplayer.playerNum; i++){
             for (int j = i+1; j < defaultAllplayer.playerNum; j++){
                 if(defaultAllplayer.allPlayers[i].preLoc.mark == defaultAllplayer.allPlayers[j].preLoc.mark) {
-                    if(defaultAllplayer.allPlayers[i].team == Player.HUMAN &&
-                            defaultAllplayer.allPlayers[j].team == Player.ZOMBIE) {
-                        defaultAllplayer.allPlayers[i].team = Player.ZOMBIE;
+                    if(defaultAllplayer.allPlayers[i].team == game.Player.HUMAN &&
+                            defaultAllplayer.allPlayers[j].team == game.Player.ZOMBIE) {
+                        defaultAllplayer.allPlayers[i].team = game.Player.ZOMBIE;
                         //TODO:告诉前端这人被感染了然后提示
                         //begin
                         System.out.print("A human is infected!");
                         //end
                     }
-                    if(defaultAllplayer.allPlayers[j].team == Player.HUMAN &&
-                            defaultAllplayer.allPlayers[i].team == Player.ZOMBIE) {
-                        defaultAllplayer.allPlayers[j].team = Player.ZOMBIE;
+                    if(defaultAllplayer.allPlayers[j].team == game.Player.HUMAN &&
+                            defaultAllplayer.allPlayers[i].team == game.Player.ZOMBIE) {
+                        defaultAllplayer.allPlayers[j].team = game.Player.ZOMBIE;
                         //TODO:告诉前端这人被感染了然后提示
                         //begin
                         System.out.print("A human is infected!");
