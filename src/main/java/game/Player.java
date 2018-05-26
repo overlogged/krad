@@ -25,6 +25,7 @@ public class Player {
     int firePow;                  //firepower
     int range;                    //range
     int energyLim;               //energy limit
+    int SID;                      //session ID
 
     //dynamic properties
     int energy;                  //present energy

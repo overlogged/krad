@@ -3,8 +3,8 @@ package game;
 import java.io.IOException;
 
 public class God {
-/*  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // class: store all game.Player
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // class: store all Player
     // function initialPlayerCharacter: 1. get the choice of players from initialPlayer
     //                                  2. set the value of character value
     // function initialPlayerCharacter: 1. get the default birth unit from map
@@ -12,46 +12,61 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     class AllPlayer{
         int playerNum;
-        game.Player[] allPlayers;
+        Player[] allPlayers;
 
-        void initialPlayer(int playerNum, game.Player[] allPlayers) throws IOException {
+        void initialPlayer(int playerNum, Player[] allPlayers, int[] playerSID) throws IOException {
+
+            for (int i = 0; i < playerNum; i++){
+                allPlayers[i].SID = playerSID[i];
+            }
+
+
+
+
+            /*
             // TODO: get the playersCharacterChoice from 前端
             int[] playersCharacterChoice=new int[playerNum];
             // begin
-            // 这段要写怎么从前端搞过来
+            // 这段要写怎么从前端搞过来，我下面随便写的
+            for (int i = 0; i < playerNum; i++){
+                playersCharacterChoice[i] = System.in.read();
+            }
             // end
 
             this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
-            this.initialPlayerPos();
+            this.initialPlayerPos(playerNum, allPlayers, );
+            */
         }
-
-        private void initialPlayerCharacter(int playerNum, game.Player[] allPlayers, int[] playersCharacterChoice) {
+/*
+        private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
 
             for(int i = 0; i < playerNum; i++){
                 // TODO: 从player里面例化出来character，然后赋值
                 //begin
-                allPlayers[i].energyLim = game.Player.character[playersCharacterChoice].energyLim;
-                allPlayers[i].mot = game.Player.character[playersCharacterChoice].mot;
-                allPlayers[i].firePow = game.Player.character[playersCharacterChoice].firePow;
-                allPlayers[i].range = game.Player.character[playersCharacterChoice].range;
+                allPlayers[i].energyLim = Player.character[playersCharacterChoice].energyLim;
+                allPlayers[i].mot = Player.character[playersCharacterChoice].mot;
+                allPlayers[i].firePow = Player.character[playersCharacterChoice].firePow;
+                allPlayers[i].range = Player.character[playersCharacterChoice].range;
                 //end
             }
         }
 
-        private void initialPlayerPos(int playerNum, game.Player[] allPlayers, game.MapUnit[] defaultMap) {
+        private void initialPlayerPos(int playerNum, Player[] allPlayers, MapUnit[] defaultMap) {
             for(int i = 0; i < playerNum; i++){
-                //TODO: create birth place in map
+                //TODO: 地图能不能告诉我出生地址
                 //begin
                 allPlayers[i].preLoc = defaultMap.birthLoc;
                 //end
             }
         }
-
+*/
     }
+    private AllPlayer defaultAllPlayer;
+    private boolean humanWin;
+    private MapUnit[] gameMap;
 
 
-
-
+/*
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // func: start the game
     // set map
@@ -60,11 +75,13 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     void initialGame(int playerNum) throws IOException {
         AllPlayer defaultNewPlayer = new AllPlayer();
-        defaultNewPlayer.allPlayers = new game.Player[playerNum];
+        defaultNewPlayer.allPlayers = new Player[playerNum];
         //TODO: setmap
         //begin
+        //我这里用的是特殊案例
+        gameMap = Create();
         //end
-        //TODO: choose character
+        //choose character
         defaultNewPlayer.initialPlayer(playerNum, defaultNewPlayer.allPlayers);
     }
 
@@ -78,9 +95,9 @@ public class God {
         // TODO: 2.从前端知道这人搞不搞事
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
             System.out.print("你想用技能吗？");
-            //TODO: game.Player::skillDecision
+            //TODO: Player::skillDecisions
             //begin
-            defaultAllPlayer.allPlayers[i].skillDecision = System.in.read();
+            defaultAllPlayer.allPlayers[i].skillsDecision = System.in.read();
             //end
         }
     }
@@ -94,10 +111,25 @@ public class God {
         // TODO: 2.从前端知道这人搞不搞事
         for(int i = 0; i < defaultAllPlayer.playerNum; i++) {
             System.out.print("你想做什么行动？");
-            //TODO: game.Player::moveDecision
+            //TODO: Player::moveDecision
             //begin
-            defaultAllPlayer.allPlayers[i].moveDecision = System.in.read();
+            defaultAllPlayer.allPlayers[i].stratDecision = System.in.read();
             //end
+        }
+    }
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // func:
+    // 要素确认
+    //    default: no
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    void checkFactor(AllPlayer defaultAllPlayer){
+        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
+            if(!defaultAllPlayer.allPlayers[i].hasElem && defaultAllPlayer.allPlayers[i].preLoc.status==1
+                    && defaultAllPlayer.allPlayers[i].team == Player.HUMAN)
+                defaultAllPlayer.allPlayers[i].hasElem = true;
+            else
+                ;
         }
     }
 
@@ -110,13 +142,13 @@ public class God {
     void useSkill(AllPlayer defaultAllPlayer) throws IOException{
         // TODO 安排顺序，体现在下面是怎么for的
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            // TODO: game.SkillsChecker, game.Player::skillDecision
+            // TODO: SkillsChecker
             // begin
-            if(defaultAllPlayer.allPlayers[i].skillDecision == game.Player.SKILL)
+            if(defaultAllPlayer.allPlayers[i].skillsDecision != 0)
                 ;
-            // end
+                // end
             else
-                continue;
+                ;
         }
     }
 
@@ -125,12 +157,24 @@ public class God {
     // 开火
     //    default: no
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void firePosition(AllPlayer defaultAllPlayer){
+    void fire(AllPlayer defaultAllPlayer) throws IOException{
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            // TODO: fire是什么操作, game.Player::skillDecision
+            // TODO: 前端交互：这是给谁fire的
+            System.out.print("你想对几号玩家fire？");
+            //begin
+            int fired = System.in.read();
+            //end
+            // TODO: 前端交互：这是给哪个方向fire的
+            System.out.print("你想对几号玩家fire？");
+            //begin
+            int fireDirection = System.in.read();
+            //end
+            // TODO: fire好像那边还在修改
+            // TODO: 把fire改成静态
             // begin
-            if(defaultAllPlayer.allPlayers[i].moveDecision == game.Player.FIRE)
-                ;
+            if(defaultAllPlayer.allPlayers[i].stratDecision == Player.FIRE) {
+                PlayerChecker.fire(defaultAllPlayer.allPlayers[i].preLoc, defaultAllPlayer.allPlayers[fired].preLoc, defaultAllPlayer.allPlayers[i].preLoc.edge[fireDirection]);
+            }
             // end
             else
                 continue;
@@ -150,7 +194,8 @@ public class God {
             // begin
             defaultAllPlayer.allPlayers[i].gamble = System.in.read();
             // end
-            game.GambleChecker.winJudge(defaultAllPlayer.playerNum, defaultAllPlayer.allPlayers);
+            // 通过调用gamblechecker来进行充能调整
+            GambleChecker.winJudge(defaultAllPlayer.playerNum, defaultAllPlayer.allPlayers);
         }
     }
 
@@ -159,44 +204,63 @@ public class God {
     // 判断移动距离
     //    default: no
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void movePlayers(AllPlayer defaultAllPlayer){
+    void movePlayers(AllPlayer defaultAllPlayer) throws IOException{
         for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(defaultAllPlayer.allPlayers[i].moveDecision == game.Player.MOVE){
-                //TODO: 懒得写了
-            }
+            System.out.print("你想走哪个方向？");
+            // TODO: 前端交互
+            // begin
+            defaultAllPlayer.allPlayers[i].gamble = System.in.read();
+            // end
         }
     }
 
-
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:判断胜负
+    // func:游戏结束
     // 感染者赢：所有人都是zombie
     // 生存者赢：拿到要素
     //    default: no
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void checkWhetherWin(AllPlayer defaultAllPlayer){
-        boolean zombieWin = checkWhetherZombieWin(defaultAllPlayer);
-        //TODO: if (zombieWin), tell 前端
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(defaultAllPlayer.allPlayers[i].team == game.Player.HUMAN)
-                System.out.print("Zombie win, game over!");
-            else
-                System.out.print("Congratulation, zombies win!");
+
+    void gameOver(boolean humanwin){
+        if (humanwin){
+            //TODO: if (humanWin), tell 前端
+            System.out.print("Human win!");
         }
-        boolean humanWin = checkWhetherHumanWin(defaultAllPlayer);
-        //TODO: if (humanWin), tell 前端
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(defaultAllPlayer.allPlayers[i].team == game.Player.ZOMBIE)
-                System.out.print("Human win, game over!");
-            else
-                System.out.print("Congratulation, human win!");
+        else{
+
+            //TODO: if (zombieWin), tell 前端
+            System.out.print("Zombie win!");
         }
+        //TODO:前端可能需要展示数据？
+        //TODO:清理本局游戏残留数据
+    }
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // func:判断胜负
+    // 感染者赢：所有人都是zombie
+    // 生存者赢：拿到要素
+    //    return: 有没有结束游戏
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    boolean checkWhetherWin(AllPlayer defaultAllPlayer){
+        boolean zombieLocalWin = checkWhetherZombieWin(defaultAllPlayer);
+        boolean humanLocalWin = checkWhetherHumanWin(defaultAllPlayer);
+        if(humanLocalWin) {
+            humanWin = true;
+            return true;
+        }
+        else if(zombieLocalWin) {
+            humanWin = false;
+            gameOver(true);
+            return true;
+        }
+        else
+            return false;
     }
 
     boolean checkWhetherZombieWin(AllPlayer defaultAllPlayer){
         boolean win = true;
         for (int i = 0; i < defaultAllPlayer.playerNum; i++)
-            if(defaultAllPlayer.allPlayers[i].team == game.Player.HUMAN){
+            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN){
                 win = false;
                 break;
             }
@@ -207,13 +271,13 @@ public class God {
         for (int i = 0; i < defaultAllPlayer.playerNum; i++)
             //TODO: status加一个离开点leave
             //begin
-            if(defaultAllPlayer.allPlayers[i].team == game.Player.HUMAN &&
-                    defaultAllPlayer.allPlayers[i].preLoc.status == game.MapUnit.LEAVE &&
+            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN &&
+                    defaultAllPlayer.allPlayers[i].preLoc.status == MapUnit.LEAVE &&
                     defaultAllPlayer.allPlayers[i].hasElem == true){
                 win = true;
                 break;
             }
-            //end
+        //end
 
         return win;
     }
@@ -225,26 +289,95 @@ public class God {
     void checkWhetherInfect(AllPlayer defaultAllplayer){
         for (int i = 0; i < defaultAllplayer.playerNum; i++){
             for (int j = i+1; j < defaultAllplayer.playerNum; j++){
-                if(defaultAllplayer.allPlayers[i].preLoc.mark == defaultAllplayer.allPlayers[j].preLoc.mark) {
-                    if(defaultAllplayer.allPlayers[i].team == game.Player.HUMAN &&
-                            defaultAllplayer.allPlayers[j].team == game.Player.ZOMBIE) {
-                        defaultAllplayer.allPlayers[i].team = game.Player.ZOMBIE;
-                        //TODO:告诉前端这人被感染了然后提示
-                        //begin
-                        System.out.print("A human is infected!");
-                        //end
-                    }
-                    if(defaultAllplayer.allPlayers[j].team == game.Player.HUMAN &&
-                            defaultAllplayer.allPlayers[i].team == game.Player.ZOMBIE) {
-                        defaultAllplayer.allPlayers[j].team = game.Player.ZOMBIE;
-                        //TODO:告诉前端这人被感染了然后提示
-                        //begin
-                        System.out.print("A human is infected!");
-                        //end
-                    }
-                }
+                // TODO: 让PlayerChecker.infection静态
+                PlayerChecker.infection(defaultAllPlayer.allPlayers[i], defaultAllPlayer.allPlayers[j]);
             }
         }
     }
-*/
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // func: 有没有人能量溢出
+    // 溢出：变成最大值
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    void checkWhetherEnergyOverflow(AllPlayer defaultAllplayer){
+        for (int i = 0; i < defaultAllplayer.playerNum; i++){
+            if (defaultAllplayer.allPlayers[i].energy > defaultAllplayer.allPlayers[i].energyLim){
+                defaultAllplayer.allPlayers[i].energy = defaultAllplayer.allPlayers[i].energyLim;
+            }
+        }
+    }
+    void game() throws  IOException{
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Step one: init
+        // func: 获取人的数目然后进行初始化
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        // TODO: 跟前端交互来完成获得玩家数目
+        //begin
+        System.out.print("请输入玩家数目：");
+        int numOfPlayers = System.in.read();
+        //end
+        initialGame(numOfPlayers);
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Step two: gaming
+        // func: 在每个周期进行操作
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        while(true){
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Stage one: ready
+            // func: 申明要使用的主动技
+            //      申明要使用的行动
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //1 申明要使用的主动技
+            tellSkill(defaultAllPlayer);
+            //2 申明要使用的行动
+            tellAction(defaultAllPlayer);
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Stage two: gamble
+            // func: 猜拳并记录结果，充能调整
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            gamble(defaultAllPlayer);
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Stage three: 行动
+            // func: 主动技能的释放
+            //      开火结果
+            //      位置变更
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //1 主动技能的释放
+            useSkill(defaultAllPlayer);
+            //2 开火结果
+            fire(defaultAllPlayer);
+            //3 位置变更
+            movePlayers(defaultAllPlayer);
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Stage four: 结算
+            // func: 要 素 确 认
+            //      获胜判定
+            //      感染判定
+            //      能量有无溢出
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //1 要素确认
+            checkFactor(defaultAllPlayer);
+            //2 获胜判定
+            if(checkWhetherWin(defaultAllPlayer))
+                break;
+            else
+                ;
+            //3 感染判定
+            checkWhetherInfect(defaultAllPlayer);
+            //4 能量有无溢出
+            checkWhetherEnergyOverflow(defaultAllPlayer);
+
+        }
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Step three: closing
+        // func: 结束
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        gameOver(humanWin);
+    }
+    */
 }
