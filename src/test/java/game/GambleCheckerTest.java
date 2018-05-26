@@ -1,6 +1,4 @@
-import game.FrontEndData;
-import game.GambleChecker;
-import game.Player;
+package game;
 
 public class GambleCheckerTest {
     static GambleCheckerTest test = new GambleCheckerTest();

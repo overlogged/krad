@@ -10,33 +10,32 @@ public class God {
     // function initialPlayerCharacter: 1. get the default birth unit from map
     //                                  2. set the value of position
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    class AllPlayer{
-        int playerNum;
-        Player[] allPlayers;
+    private int playerNum;
+    private Player[] allPlayers;
 
-        void initialPlayer(int playerNum, Player[] allPlayers, int[] playerSID) throws IOException {
+    public void initialPlayer(int[] playerSID) throws IOException {
+        playerNum = playerSID.length;
 
-            for (int i = 0; i < playerNum; i++){
-                allPlayers[i].SID = playerSID[i];
-            }
-
-
-
-
-            /*
-            // TODO: get the playersCharacterChoice from 前端
-            int[] playersCharacterChoice=new int[playerNum];
-            // begin
-            // 这段要写怎么从前端搞过来，我下面随便写的
-            for (int i = 0; i < playerNum; i++){
-                playersCharacterChoice[i] = System.in.read();
-            }
-            // end
-
-            this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
-            this.initialPlayerPos(playerNum, allPlayers, );
-            */
+        for (int i = 0; i < playerNum; i++){
+            allPlayers[i].SID = playerSID[i];
         }
+
+
+
+
+        /*
+        // TODO: get the playersCharacterChoice from 前端
+        int[] playersCharacterChoice=new int[playerNum];
+        // begin
+        // 这段要写怎么从前端搞过来，我下面随便写的
+        for (int i = 0; i < playerNum; i++){
+            playersCharacterChoice[i] = System.in.read();
+        }
+        // end
+
+        this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
+        this.initialPlayerPos(playerNum, allPlayers, );
+        */
 /*
         private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
 
@@ -61,7 +60,6 @@ public class God {
         }
 */
     }
-    private AllPlayer defaultAllPlayer;
     private boolean humanWin;
     private MapUnit[] gameMap;
 

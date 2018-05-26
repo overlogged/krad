@@ -5,7 +5,9 @@ import java.util.Date
 import common.Bimap
 import game.UserModel.User
 import server.Server.{RequestLogin, RequestMatch, RequestRegister}
+
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -86,11 +88,11 @@ object SessionController {
     * matchPlayers
     */
   var matching_count = 0
+
   def matchPlayers(req:RequestMatch):Future[Option[Int]] = Future {
     matching_count.synchronized {
       matching_count += 1
     }
-
     // wait
     var stop = false
     var result:Option[Int] = None
@@ -109,19 +111,19 @@ object SessionController {
             // start a game
             this.synchronized {
               // todo: random
-              var in_game_count:Int = 0
+              var choosed_players = ArrayBuffer[Int]()
               val god = new God()
-              for(player<-states) if(player._2.state == StateMatching && in_game_count < player_count) {
+              for(player<-states) if(player._2.state == StateMatching && choosed_players.size < player_count) {
                 states(player._1) = player._2.copy(state = StateReady,god = god)
                 matching_count -= 1
-                in_game_count += 1
+                choosed_players += player._1
               }
+              god.initialPlayer(choosed_players.toArray)
             }
           }
         }
       }
     }
-
     result
   }
 }
