@@ -11,7 +11,7 @@ object UserController {
   /**
     * forget password
     */
-  def forget(req:RequestForgetPassword) : Future[String] = {
+  def forget(req:RequestForgetPassword) : Future[Unit] = {
     val uid = req.email
     UserModel.checkUser(uid).map { _ =>
       val sid = createSession(uid)
@@ -19,7 +19,7 @@ object UserController {
       val text = s"请点击以下链接以重置密码： ${config.web_url}/changepassword.html?sid=$sid"
       Mail.send(req.email, title, text)
     }.getOrElse{
-      Future("")
+      Future(())
     }
   }
 

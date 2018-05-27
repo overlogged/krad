@@ -1,6 +1,6 @@
 package common
 
-import org.apache.commons.mail.HtmlEmail
+import org.apache.commons.mail.{EmailException, HtmlEmail}
 import server.Server
 import server.Server.config
 
@@ -26,6 +26,13 @@ object Mail {
     email.setCharset("utf-8")
     email.setHtmlMsg(text)
     Server.log("[send]",to+subject+text)
-    email.send
+    try{
+      email.send
+    }catch{
+      case e:EmailException => {
+        e.printStackTrace()
+      }
+    }
+    ()
   }
 }
