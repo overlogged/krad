@@ -21,6 +21,7 @@ object Mail {
     try {
       val email = new HtmlEmail
       email.setHostName(config.email_host)
+      email.setSmtpPort(25)
       email.setAuthentication(config.email_username, config.email_password)
       email.addTo(to)
       email.setFrom(config.email_username)
