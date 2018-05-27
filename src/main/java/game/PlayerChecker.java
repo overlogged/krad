@@ -16,7 +16,7 @@ public class PlayerChecker{
 
     //energy acquiring and consuming
     void energyAcq(Player playerMain,int energyVal){
-        if(playerMain.energy<playerMain.energyLim)
+        if(playerMain.energy<playerMain.healthPoint)
             playerMain.energy+=energyVal;
     }
     void energyConsume(Player playerMain,int energyVal) {
@@ -35,7 +35,7 @@ public class PlayerChecker{
                     fire(awardData.playerPos,awardData.playerPas,awardData.fireDirection);
                     break;
                 case Player.DEPOSIT:
-                    if(playerMain.energy<playerMain.energyLim)
+                    if(playerMain.energy<playerMain.healthPoint)
                         energyAcq(playerMain,1);
                     break;
             }
@@ -58,7 +58,7 @@ public class PlayerChecker{
     void fire(Player playerPos,Player playerPas,MapEdge direction){
         distance = myMap.outDistance(playerPas.preLoc,playerPos.preLoc);
         if(playerPos.range>=distance) {
-            playerPas.energyLim -= playerPos.firePow;
+            playerPas.healthPoint-= playerPos.firePow;
             //TODO:energy consuming
         }
     }
@@ -73,7 +73,7 @@ public class PlayerChecker{
                     playerPas.hasElem = false;
                     playerPas.firePow = 0;
                     playerPas.range = 0;
-                    playerPas.energyLim = 0;
+                    playerPas.healthPoint = 0;
                 }
             }
         }

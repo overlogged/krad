@@ -2,40 +2,37 @@ package game;
 
 // properties of a player
 public class Player {
+    //constant about teams
+    public static final int HUMAN = 0;
+    public static final int ZOMBIE = 1;
     //constant about gamble cards
     public static final int PAPER = 1;
     public static final int SCISSORS = 2;
     public static final int STONE = 3;
-    //constant about teams
-    public static final int HUMAN = 0;
-    public static final int ZOMBIE = 1;
     //constant about strategy decision
-    public static final int MOVE = 1;
-    public static final int DEPOSIT = 2;
-    public static final int FIRE = 3;
+    public static final int MOVE = 4;
+    public static final int DEPOSIT = 5;
+    public static final int FIRE = 6;
+    public static final int SKILLS = 7;
 
     String name;
 
     //cards{strategy,skills}
     //least energy consume = 4
-    //energyLim = cardNumLimit = healthPoint
-
     //static properties
+
+    //cards system
+    int[] cardsOnHand;
+
     int mot;                             //motility
     int firePow;                        //firepower
     int range;                          //range
     int SID;                            //session ID
 
     //dynamic properties
-    int energyLim;                      //energy limit
+    int healthPoint;                    //energy limit
     int energy;                         //present energy
     int team;                           //the team of the player:zombie or human
-    int[] cardsOnHand = new int[3];   /*
-                                         the numbers of cards on players hands each turn
-                                         cardsOnHand[0] -> number of PAPERS
-                                         cardsOnHand[1] -> number of SCISSORS
-                                         cardsOnHand[2] -> number of STONES
-                                        */
 
     //properties about gamble
     int gamble = PAPER;                /*
@@ -54,6 +51,7 @@ public class Player {
                                         this variable should be set as false each turn ends
                                        */
 
+    //properties about location
     MapUnit preLoc;                    //present location
     boolean hasElem;                  //if the player maintains the element
 }
