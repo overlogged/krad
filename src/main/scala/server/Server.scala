@@ -129,9 +129,14 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         post {
           entity(as[RequestForgetPassword]) { req =>
             log("post", "user/forget")
-            onComplete(UserController.forget(req)) {
-              case Success(_) => complete(HttpResponse(StatusCodes.Accepted))
-              case Failure(_) => complete(HttpResponse(StatusCodes.BadRequest))
+            UserController.forget(req) match {
+              case Some(future) => {
+                onComplete(future) {
+                  case Success(_) => complete(HttpResponse(StatusCodes.Accepted))
+                  case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+                }
+              }
+              case None => complete(HttpResponse(StatusCodes.BadRequest))
             }
           }
         }
