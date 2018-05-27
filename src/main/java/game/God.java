@@ -4,6 +4,8 @@ import java.io.IOException;
 import game.GodController.*;
 
 public class God {
+
+
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // class: store all Player
     // function initialPlayerCharacter: 1. get the choice of players from initialPlayer
@@ -11,11 +13,65 @@ public class God {
     // function initialPlayerCharacter: 1. get the default birth unit from map
     //                                  2. set the value of position
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private int playerNum;
-    private Player[] allPlayers;
+    private int playerNum;      //how many people to play the game
+    private Player[] allPlayers;//preserve the state of players
+    private boolean humanWin;   //whether someone win
+    private MapUnit[] gameMap;  //map of the game
+    int gameState;              //state of the game:
+    //1
+    // Step one: init                   get the heroChoice
+    //send the heroChoice
 
+    // Step two: gaming
+    // Stage one: ready
+    //2
+    //申明要使用的主动技               get the skillChoice
+    //send the skillChoice
+
+    //3
+    //申明要使用的行动                 get the moveChoice
+    //send the moveChoice
+    // Stage two: gamble
+    //4
+    // 猜拳                          get the gambleChoice
+    //send the gambleChoice
+    // 充能调整
+    // Stage three: 行动
+    //5
+    //主动技能的释放                   get None
+    //send the skillResult，具体内容暂定
+    //6
+    //开火结果                        get None
+    //send the fireResult，moveChoice不是fire就0，具体内容暂定
+    //7
+    //位置变更                        get None
+    //send the positionResult
+    // Stage four: 结算
+    //8
+    //要素确认                        get None
+    //send the personFactorResult
+    //9
+    //获胜判定                        get None
+    //send the winResult
+    //10
+    //感染判定                        get None
+    //send the infectionResult
+    //11
+    //能量有无溢出                    get None
+    //send the overflowResult
+
+    //12
+    //get哪边赢了                     get None
+    //send the gameOver
     public String request(int sid,String msg) {
-        return "";
+
+        if(true) // choose hero
+        {
+            MsgChooseHero choose =  GodController.getChooseHero(msg);
+
+        }
+        return GodController.toChooseHero(0,"result");
+
     }
 
     public void initialPlayer(int[] playerSID) throws IOException {
@@ -65,8 +121,7 @@ public class God {
         }
 */
     }
-    private boolean humanWin;
-    private MapUnit[] gameMap;
+
 
 
 /*
@@ -76,16 +131,16 @@ public class God {
     // ask everyone to choose character
     // set everyone at its initial point
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void initialGame(int playerNum) throws IOException {
+    void initialGame(int[] SID) throws IOException {
         AllPlayer defaultNewPlayer = new AllPlayer();
-        defaultNewPlayer.allPlayers = new Player[playerNum];
+        defaultNewPlayer.allPlayers = new Player[];
         //TODO: setmap
         //begin
         //我这里用的是特殊案例
         gameMap = Create();
         //end
         //choose character
-        defaultNewPlayer.initialPlayer(playerNum, defaultNewPlayer.allPlayers);
+        defaultNewPlayer.initialPlayer(SID);
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -315,12 +370,11 @@ public class God {
         // func: 获取人的数目然后进行初始化
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        // TODO: 跟前端交互来完成获得玩家数目
+        // TODO: 跟前端交互来完成获得SID[]
         //begin
-        System.out.print("请输入玩家数目：");
-        int numOfPlayers = System.in.read();
+        initialGame(int[] SID);
         //end
-        initialGame(numOfPlayers);
+
 
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Step two: gaming
