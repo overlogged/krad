@@ -2,7 +2,6 @@ package game
 
 import java.util.Date
 
-import akka.parboiled2.RuleTrace.Fail
 import common.Bimap
 import game.UserModel.User
 import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
@@ -10,7 +9,7 @@ import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import server.Server.executionContext
 
 object SessionController {
 
