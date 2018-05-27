@@ -29,7 +29,7 @@
       preload: function () {
         game.load.image('background', 'assets/img/background1.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.spritesheet('button', 'assets/buttons/button1.jpg', 100, 34);
+        game.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
         game.load.image('figure1','assets/img/figure/figure1.png');
         game.load.image('figure2','assets/img/figure/figure2.png');
@@ -53,7 +53,7 @@
         var confirmText = game.add.bitmapText(275, 290, 'chiller', 'Confirm', 54);
         var avatarText = game.add.bitmapText(290, 345, 'chiller', 'Avatar', 54);
 
-        var confirmButton = game.add.button(400, 400, 'button', do_register, this, 1, 0, 2);
+        var confirmButton = game.add.button(400, 400, 'button', do_register, this, 1, 0, 2, 0);
         var confirmButtonText = game.add.bitmapText(420, 405, 'chiller', 'Confirm', 28);
         
         game.avatar = game.add.sprite(620,280,'figure1');
@@ -105,7 +105,7 @@
         url: "/api/session/register",
         type: "POST",
         contentType: 'application/json',
-        data: JSON.stringify(rep),
+        data: JSON.stringify(req),
         success: function (data, status) {
           alert("账号注册成功");
           console.log(data);

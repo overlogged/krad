@@ -11,7 +11,7 @@ public class PlayerCheckerTest {
         playerA.firePow = 0;
         playerA.hasElem = false;
         playerA.energy = INF;
-        playerA.energyLim = INF;
+        playerA.healthPoint = INF;
         playerA.mot = 10000;
     }
 
@@ -25,7 +25,7 @@ public class PlayerCheckerTest {
         System.out.println("decision this turn: " + playerMain.stratDecision);
         System.out.println("present energy: " + playerMain.energy);
         System.out.println("has elem or not: " + playerMain.hasElem);
-        System.out.println("energy limit: " + playerMain.energyLim);
+        System.out.println("health point: " + playerMain.healthPoint);
         System.out.println("fire power: " + playerMain.firePow);
         System.out.println("motility: " + playerMain.mot);
         System.out.println("range: " + playerMain.range);

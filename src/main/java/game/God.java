@@ -1,6 +1,7 @@
 package game;
 
 import java.io.IOException;
+import game.GodController.*;
 
 public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -12,6 +13,10 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private int playerNum;
     private Player[] allPlayers;
+
+    public String request(int sid,String msg) {
+        return "";
+    }
 
     public void initialPlayer(int[] playerSID) throws IOException {
         playerNum = playerSID.length;
@@ -42,7 +47,7 @@ public class God {
             for(int i = 0; i < playerNum; i++){
                 // TODO: 从player里面例化出来character，然后赋值
                 //begin
-                allPlayers[i].energyLim = Player.character[playersCharacterChoice].energyLim;
+                allPlayers[i].healthPoint = Player.character[playersCharacterChoice].healthPoint;
                 allPlayers[i].mot = Player.character[playersCharacterChoice].mot;
                 allPlayers[i].firePow = Player.character[playersCharacterChoice].firePow;
                 allPlayers[i].range = Player.character[playersCharacterChoice].range;
@@ -299,8 +304,8 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     void checkWhetherEnergyOverflow(AllPlayer defaultAllplayer){
         for (int i = 0; i < defaultAllplayer.playerNum; i++){
-            if (defaultAllplayer.allPlayers[i].energy > defaultAllplayer.allPlayers[i].energyLim){
-                defaultAllplayer.allPlayers[i].energy = defaultAllplayer.allPlayers[i].energyLim;
+            if (defaultAllplayer.allPlayers[i].energy > defaultAllplayer.allPlayers[i].healthPoint){
+                defaultAllplayer.allPlayers[i].energy = defaultAllplayer.allPlayers[i].healthPoint;
             }
         }
     }

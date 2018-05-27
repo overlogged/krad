@@ -6,3 +6,4 @@ config.txt
 log.txt
 deploy/
 *.map
+.DS_Store
