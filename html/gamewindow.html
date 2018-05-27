@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
+  <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+  <style>
+  div
+  {
+  width:110px;
+  height:110px;
+  border:thin solid rgb(108, 211, 243);
+  overflow-x:hidden;
+  overflow-y:scroll;
+  }
+</style>
+</head>
+<body>
+  <div><img src="assets/img/gamebackground.png" width="200" height="300" alt="Shinny Star"/></div>
+  <script>  
+    var game = new Phaser.Game(600, 800, Phaser.CANVAS, '', {
+      preload: function () {
+        game.load.image('gamebackground', 'assets/img/gamebackground.png');
+        game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
+        game.load.spritesheet('button','assets/buttons/button1.png',100,34);
+        game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+      },
+
+      create: function () {
+       var background = game.add.sprite(0,50, 'gamebackground');
+        background.smoothed = true;
+        background.height = 700;
+        background.width = 600; 
+        var playerstatus = game.add.sprite(0,0,'input');
+        playerstatus.smoothed=true;
+        playerstatus.height=50;
+        playerstatus.width=600;
+        var cardarea = game.add.sprite(0,750,'input');
+        cardarea.smoothed=true;
+        cardarea.height = 50;
+        cardarea.width = 500;
+        var extraarea = game.add.sprite(500,750,'button');
+        extraarea.smoothed = true;
+        extraarea.width=100;
+        extraarea.height=50;
+      }
+    });
+</script>
+
+</body>
+
+</html>
