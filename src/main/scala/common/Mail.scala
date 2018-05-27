@@ -1,6 +1,7 @@
 package common
 
 import org.apache.commons.mail.HtmlEmail
+import server.Server
 import server.Server.config
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -24,7 +25,7 @@ object Mail {
     email.setSubject(subject)
     email.setCharset("utf-8")
     email.setHtmlMsg(text)
+    Server.log("[send]",to+subject+text)
     email.send
-    ()
   }
 }

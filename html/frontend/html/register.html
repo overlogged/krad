@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>用户注册</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<link href="../css/register.css" rel="stylesheet" type="text/css">
+	
+</head>
+
+<body>
+	<div id="register">
+		<div class="register_wrap">
+			<div class="register_tittle">
+				用户注册
+			</div>
+			<div class="register_content">
+				<ul>
+					<li>
+						<span class="mustItem">昵称:</span><input type="text" name="username" id="tUsername" placeholder="您的昵称"/>
+					</li>
+					<li>
+						<span></span><span class="mark">由3-6位英文字母、数字或下划线组成</span>
+					</li>
+					<li>
+						<span class="mustItem">性别:</span><input type="radio" name="sex" id="tSex" class="sex" value="1" checked>男<input type="radio" name="sex" class="sex" value="2">女<input type="radio" name="sex" class="sex">
+					</li>
+					<li><span></span><span class="mark"></span></li>
+					<li>
+						<span class="mustItem">电子邮箱:</span><input type="email" name="email" id="tEmail" placeholder="请填写邮箱">
+					</li>
+					<li><span></span><span class="mark">格式xx@xx.xxx</span></li>
+					<li>
+						<span class="mustItem">密码:</span><input type="password" name="password"  id="tPassword"placeholder="您的密码">
+					</li>
+					<li><span></span><span class="mark">由6-12位数字与英文字母组成</span></li>
+					<li>
+						<span class="mustItem">重复密码:</span><input type="password" name="confirmpassword" placeholder="请重复您的密码">
+					</li>
+					<li><span></span><span class="mark"></span></li>
+					<li><input type="submit" value="确认" class="reSubmit" onmouseover="this.style.backgroundColor='#FF8D00'" onmouseout="this.style.backgroundColor='#FC5628'"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function(){
+			$("input.reSubmit").click(function(){
+				alert("aaa");
+				var nicknameStr="why";
+				var emailStr="2998868901@qq.com";
+				var passwordStr="password";
+				var nickResult=/{};:'/.test(nicknameStr);
+				var emailResult=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(emailStr);
+				var passwordResult=/[a-zA-Z0-9]{6,18}/.test(passwordStr);
+				if(nickResult){
+					alert("昵称非法");
+				}
+				if(!emailResult){
+					alert("邮箱格式错误");
+				}
+				if(!passwordResult){
+					alert("密码格式错误");
+				}
+			});
+		});
+		$(document).ready(function(){
+			$("input.reSubmit").click(function(){
+				$.ajax({
+					  url:"/api/session/register",
+					  type:"POST",
+					  contentType: 'application/json',
+					  data:JSON.stringify({
+					    email:"2998868901@qq.com",
+					    nickname:"why",
+					    avatar:"assets/img/figure/figure1.png",
+					    gender:0,
+					    password:"password"
+					}),
+			        success:function(data,status){
+					    alert("注册成功");
+						console.log(data);
+				    },
+				    error:function(data,status){
+						alert("注册失败");
+					    console.log(data);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

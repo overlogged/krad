@@ -1,0 +1,35 @@
+input {
+    font-family: 'Indie Flower',sans-serif;
+    font-size: 18px;
+    position: absolute;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: repeat;
+    border: 0px;
+    border-radius: 4.5px;
+    padding: 5px;
+    outline-color: dodgerblue;
+}
+
+.inputbox1 {
+    background-image: url('../img/inputbox1.png');
+    height:28px;
+}
+
+.inputbox2 {
+    background-image: url('../img/inputbox2.png');
+    height:35px;
+}
+
+.link1 {
+    font-family: 'Indie Flower',sans-serif;
+    font-size: 24px;
+    position: absolute;
+}
+
+.select{
+    font-family: 'Indie Flower',sans-serif;
+    position: absolute;
+    font-size: 18px;
+    width: 185px;
+}
