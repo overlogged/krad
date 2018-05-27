@@ -14,6 +14,10 @@ public class God {
     private int playerNum;
     private Player[] allPlayers;
 
+    public String request(int sid,String msg) {
+        return "";
+    }
+
     public void initialPlayer(int[] playerSID) throws IOException {
         playerNum = playerSID.length;
 

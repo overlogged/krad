@@ -2,6 +2,7 @@ package game
 
 import java.util.Date
 
+import akka.parboiled2.RuleTrace.Fail
 import common.Bimap
 import game.UserModel.User
 import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
@@ -127,7 +128,10 @@ object SessionController {
     result
   }
 
-//  def gameRequest(req:RequestGame) = Future {
-//    val
-//  }
+  def gameRequest(req:RequestGame):Future[Option[String]] = Future {
+    states.get(req.sid) map { states =>
+      val god = states.god
+      god.request(req.sid,req.msg)
+    }
+  }
 }

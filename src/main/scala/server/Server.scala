@@ -184,7 +184,11 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       path("game"){
         post{
           entity(as[RequestGame]){req=>
-            onComplete()
+            onComplete(SessionController.gameRequest(req)){
+              case Success(Some(str)) => complete(str)
+              case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
+              case Failure(_)    => complete(HttpResponse(StatusCodes.InternalServerError))
+            }
           }
         }
       }
