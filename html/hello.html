@@ -12,7 +12,7 @@
 <body>
   <input type="text" id="email" class="inputbox1" style="left:410px;top:210px">
   <input type="password" id="password" class="inputbox1" style="left:410px;top:270px">
-  <a href="forgetpassword.html" style="left:410px;top:270px">Forget</a>
+  <a href="forgetpassword.html" class="link1" style="left:620px;top:270px">Forget</a>
   <script>
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
@@ -30,7 +30,7 @@
 
         var loginText = game.add.bitmapText(350, 130, 'chiller', 'Log In', 70);
         var usernameText = game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
-        var passwordText = game.add.bitmapText(250, 255, 'chiller', 'PassWord', 54);
+        var passwordText = game.add.bitmapText(250, 255, 'chiller', 'Password', 54);
 
         var signUpButton = game.add.button(270, 320, 'button', do_signup, this, 1, 0, 2);
         var signUpButtonText = game.add.bitmapText(290, 320, 'chiller', 'Sign Up', 28);
