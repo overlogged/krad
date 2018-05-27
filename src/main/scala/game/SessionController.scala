@@ -4,12 +4,12 @@ import java.util.Date
 
 import common.Bimap
 import game.UserModel.User
-import server.Server.{RequestLogin, RequestMatch, RequestRegister}
+import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import server.Server.executionContext
 
 object SessionController {
 
@@ -125,5 +125,12 @@ object SessionController {
       }
     }
     result
+  }
+
+  def gameRequest(req:RequestGame):Future[Option[String]] = Future {
+    states.get(req.sid) map { states =>
+      val god = states.god
+      god.request(req.sid,req.msg)
+    }
   }
 }

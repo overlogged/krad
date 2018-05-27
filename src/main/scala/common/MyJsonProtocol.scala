@@ -1,8 +1,9 @@
 package common
 
+import game.GodController.MsgChooseHero
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
-import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
+import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
 import spray.json.DefaultJsonProtocol
 
 /**
@@ -20,4 +21,6 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val RequestChangeProfileFormat = jsonFormat4(RequestChangeProfile)
   implicit val RequestMatchFormat = jsonFormat1(RequestMatch)
   implicit val SessionFormat = jsonFormat3(Session)
+  implicit val MsgChooseHeroFormat = jsonFormat2(MsgChooseHero)
+  implicit val RequestGameFormat = jsonFormat2(RequestGame)
 }
