@@ -5,18 +5,22 @@ import common.MyUtils._
 import game.SessionController.{createSession, map}
 import server.Server.{RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestSetNewPassword, config}
 
+import scala.concurrent.Future
+
 object UserController {
   /**
     * forget password
     */
-  def forget(req:RequestForgetPassword) : Option[Unit] = {
+  def forget(req:RequestForgetPassword) : Future[String] = {
     val uid = req.email
-    UserModel.checkUser(uid).flatMap { _ =>
+    UserModel.checkUser(uid).map { _ =>
       val sid = createSession(uid)
       val title = "[Krad] 重置密码"
       val text = s"请点击以下链接以重置密码： ${config.web_url}/changepassword.html?sid=$sid"
-      Some(Mail.send(req.email, title, text))
-    }.succ()
+      Mail.send(req.email, title, text)
+    }.getOrElse{
+      Future("")
+    }
   }
 
   /**
