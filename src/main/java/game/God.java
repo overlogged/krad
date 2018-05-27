@@ -1,6 +1,7 @@
 package game;
 
 import java.io.IOException;
+import game.GodController.*;
 
 public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

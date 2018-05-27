@@ -75,6 +75,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
 
   final case class RequestMatch(sid: Int)
 
+  final case class RequestGame(sid: Int,msg: String)
+
   val customConf = ConfigFactory.parseString("""
                                                  my-blocking-dispatcher {
                                                     type = Dispatcher
@@ -176,6 +178,13 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
               case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
               case Failure(_)    => complete(HttpResponse(StatusCodes.InternalServerError))
             }
+          }
+        }
+      } ~
+      path("game"){
+        post{
+          entity(as[RequestGame]){req=>
+            onComplete()
           }
         }
       }

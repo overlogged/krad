@@ -4,7 +4,7 @@ import java.util.Date
 
 import common.Bimap
 import game.UserModel.User
-import server.Server.{RequestLogin, RequestMatch, RequestRegister}
+import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -126,4 +126,8 @@ object SessionController {
     }
     result
   }
+
+//  def gameRequest(req:RequestGame) = Future {
+//    val
+//  }
 }
