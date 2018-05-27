@@ -5,13 +5,13 @@ public class GambleCheckerTest {
     static GambleChecker gc = new GambleChecker();
 
     void setFrontEndData(FrontEndData frontEndData){
-        frontEndData.playerNum=4;
+        frontEndData.playerNum = 4;
         frontEndData.players = new Player[frontEndData.playerNum];
         for(int i = 0; i<frontEndData.playerNum; i++)
             frontEndData.players[i] = new Player();
 
-        for(int i=0;i<4;i++)
-            frontEndData.players[i].energyLim = 10;
+        for(int i=0;i < 4;i++)
+            frontEndData.players[i].healthPoint = 10;
 
         frontEndData.players[0].energy = 10;
         frontEndData.players[1].energy = 9;
