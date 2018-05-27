@@ -4,7 +4,7 @@ import common.Mail
 import common.MyUtils._
 import game.SessionController.{createSession, map}
 import server.Server.{RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestSetNewPassword, config}
-
+import server.Server.executionContext
 import scala.concurrent.Future
 
 object UserController {

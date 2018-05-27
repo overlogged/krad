@@ -1,6 +1,6 @@
 package common
 
-import game.GodController.MsgChooseHero
+import game.GodController.{MsgChooseHero, ResChooseHero}
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
@@ -23,4 +23,5 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val SessionFormat = jsonFormat3(Session)
   implicit val MsgChooseHeroFormat = jsonFormat2(MsgChooseHero)
   implicit val RequestGameFormat = jsonFormat2(RequestGame)
+  implicit val ResChooseHeroFormat = jsonFormat2(ResChooseHero)
 }
