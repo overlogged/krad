@@ -15,19 +15,23 @@
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
         game.load.image('background', 'assets/img/userbackground.png');
+        game.load.image('userfigure', 'assets/img/figure/figure1.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
 
       create: function () {
+        /*var url = winddow.location.href;
+        var sid = url.split("?")[1];*/
         var background = game.add.sprite(0, 0, 'background');
+        var userfigure = game.add.sprite(10, 10, 'userfigure');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
 
         var loginText = game.add.bitmapText(350, 130, 'chiller', 'Log In', 70);
-        var usernameText = game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
+        var usernameText = game.add.bitmapText(30, 10, 'chiller', 'zhuchiwei', 54);
         var passwordText = game.add.bitmapText(250, 255, 'chiller', 'Password', 54);
 
         var signUpButton = game.add.button(270, 320, 'button', do_signup, this, 1, 0, 2, 0);
