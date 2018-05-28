@@ -11,13 +11,13 @@
 </head>
 
 <body>
-  <input type="text" id="email" class="inputbox1" style="left:410px;top:90px">
-  <input type="text" id="nickname" class="inputbox1" style="left:410px;top:150px">
-  <input type="radio" id="gender1" name="gender" style="left:410px;top:210px" value="0" checked="checked">
-  <input type="radio" id="gender2" name="gender" style="left:510px;top:210px" value="1">
-  <input type="password" id="password" class="inputbox1" style="left:410px;top:250px">
-  <input type="password" id="confirm" class="inputbox1" style="left:410px;top:310px">
-  <select class="select" id="avatar" style="left: 410px;top:365px" onchange="update_avatar()">
+  <input type="text" id="email" class="inputbox1" style="left:410px;top:130px">
+  <input type="text" id="nickname" class="inputbox1" style="left:410px;top:190px">
+  <input type="radio" id="gender1" name="gender" style="left:410px;top:250px" value="0" checked="checked">
+  <input type="radio" id="gender2" name="gender" style="left:510px;top:250px" value="1">
+  <input type="password" id="password" class="inputbox1" style="left:410px;top:290px">
+  <input type="password" id="confirm" class="inputbox1" style="left:410px;top:350px">
+  <select class="select" id="avatar" style="left: 410px;top:405px" onchange="update_avatar()">
     <option value="figure1">figure1</option>
     <option value="figure2">figure2</option>
     <option value="figure3">figure3</option>
@@ -43,20 +43,20 @@
         background.height = game.height;
         background.width = game.width;
 
-        var registerText = game.add.bitmapText(350, 15, 'chiller', 'Register', 70);
-        var emailText = game.add.bitmapText(315, 75, 'chiller', 'Email', 54);
-        var nicknameText = game.add.bitmapText(260, 130, 'chiller', 'Nickname', 54);
-        var genderText = game.add.bitmapText(280, 185, 'chiller', 'Gender', 54);
-        var maleText = game.add.bitmapText(435, 185, 'chiller', 'Boy', 54);
-        var femaleText = game.add.bitmapText(530, 185, 'chiller', 'Girl', 54);
-        var passwordText = game.add.bitmapText(265, 235, 'chiller', 'Password', 54);
-        var confirmText = game.add.bitmapText(275, 290, 'chiller', 'Confirm', 54);
-        var avatarText = game.add.bitmapText(290, 345, 'chiller', 'Avatar', 54);
+        var registerText = game.add.bitmapText(350, 55, 'chiller', 'Register', 70);
+        var emailText = game.add.bitmapText(315,115, 'chiller', 'Email', 54);
+        var nicknameText = game.add.bitmapText(260, 170, 'chiller', 'Nickname', 54);
+        var genderText = game.add.bitmapText(280, 225, 'chiller', 'Gender', 54);
+        var maleText = game.add.bitmapText(435, 225, 'chiller', 'Boy', 54);
+        var femaleText = game.add.bitmapText(530, 225, 'chiller', 'Girl', 54);
+        var passwordText = game.add.bitmapText(265, 275, 'chiller', 'Password', 54);
+        var confirmText = game.add.bitmapText(275, 330, 'chiller', 'Confirm', 54);
+        var avatarText = game.add.bitmapText(290, 385, 'chiller', 'Avatar', 54);
 
-        var confirmButton = game.add.button(400, 400, 'button', do_register, this, 1, 0, 2, 0);
-        var confirmButtonText = game.add.bitmapText(420, 405, 'chiller', 'Confirm', 28);
+        var confirmButton = game.add.button(400, 440, 'button', do_register, this, 1, 0, 2, 0);
+        var confirmButtonText = game.add.bitmapText(420, 445, 'chiller', 'Confirm', 28);
         
-        game.avatar = game.add.sprite(620,280,'figure1');
+        game.avatar = game.add.sprite(620,360,'figure1');
         
       }
     });
