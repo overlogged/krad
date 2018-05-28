@@ -10,13 +10,11 @@
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <input type="text" id="email" class="inputbox1" style="left:410px;top:210px">
-  <input type="password" id="password" class="inputbox1" style="left:410px;top:270px">
-  <a href="forgetpassword.html" class="link1" style="left:620px;top:270px">Forget</a>
+  
   <script>
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
-        game.load.image('background', 'assets/img/background1.png');
+        game.load.image('background', 'assets/img/userbackground.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
