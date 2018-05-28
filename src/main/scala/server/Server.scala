@@ -179,6 +179,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       path("user") {
         get {
           parameters('sid.as[String]) { sid =>
+            log("get","user?sid="+sid)
             UserController.getProfile(sid.toInt) match {
               case Some(u) => complete(u)
               case None => complete(HttpResponse(StatusCodes.NotFound))
