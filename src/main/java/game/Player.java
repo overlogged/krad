@@ -19,11 +19,8 @@ public class Player {
 
     //cards{strategy,skills}
     //least energy consume = 4
+
     //static properties
-
-    //cards system
-    int[] cardsOnHand;
-
     int mot;                             //motility
     int firePow;                        //firepower
     int range;                          //range
@@ -46,11 +43,16 @@ public class Player {
                                          */
     int stratDecision;
     int skillsDecision;
-    int[] handCards = new int[healthPoint];
     boolean isWin = false;            /*
                                         victory or defeat in one turn
                                         this variable should be set as false each turn ends
                                        */
+
+    //properties about cards
+    int handCardsNum = 0;
+    int[] handCards;
+    int cardsDesertNum = 0;
+    int[] cardsDesertList;
 
     //properties about location
     MapUnit preLoc;                    //present location

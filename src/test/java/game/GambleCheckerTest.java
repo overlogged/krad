@@ -1,6 +1,8 @@
 package game;
 
 public class GambleCheckerTest {
+    //TODO: cards system test
+
     static GambleCheckerTest test = new GambleCheckerTest();
     static GambleChecker gc = new GambleChecker();
 
