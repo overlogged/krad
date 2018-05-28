@@ -51,6 +51,7 @@ public class GambleChecker {
         return cardHeap;
     }
 
+
     /*
      judge the result of one pair of gamble
      if the return value is true, playerA wins
