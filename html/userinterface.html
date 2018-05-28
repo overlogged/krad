@@ -10,12 +10,11 @@
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <input type="password" id="password" class="inputbox1" style="left:410px;top:210px">
-  <input type="password" id="confirm" class="inputbox1" style="left:410px;top:270px">
+  
   <script>
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
-        game.load.image('background', 'assets/img/background1.png');
+        game.load.image('background', 'assets/img/userbackground.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
@@ -27,51 +26,51 @@
         background.height = game.height;
         background.width = game.width;
 
-        var loginText = game.add.bitmapText(270, 130, 'chiller', 'Modify Password', 70);
-        var passwordText = game.add.bitmapText(275, 195, 'chiller', 'Password', 54);
-        var confirmText = game.add.bitmapText(280, 255, 'chiller', 'Confirm', 54);
+        var loginText = game.add.bitmapText(350, 130, 'chiller', 'Log In', 70);
+        var usernameText = game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
+        var passwordText = game.add.bitmapText(250, 255, 'chiller', 'Password', 54);
 
-        var confirmButton = game.add.button(400, 320, 'button', do_confirm, this, 1, 0, 2, 0);
-        var confirmButtonText = game.add.bitmapText(420, 325, 'chiller', 'Confirm', 28);
+        var signUpButton = game.add.button(270, 320, 'button', do_signup, this, 1, 0, 2, 0);
+        var signUpButtonText = game.add.bitmapText(292, 320, 'chiller', 'Sign Up', 28);
+
+        var logInButton = game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
+        var logInButtonText = game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
       }
     });
 
-    function do_confirm() {
+    function do_signup() {
+        window.location.href = "register.html"
+    }
+
+    function do_login() {
+      var email = $("#email").val();
       var password = $("#password").val();
-      var confirm = $("#confirm").val();
-      if(confirm!=password){
-          alert("两次密码填写不一样");
-          return;
-      }
-      var url = window.location.href;
-      var sid = url.split("?")[1]; 
       var req = {
-
-        'sid':sid,
-        'password':password,
-
+        'email': email,
+        'password': password
       };
       console.log(req);
+      var v_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email);
       var v_password = /[a-zA-Z0-9]{6,18}/.test(password);
-      if (!v_password) {
-        alert("密码格式不正确");
+      if (!v_email || !v_password) {
+        alert("邮箱格式或密码格式不正确");
         return;
       }
       $.ajax({
-        url: "/api/user/setpw",
+        url: "/api/session/login",
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify(req),
         success: function (data, status) {
-          alert("修改成功");
+          alert("登录成功");
           console.log(data);
-          console.log(sid);
-          window.location.href = "hello.html"; //需要跳转的地址
+          console.log(data.sid);
+          console.log(data.user);
+          // window.location.href = ""; //需要跳转的地址
         },
         error: function (data, status) {
-          alert("修改失败");
+          alert("用户名或密码错误");
           console.log(data);
-          console.log(sid);
         }
       });
     }
