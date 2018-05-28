@@ -68,7 +68,8 @@
           console.log(data);
           console.log(data.sid);
           console.log(data.user);
-          // window.location.href = ""; //需要跳转的地址
+          var id = data.sid;
+          window.location.href = "userinterface.html?sid=id"; //需要跳转的地址
         },
         error: function (data, status) {
           alert("用户名或密码错误");
