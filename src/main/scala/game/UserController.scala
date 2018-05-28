@@ -3,8 +3,10 @@ package game
 import common.Mail
 import common.MyUtils._
 import game.SessionController.{createSession, map}
+import game.UserModel.User
 import server.Server.{RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestSetNewPassword, config}
 import server.Server.executionContext
+
 import scala.concurrent.Future
 
 object UserController {
@@ -45,6 +47,15 @@ object UserController {
   def changeProfile(req:RequestChangeProfile) : Option[Unit] = {
     map.getB(req.sid).flatMap { uid =>
       UserModel.changeProfile(uid,req.nickname,req.avatar,req.gender)
+    }
+  }
+
+  /**
+    * get profile
+    */
+  def getProfile(sid:Int): Option[User] = {
+    map.getB(sid).flatMap { uid =>
+      UserModel.getProfile(uid)
     }
   }
 }
