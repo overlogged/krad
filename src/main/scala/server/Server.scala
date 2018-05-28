@@ -97,10 +97,10 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
 
   // api
   val route: Route =
-    path("hello") {
+    path("log") {
       get {
-        log("get", "hello")
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad api!</h1>"))
+        log("get", "log")
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, Source.fromFile("log.txt","utf8").mkString))
       }
     } ~
       path("session" / "login") {
