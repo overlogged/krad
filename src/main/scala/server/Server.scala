@@ -100,7 +100,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
     path("log") {
       get {
         log("get", "log")
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, Source.fromFile("log.txt","utf8").mkString))
+        val content = "<html><body>"+Source.fromFile("log.txt","utf8").mkString.split("\n").fold("")(_+"<br></br>"+_)+"</body></html>"
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
       }
     } ~
       path("session" / "login") {
