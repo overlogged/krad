@@ -129,6 +129,21 @@ object UserModel extends MyJsonProtocol{
   }
 
   /**
+    * get profile
+    */
+  def getProfile(email:String):Option[User] = {
+    Option(col_users.findOne(MongoDBObject("email" -> email))).flatMap{ one =>
+      for (
+        email <- one.getAs[String]("email");
+        nickname <- one.getAs[String]("nickname");
+        avatar <- one.getAs[String]("avatar");
+        gender <- one.getAs[Int]("gender");
+        stats <- one.getAs[String]("stats").flatMap { x => Some(x.parseJson.convertTo[Stats]) }
+      ) yield User(email, nickname, avatar, gender, "", stats)
+    }
+  }
+
+  /**
     * change password
     * @return None if failed
     */

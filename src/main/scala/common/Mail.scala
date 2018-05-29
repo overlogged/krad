@@ -28,8 +28,8 @@ object Mail {
       email.setSubject(subject)
       email.setCharset("utf-8")
       email.setHtmlMsg(text)
-      Server.log("send", to + subject + text)
       email.send
+      Server.log("verbose send", to + " " + subject + " " + text)
     } catch {
       case e: EmailException => {
         e.printStackTrace()

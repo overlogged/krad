@@ -34,7 +34,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                           web_url: String,
                           email_host: String,
                           email_username: String,
-                          email_password: String)
+                          email_password: String,
+                          log_verbose: Boolean)
 
   val log_file = new FileWriter(new File("log.txt"), true)
   val config: Config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
@@ -48,9 +49,12 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   def log[A](action: String, info: A): Unit = {
     val date = new Date()
     val s = s"[$action] $info #\t$date\n"
-    print(s)
-    log_file.write(s)
-    log_file.flush()
+    val verbose = action.startsWith("verbose")
+    if (!verbose || (verbose && config.log_verbose)) {
+      print(s)
+      log_file.write(s)
+      log_file.flush()
+    }
   }
 
   // request
@@ -75,9 +79,10 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
 
   final case class RequestMatch(sid: Int)
 
-  final case class RequestGame(sid: Int,msg: String)
+  final case class RequestGame(sid: Int, msg: String)
 
-  val customConf = ConfigFactory.parseString("""
+  val customConf = ConfigFactory.parseString(
+    """
                                                  my-blocking-dispatcher {
                                                     type = Dispatcher
                                                     executor = "thread-pool-executor"
@@ -91,16 +96,17 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                                                     throughput = 1
                                                  }""")
 
-  implicit val system: ActorSystem = ActorSystem("my-system",ConfigFactory.load(customConf))
+  implicit val system: ActorSystem = ActorSystem("my-system", ConfigFactory.load(customConf))
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: MessageDispatcher = system.dispatchers.lookup("my-blocking-dispatcher")
 
   // api
   val route: Route =
-    path("hello") {
+    path("log") {
       get {
-        log("get", "hello")
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to krad api!</h1>"))
+        log("get", "log")
+        val content = "<html><body>" + Source.fromFile("log.txt", "utf8").mkString.split("\n").fold("")(_ + "<br></br>" + _) + "</body></html>"
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
       }
     } ~
       path("session" / "login") {
@@ -174,6 +180,17 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
           }
         }
       } ~
+      path("user") {
+        get {
+          parameters('sid.as[String]) { sid =>
+            log("get", "user?sid=" + sid)
+            UserController.getProfile(sid.toInt) match {
+              case Some(u) => complete(u)
+              case None => complete(HttpResponse(StatusCodes.NotFound))
+            }
+          }
+        }
+      } ~
       path("session" / "match") {
         post {
           entity(as[RequestMatch]) { req =>
@@ -181,18 +198,19 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
             onComplete(SessionController.matchPlayers(req)) {
               case Success(Some(_)) => complete(HttpResponse(StatusCodes.Accepted))
               case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-              case Failure(_)    => complete(HttpResponse(StatusCodes.InternalServerError))
+              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
             }
           }
         }
       } ~
-      path("game"){
-        post{
-          entity(as[RequestGame]){req=>
-            onComplete(SessionController.gameRequest(req)){
+      path("game") {
+        post {
+          entity(as[RequestGame]) { req =>
+            log("post", "game")
+            onComplete(SessionController.gameRequest(req)) {
               case Success(Some(str)) => complete(str)
               case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-              case Failure(_)    => complete(HttpResponse(StatusCodes.InternalServerError))
+              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
             }
           }
         }
