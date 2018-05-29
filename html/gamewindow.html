@@ -20,18 +20,16 @@
 </style>
 </head>
 <body>
-  <div><img src="assets/img/gamebackground.png" width="200" height="300" alt="Shinny Star"/></div>
-  <script>  
-    var game = new Phaser.Game(600, 800, Phaser.CANVAS, '', {
+  <script>
+      var game = new Phaser.Game(600, 800, Phaser.CANVAS, '', {
       preload: function () {
         game.load.image('gamebackground', 'assets/img/gamebackground.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
-
       create: function () {
-       var background = game.add.sprite(0,50, 'gamebackground');
+        var background = game.add.sprite(0,50, 'gamebackground');
         background.smoothed = true;
         background.height = 700;
         background.width = 600; 
@@ -47,10 +45,17 @@
         extraarea.smoothed = true;
         extraarea.width=100;
         extraarea.height=50;
+        layer.scale.set(2);
       }
     });
 </script>
-
+      <div><p style="width:140px">
+          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
+          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
+          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
+          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
+          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
+          </p></div> 
 </body>
 
 </html>
