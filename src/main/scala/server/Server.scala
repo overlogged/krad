@@ -34,7 +34,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                           web_url: String,
                           email_host: String,
                           email_username: String,
-                          email_password: String)
+                          email_password: String,
+                          log_verbose: Boolean)
 
   val log_file = new FileWriter(new File("log.txt"), true)
   val config: Config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
@@ -48,9 +49,12 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   def log[A](action: String, info: A): Unit = {
     val date = new Date()
     val s = s"[$action] $info #\t$date\n"
-    print(s)
-    log_file.write(s)
-    log_file.flush()
+    val verbose = action.startsWith("verbose")
+    if (!verbose || (verbose && config.log_verbose)) {
+      print(s)
+      log_file.write(s)
+      log_file.flush()
+    }
   }
 
   // request
@@ -179,37 +183,38 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       path("user") {
         get {
           parameters('sid.as[String]) { sid =>
-            log("get","user?sid="+sid)
+            log("get", "user?sid=" + sid)
             UserController.getProfile(sid.toInt) match {
               case Some(u) => complete(u)
               case None => complete(HttpResponse(StatusCodes.NotFound))
             }
           }
         }
-      }
-  path("session" / "match") {
-    post {
-      entity(as[RequestMatch]) { req =>
-        log("post", "session/match")
-        onComplete(SessionController.matchPlayers(req)) {
-          case Success(Some(_)) => complete(HttpResponse(StatusCodes.Accepted))
-          case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-          case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+      } ~
+      path("session" / "match") {
+        post {
+          entity(as[RequestMatch]) { req =>
+            log("post", "session/match")
+            onComplete(SessionController.matchPlayers(req)) {
+              case Success(Some(_)) => complete(HttpResponse(StatusCodes.Accepted))
+              case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
+              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+            }
+          }
         }
-      }
-    }
-  } ~
-    path("game") {
-      post {
-        entity(as[RequestGame]) { req =>
-          onComplete(SessionController.gameRequest(req)) {
-            case Success(Some(str)) => complete(str)
-            case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-            case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+      } ~
+      path("game") {
+        post {
+          entity(as[RequestGame]) { req =>
+            log("post", "game")
+            onComplete(SessionController.gameRequest(req)) {
+              case Success(Some(str)) => complete(str)
+              case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
+              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+            }
           }
         }
       }
-    }
 
 
   // main

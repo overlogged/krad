@@ -4,6 +4,7 @@ import java.util.Date
 
 import common.Bimap
 import game.UserModel.User
+import server.Server
 import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
 
 import scala.collection.mutable
@@ -130,8 +131,11 @@ object SessionController {
 
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
     states.get(req.sid) map { states =>
+      Server.log("verbose game in",req.toString)
       val god = states.god
-      god.request(req.sid, req.msg)
+      val result = god.request(req.sid, req.msg)
+      Server.log("verbose game out",result)
+      result
     }
   }
 }
