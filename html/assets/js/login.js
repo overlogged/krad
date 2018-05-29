@@ -1,5 +1,11 @@
 var state_login = {
   preload: function() {
+    var url = window.location.href;
+    if(url.indexOf("?")!=-1){
+      var str = url.split("?")[1];
+      sid = parseInt(str.split("=")[1]);
+      game.state.start('setpw');
+    }
     var background = game.add.image(0, 0, 'background');
     background.smoothed = true;
     background.height = game.height;

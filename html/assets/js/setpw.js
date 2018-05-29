@@ -41,7 +41,7 @@ function do_confirm() {
       alert("修改成功");
       console.log(data);
       console.log(sid);
-      window.location.href = "hello.html"; //需要跳转的地址
+      game.state.start('login'); //需要跳转的地址
     },
     error: function (data, status) {
       alert("修改失败");

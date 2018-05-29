@@ -31,6 +31,8 @@ function do_forget() {
     success: function(data,status){
       alert("信息已发送至邮箱");
       console.log(data);
+      console.log(data.sid);
+      game.state.start('login');
     },
     error: function(data,status){
       alert("邮箱不存在");

@@ -1,5 +1,5 @@
 var state_changepw = {
-  'preload': function () {
+  preload: function () {
     game.add.image(0, 0, 'background');
     game.add.bitmapText(300, 130, 'chiller', 'Change Password', 70);
     game.add.bitmapText(205, 195, 'chiller', 'OldPassword', 54);
@@ -20,7 +20,7 @@ function do_change() {
     return;
   }
   var req = {
-    //todo write sid
+    'sid':sid,
     'oldpassword': oldpassword,
     'newpassword': newpassword,
   };
@@ -38,6 +38,7 @@ function do_change() {
     success: function (data, status) {
       alert("修改成功");
       console.log(data);
+      game.state.start('home');
     },
     error: function (data, status) {
       alert("修改失败");
