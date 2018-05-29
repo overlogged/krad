@@ -52,7 +52,7 @@ public class Player {
     int handCardsNum = 0;
     int[] handCards;
     int cardsDesertNum = 0;
-    int[] cardsDesertList;
+    int[] cardsDesertList;           //if there is no card to desert, then the element is -1
 
     //properties about location
     MapUnit preLoc;                    //present location
