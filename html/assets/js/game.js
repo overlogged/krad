@@ -23,5 +23,5 @@ game.state.add('register', state_register);
 game.state.add('forget', state_forget);
 game.state.add('changepw',state_changepw);
 game.state.add('setpw',state_setpw);
-//game.state.add('changeprofile', state_changeprofile);
+game.state.add('changeprofile', state_changeprofile);
 game.state.start('preload');
