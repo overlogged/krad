@@ -42,6 +42,17 @@
       <input type="password" id="setpw_password" class="inputbox1" style="left:410px;top:210px">
       <input type="password" id="setpw_confirm" class="inputbox1" style="left:410px;top:270px">
     </div>
+    <div id="changeprofile" style="display: none">
+      <input type="text" id="changeprofile_nickname" class="inputbox1" style="left:410px;top:250px">
+      <input type="radio" id="changeprofile_gender1" name="gender" style="left:410px;top:320px" value="0" checked="checked">
+      <input type="radio" id="changeprofile_gender2" name="gender" style="left:510px;top:320px" value="1">
+      <select class="select" id="changeprofile_avatar" style="left: 410px;top:365px" onchange="update_avatar()">
+        <option value="figure1">figure1</option>
+        <option value="figure2">figure2</option>
+        <option value="figure3">figure3</option>
+        <option value="figure4">figure4</option>
+      </select>  
+    </div>
   </div>
   <script type="text/javascript" src="assets/js/global.js"></script>
   <script type="text/javascript" src="assets/js/login.js"></script>
@@ -49,6 +60,7 @@
   <script type="text/javascript" src="assets/js/forget.js"></script>
   <script type="text/javascript" src="assets/js/changepw.js"></script>
   <script type="text/javascript" src="assets/js/setpw.js"></script>
+  <script type="text/javascript" src="assets/js/changeprofile.js"></script>
   <script type="text/javascript" src="assets/js/game.js"></script>
 </body>
 

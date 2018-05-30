@@ -1,5 +1,5 @@
 var state_register = {
-  'preload': function () {
+  preload: function () {
     game.add.image(0, 0, 'background');
     game.add.bitmapText(350, 55, 'chiller', 'Register', 70);
     game.add.bitmapText(315, 115, 'chiller', 'Email', 54);
@@ -30,7 +30,7 @@ function do_register() {
   var nickname = $("#register_nickname").val();
   var password = $("#register_password").val();
   var confirm = $("#register_confirm").val();
-  var avatar = "assets/img/figure/" + $("#register_avatar").val();
+  var avatar = "assets/img/figure/" + $("#register_avatar").val()+".png";
   var gender = $("input[name='gender']:checked").val();
   if (password != confirm) {
     alert("两次密码填写不一样");

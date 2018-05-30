@@ -17,27 +17,31 @@ public class GambleChecker {
     // generate an ordered card heap
     int[] cardHeapInit(int[] cardHeap, int playerNum) {
         //count variable i
-        int i;
-        // the number of cards equals to 37 * number of players
-        cardHeap = new int[37 * playerNum];
-
-        //the ratio of all kinds of cards is 8:12:8:4:4:4
+        int i,j;
+        // the number of cards equals to 40 * number of players
+        cardHeap = new int[40 * playerNum];
+        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:STONE = 8:12:8:4:4:4
         for (i = 0; i < 8 * playerNum; i++) {
             cardHeap[i] = FIRE;
         }
-        for (; i < i + 12 * playerNum; i++) {
+        j = i;
+        for (; i < j + 12 * playerNum; i++) {
             cardHeap[i] = MOVE;
         }
-        for (; i < i + 8 * playerNum; i++) {
+        j = i;
+        for (; i < j + 8 * playerNum; i++) {
             cardHeap[i] = SKILLS;
         }
-        for (; i < i + 4 * playerNum; i++) {
+        j = i;
+        for (; i < j + 4 * playerNum; i++) {
             cardHeap[i] = PAPER;
         }
-        for (; i < i + 4 * playerNum; i++) {
+        j = i;
+        for (; i < j + 4 * playerNum; i++) {
             cardHeap[i] = SCISSORS;
         }
-        for (; i < i + 4 * playerNum; i++) {
+        j = i;
+        for (; i < j + 4 * playerNum; i++) {
             cardHeap[i] = STONE;
         }
         return cardHeap;
@@ -55,14 +59,30 @@ public class GambleChecker {
     }
 
     //cards operation
+    void cardSort(int[] cardHeap){
+        for(int i = 0;i < cardHeap.length;i++){
+            for(int j = i;j < cardHeap.length;j++){
+                if(cardHeap[i] < cardHeap[j]){
+                    int tmp = cardHeap[i];
+                    cardHeap[i] = cardHeap[j];
+                    cardHeap[j] = tmp;
+                }
+            }
+        }
+    }
     void cardToPlayer(int card, Player playerMain) {
-        playerMain.handCards[playerMain.handCardsNum] = card;
-        playerMain.handCardsNum++;
+        for(int i = 0;i < playerMain.handCards.length;i++) {
+           if(playerMain.handCards[i] == NOTHING) {
+               playerMain.handCards[i] = card;
+               playerMain.handCardsNum++;
+               break;
+           }
+        }
     }
     void cardToHeap(int[] cardHeap, int card) {
         int i = (int) (Math.random() * cardHeap.length);
         while (cardHeap[i] != NOTHING)
-            i++;
+            i = (i + 1) % cardHeap.length;
         cardHeap[i] = card;
     }
     void cardDistribute(int[] cardHeap, Player playerMain, int cardNum) {
@@ -74,18 +94,23 @@ public class GambleChecker {
                 distributedCardNum++;
             }
             if (distributedCardNum == cardNum) {
-                Arrays.sort(playerMain.handCards);
+                cardSort(playerMain.handCards);
                 break;
             }
         }
     }
     void cardDesert(Player playerMain, int[] cardHeap) {
-        for(int i = 0;i < playerMain.cardsDesertNum;i++){
-            cardToHeap(cardHeap, playerMain.handCards[ playerMain.cardsDesertList[i] ]);
-            playerMain.handCards[ playerMain.cardsDesertList[i] ] = NOTHING;
-            playerMain.handCardsNum --;
+        if(playerMain.handCardsNum > playerMain.healthPoint) {
+            playerMain.cardsDesertNum = playerMain.handCardsNum - playerMain.healthPoint;
+            for (int i = 0; i < playerMain.cardsDesertNum; i++) {
+                if(playerMain.cardsDesertList[i] != -1) {
+                    cardToHeap(cardHeap, playerMain.handCards[playerMain.cardsDesertList[i]]);
+                    playerMain.handCards[playerMain.cardsDesertList[i]] = NOTHING;
+                    playerMain.handCardsNum--;
+                }
+            }
+            cardSort(playerMain.handCards);
         }
-        Arrays.sort(playerMain.handCards);
     }
 
     /*
