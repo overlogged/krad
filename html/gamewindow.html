@@ -9,53 +9,53 @@
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
   <style>
-  div
-  {
-  width:110px;
-  height:110px;
-  border:thin solid rgb(108, 211, 243);
-  overflow-x:hidden;
-  overflow-y:scroll;
-  }
+       #gamecontainer{ height:300px; width: 800px; margin: 0px 0px ;  outline: 3px solid rgb(11, 206, 212); overflow: auto;}
+       #statuscontainer{ height:50px; width: 600px; margin: 0px 0px  ; outline: 0px solid rgb(11, 206, 212); overflow: scr;}
+       #cardcontainer{ height:50px; width: 600px; margin: 0px 0px  ; outline: 0px solid rgb(11, 206, 212); overflow: ;}
 </style>
 </head>
 <body>
+    <div id="gamecontainer"></div>
+    <div id="cardcontainer"></div>
   <script>
-      var game = new Phaser.Game(600, 800, Phaser.CANVAS, '', {
-      preload: function () {
+      var playstatus = new Phaser.Game(600, 50, Phaser.CANVAS, 'statuscontainer',{
+       preload: function () {
+         playstatus.load.image('star', 'assets/img/userbackground.png');
+       },
+       create: function () {
+         var statusbackground = playstatus.add.sprite(0,0,'star');
+         statusbackground.smoothed = true;
+         statusbackground.height = playstatus.height;
+         statusbackground.width = playstatus.width;
+       }
+     });
+      var game = new Phaser.Game(500, 510, Phaser.CANVAS, 'gamecontainer', {
+       preload: function () {
         game.load.image('gamebackground', 'assets/img/gamebackground.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
       create: function () {
-        var background = game.add.sprite(0,50, 'gamebackground');
+        var background = game.add.sprite(0,0, 'gamebackground');
         background.smoothed = true;
-        background.height = 700;
-        background.width = 600; 
-        var playerstatus = game.add.sprite(0,0,'input');
-        playerstatus.smoothed=true;
-        playerstatus.height=50;
-        playerstatus.width=600;
-        var cardarea = game.add.sprite(0,750,'input');
-        cardarea.smoothed=true;
-        cardarea.height = 50;
-        cardarea.width = 500;
-        var extraarea = game.add.sprite(500,750,'button');
-        extraarea.smoothed = true;
-        extraarea.width=100;
-        extraarea.height=50;
-        layer.scale.set(2);
+        background.height = game.height;
+        background.width = game.height; 
+        var test = game.add.sprite(400,400,'input');
+      }
+    });
+    var card = new Phaser.Game(600, 50, Phaser.CANVAS, 'cardcontainer',{
+      preload: function () {
+        card.load.image('cardbackground','assets/img/inputbox1.png');
+      },
+      create: function () {
+        var cardbackground = card.add.sprite(0,0,'cardbackground');
+        cardbackground.smoothed = true;
+        cardbackground.height = card.height;
+        cardbackground.width = card.width;
       }
     });
 </script>
-      <div><p style="width:140px">
-          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
-          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
-          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
-          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
-          这是一个段落。这是一个段落。这是一个段落。这是一个段落。
-          </p></div> 
 </body>
 
 </html>
