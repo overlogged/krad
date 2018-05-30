@@ -65,13 +65,38 @@ public class God {
     //send the gameOver
     public String request(int sid,String msg) {
 
-        if(true) // choose hero
+        if(true) // sample
+        {
+            return sample(sid,msg);
+        }
+        else // choose hero
         {
             MsgChooseHero choose =  GodController.getChooseHero(msg);
-
+            return GodController.toChooseHero(0,"result");
         }
-        return GodController.toChooseHero(0,"result");
+    }
 
+    private Integer sample_count;
+    private String sample(int sid,String msg){
+        synchronized (this){
+            sample_count += 1;
+            if(sample_count < 4){
+                while (sample_count < 4){
+                    try {
+                        this.wait();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            } else {
+                this.notifyAll();
+            }
+        }
+        return Integer.toString(sid) + "choose" + msg;
+    }
+
+    God(){
+        sample_count = 0;
     }
 
     public void initialPlayer(int[] playerSID) throws IOException {
