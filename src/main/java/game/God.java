@@ -83,7 +83,7 @@ public class God {
             if(sample_count < 4){
                 while (sample_count < 4){
                     try {
-                        this.wait();
+                        this.wait();                
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
