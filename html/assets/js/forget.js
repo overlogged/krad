@@ -5,10 +5,16 @@ var state_forget = {
     game.add.bitmapText(280, 130, 'chiller', 'Forget Password', 70);
     game.add.bitmapText(290, 240, 'chiller', 'Email', 54);
 
-    game.add.button(395, 320, 'button', do_forget, this, 1, 0, 2, 0);
-    game.add.bitmapText(415, 325, 'chiller', 'Confirm', 28);
+    game.add.button(285, 320, 'button', do_forget, this, 1, 0, 2, 0);
+    game.add.button(465, 320, 'button', do_backloginfp, this, 1, 0, 2, 0);
+    game.add.bitmapText(300, 325, 'chiller', 'Confirm', 28);
+    game.add.bitmapText(490, 325, 'chiller', 'Back', 28);
     show("forget");
   }
+}
+
+function do_backloginfp (){
+  game.state.start('login');
 }
 
 function do_forget() {
