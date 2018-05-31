@@ -7,7 +7,7 @@ import spray.json._
 import scala.concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
 
-object GodController extends MyJsonProtocol{
+object GodHelper extends MyJsonProtocol{
   case class MsgChooseHero(sid:Int,hero:String)
   case class ResChooseHero(count:Int,result:String)
 

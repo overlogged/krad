@@ -1,7 +1,7 @@
 package game;
 
 import java.io.IOException;
-import game.GodController.*;
+import game.GodHelper.*;
 
 public class God {
 
@@ -71,8 +71,8 @@ public class God {
         }
         else // choose hero
         {
-            MsgChooseHero choose =  GodController.getChooseHero(msg);
-            return GodController.toChooseHero(0,"result");
+            MsgChooseHero choose =  GodHelper.getChooseHero(msg);
+            return GodHelper.toChooseHero(0,"result");
         }
     }
 
