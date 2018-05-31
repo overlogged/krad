@@ -15,8 +15,9 @@ var state_register = {
     game.add.button(500,440, 'button', do_backlogin, this, 1, 0, 2);
     game.add.bitmapText(335, 445, 'chiller', 'Confirm', 28);
     game.add.bitmapText(515, 445, 'chiller', 'Back', 28);
+    
 
-    game.avatar = game.add.sprite(620, 360, 'figure1');
+    game.avatar = game.add.sprite(620, 280, 'figure1');
     
     show("register");
   }
@@ -37,7 +38,7 @@ function do_register() {
   var password = $("#register_password").val();
   var confirm = $("#register_confirm").val();
   var avatar = "assets/img/figure/" + $("#register_avatar").val()+".png";
-  var gender = $("input[name='gender']:checked").val();
+  var gender = parseInt($("input[name='gender']:checked").val());
   if (password != confirm) {
     alert("两次密码填写不一样");
     return;
