@@ -1,9 +1,9 @@
 package game
 
-import GodController._
+import GodHelper._
 import spray.json._
 
-object GodControllerTest {
+object GodHelperTest {
   def main(args: Array[String]): Unit = {
     val x = MsgChooseHero(1,"sfaf")
     val s = x.toJson.toString // JsValue

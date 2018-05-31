@@ -13,7 +13,7 @@
   <input type="text" id="nickname" class="inputbox1" style="left:410px;top:250px">
   <input type="radio" id="gender1" name="gender" style="left:410px;top:320px" value="0" checked="checked">
   <input type="radio" id="gender2" name="gender" style="left:510px;top:320px" value="1">
-  <select class="select" id="avatar" style="left: 410px;top:365px" onchange="update_avatar()">
+  <select class="select" id="a_avatar" style="left: 410px;top:365px" onchange="update_avatar()">
     <option value="figure1">figure1</option>
     <option value="figure2">figure2</option>
     <option value="figure3">figure3</option>
@@ -57,7 +57,7 @@
     function update_avatar(){
       game.avatar.kill();
       console.log($("#avatar").val());
-      game.avatar = game.add.sprite(620,280,$("#avatar").val());
+      game.avatar = game.add.sprite(620,280,$("#a_avatar").val());
     }
     
     function do_change() {

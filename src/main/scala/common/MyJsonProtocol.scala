@@ -1,6 +1,6 @@
 package common
 
-import game.GodController.{MsgChooseHero, ResChooseHero}
+import game.GodHelper.{MsgChooseHero, ResChooseHero}
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
