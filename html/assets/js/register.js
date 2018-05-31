@@ -23,7 +23,7 @@ var state_register = {
   }
 }
 
-function update_avatar() {
+function update_avatar_register() {
   game.avatar.kill();
   game.avatar = game.add.sprite(620, 280, $("#register_avatar").val());
 }
