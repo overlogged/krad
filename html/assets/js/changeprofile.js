@@ -29,8 +29,8 @@ function do_changepf() {
   var req = {
     'nickname': nickname,
     'avatar': avatar,
-    'gender': gender,
-  }
+    'gender': gender
+  };
 
   console.log(req);
   var v_nickname = /{};:'/.test(nickname);
