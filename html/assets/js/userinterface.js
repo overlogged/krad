@@ -12,7 +12,7 @@ var state_userinterface = {
       background.height = game.height;
       background.width = game.width;
       var req = {
-        'sid':sid
+        
       };
 
       $.ajax({
@@ -22,9 +22,10 @@ var state_userinterface = {
       data: req,
       success: function (data, status) {
         console.log(data);
-        console.log(data.sid);
-        console.log(data.user);
-        var nickname = data.user.nickname;
+        console.log(data.nickname);
+        console.log(data.avatar);
+        var nickname = data.nickname;
+        var avatar = data.avatar
 
 
           // window.location.href = ""; //需要跳转的地址
