@@ -62,6 +62,12 @@ object SessionController {
     }
   }
 
+  def test(): Unit = {
+    val god = new God()
+    god.initialPlayer(Array(0))
+    states(0) = SessionState(StatePlaying,god)
+  }
+
   // api for http server
 
   /**
