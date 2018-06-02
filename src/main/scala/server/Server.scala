@@ -49,7 +49,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   def log[A](action: String, info: A): Unit = {
     val date = new Date()
     val s = s"[$action] $info #\t$date\n"
-    val verbose = config.log_verbose
+    val verbose = action.startsWith("verbose")
     if (!verbose || (verbose && config.log_verbose)) {
       print(s)
       log_file.write(s)

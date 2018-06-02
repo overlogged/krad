@@ -5,12 +5,10 @@ import java.util.Date
 import common.Bimap
 import game.UserModel.User
 import server.Server
-import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
+import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister, executionContext}
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
-import server.Server.executionContext
 
 object SessionController {
 

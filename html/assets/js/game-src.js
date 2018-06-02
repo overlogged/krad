@@ -11,5 +11,7 @@ function request(req,callback) {
   });
 }
 
+// choose hero
 request({},cont(data,status));
+
 console.log(data);
