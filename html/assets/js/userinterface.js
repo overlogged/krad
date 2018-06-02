@@ -12,7 +12,7 @@ var state_userinterface = {
       background.height = game.height;
       background.width = game.width;
       var req = {
-        
+        'sid':sid
       };
 
       $.ajax({
