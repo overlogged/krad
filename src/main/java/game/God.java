@@ -1,6 +1,9 @@
 package game;
 
 import java.io.IOException;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import game.GodHelper.*;
 
 public class God {
@@ -93,6 +96,29 @@ public class God {
             return
         }
          */
+    }
+
+    private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
+
+    private void waitAllPlayers(){
+        synchronized (wait_map){
+            Integer counter = wait_map.get(gameState);
+            if(counter==null) counter = 0;
+            counter++;
+            wait_map.put(gameState,counter);
+            if(counter < playerNum){
+                do{
+                    try{
+                        wait_map.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                    counter = wait_map.get(gameState);
+                }while (counter < playerNum);
+            } else {
+                wait_map.notifyAll();
+            }
+        }
     }
 
     private Integer choice_count;

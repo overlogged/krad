@@ -226,6 +226,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       case _ => {}
     }
     Http().bindAndHandle(route, config.web_host, config.web_port)
+    SessionController.test()
     log("bind", s"${config.web_host}:${config.web_port}")
   }
 }
