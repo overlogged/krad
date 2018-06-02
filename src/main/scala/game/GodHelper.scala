@@ -8,8 +8,13 @@ import scala.concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
 
 object GodHelper extends MyJsonProtocol{
+  case class ResInit(nextStage:String,heroList:Array[String])
   case class MsgChooseHero(sid:Int,hero:String)
   case class ResChooseHero(count:Int,result:String)
+
+  def toInit(nextStage:String,heroList:Array[String]):String = {
+    ResInit(nextStage,heroList).toJson.toString
+  }
 
   def getChooseHero(str:String):MsgChooseHero = {
     str.parseJson.convertTo[MsgChooseHero]
