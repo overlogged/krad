@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -22,26 +22,31 @@
 <body>
   <div><img src="assets/img/gamebackground.png" width="200" height="300" alt="Shinny Star"/></div>
   <script>  
-    var game = new Phaser.Game(600, 800, Phaser.CANVAS, '', {
-      preload: function () {
+    var game = new Phaser.Game(600, 950, Phaser.CANVAS, '', {
+        preload: function () {
+        game.load.image('recoveredcard','assets/img/recoveredcard.png')
         game.load.image('gamebackground', 'assets/img/gamebackground.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
 
-      create: function () {
-       var background = game.add.sprite(0,50, 'gamebackground');
+        create: function () {
+        var background = game.add.sprite(0,50, 'gamebackground');
         background.smoothed = true;
         background.height = 700;
         background.width = 600; 
         var playerstatus = game.add.sprite(0,0,'input');
         playerstatus.smoothed=true;
         playerstatus.height=50;
-        playerstatus.width=600;
+        playerstatus.width = 600;
+        var recoveredcardarea = game.add.sprite(490, 800, 'recoveredcard');
+        recoveredcardarea.smoothed = true;
+        recoveredcardarea.height = 150;
+        recoveredcardarea.width = 100;
         var cardarea = game.add.sprite(0,750,'input');
         cardarea.smoothed=true;
-        cardarea.height = 50;
+        cardarea.height = 200;
         cardarea.width = 500;
         var extraarea = game.add.sprite(500,750,'button');
         extraarea.smoothed = true;
