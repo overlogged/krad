@@ -16,7 +16,7 @@ var state_changeprofile = {
   }
 }
 
-function update_avatar() {
+function update_avatar_changeprofile() {
   game.avatar.kill();
   console.log($("#changeproflie_avatar").val());
   game.avatar = game.add.sprite(620, 280, $("#changeproflie_avatar").val());
@@ -25,7 +25,7 @@ function update_avatar() {
 function do_changepf() {
   var nickname = $("#changeprofile_nickname").val();
   var avatar = "assets/img/figure/" + $("#changeprofile_avatar").val() + ".png";
-  var gender = $("input[name='gender']:checked").val();
+  var gender = parseInt($("input[name='gender']:checked").val());
   var req = {
     'nickname': nickname,
     'avatar': avatar,

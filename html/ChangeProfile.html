@@ -50,14 +50,14 @@
         var confirmButtonText = game.add.bitmapText(415, 400, 'chiller', 'Confirm', 28);
         
 
-        game.avatar = game.add.sprite(620,280,'figure1');
+        game.avatar = game.add.sprite(420,280,'figure1');
       }
     });
 
     function update_avatar(){
       game.avatar.kill();
       console.log($("#avatar").val());
-      game.avatar = game.add.sprite(620,280,$("#a_avatar").val());
+      game.avatar = game.add.sprite(420,280,$("#a_avatar").val());
     }
     
     function do_change() {
