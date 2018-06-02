@@ -20,7 +20,7 @@ function do_backloginfp (){
 function do_forget() {
   var email = $("#forget_email").val();
   var req ={
-    'email':email,
+    'email':email
   };
   console.log(req);
   var v_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email);
