@@ -11,6 +11,8 @@ var state_userinterface = {
       background.smoothed = true;
       background.height = game.height;
       background.width = game.width;
+      var user_nickname;
+      var user_avatar;
       var req = {
         'sid':sid
       };
@@ -24,8 +26,8 @@ var state_userinterface = {
         console.log(data);
         console.log(data.nickname);
         console.log(data.avatar);
-        var nickname = data.nickname;
-        var avatar = data.avatar
+        user_nickname = data.nickname;
+        user_avatar = data.avatar
 
 
           // window.location.href = ""; //需要跳转的地址
@@ -41,9 +43,9 @@ var state_userinterface = {
         
 
       var nicknameText = game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
-      var usernickname = game.add.bitmapText(260, 20, 'chiller', nickname, 54);
+      var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
       var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
-      var usergrade = game.add.bitmapText(215, 60, 'chiller', '???', 54);
+      var usergrade = game.add.bitmapText(215, 60, 'chiller', user_avatar, 54);
         
         
       var changepw = game.add.button(340, 70, 'button', do_changepw, this, 1, 0, 2, 0);

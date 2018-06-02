@@ -37,7 +37,7 @@ function do_register() {
   var nickname = $("#register_nickname").val();
   var password = $("#register_password").val();
   var confirm = $("#register_confirm").val();
-  var avatar = "assets/img/figure/" + $("#register_avatar").val()+".png";
+  var avatar =  $("#register_avatar").val();
   var gender = parseInt($("input[name='gender']:checked").val());
   if (password != confirm) {
     alert("两次密码填写不一样");
@@ -76,7 +76,7 @@ function do_register() {
       console.log(data);
       sid = data.sid;
       user = data.user;
-      game.state.start('home');
+      game.state.start('login');
     },
     error: function (data, status) {
       alert("账号注册失败");
