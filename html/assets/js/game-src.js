@@ -10,6 +10,8 @@ function request(req,callback) {
     }
   });
 }
+// for continuation.js
+arguments = {}
 
 // choose hero
 request({},cont(data,status));

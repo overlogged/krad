@@ -11,6 +11,7 @@ function request(req, callback) {
   });
 }
 var data, status;
+arguments = {};
 request({}, function (arguments, _$param0, _$param1) {
   data = _$param0;
   status = _$param1;
