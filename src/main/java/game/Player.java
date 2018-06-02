@@ -15,8 +15,6 @@ public class Player {
     public static final int FIRE = 6;
     public static final int SKILLS = 7;
 
-    String name;
-
     //cards{strategy,skills}
     //least energy consume = 4
 
@@ -25,6 +23,8 @@ public class Player {
     int firePow;                        //firepower
     int range;                          //range
     int SID;                            //session ID
+    String humanChara;
+    String zombieChara;
 
     //dynamic properties
     int healthPoint;                    //energy limit

@@ -17,10 +17,12 @@ public class God {
     private Player[] allPlayers;//preserve the state of players
     private boolean humanWin;   //whether someone win
     private MapUnit[] gameMap;  //map of the game
-    int gameState;              //state of the game:
+    private String[] heroList = { "0" };
+    enum GameState{ INIT, CHOOSEHERO,CHOOSEHEROREADY };
+    GameState gameState;
     //1
-    // Step one: init                   get the heroChoice
-    //send the heroChoice
+    // Step one: init                   get the playerNum and playerSIDs
+    //send the heroChoice,teamDivide and MapChoice
 
     // Step two: gaming
     // Stage one: ready
@@ -65,23 +67,46 @@ public class God {
     //send the gameOver
     public String request(int sid,String msg) {
 
-        if(true) // sample
-        {
-            return sample(sid,msg);
+        String result = "{state:'error'}";
+        switch(gameState) {
+            case INIT:
+                result = GodHelper.toInit("choose hero", heroList);
+                break;
+            case CHOOSEHERO:
+                result = heroChoose(sid, msg);
+                gameState = GameState.CHOOSEHEROREADY;
+                break;
+            case CHOOSEHEROREADY:
+                result = GodHelper.toChooseHero(0, "result");
+                break;
         }
-        else // choose hero
-        {
-            MsgChooseHero choose =  GodHelper.getChooseHero(msg);
-            return GodHelper.toChooseHero(0,"result");
+        return result;
+
+        /*
+        else if( choose hero){
+            state = chosen;
+            return herolist;
         }
+        else if ( chosen){
+            state = ready;
+            sample(sid,msg);
+            return
+        }
+         */
     }
 
-    private Integer sample_count;
-    private String sample(int sid,String msg){
+    private Integer choice_count;
+    private String heroChoose(int sid,String msg){
         synchronized (this){
-            sample_count += 1;
-            if(sample_count < 4){
-                while (sample_count < 4){
+            choice_count += 1;
+            for(int i = 0;i < playerNum;i++){
+                if(allPlayers[i].SID == sid) {
+                    MsgChooseHero choose = GodHelper.getChooseHero(msg);
+                    allPlayers[i].humanChara = choose.hero();
+                }
+            }
+            if(choice_count < playerNum){
+                while (choice_count < playerNum){
                     try {
                         this.wait();
                     } catch (Exception ex) {
@@ -95,21 +120,8 @@ public class God {
         return Integer.toString(sid) + "choose" + msg;
     }
 
-    God(){
-        sample_count = 0;
-    }
 
-    public void initialPlayer(int[] playerSID) throws IOException {
-        playerNum = playerSID.length;
-        allPlayers = new Player[playerNum];
-        for (int i = 0; i < playerNum; i++){
-            allPlayers[i] = new Player();
-            allPlayers[i].SID = playerSID[i];
-        }
-
-
-
-
+    public void initialPlayer(int[] playerSID)  {
         /*
         // TODO: get the playersCharacterChoice from 前端
         int[] playersCharacterChoice=new int[playerNum];
