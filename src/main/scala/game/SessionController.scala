@@ -137,7 +137,15 @@ object SessionController {
     states.get(req.sid) map { states =>
       Server.log("verbose game in",req.toString)
       val god = states.god
-      val result = god.request(req.sid, req.msg)
+      val result =
+        try{
+          god.request(req.sid, req.msg)
+        }catch{
+          case ex:Exception => {
+            ex.printStackTrace()
+            "error"
+          }
+        }
       Server.log("verbose game out",result)
       result
     }
