@@ -20,8 +20,8 @@ public class God {
     private Player[] allPlayers;//preserve the state of players
     private boolean humanWin;   //whether someone win
     private MapUnit[] gameMap;  //map of the game
-    private String[] heroList = { "0" };
-    enum GameState{ INIT, CHOOSEHERO,CHOOSEHEROREADY };
+    private String[] heroList;
+    enum GameState{ INIT, CHOOSEHERO, CHOOSEHEROREADY, TEAMDIVIDE};
     GameState gameState;
     //1
     // Step one: init                   get the playerNum and playerSIDs
@@ -80,7 +80,9 @@ public class God {
                 gameState = GameState.CHOOSEHEROREADY;
                 break;
             case CHOOSEHEROREADY:
-                result = GodHelper.toChooseHero(0, "result");
+                result = GodHelper.toChooseHero("team divide",playerNum, "hero choose finished");
+                break;
+            case TEAMDIVIDE:
                 break;
         }
         return result;
@@ -123,11 +125,11 @@ public class God {
 
     private Integer choice_count;
     private String heroChoose(int sid,String msg){
+        MsgChooseHero choose = GodHelper.getChooseHero(msg);
         synchronized (this){
             choice_count += 1;
             for(int i = 0;i < playerNum;i++){
-                if(allPlayers[i].SID == sid) {
-                    MsgChooseHero choose = GodHelper.getChooseHero(msg);
+                if(allPlayers[i].SID == sid) { ;
                     allPlayers[i].humanChara = choose.hero();
                 }
             }
@@ -143,11 +145,24 @@ public class God {
                 this.notifyAll();
             }
         }
-        return Integer.toString(sid) + "choose" + msg;
+        return Integer.toString(sid) + "choose" + choose.hero();
+    }
+    private String teamDivide(Player[] allPlayers){
+        int zombie = (int)( Math.random() * allPlayers.length);
+        allPlayers[zombie].team = Player.ZOMBIE;
+        for(int i = 0;i < allPlayers.length;i++){
+            if(i != zombie)
+                allPlayers[i].team = Player.HUMAN;
+        }
+        return "0";
     }
 
-
     public void initialPlayer(int[] playerSID)  {
+        int playerNum = playerSID.length;
+        for(int i = 0;i < playerNum;i++) {
+            allPlayers[i] = new Player();
+            allPlayers[i].SID = playerSID[i];
+        }
         /*
         // TODO: get the playersCharacterChoice from 前端
         int[] playersCharacterChoice=new int[playerNum];
