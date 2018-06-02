@@ -24,7 +24,7 @@ function update_avatar_changeprofile() {
 
 function do_changepf() {
   var nickname = $("#changeprofile_nickname").val();
-  var avatar = "assets/img/figure/" + $("#changeprofile_avatar").val() + ".png";
+  var avatar =  $("#changeprofile_avatar").val();
   var gender = parseInt($("input[name='gender']:checked").val());
   var req = {
     'nickname': nickname,
@@ -49,7 +49,7 @@ function do_changepf() {
     success: function (data, status) {
       alert("修改成功");
       console.log(data);
-      game.state.start('home'); // 跳转用户界面
+      game.state.start('userinterface'); // 跳转用户界面
     },
     error: function (data, status) {
       alert("修改失败");
