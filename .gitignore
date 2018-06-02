@@ -7,3 +7,4 @@ log.txt
 deploy/
 *.map
 .DS_Store
+.vs/
