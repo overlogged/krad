@@ -158,6 +158,11 @@ public class God {
     }
 
     public void initialPlayer(int[] playerSID)  {
+        int playerNum = playerSID.length;
+        for(int i = 0;i < playerNum;i++) {
+            allPlayers[i] = new Player();
+            allPlayers[i].SID = playerSID[i];
+        }
         /*
         // TODO: get the playersCharacterChoice from 前端
         int[] playersCharacterChoice=new int[playerNum];
