@@ -55,7 +55,7 @@ function do_login() {
       alert("登录成功");
       sid = data.sid;
       user = data.user;
-      game.state.start('home');
+      game.state.start('userinterface');
     },
     error: function (data, status) {
       alert("用户名或密码错误");
