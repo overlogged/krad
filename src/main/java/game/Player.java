@@ -17,6 +17,9 @@ public class Player {
 
     //cards{strategy,skills}
     //least energy consume = 4
+    int index;
+    String avatar;
+
 
     //static properties
     int mot;                             //motility
