@@ -1,9 +1,12 @@
-function request(req, callback) {
+function request(msg, callback) {
   $.ajax({
     url: '/api/game',
     type: 'POST',
     contentType: 'application/json',
-    data: JSON.stringify(req),
+    data: JSON.stringify({
+      'sid': sid,
+      'msg': JSON.stringify(msg)
+    }),
     success: callback,
     error: function (data, status) {
       console.log(data);
@@ -11,6 +14,7 @@ function request(req, callback) {
   });
 }
 var data, status;
+sid = 0;
 arguments = {};
 request({}, function (arguments, _$param0, _$param1) {
   data = _$param0;
