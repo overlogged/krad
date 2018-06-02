@@ -17,7 +17,7 @@ var state_register = {
     game.add.bitmapText(515, 445, 'chiller', 'Back', 28);
     
 
-    game.avatar = game.add.sprite(450, 220, 'figure1');
+    game.avatar = game.add.sprite(10, 280, 'figure1');
     
     show("register");
   }
@@ -25,7 +25,7 @@ var state_register = {
 
 function update_avatar_register() {
   game.avatar.kill();
-  game.avatar = game.add.sprite(450, 220, $("#register_avatar").val());
+  game.avatar = game.add.sprite(10, 280, $("#register_avatar").val());
 }
 
 function do_backlogin() {
