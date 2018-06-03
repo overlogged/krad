@@ -44,6 +44,13 @@ object ScalaGodTest {
   }
 
   def main(args: Array[String]): Unit = {
+    val sids = 0 to 3
+    val god = new God
+    god.initialPlayer(sids.toArray)
+    for(sid<-sids){
+      Future{
 
+      }
+    }
   }
 }
