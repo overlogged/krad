@@ -1,6 +1,7 @@
 package game;
 
 import java.io.*;
+
 import server.Server;
 
 public class CreateMap {
@@ -18,7 +19,7 @@ public class CreateMap {
     void outputMap() {                      //Output map ser file
         for (int i = 0; i < array_number; i++) {
             int edge_number;
-            if (i == 6) {
+            if ((i == 7) || (i == 8) || (i == 22)) {
                 edge_number = 3;
             } else if (i == 0) {
                 edge_number = 1;
@@ -27,26 +28,41 @@ public class CreateMap {
             }
 
             sample[i] = new MapUnit(edge_number);
-            sample[i].mark = i + 1;
-            sample[i].height = i + 1;
+            sample[i].mark = i+1;
             sample[i].status = 0;
-            sample[i].edge[0].adjedg = i + 2;
+
+            if (i == 22) {
+                sample[i].edge[0].adjedg = 8;
+            } else {
+                sample[i].edge[0].adjedg = i + 2;
+            }
             sample[i].edge[0].distance = 1;
-            if (i != 0) {
-                sample[i].edge[1].adjedg = i;
+
+            if (edge_number >= 2) {
+                sample[i].edge[1].adjedg = i ;
                 sample[i].edge[1].distance = 1;
             }
-            sample[i].rank=1;
+            if (i < 7) {
+                sample[i].rank = 1;
+            } else if (i == 7) {
+                sample[i].rank = 2;
+            } else if (i == 15) {
+                sample[i].rank = 4;
+            } else {
+                sample[i].rank = 3;
+            }
         }
-        for (int i=array_number-1;i>9;i--)
-        {
-            sample[i].rank=2;
-        }
-        sample[6].edge[2].adjedg = 11;
-        sample[6].edge[2].distance = 1;
-        sample[11].edge[0].adjedg = 6;
-        sample[9].status = 1;
-        sample[9].key.name = "Fate";
+
+        sample[8].edge[2].adjedg = 7;
+        sample[8].edge[2].distance = 2;
+        sample[22].edge[2].distance = 2;
+        sample[22].edge[2].adjedg = 7;
+        sample[7].edge[2].adjedg = 23;
+        sample[7].edge[2].distance = 1;
+
+        sample[7].status=1;
+        sample[15].status=2;
+        sample[15].key.name="FATE";
         try {
             FileOutputStream fileOut = new FileOutputStream("sample.map");   //Create a Ser in the krad-backend
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -55,7 +71,7 @@ public class CreateMap {
             }
             out.close();
             fileOut.close();
-            Server.log("serialize","sample.map");
+//            Server.log("serialize", "sample.map");
 //            System.out.println("Serialized data is saved in krad-backend/Mapsample.map");
         } catch (IOException i) {
             i.printStackTrace();
@@ -64,7 +80,7 @@ public class CreateMap {
 
     void obtainMap() {                  //Obtain objection from file
         try {
-            FileInputStream fileInput = new FileInputStream("Mapsample.map" );
+            FileInputStream fileInput = new FileInputStream("sample.map");
             ObjectInputStream ois = new ObjectInputStream(fileInput);
             for (int i = 0; fileInput.available() > 0; i++) {
                 try {

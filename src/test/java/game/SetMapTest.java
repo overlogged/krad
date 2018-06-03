@@ -18,10 +18,9 @@ public class SetMapTest {
         return  distance;
     }
     public static void main(String[] args) {
-        CreateMap X=new CreateMap(12);
-        X.outputMap();
+        CreateMap X=new CreateMap(23);
         X.obtainMap();
-        System.out.println(X.sample[0].mark);
+        System.out.println(X.sample[7].edge[2].adjedg);
         System.out.println(X.sample[10].rank);
         int distance=0;
         distance=outDistance(X.sample[3],X.sample[8]);
