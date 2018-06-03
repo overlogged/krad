@@ -9,7 +9,7 @@ import concurrent.ExecutionContext.Implicits.global
 object GodHelper extends MyJsonProtocol{
   case class UserInfo(index:Int,nickName:String)
   case class ResInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String])
-  case class MsgChooseHero(sid:Int,hero:String)
+  case class MsgChooseHero(hero:String)
   case class ResChooseHero(state:String,heroChoices:Array[String])
   case class ResTeamDivide(state:String,teamResult:Array[Int])
 
