@@ -23,7 +23,7 @@ public class God {
     private String[] heroChoices;
     private int[] teamResult;
 
-    enum GameState{ INIT, TEAMDIVIDE, MAPINIT }
+    enum GameState{ INIT, TEAMDIVIDE, MAPINIT, PREPARE }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
     //1
@@ -101,6 +101,7 @@ public class God {
                 break;
             case MAPINIT:
                 break;
+                case:
         }
         return result;
     }
