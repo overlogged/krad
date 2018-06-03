@@ -8,6 +8,8 @@ var state_userinterface = {
       game.add.sprite(480, 20, 'figure4');
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
+      var user_nickname;
+      var uaer_avatar;
 
       var req = {
         'sid':sid
@@ -23,7 +25,8 @@ var state_userinterface = {
         console.log(data.nickname);
         console.log(data.avatar);
         user_nickname = data.nickname;
-        user_avatar = data.avatar
+        user_avatar = data.avatar;
+        console.log(user_nickname);
 
 
           // window.location.href = ""; //需要跳转的地址
@@ -33,7 +36,7 @@ var state_userinterface = {
         console.log(data);
       }
     });
-    console.log(user_nickname);
+    
 
       var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
       var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
