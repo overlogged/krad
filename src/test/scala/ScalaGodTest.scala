@@ -22,6 +22,7 @@ object ScalaGodTest extends MyJsonProtocol{
       Thread.sleep(100)
     }
   }
+  
 
   def exper(): Unit ={
     val f1 = Future {
@@ -53,6 +54,5 @@ object ScalaGodTest extends MyJsonProtocol{
       yield Future{
         println(sid,god.request(sid,""))
       }
-
   }
 }
