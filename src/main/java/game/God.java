@@ -23,6 +23,8 @@ public class God {
     private MapUnit[] gameMap;      // map of the game
     private String[] heroList;
     private UserInfo[] allUserInfo;
+    private String[] heroChoices;
+    private int[] teamResult;
     enum GameState{ INIT, CHOOSEHERO, TEAMDIVIDE };
     GameState gameState;
     //1
@@ -82,11 +84,11 @@ public class God {
             case CHOOSEHERO:
                 heroChoose(sid, msg);
                 gameState = GameState.TEAMDIVIDE;
-                result = GodHelper.toChooseHero("Team dividing",allUserInfo);
+                result = GodHelper.toChooseHero("Team dividing",heroChoices);
                 break;
             case TEAMDIVIDE:
                 teamDivide(allPlayers);
-                result = GodHelper.toTeamDivide("Start game",allUserInfo);
+                result = GodHelper.toTeamDivide("Start game",teamResult);
                 break;
         }
         return result;
@@ -137,6 +139,7 @@ public class God {
             for( playerIndex = 0;playerIndex < playerNum;playerIndex++){
                 if(allPlayers[playerIndex].SID == sid) { ;
                     allPlayers[playerIndex].chara = choose.hero();
+                    heroChoices[playerIndex] = choose.hero();
                 }
             }
             if(choice_count < playerNum){
@@ -155,19 +158,23 @@ public class God {
     private void teamDivide(Player[] allPlayer){
         int zombie = (int)( Math.random() * allPlayer.length);
         allPlayer[zombie].team = Player.ZOMBIE;
+        teamResult[zombie] = Player.ZOMBIE;
         for(int i = 0;i < allPlayer.length;i++){
             if(i != zombie) {
                 allPlayer[i].team = Player.HUMAN;
+                teamResult[i] = Player.HUMAN;
             }
         };
     }
 
     public void initialPlayer(int[] playerSID)  {
         int playerNum = playerSID.length;
+        heroChoices = new String[playerNum];
+        teamResult = new int[playerNum];
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
-            allUserInfo[i] = new UserInfo(i,allPlayers[i].nickName,"0");
+            allUserInfo[i] = new UserInfo(i,allPlayers[i].nickName);
         }
         /*
         // TODO: get the playersCharacterChoice from 前端

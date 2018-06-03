@@ -23,7 +23,7 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val SessionFormat = jsonFormat3(Session)
   implicit val MsgChooseHeroFormat = jsonFormat2(MsgChooseHero)
   implicit val RequestGameFormat = jsonFormat2(RequestGame)
-  implicit val ResUserInfoFormat = jsonFormat3(UserInfo)
+  implicit val ResUserInfoFormat = jsonFormat2(UserInfo)
   implicit val ResChooseHeroFormat = jsonFormat2(ResChooseHero)
   implicit val ResInitFormat = jsonFormat3(ResInit)
   implicit val ResTeamDivideFormat = jsonFormat2(ResTeamDivide)

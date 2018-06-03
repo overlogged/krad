@@ -8,11 +8,11 @@ import scala.concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
 
 object GodHelper extends MyJsonProtocol{
-  case class UserInfo(index:Int,nickName:String,hero:String)
+  case class UserInfo(index:Int,nickName:String)
   case class ResInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String])
   case class MsgChooseHero(sid:Int,hero:String)
-  case class ResChooseHero(state:String,allUserInfo:Array[UserInfo])
-  case class ResTeamDivide(state:String,allUserInfo:Array[UserInfo])
+  case class ResChooseHero(state:String,heroChoices:Array[String])
+  case class ResTeamDivide(state:String,teamResult:Array[Int])
 
   def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {
     ResInit(allUserInfo,state,heroList).toJson.toString
@@ -22,11 +22,11 @@ object GodHelper extends MyJsonProtocol{
     str.parseJson.convertTo[MsgChooseHero]
   }
 
-  def toChooseHero(state:String,allUserInfo:Array[UserInfo]):String = {
-    ResChooseHero(state,allUserInfo).toJson.toString
+  def toChooseHero(state:String,heroChoices:Array[String]):String = {
+    ResChooseHero(state,heroChoices).toJson.toString
   }
 
-  def toTeamDivide(state:String,allUserInfo:Array[UserInfo]):String = {
-    ResTeamDivide(state,allUserInfo).toJson.toString
+  def toTeamDivide(state:String,teamResult:Array[Int]):String = {
+    ResTeamDivide(state,teamResult).toJson.toString
   }
 }
