@@ -65,7 +65,7 @@ object SessionController {
   def test(): Unit = {
     val god = new God()
     god.initialPlayer(Array(0))
-    states(0) = SessionState(StatePlaying,god)
+    states += (0->SessionState(StatePlaying,god))
   }
 
   // api for http server
@@ -134,6 +134,7 @@ object SessionController {
   }
 
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
+    Server.log("game",req)
     states.get(req.sid) map { states =>
       Server.log("verbose game in",req.toString)
       val god = states.god

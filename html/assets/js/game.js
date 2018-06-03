@@ -13,7 +13,7 @@ function request(msg, callback) {
     }
   });
 }
-var data, status;
+var sid, data, status;
 sid = 0;
 arguments = {};
 request({}, function (arguments, _$param0, _$param1) {

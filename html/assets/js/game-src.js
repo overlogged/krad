@@ -1,4 +1,4 @@
-sid = 0
+var sid = 0
 
 function request(msg,callback) {
   $.ajax({
