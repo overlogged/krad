@@ -15,8 +15,8 @@ public class Player {
     public static final int FIRE = 6;
     public static final int SKILLS = 7;
 
-    String nickName;
-    String avatar;
+    UserModel.User user_info;
+
     int SID;                            //session ID
 
 

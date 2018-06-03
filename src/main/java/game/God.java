@@ -1,14 +1,10 @@
 package game;
 
-import java.io.IOException;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import game.GodHelper.*;
-import scala.concurrent.java8.FuturesConvertersImpl;
+import scala.Option;
 
 public class God {
-
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // class: store all Player
@@ -25,8 +21,8 @@ public class God {
     private UserInfo[] allUserInfo;
     private String[] heroChoices;
     private int[] teamResult;
-    enum GameState{ INIT, CHOOSEHERO, TEAMDIVIDE };
-    GameState gameState = GameState.INIT;
+    enum GameState{ INIT, CHOOSEHERO, TEAMDIVIDE }
+    private GameState gameState = GameState.INIT;
     //1
     // Step one: init                   get the playerNum and playerSIDs
     //send the heroChoice,teamDivide and MapChoice
@@ -73,9 +69,7 @@ public class God {
     //get哪边赢了                     get None
     //send the gameOver
 
-
     public String request(int sid,String msg) {
-
         String result = "{state:'error'}";
         switch(gameState) {
             case INIT:
@@ -94,8 +88,11 @@ public class God {
         return result;
     }
 
+    /**
+     * sample code
+     * wait all players to send message
+     */
     private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
-
     private void waitAllPlayers(){
         synchronized (wait_map){
             Integer counter = wait_map.get(gameState);
@@ -152,11 +149,11 @@ public class God {
                 allPlayer[i].team = Player.HUMAN;
                 teamResult[i] = Player.HUMAN;
             }
-        };
+        }
     }
 
     public void initialPlayer(int[] playerSID)  {
-        int playerNum = playerSID.length;
+        playerNum = playerSID.length;
         allPlayers = new Player[playerNum];
         allUserInfo = new UserInfo[playerNum];
         heroChoices = new String[playerNum];
@@ -166,7 +163,10 @@ public class God {
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
-            allUserInfo[i] = new UserInfo(i,allPlayers[i].nickName);
+            Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
+            if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
+            else allPlayers[i].user_info = user.get();
+            allUserInfo[i] = new UserInfo(i,allPlayers[i].user_info.nickname());
         }
         /*
         // TODO: get the playersCharacterChoice from 前端

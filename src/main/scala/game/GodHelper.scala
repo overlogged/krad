@@ -1,10 +1,9 @@
 package game
 
 import common.MyJsonProtocol
-import server.Server.RequestGame
+import game.UserModel.{Stats, User}
 import spray.json._
 
-import scala.concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
 
 object GodHelper extends MyJsonProtocol{
@@ -29,4 +28,6 @@ object GodHelper extends MyJsonProtocol{
   def toTeamDivide(state:String,teamResult:Array[Int]):String = {
     ResTeamDivide(state,teamResult).toJson.toString
   }
+
+  val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())
 }

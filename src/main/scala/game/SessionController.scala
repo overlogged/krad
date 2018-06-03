@@ -1,5 +1,6 @@
 package game
 
+import java.io.PrintWriter
 import java.util.Date
 
 import common.Bimap
@@ -66,7 +67,6 @@ object SessionController {
     val god = new God()
     god.initialPlayer(Array(0))
     states += (0->SessionState(StatePlaying,god))
-    Server.log("verbose",states.get(0).map(_.state))
   }
 
   // api for http server
@@ -136,7 +136,6 @@ object SessionController {
 
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
     Server.log("game",req)
-    Server.log("verbose game",states.get(req.sid).map(_.state))
     states.get(req.sid) map { states =>
       Server.log("verbose game in",req.toString)
       val god = states.god
@@ -145,8 +144,8 @@ object SessionController {
           god.request(req.sid, req.msg)
         }catch{
           case ex:Exception => {
-            ex.printStackTrace()
-            "error"
+            ex.printStackTrace(new PrintWriter(Server.log_file))
+            "Internal Error"
           }
         }
       Server.log("verbose game out",result)

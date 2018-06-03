@@ -4,8 +4,9 @@ import java.security.cert.PKIXRevocationChecker
 
 import common.MyJsonProtocol
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 
 object ScalaGodTest extends MyJsonProtocol{
   def testSample(): Unit = {
@@ -54,5 +55,6 @@ object ScalaGodTest extends MyJsonProtocol{
       yield Future{
         println(sid,god.request(sid,""))
       }
+    for(f<-fs) Await.ready(f,Duration.Inf)
   }
 }
