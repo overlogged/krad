@@ -16,7 +16,7 @@ var state_changeprofile = {
     game.add.button(465, 410, 'button', do_backloginpf, this, 1, 0, 2, 0);
     game.add.bitmapText(490, 415, 'chiller', 'Back', 28);
 
-    game.avatar = game.add.sprite(620, 280, 'figure1');
+    game.avatar = game.add.sprite(10, 250, 'figure1');
     show("changeprofile");
   }
 }
@@ -27,8 +27,7 @@ function do_backloginpf(){
 
 function update_avatar_changeprofile() {
   game.avatar.kill();
-  console.log($("#changeproflie_avatar").val());
-  game.avatar = game.add.sprite(620, 280, $("#changeproflie_avatar").val());
+  game.avatar = game.add.sprite(10, 250, $("#changeprofile_avatar").val());
 }
 
 function do_changepf() {

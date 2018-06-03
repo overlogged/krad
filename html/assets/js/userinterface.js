@@ -14,7 +14,6 @@ var state_userinterface = {
       var req = {
         'sid':sid
       };
-
       $.ajax({
       url: "/api/user?sid＝"+sid,
       type: "GET",
@@ -47,7 +46,6 @@ var state_userinterface = {
       var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
       var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
       var usergrade = game.add.bitmapText(215, 60, 'chiller', user_avatar, 54);
-      usernickname.tacticalText = user_nickname;
         
         
       var changepw = game.add.button(340, 70, 'button', go_changepw, this, 1, 0, 2, 0);
