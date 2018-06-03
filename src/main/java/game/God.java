@@ -125,7 +125,7 @@ public class God {
         synchronized (this){
             choice_count += 1;
             for( playerIndex = 0;playerIndex < playerNum;playerIndex++){
-                if(allPlayers[playerIndex].SID == sid) { ;
+                if(allPlayers[playerIndex].SID == sid) {
                     allPlayers[playerIndex].chara = choose.hero();
                     heroChoices[playerIndex] = choose.hero();
                 }
