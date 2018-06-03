@@ -11,18 +11,25 @@ var state_register = {
     game.add.bitmapText(275, 330, 'chiller', 'Confirm', 54);
     game.add.bitmapText(290, 385, 'chiller', 'Avatar', 54);
 
-    game.add.button(400, 440, 'button', do_register, this, 1, 0, 2, 0);
-    game.add.bitmapText(420, 445, 'chiller', 'Confirm', 28);
+    game.add.button(320, 440, 'button', do_register, this, 1, 0, 2, 0);
+    game.add.button(500,440, 'button', do_backlogin, this, 1, 0, 2, 0);
+    game.add.bitmapText(335, 445, 'chiller', 'Confirm', 28);
+    game.add.bitmapText(515, 445, 'chiller', 'Back', 28);
+    
 
-    game.avatar = game.add.sprite(620, 360, 'figure1');
+    game.avatar = game.add.sprite(10, 280, 'figure1');
     
     show("register");
   }
 }
 
-function update_avatar() {
+function update_avatar_register() {
   game.avatar.kill();
-  game.avatar = game.add.sprite(620, 280, $("#register_avatar").val());
+  game.avatar = game.add.sprite(10, 280, $("#register_avatar").val());
+}
+
+function do_backlogin() {
+  game.state.start('login');
 }
 
 function do_register() {
@@ -30,8 +37,8 @@ function do_register() {
   var nickname = $("#register_nickname").val();
   var password = $("#register_password").val();
   var confirm = $("#register_confirm").val();
-  var avatar = "assets/img/figure/" + $("#register_avatar").val()+".png";
-  var gender = $("input[name='gender']:checked").val();
+  var avatar =  $("#register_avatar").val();
+  var gender = parseInt($("input[name='gender']:checked").val());
   if (password != confirm) {
     alert("两次密码填写不一样");
     return;
@@ -41,7 +48,7 @@ function do_register() {
     'nickname': nickname,
     'password': password,
     'avatar': avatar,
-    'gender': gender,
+    'gender': gender
   };
 
   console.log(req);
@@ -69,7 +76,7 @@ function do_register() {
       console.log(data);
       sid = data.sid;
       user = data.user;
-      game.state.start('home');
+      game.state.start('login');
     },
     error: function (data, status) {
       alert("账号注册失败");

@@ -44,6 +44,13 @@ object UserModel extends MyJsonProtocol{
   object User {
     val boy = 0
     val girl = 1
+
+    def apply(email: String,
+              nickname: String,
+              avatar: String,
+              gender: Int,
+              password: String,
+              stats: Stats): User = new User(email, nickname, avatar, gender, password, stats)
   }
 
   // database

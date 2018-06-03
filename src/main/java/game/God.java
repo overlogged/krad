@@ -1,10 +1,10 @@
 package game;
 
-import java.io.IOException;
-import game.GodController.*;
+import java.util.TreeMap;
+import game.GodHelper.*;
+import scala.Option;
 
 public class God {
-
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // class: store all Player
@@ -13,14 +13,26 @@ public class God {
     // function initialPlayerCharacter: 1. get the default birth unit from map
     //                                  2. set the value of position
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private int playerNum;      //how many people to play the game
-    private Player[] allPlayers;//preserve the state of players
-    private boolean humanWin;   //whether someone win
-    private MapUnit[] gameMap;  //map of the game
-    int gameState;              //state of the game:
-    //1
-    // Step one: init                   get the heroChoice
-    //send the heroChoice
+    GambleChecker gc;
+    PlayerChecker pc;
+
+    private int playerNum;          // how many people to play the game
+    private Player[] allPlayers;    // preserve the state of players
+    private boolean humanWin;      // whether someone win
+    private MapUnit[] gameMap;      // map of the game
+    private String[] heroList = {"0"};
+    private UserInfo[] allUserInfo;
+    private int[] cardHeap;
+
+    private String[] heroChoices;
+    private int[] teamResult;
+
+
+    enum GameState{ INIT, MAPINIT, MAINGAME }
+    private GameState gameState = GameState.INIT;
+    private int[] playerState;
+    enum PhaseState{ PREPARE, GAMBLE, ACTION}
+    private PhaseState phaseState = PhaseState.PREPARE;
 
     // Step two: gaming
     // Stage one: ready
@@ -63,25 +75,93 @@ public class God {
     //12
     //get哪边赢了                     get None
     //send the gameOver
-    public String request(int sid,String msg) {
 
-        if(true) // sample
-        {
-            return sample(sid,msg);
+    public String request(int sid,String msg) {
+        int playerIndex = 0;
+        for(int i = 0;i < playerNum; i++){
+            if(allPlayers[i].SID == sid) {
+                playerIndex = i;
+                break;
+            }
         }
-        else // choose hero
-        {
-            MsgChooseHero choose =  GodController.getChooseHero(msg);
-            return GodController.toChooseHero(0,"result");
+        String result = "{\"state\":\"Error\"}";
+        switch(gameState) {
+            case INIT:
+                if(playerState[playerIndex] == 0) {
+                    result = GodHelper.toInit(allUserInfo, "Choose hero", heroList);
+                    playerState[playerIndex] =1;
+                } else if(playerState[playerIndex] == 1) {
+                    heroChoose(sid, msg);
+                    gameState = GameState.MAPINIT;
+                    playerState[playerIndex] = 0;
+                    result = GodHelper.toChooseHero("Start game", heroChoices,teamResult);
+                }
+                break;
+            case MAPINIT:
+                break;
+            case MAINGAME:
+                switch(phaseState){
+                    case PREPARE:
+                        if(playerState[playerIndex] == 0){
+                        }
+                        break;
+                    case GAMBLE:
+                        break;
+                    case ACTION:
+                        break;
+                }
+                break;
+        }
+
+        // for debug
+        if(result.equals("{\"state\":\"Error\"}")){
+            System.out.printf("%d %s %s\n",sid,msg,gameState.toString());
+        }
+
+        return result;
+    }
+
+    /**
+     * sample code
+     * wait all players to send message
+     */
+    private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
+    private void waitAllPlayers(){
+        synchronized (wait_map){
+            Integer counter = wait_map.get(gameState);
+            if(counter==null) counter = 0;
+            counter++;
+            wait_map.put(gameState,counter);
+            if(counter < playerNum){
+                do{
+                    try{
+                        wait_map.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                    counter = wait_map.get(gameState);
+                }while (counter < playerNum);
+            } else {
+                wait_map.notifyAll();
+            }
         }
     }
 
-    private Integer sample_count;
-    private String sample(int sid,String msg){
+    private Integer choice_count = 0;
+    private void heroChoose(int sid,String msg){
+        int playerIndex;
+        String heroChoice;
+        MsgChooseHero choose = GodHelper.getChooseHero(msg);
         synchronized (this){
-            sample_count += 1;
-            if(sample_count < 4){
-                while (sample_count < 4){
+            choice_count += 1;
+            for( playerIndex = 0;playerIndex < playerNum;playerIndex++){
+                if(allPlayers[playerIndex].SID == sid) {
+                    allPlayers[playerIndex].chara = choose.hero();
+                    heroChoices[playerIndex] = choose.hero();
+                }
+            }
+            if(choice_count < playerNum){
+                while (choice_count < playerNum){
                     try {
                         this.wait();
                     } catch (Exception ex) {
@@ -89,27 +169,42 @@ public class God {
                     }
                 }
             } else {
+                teamDivide();
+                gc.cardHeapInit(cardHeap,playerNum);
+                gc.cardHeapStir(cardHeap);
                 this.notifyAll();
             }
         }
-        return Integer.toString(sid) + "choose" + msg;
+    }
+    private void teamDivide(){
+        int zombie = (int)( Math.random() * playerNum);
+        allPlayers[zombie].team = Player.ZOMBIE;
+        teamResult[zombie] = Player.ZOMBIE;
+        for(int i = 0;i < allPlayers.length;i++){
+            if(i != zombie) {
+                allPlayers[i].team = Player.HUMAN;
+                teamResult[i] = Player.HUMAN;
+            }
+        }
     }
 
-    God(){
-        sample_count = 0;
-    }
-
-    public void initialPlayer(int[] playerSID) throws IOException {
+    public void initialPlayer(int[] playerSID)  {
         playerNum = playerSID.length;
         allPlayers = new Player[playerNum];
-        for (int i = 0; i < playerNum; i++){
+        allUserInfo = new UserInfo[playerNum];
+        playerState = new int[playerNum];
+
+        heroChoices = new String[playerNum];
+        teamResult = new int[playerNum];
+        for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
+            playerState[i] = 0;
+            Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
+            if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
+            else allPlayers[i].user_info = user.get();
+            allUserInfo[i] = new UserInfo(i,allPlayers[i].user_info.nickname());
         }
-
-
-
-
         /*
         // TODO: get the playersCharacterChoice from 前端
         int[] playersCharacterChoice=new int[playerNum];
@@ -123,7 +218,7 @@ public class God {
         this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
         this.initialPlayerPos(playerNum, allPlayers, );
         */
-/*
+        /*
         private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
 
             for(int i = 0; i < playerNum; i++){
@@ -136,7 +231,9 @@ public class God {
                 //end
             }
         }
+        */
 
+        /*
         private void initialPlayerPos(int playerNum, Player[] allPlayers, MapUnit[] defaultMap) {
             for(int i = 0; i < playerNum; i++){
                 //TODO: 地图能不能告诉我出生地址
@@ -145,10 +242,12 @@ public class God {
                 //end
             }
         }
-*/
+        */
     }
 
-
+    /*
+    private String initiatePlayer(int[] playerSID)
+     */
 
 /*
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

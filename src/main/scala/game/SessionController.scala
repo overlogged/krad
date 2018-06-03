@@ -1,16 +1,15 @@
 package game
 
+import java.io.PrintWriter
 import java.util.Date
 
 import common.Bimap
 import game.UserModel.User
 import server.Server
-import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister}
+import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister, executionContext}
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
-import server.Server.executionContext
 
 object SessionController {
 
@@ -62,6 +61,12 @@ object SessionController {
         createSession(uid)
       }
     }
+  }
+
+  def test(): Unit = {
+    val god = new God()
+    god.initialPlayer(Array(0))
+    states += (0->SessionState(StatePlaying,god))
   }
 
   // api for http server
@@ -130,10 +135,19 @@ object SessionController {
   }
 
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
+    Server.log("game",req)
     states.get(req.sid) map { states =>
       Server.log("verbose game in",req.toString)
       val god = states.god
-      val result = god.request(req.sid, req.msg)
+      val result =
+        try{
+          god.request(req.sid, req.msg)
+        }catch{
+          case ex:Exception => {
+            ex.printStackTrace(new PrintWriter(Server.log_file))
+            "Internal Error"
+          }
+        }
       Server.log("verbose game out",result)
       result
     }

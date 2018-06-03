@@ -20,10 +20,13 @@ var state_login = {
   
     game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
     game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
+
+
   
     show("login");
   }
 }
+
 
 function go_signup() {
   game.state.start('register');
@@ -51,7 +54,7 @@ function do_login() {
       alert("登录成功");
       sid = data.sid;
       user = data.user;
-      game.state.start('home');
+      game.state.start('userinterface');
     },
     error: function (data, status) {
       alert("用户名或密码错误");

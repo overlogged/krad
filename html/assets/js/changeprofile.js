@@ -8,29 +8,37 @@ var state_changeprofile = {
     game.add.bitmapText(530, 290, 'chiller', 'Girl', 54);
     game.add.bitmapText(290, 345, 'chiller', 'Avatar', 54);
 
-    game.add.button(395, 400, 'button', do_changepf, this, 1, 0, 2);
-    game.add.bitmapText(415, 400, 'chiller', 'Confirm', 28);
+    game.add.button(325, 410, 'button', do_changepf, this, 1, 0, 2, 0);
+    game.add.bitmapText(340, 415, 'chiller', 'Confirm', 28);
 
-    game.avatar = game.add.sprite(620, 280, 'figure1');
+
+
+    game.add.button(465, 410, 'button', do_backloginpf, this, 1, 0, 2, 0);
+    game.add.bitmapText(490, 415, 'chiller', 'Back', 28);
+
+    game.avatar = game.add.sprite(10, 250, 'figure1');
     show("changeprofile");
   }
 }
 
-function update_avatar() {
+function do_backloginpf(){
+  game.state.start('login');
+}
+
+function update_avatar_changeprofile() {
   game.avatar.kill();
-  console.log($("#changeproflie_avatar").val());
-  game.avatar = game.add.sprite(620, 280, $("#changeproflie_avatar").val());
+  game.avatar = game.add.sprite(10, 250, $("#changeprofile_avatar").val());
 }
 
 function do_changepf() {
   var nickname = $("#changeprofile_nickname").val();
-  var avatar = "assets/img/figure/" + $("#changeprofile_avatar").val() + ".png";
-  var gender = $("input[name='gender']:checked").val();
+  var avatar =  $("#changeprofile_avatar").val();
+  var gender = parseInt($("input[name='gender']:checked").val());
   var req = {
     'nickname': nickname,
     'avatar': avatar,
-    'gender': gender,
-  }
+    'gender': gender
+  };
 
   console.log(req);
   var v_nickname = /{};:'/.test(nickname);
@@ -49,7 +57,7 @@ function do_changepf() {
     success: function (data, status) {
       alert("修改成功");
       console.log(data);
-      game.state.start('home'); // 跳转用户界面
+      game.state.start('userinterface'); // 跳转用户界面
     },
     error: function (data, status) {
       alert("修改失败");

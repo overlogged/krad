@@ -17,7 +17,7 @@ public class PlayerCheckerTest {
 
     void printPlayerStatus(Player playerMain) {
         System.out.println("player's status");
-        System.out.println("name: " + playerMain.name);
+        System.out.println("name: " );
         System.out.println("team: " + playerMain.team);
         System.out.println("present location: " + playerMain.preLoc);
         System.out.println("gamble this turn: " + playerMain.gamble);

@@ -15,16 +15,16 @@ public class Player {
     public static final int FIRE = 6;
     public static final int SKILLS = 7;
 
-    String name;
+    UserModel.User user_info;
 
-    //cards{strategy,skills}
-    //least energy consume = 4
+    int SID;                            //session ID
+
 
     //static properties
     int mot;                             //motility
     int firePow;                        //firepower
     int range;                          //range
-    int SID;                            //session ID
+    String chara;
 
     //dynamic properties
     int healthPoint;                    //energy limit

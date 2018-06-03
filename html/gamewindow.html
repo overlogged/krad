@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -14,6 +14,7 @@
 </style>
 </head>
 <body>
+<<<<<<< HEAD
     <div id="gamecontainer"></div>
     <div id="cardcontainer"></div>
   <script>
@@ -24,10 +25,19 @@
       var game = new Phaser.Game(780, 899, Phaser.CANVAS, 'gamecontainer', {
        preload: function () {
         game.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
+=======
+  <div><img src="assets/img/gamebackground.png" width="200" height="300" alt="Shinny Star"/></div>
+  <script>  
+    var game = new Phaser.Game(600, 950, Phaser.CANVAS, '', {
+        preload: function () {
+        game.load.image('recoveredcard','assets/img/recoveredcard.png')
+        game.load.image('gamebackground', 'assets/img/gamebackground.png');
+>>>>>>> a35baf1a9bbf9a23fb8cd41656b828b69c2035df
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.image('fighter1','assets/img/gamewindow/fighter2.png');
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
+<<<<<<< HEAD
       create: function () {
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.world.setBounds(0, 0,game.width, game.height);
@@ -82,6 +92,30 @@
         cardbackground.height = card.height;
         cardbackground.width = card.width;
     var movebutton = card.add.button(0,0 , 'button', do_move,this, 1, 0, 2, 0);
+=======
+
+        create: function () {
+        var background = game.add.sprite(0,50, 'gamebackground');
+        background.smoothed = true;
+        background.height = 700;
+        background.width = 600; 
+        var playerstatus = game.add.sprite(0,0,'input');
+        playerstatus.smoothed=true;
+        playerstatus.height=50;
+        playerstatus.width = 600;
+        var recoveredcardarea = game.add.sprite(490, 800, 'recoveredcard');
+        recoveredcardarea.smoothed = true;
+        recoveredcardarea.height = 150;
+        recoveredcardarea.width = 100;
+        var cardarea = game.add.sprite(0,750,'input');
+        cardarea.smoothed=true;
+        cardarea.height = 200;
+        cardarea.width = 500;
+        var extraarea = game.add.sprite(500,750,'button');
+        extraarea.smoothed = true;
+        extraarea.width=100;
+        extraarea.height=50;
+>>>>>>> a35baf1a9bbf9a23fb8cd41656b828b69c2035df
       }
     });
     function do_move(mark){
