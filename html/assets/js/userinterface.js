@@ -61,7 +61,7 @@ var state_userinterface = {
   }
   
 function do_help() {
-    game.state.start(help);
+    game.state.start('help');
 
 }
 
@@ -90,10 +90,10 @@ function do_match(){
 
 
 function do_changepw() {
-  game.state.start(changepw);
+  game.state.start('changepw');
 }
 
 
 function do_changeprofile() {
-  game.state.start(changeprofile);
+  game.state.start('changeprofile');
 }
