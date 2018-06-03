@@ -9,12 +9,11 @@ var state_userinterface = {
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
       var user_nickname;
-      var uaer_avatar;
+      var user_avatar;
 
       var req = {
         'sid':sid
       };
-
       $.ajax({
       url: "/api/user?sid＝"+sid,
       type: "GET",
@@ -27,6 +26,7 @@ var state_userinterface = {
         user_nickname = data.nickname;
         user_avatar = data.avatar;
         console.log(user_nickname);
+        console.log(user_avatar);
 
 
           // window.location.href = ""; //需要跳转的地址
@@ -46,13 +46,12 @@ var state_userinterface = {
       var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
       var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
       var usergrade = game.add.bitmapText(215, 60, 'chiller', user_avatar, 54);
-      usernickname.tacticalText = user_nickname;
         
         
-      var changepw = game.add.button(340, 70, 'button', do_changepw, this, 1, 0, 2, 0);
+      var changepw = game.add.button(340, 70, 'button', go_changepw, this, 1, 0, 2, 0);
       var changepwText = game.add.bitmapText(360, 70, 'chiller', 'password', 28);
 
-      var changeprofile = game.add.button(340, 30, 'button', do_changeprofile, this, 1, 0, 2, 0);
+      var changeprofile = game.add.button(340, 30, 'button', go_changeprofile, this, 1, 0, 2, 0);
       var changeprofileText = game.add.bitmapText(360, 30, 'chiller', 'profile', 28);
 
       var startgame = game.add.button(150, 100, 'start', do_match, this);

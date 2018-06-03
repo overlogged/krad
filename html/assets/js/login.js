@@ -20,10 +20,13 @@ var state_login = {
   
     game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
     game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
+
+
   
     show("login");
   }
 }
+
 
 function go_signup() {
   game.state.start('register');
