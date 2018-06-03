@@ -8,7 +8,8 @@ var state_userinterface = {
       game.add.sprite(480, 20, 'figure4');
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
-      
+      var user_nickname="";
+      var user_avatar="";
 
       var req = {
         'sid':sid
@@ -18,12 +19,12 @@ var state_userinterface = {
       type: "GET",
       contentType: 'application/json',
       data: req,
-      success: function (data, status) {
-        console.log(data);
-        console.log(data.nickname);
-        console.log(data.avatar);
-        user_nickname = data.nickname;
-        user_avatar = data.avatar;
+      success: function (user, status) {
+        console.log(user);
+        console.log(user.nickname);
+        console.log(user.avatar);
+        user_nickname = user.nickname;
+        user_avatar = user.avatar;
         console.log(user_nickname);
         console.log(user_avatar);
 

@@ -11,5 +11,4 @@ function show(page) {
 // global data
 var sid = 0;
 var user = {};
-var user_nickname="";
-var user_avatar="";
+
