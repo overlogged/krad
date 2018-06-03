@@ -9,7 +9,7 @@ var state_userinterface = {
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
       var user_nickname;
-      var uaer_avatar;
+      var user_avatar;
 
       var req = {
         'sid':sid
@@ -27,6 +27,7 @@ var state_userinterface = {
         user_nickname = data.nickname;
         user_avatar = data.avatar;
         console.log(user_nickname);
+        console.log(user_avatar);
 
 
           // window.location.href = ""; //需要跳转的地址
