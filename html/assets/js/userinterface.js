@@ -38,7 +38,7 @@ var state_userinterface = {
         console.log(data);
       }
     });
-    console.log(data.nickname);
+    console.log(user_nickname);
 
       var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
       var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
