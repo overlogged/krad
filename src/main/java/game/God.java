@@ -23,7 +23,7 @@ public class God {
     private String[] heroChoices;
     private int[] teamResult;
 
-    enum GameState{ INIT, TEAMDIVIDE, MAPINIT }
+    enum GameState{ INIT, MAPINIT }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
     //1
@@ -80,28 +80,28 @@ public class God {
                 break;
             }
         }
-        String result = "{state:'error'}";
+        String result = "{\"state\":\"Error\"}";
         switch(gameState) {
             case INIT:
                 if(playerState[playerIndex] == 0) {
                     result = GodHelper.toInit(allUserInfo, "Choose hero", heroList);
                     playerState[playerIndex] =1;
-                }
-                else if(playerState[playerIndex] == 1) {
+                } else if(playerState[playerIndex] == 1) {
                     heroChoose(sid, msg);
-                    gameState = GameState.TEAMDIVIDE;
+                    gameState = GameState.MAPINIT;
                     playerState[playerIndex] = 0;
-                    result = GodHelper.toChooseHero("Team dividing", heroChoices);
+                    result = GodHelper.toChooseHero("Start game", heroChoices,teamResult);
                 }
-                break;
-            case TEAMDIVIDE:
-                teamDivide(allPlayers);
-                gameState = GameState.MAPINIT;
-                result = GodHelper.toTeamDivide("Start game",teamResult);
                 break;
             case MAPINIT:
                 break;
         }
+
+        // for debug
+        if(result.equals("{\"state\":\"Error\"}")){
+            System.out.printf("%d %s %s\n",sid,msg,gameState.toString());
+        }
+
         return result;
     }
 
@@ -131,7 +131,7 @@ public class God {
         }
     }
 
-    private Integer choice_count;
+    private Integer choice_count = 0;
     private void heroChoose(int sid,String msg){
         int playerIndex;
         String heroChoice;
@@ -153,17 +153,18 @@ public class God {
                     }
                 }
             } else {
+                teamDivide();
                 this.notifyAll();
             }
         }
     }
-    private void teamDivide(Player[] allPlayer){
-        int zombie = (int)( Math.random() * allPlayer.length);
-        allPlayer[zombie].team = Player.ZOMBIE;
+    private void teamDivide(){
+        int zombie = (int)( Math.random() * playerNum);
+        allPlayers[zombie].team = Player.ZOMBIE;
         teamResult[zombie] = Player.ZOMBIE;
-        for(int i = 0;i < allPlayer.length;i++){
+        for(int i = 0;i < allPlayers.length;i++){
             if(i != zombie) {
-                allPlayer[i].team = Player.HUMAN;
+                allPlayers[i].team = Player.HUMAN;
                 teamResult[i] = Player.HUMAN;
             }
         }
