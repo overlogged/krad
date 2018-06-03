@@ -50,10 +50,10 @@ var state_userinterface = {
       usernickname.tacticalText = user_nickname;
         
         
-      var changepw = game.add.button(340, 70, 'button', do_changepw, this, 1, 0, 2, 0);
+      var changepw = game.add.button(340, 70, 'button', go_changepw, this, 1, 0, 2, 0);
       var changepwText = game.add.bitmapText(360, 70, 'chiller', 'password', 28);
 
-      var changeprofile = game.add.button(340, 30, 'button', do_changeprofile, this, 1, 0, 2, 0);
+      var changeprofile = game.add.button(340, 30, 'button', go_changeprofile, this, 1, 0, 2, 0);
       var changeprofileText = game.add.bitmapText(360, 30, 'chiller', 'profile', 28);
 
       var startgame = game.add.button(150, 100, 'start', do_match, this);
