@@ -3,6 +3,7 @@ package game
 import java.security.cert.PKIXRevocationChecker
 
 import common.MyJsonProtocol
+import game.GodHelper._
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,6 +55,7 @@ object ScalaGodTest extends MyJsonProtocol{
     val fs = for(sid<-sids)
       yield Future{
         println(sid,god.request(sid,""))
+        println(sid,god.request(sid,"{hero:'hero'}"))
       }
     for(f<-fs) Await.ready(f,Duration.Inf)
   }
