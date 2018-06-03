@@ -8,9 +8,6 @@ var state_userinterface = {
       game.add.sprite(480, 20, 'figure4');
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
-      background.smoothed = true;
-      background.height = game.height;
-      background.width = game.width;
 
       var req = {
         'sid':sid
