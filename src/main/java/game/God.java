@@ -171,6 +171,8 @@ public class God {
         int playerNum = playerSID.length;
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];
+        allPlayers = new Player[playerNum];
+        allUserInfo = new UserInfo[playerNum];
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];

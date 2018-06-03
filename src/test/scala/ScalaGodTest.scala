@@ -49,10 +49,10 @@ object ScalaGodTest extends MyJsonProtocol{
     val sids = 0 to 3
     val god = new God
     god.initialPlayer(sids.toArray)
-    for(sid<-sids){
-      Future{
+    val fs = for(sid<-sids)
+      yield Future{
         println(sid,god.request(sid,""))
       }
-    }
+
   }
 }
