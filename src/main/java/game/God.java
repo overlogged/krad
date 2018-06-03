@@ -17,12 +17,15 @@ public class God {
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;      // whether someone win
     private MapUnit[] gameMap;      // map of the game
-    private String[] heroList = {"0","0","0","0","0"};
+    private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
+
     private String[] heroChoices;
     private int[] teamResult;
-    enum GameState{ INIT, CHOOSEHERO, TEAMDIVIDE }
+
+    enum GameState{ INIT, TEAMDIVIDE, MAPINIT }
     private GameState gameState = GameState.INIT;
+    private int[] playerState;
     //1
     // Step one: init                   get the playerNum and playerSIDs
     //send the heroChoice,teamDivide and MapChoice
@@ -70,19 +73,33 @@ public class God {
     //send the gameOver
 
     public String request(int sid,String msg) {
+        int playerIndex = 0;
+        for(int i = 0;i < playerNum; i++){
+            if(allPlayers[i].SID == sid) {
+                playerIndex = i;
+                break;
+            }
+        }
         String result = "{state:'error'}";
         switch(gameState) {
             case INIT:
-                result = GodHelper.toInit(allUserInfo,"Choose hero",heroList);
-                break;
-            case CHOOSEHERO:
-                heroChoose(sid, msg);
-                gameState = GameState.TEAMDIVIDE;
-                result = GodHelper.toChooseHero("Team dividing",heroChoices);
+                if(playerState[playerIndex] == 0) {
+                    result = GodHelper.toInit(allUserInfo, "Choose hero", heroList);
+                    playerState[playerIndex] =1;
+                }
+                else if(playerState[playerIndex] == 1) {
+                    heroChoose(sid, msg);
+                    gameState = GameState.TEAMDIVIDE;
+                    playerState[playerIndex] = 0;
+                    result = GodHelper.toChooseHero("Team dividing", heroChoices);
+                }
                 break;
             case TEAMDIVIDE:
                 teamDivide(allPlayers);
+                gameState = GameState.MAPINIT;
                 result = GodHelper.toTeamDivide("Start game",teamResult);
+                break;
+            case MAPINIT:
                 break;
         }
         return result;
@@ -156,13 +173,14 @@ public class God {
         playerNum = playerSID.length;
         allPlayers = new Player[playerNum];
         allUserInfo = new UserInfo[playerNum];
+        playerState = new int[playerNum];
+
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];
-        allPlayers = new Player[playerNum];
-        allUserInfo = new UserInfo[playerNum];
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
+            playerState[i] = 0;
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
             else allPlayers[i].user_info = user.get();
@@ -181,7 +199,7 @@ public class God {
         this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
         this.initialPlayerPos(playerNum, allPlayers, );
         */
-/*
+        /*
         private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
 
             for(int i = 0; i < playerNum; i++){
@@ -194,7 +212,9 @@ public class God {
                 //end
             }
         }
+        */
 
+        /*
         private void initialPlayerPos(int playerNum, Player[] allPlayers, MapUnit[] defaultMap) {
             for(int i = 0; i < playerNum; i++){
                 //TODO: 地图能不能告诉我出生地址
@@ -203,7 +223,7 @@ public class God {
                 //end
             }
         }
-*/
+        */
     }
 
     /*
