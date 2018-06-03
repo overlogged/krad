@@ -2,10 +2,12 @@ package game
 
 import java.security.cert.PKIXRevocationChecker
 
+import common.MyJsonProtocol
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object ScalaGodTest {
+object ScalaGodTest extends MyJsonProtocol{
   def testSample(): Unit = {
     val god = new God
     val sid = Array(1, 2, 3, 4)
@@ -20,6 +22,7 @@ object ScalaGodTest {
       Thread.sleep(100)
     }
   }
+  
 
   def exper(): Unit ={
     val f1 = Future {
@@ -47,10 +50,9 @@ object ScalaGodTest {
     val sids = 0 to 3
     val god = new God
     god.initialPlayer(sids.toArray)
-    for(sid<-sids){
-      Future{
-
+    val fs = for(sid<-sids)
+      yield Future{
+        println(sid,god.request(sid,""))
       }
-    }
   }
 }
