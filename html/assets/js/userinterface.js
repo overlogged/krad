@@ -8,8 +8,7 @@ var state_userinterface = {
       game.add.sprite(480, 20, 'figure4');
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
-      var user_nickname="";
-      var user_avatar="";
+      
 
       var req = {
         'sid':sid
