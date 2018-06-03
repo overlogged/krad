@@ -8,8 +8,7 @@ var state_userinterface = {
       game.add.sprite(480, 20, 'figure4');
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
-      var user_nickname;
-      var user_avatar;
+      
 
       var req = {
         'sid':sid
@@ -37,6 +36,7 @@ var state_userinterface = {
       }
     });
     
+      console.log(user_nickname);
 
       var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
       var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
@@ -84,7 +84,7 @@ function do_match(){
     error: function (data, status) {
       alert("匹配失败");
       console.log(data);
-      consloe.log(data.nickname);
+      console.log(data.nickname);
     }
   });
 }
