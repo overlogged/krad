@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import game.GodHelper.*;
+import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class God {
 
@@ -16,12 +17,13 @@ public class God {
     // function initialPlayerCharacter: 1. get the default birth unit from map
     //                                  2. set the value of position
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private int playerNum;      //how many people to play the game
-    private Player[] allPlayers;//preserve the state of players
-    private boolean humanWin;   //whether someone win
-    private MapUnit[] gameMap;  //map of the game
+    private int playerNum;          // how many people to play the game
+    private Player[] allPlayers;    // preserve the state of players
+    private boolean humanWin;      // whether someone win
+    private MapUnit[] gameMap;      // map of the game
     private String[] heroList;
-    enum GameState{ INIT, CHOOSEHERO, CHOOSEHEROREADY, TEAMDIVIDE};
+    private UserInfo[] allUserInfo;
+    enum GameState{ INIT, CHOOSEHERO, TEAMDIVIDE };
     GameState gameState;
     //1
     // Step one: init                   get the playerNum and playerSIDs
@@ -68,21 +70,23 @@ public class God {
     //12
     //get哪边赢了                     get None
     //send the gameOver
+
+
     public String request(int sid,String msg) {
 
         String result = "{state:'error'}";
         switch(gameState) {
             case INIT:
-                result = GodHelper.toInit("choose hero", heroList);
+                result = GodHelper.toInit(allUserInfo,"Choose hero",heroList);
                 break;
             case CHOOSEHERO:
-                result = heroChoose(sid, msg);
-                gameState = GameState.CHOOSEHEROREADY;
-                break;
-            case CHOOSEHEROREADY:
-                result = GodHelper.toChooseHero("team divide",playerNum, "hero choose finished");
+                heroChoose(sid, msg);
+                gameState = GameState.TEAMDIVIDE;
+                result = GodHelper.toChooseHero("Team dividing",allUserInfo);
                 break;
             case TEAMDIVIDE:
+                teamDivide(allPlayers);
+                result = GodHelper.toTeamDivide("Start game",allUserInfo);
                 break;
         }
         return result;
@@ -124,13 +128,15 @@ public class God {
     }
 
     private Integer choice_count;
-    private String heroChoose(int sid,String msg){
+    private void heroChoose(int sid,String msg){
+        int playerIndex;
+        String heroChoice;
         MsgChooseHero choose = GodHelper.getChooseHero(msg);
         synchronized (this){
             choice_count += 1;
-            for(int i = 0;i < playerNum;i++){
-                if(allPlayers[i].SID == sid) { ;
-                    allPlayers[i].humanChara = choose.hero();
+            for( playerIndex = 0;playerIndex < playerNum;playerIndex++){
+                if(allPlayers[playerIndex].SID == sid) { ;
+                    allPlayers[playerIndex].chara = choose.hero();
                 }
             }
             if(choice_count < playerNum){
@@ -145,16 +151,15 @@ public class God {
                 this.notifyAll();
             }
         }
-        return Integer.toString(sid) + "choose" + choose.hero();
     }
-    private String teamDivide(Player[] allPlayers){
-        int zombie = (int)( Math.random() * allPlayers.length);
-        allPlayers[zombie].team = Player.ZOMBIE;
-        for(int i = 0;i < allPlayers.length;i++){
-            if(i != zombie)
-                allPlayers[i].team = Player.HUMAN;
-        }
-        return "0";
+    private void teamDivide(Player[] allPlayer){
+        int zombie = (int)( Math.random() * allPlayer.length);
+        allPlayer[zombie].team = Player.ZOMBIE;
+        for(int i = 0;i < allPlayer.length;i++){
+            if(i != zombie) {
+                allPlayer[i].team = Player.HUMAN;
+            }
+        };
     }
 
     public void initialPlayer(int[] playerSID)  {
@@ -162,6 +167,7 @@ public class God {
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
+            allUserInfo[i] = new UserInfo(i,allPlayers[i].nickName,"0");
         }
         /*
         // TODO: get the playersCharacterChoice from 前端
