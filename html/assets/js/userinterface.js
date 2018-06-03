@@ -8,8 +8,6 @@ var state_userinterface = {
       game.add.sprite(480, 20, 'figure4');
       game.add.sprite(480, 140, 'figure5');
       game.add.sprite(480, 260, 'figure6');
-      var user_nickname="";
-      var user_avatar="";
 
       var req = {
         'sid':sid
@@ -23,30 +21,23 @@ var state_userinterface = {
         console.log(user);
         console.log(user.nickname);
         console.log(user.avatar);
-        user_nickname = user.nickname;
-        user_avatar = user.avatar;
-        console.log(user_nickname);
-        console.log(user_avatar);
-
-
-          // window.location.href = ""; //需要跳转的地址
+       // window.location.href = ""; //需要跳转的地址
       },
-      error: function (data, status) {
+      error: function (user, status) {
         alert("获取信息错误");
-        console.log(data);
+        console.log(user);
       }
     });
-    
-      console.log(user.nickname);
+
 
       var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
       var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
         
 
       var nicknameText = game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
-      var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
+      var usernickname = game.add.bitmapText(260, 20, 'chiller', user.nickname, 54);
       var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
-      var usergrade = game.add.bitmapText(215, 60, 'chiller', user_avatar, 54);
+      var usergrade = game.add.bitmapText(215, 60, 'chiller', user.avatar, 54);
         
         
       var changepw = game.add.button(340, 70, 'button', go_changepw, this, 1, 0, 2, 0);
@@ -85,7 +76,6 @@ function do_match(){
     error: function (data, status) {
       alert("匹配失败");
       console.log(data);
-      console.log(data.nickname);
     }
   });
 }
