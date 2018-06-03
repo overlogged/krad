@@ -55,8 +55,14 @@ object ScalaGodTest extends MyJsonProtocol{
     val fs = for(sid<-sids)
       yield Future{
         println(sid,god.request(sid,""))
-        println(sid,god.request(sid,"{hero:'hero'}"))
+        println(sid,god.request(sid,
+          """{"hero":"hero1"}"""
+        ))
+        println(sid,god.request(sid,"start"))
       }
-    for(f<-fs) Await.ready(f,Duration.Inf)
+    for(f<-fs) {
+      f onComplete println
+      Await.ready(f,Duration.Inf)
+    }
   }
 }

@@ -80,7 +80,7 @@ public class God {
                 break;
             }
         }
-        String result = "{state:'error'}";
+        String result = "{\"state\":\"Error\"}";
         switch(gameState) {
             case INIT:
                 if(playerState[playerIndex] == 0) {
@@ -92,6 +92,7 @@ public class God {
                     gameState = GameState.TEAMDIVIDE;
                     playerState[playerIndex] = 0;
                     result = GodHelper.toChooseHero("Team dividing", heroChoices);
+                    assert choice_count == playerNum;
                 }
                 break;
             case TEAMDIVIDE:
@@ -101,6 +102,9 @@ public class God {
                 break;
             case MAPINIT:
                 break;
+        }
+        if(result.equals("{\"state\":\"Error\"}")){
+            System.out.printf("%d %s %s\n",sid,msg,gameState.toString());
         }
         return result;
     }
@@ -131,7 +135,7 @@ public class God {
         }
     }
 
-    private Integer choice_count;
+    private Integer choice_count = 0;
     private void heroChoose(int sid,String msg){
         int playerIndex;
         String heroChoice;
