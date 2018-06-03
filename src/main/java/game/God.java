@@ -21,12 +21,12 @@ public class God {
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;      // whether someone win
     private MapUnit[] gameMap;      // map of the game
-    private String[] heroList;
+    private String[] heroList = {"0","0","0","0","0"};
     private UserInfo[] allUserInfo;
     private String[] heroChoices;
     private int[] teamResult;
     enum GameState{ INIT, CHOOSEHERO, TEAMDIVIDE };
-    GameState gameState;
+    GameState gameState = GameState.INIT;
     //1
     // Step one: init                   get the playerNum and playerSIDs
     //send the heroChoice,teamDivide and MapChoice
@@ -92,18 +92,6 @@ public class God {
                 break;
         }
         return result;
-
-        /*
-        else if( choose hero){
-            state = chosen;
-            return herolist;
-        }
-        else if ( chosen){
-            state = ready;
-            sample(sid,msg);
-            return
-        }
-         */
     }
 
     private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
@@ -169,6 +157,8 @@ public class God {
 
     public void initialPlayer(int[] playerSID)  {
         int playerNum = playerSID.length;
+        allPlayers = new Player[playerNum];
+        allUserInfo = new UserInfo[playerNum];
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];
         for(int i = 0;i < playerNum;i++) {

@@ -20,6 +20,7 @@ object ScalaGodTest {
       Thread.sleep(100)
     }
   }
+  
 
   def exper(): Unit ={
     val f1 = Future {
@@ -44,6 +45,5 @@ object ScalaGodTest {
   }
 
   def main(args: Array[String]): Unit = {
-
   }
 }
