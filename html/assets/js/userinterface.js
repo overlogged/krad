@@ -1,18 +1,17 @@
 var state_userinterface = {
     preload: function () {
-      var background = game.add.sprite(0, 0, 'background');
-      var userfigure = game.add.sprite(-150, -100, 'userfigure');
-      var figurepshow1 = game.add.sprite(350, 20, 'figure1');
-      var figurepshow2 = game.add.sprite(350, 140, 'figure2');
-      var figurepshow3 = game.add.sprite(350, 260, 'figure3');
-      var figurepshow4 = game.add.sprite(480, 20, 'figure4');
-      var figurepshow5 = game.add.sprite(480, 140, 'figure5');
-      var figurepshow6 = game.add.sprite(480, 260, 'figure6');
+      game.add.sprite(0, 0, 'background');
+      game.add.sprite(-150, -100, 'userfigure');
+      game.add.sprite(350, 20, 'figure1');
+      game.add.sprite(350, 140, 'figure2');
+      game.add.sprite(350, 260, 'figure3');
+      game.add.sprite(480, 20, 'figure4');
+      game.add.sprite(480, 140, 'figure5');
+      game.add.sprite(480, 260, 'figure6');
       background.smoothed = true;
       background.height = game.height;
       background.width = game.width;
-      var user_nickname;
-      var user_avatar;
+
       var req = {
         'sid':sid
       };
@@ -37,6 +36,7 @@ var state_userinterface = {
         console.log(data);
       }
     });
+    console.log(user_nickname);
 
       var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
       var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
@@ -46,6 +46,7 @@ var state_userinterface = {
       var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
       var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
       var usergrade = game.add.bitmapText(215, 60, 'chiller', user_avatar, 54);
+      usernickname.tacticalText = user_nickname;
         
         
       var changepw = game.add.button(340, 70, 'button', do_changepw, this, 1, 0, 2, 0);
@@ -55,12 +56,12 @@ var state_userinterface = {
       var changeprofileText = game.add.bitmapText(360, 30, 'chiller', 'profile', 28);
 
       var startgame = game.add.button(150, 100, 'start', do_match, this);
-      var userhelp = game.add.button(-150, 200, 'help', do_help, this);
+      var userhelp = game.add.button(-150, 200, 'help', go_help, this);
       show("userinterface");
     }
   }
   
-function do_help() {
+function go_help() {
     game.state.start('help');
 
 }
@@ -84,16 +85,17 @@ function do_match(){
     error: function (data, status) {
       alert("匹配失败");
       console.log(data);
+      consloe.log(data.nickname);
     }
   });
 }
 
 
-function do_changepw() {
+function go_changepw() {
   game.state.start('changepw');
 }
 
 
-function do_changeprofile() {
+function go_changeprofile() {
   game.state.start('changeprofile');
 }

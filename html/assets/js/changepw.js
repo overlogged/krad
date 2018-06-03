@@ -5,10 +5,16 @@ var state_changepw = {
     game.add.bitmapText(205, 195, 'chiller', 'OldPassword', 54);
     game.add.bitmapText(195, 255, 'chiller', 'NewPassword', 54);
     game.add.bitmapText(260, 315, 'chiller', 'Confirm', 54);
-    game.add.button(360, 380, 'button', do_change, this, 1, 0, 2, 0);
-    game.add.bitmapText(380, 380, 'chiller', 'Confirm', 28);
+    game.add.button(300, 380, 'button', do_change, this, 1, 0, 2, 0);
+    game.add.bitmapText(310, 385, 'chiller', 'Confirm', 28);
+    game.add.button(420, 380, 'button', go_backlogincp, this, 1, 0, 2, 0);
+    game.add.bitmapText(440, 385, 'chiller', 'Back', 28);
     show("changepw");
   }  
+}
+
+function go_backlogincp(){
+  game.state.start('login');
 }
 
 function do_change() {
