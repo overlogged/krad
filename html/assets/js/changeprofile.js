@@ -8,12 +8,21 @@ var state_changeprofile = {
     game.add.bitmapText(530, 290, 'chiller', 'Girl', 54);
     game.add.bitmapText(290, 345, 'chiller', 'Avatar', 54);
 
-    game.add.button(395, 400, 'button', do_changepf, this, 1, 0, 2);
-    game.add.bitmapText(415, 400, 'chiller', 'Confirm', 28);
+    game.add.button(325, 410, 'button', do_changepf, this, 1, 0, 2, 0);
+    game.add.bitmapText(340, 415, 'chiller', 'Confirm', 28);
+
+
+
+    game.add.button(465, 410, 'button', do_backloginpf, this, 1, 0, 2, 0);
+    game.add.bitmapText(490, 415, 'chiller', 'Back', 28);
 
     game.avatar = game.add.sprite(620, 280, 'figure1');
     show("changeprofile");
   }
+}
+
+function do_backloginpf(){
+  game.state.start('login');
 }
 
 function update_avatar_changeprofile() {

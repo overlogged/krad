@@ -13,6 +13,7 @@ var state_userinterface = {
       background.width = game.width;
       var user_nickname;
       var user_avatar;
+
       var req = {
         'sid':sid
       };
@@ -37,6 +38,7 @@ var state_userinterface = {
         console.log(data);
       }
     });
+    console.log(data.nickname);
 
       var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
       var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
@@ -46,6 +48,7 @@ var state_userinterface = {
       var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
       var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
       var usergrade = game.add.bitmapText(215, 60, 'chiller', user_avatar, 54);
+      usernickname.tacticalText = user_nickname;
         
         
       var changepw = game.add.button(340, 70, 'button', do_changepw, this, 1, 0, 2, 0);
@@ -84,6 +87,7 @@ function do_match(){
     error: function (data, status) {
       alert("匹配失败");
       console.log(data);
+      consloe.log(data.nickname);
     }
   });
 }

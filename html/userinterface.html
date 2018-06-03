@@ -41,35 +41,37 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
+        var user_nickname;
+        user_nickname = 'why';
+       //user_nickname = 'why';
 
-        $.ajax({
-        url: "/api/user?sid＝"+sid,
-        type: "GET",
-        contentType: 'application/json',
-        data: req,
-        success: function (data, status) {
-          console.log(data);
-          console.log(data.nickname);
-          console.log(data.avatar);
-          var nickname = data.nickname;
+      //   $.ajax({
+      //   url: "/api/user?sid＝"+sid,
+      //   type: "GET",
+      //   contentType: 'application/json',
+      //   data: req,
+      //   success: function (data, status) {
+      //     console.log(data);
+      //     console.log(data.nickname);
+      //     console.log(data.avatar);
+      //     var nickname = data.nickname;
 
 
-          // window.location.href = ""; //需要跳转的地址
-        },
-        error: function (data, status) {
-          alert("获取信息错误");
-          console.log(data);
-        }
-      });
+      //     // window.location.href = ""; //需要跳转的地址
+      //   },
+      //   error: function (data, status) {
+      //     alert("获取信息错误");
+      //     console.log(data);
+      //   }
+      // });
 
 
 
         var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
         var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
-        
 
         var nicknameText = game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
-        var usernickname = game.add.bitmapText(260, 20, 'chiller', nickname, 54);
+        var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
         var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
         var usergrade = game.add.bitmapText(215, 60, 'chiller', '???', 54);
         
@@ -118,12 +120,12 @@
 
 
     function do_changepw() {
-      game.state.start(changepw);
+      game.state.start('changepw');
     }
 
 
     function do_changeprofile() {
-      game.state.start(changeprofile);
+      game.state.start('changeprofile');
     }
 
 

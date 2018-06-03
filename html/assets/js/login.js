@@ -25,10 +25,6 @@ var state_login = {
   }
 }
 
-function go_changeprofile (){
-  game.state.start('changeprofile');
-}
-
 function go_signup() {
   game.state.start('register');
 }
