@@ -13,23 +13,26 @@ public class God {
     // function initialPlayerCharacter: 1. get the default birth unit from map
     //                                  2. set the value of position
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    GambleChecker gc;
+    PlayerChecker pc;
+
     private int playerNum;          // how many people to play the game
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;      // whether someone win
     private MapUnit[] gameMap;      // map of the game
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
+    private int[] cardHeap;
 
     private String[] heroChoices;
     private int[] teamResult;
 
 
-    enum GameState{ INIT, MAPINIT }
+    enum GameState{ INIT, MAPINIT, MAINGAME }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
-    //1
-    // Step one: init                   get the playerNum and playerSIDs
-    //send the heroChoice,teamDivide and MapChoice
+    enum PhaseState{ PREPARE, GAMBLE, ACTION}
+    private PhaseState phaseState = PhaseState.PREPARE;
 
     // Step two: gaming
     // Stage one: ready
@@ -96,6 +99,18 @@ public class God {
                 break;
             case MAPINIT:
                 break;
+            case MAINGAME:
+                switch(phaseState){
+                    case PREPARE:
+                        if(playerState[playerIndex] == 0){
+                        }
+                        break;
+                    case GAMBLE:
+                        break;
+                    case ACTION:
+                        break;
+                }
+                break;
         }
 
         // for debug
@@ -155,6 +170,8 @@ public class God {
                 }
             } else {
                 teamDivide();
+                gc.cardHeapInit(cardHeap,playerNum);
+                gc.cardHeapStir(cardHeap);
                 this.notifyAll();
             }
         }
