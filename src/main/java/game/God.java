@@ -116,8 +116,10 @@ public class God {
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
+                            featureChoose(sid,msg);
                             //TODO: return msg to the frontend
                             phaseState = PhaseState.GAMBLE;
+                            playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
@@ -203,7 +205,7 @@ public class God {
         }
     }
     private Integer feat_choice_count = 0;
-    private void featureChoose(){
+    private void featureChoose(int sid,String msg){
         //TODO:every player choose the feature of his strategy
         synchronized (this){
             feat_choice_count += 1;
