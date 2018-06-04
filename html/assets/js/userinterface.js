@@ -28,7 +28,7 @@ var state_userinterface = {
         console.log(user);
       }
     });
-    console.log(user.stats)
+    console.log(user.stats.score);
 
 
       game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
@@ -38,7 +38,7 @@ var state_userinterface = {
       game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
       game.add.bitmapText(260, 20, 'chiller', user.nickname, 54);
       game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
-      game.add.bitmapText(215, 60, 'chiller', user.stats, 54);
+      game.add.bitmapText(215, 60, 'chiller', user.stats.score, 54);
         
         
       game.add.button(340, 70, 'button', go_changepw, this, 1, 0, 2, 0);
