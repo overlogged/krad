@@ -18,7 +18,7 @@ function go_backlogincp(){
 }
 
 function do_change() {
-  var oldpassemail = $("#changepw_oldpassword").val();
+  var oldpassword = $("#changepw_oldpassword").val();
   var newpassword = $("#changepw_newpassword").val();
   var confirm = $("#changepw_confirm").val();
   if (newpassword != confirm) {
@@ -44,7 +44,7 @@ function do_change() {
     success: function (data, status) {
       alert("修改成功");
       console.log(data);
-      game.state.start('home');
+      game.state.start('userinterface');
     },
     error: function (data, status) {
       alert("修改失败");
