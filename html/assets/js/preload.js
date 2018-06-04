@@ -10,8 +10,8 @@ var state_preload = {
     game.load.image('figure4', 'assets/img/figure/figure4.png');
     game.load.image('figure5', 'assets/img/figure/figure5.png');
     game.load.image('figure6', 'assets/img/figure/figure6.png');
-    game.load.image('start', 'assets/img/button/button_reload.png');
-    game.load.image('help', 'assets/img/button/button_question.png');
+    game.load.image('start', 'assets/img/startbutton.png');
+    game.load.image('help', 'assets/img/helpbutton.png');
 
     game.load.onLoadComplete.add(function () {
       game.state.start('login');
