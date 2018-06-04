@@ -18,7 +18,7 @@ function go_backlogincp(){
 }
 
 function do_change() {
-  var oldpassemail = $("#changepw_oldpassword").val();
+  var oldpassword = $("#changepw_oldpassword").val();
   var newpassword = $("#changepw_newpassword").val();
   var confirm = $("#changepw_confirm").val();
   if (newpassword != confirm) {
