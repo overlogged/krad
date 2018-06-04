@@ -35,6 +35,7 @@ function do_changepf() {
   var avatar =  $("#changeprofile_avatar").val();
   var gender = parseInt($("input[name='gender']:checked").val());
   var req = {
+    'sid':sid,
     'nickname': nickname,
     'avatar': avatar,
     'gender': gender

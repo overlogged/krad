@@ -23,6 +23,7 @@ public class God {
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
+    private int[] playerHandCard;
 
     private String[] heroChoices;
     private int[] teamResult;
@@ -89,7 +90,7 @@ public class God {
             case INIT:
                 if(playerState[playerIndex] == 0) {
                     result = GodHelper.toInit(allUserInfo, "Choose hero", heroList);
-                    playerState[playerIndex] =1;
+                    playerState[playerIndex] += 1;
                 } else if(playerState[playerIndex] == 1) {
                     heroChoose(sid, msg);
                     gameState = GameState.MAPINIT;
@@ -103,6 +104,22 @@ public class God {
                 switch(phaseState){
                     case PREPARE:
                         if(playerState[playerIndex] == 0){
+                            gc.cardDistribute(cardHeap,allPlayers[playerIndex],4);
+                            playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            result = GodHelper.toCardDistribute("choose strategy decision",playerHandCard);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 1){
+                            allPlayers[playerIndex].gamble = GodHelper.getChooseDecision(msg).decision();
+                            allPlayers[playerIndex].gambleNum = GodHelper.getChooseDecision(msg).cardNum();
+                            result = GodHelper.toChooseDecision("choose the feature of the decision");
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 2){
+                            featureChoose(sid,msg);
+                            //TODO: return msg to the frontend
+                            phaseState = PhaseState.GAMBLE;
+                            playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
@@ -187,6 +204,24 @@ public class God {
             }
         }
     }
+    private Integer feat_choice_count = 0;
+    private void featureChoose(int sid,String msg){
+        //TODO:every player choose the feature of his strategy
+        synchronized (this){
+            feat_choice_count += 1;
+            if(feat_choice_count < playerNum){
+                while(feat_choice_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else {
+                this.notifyAll();
+            }
+        }
+    }
 
     public void initialPlayer(int[] playerSID)  {
         playerNum = playerSID.length;
@@ -199,6 +234,10 @@ public class God {
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
+            allPlayers[i].handCardsNum = 0;
+            allPlayers[i].handCards = new int[40 * playerNum];
+            allPlayers[i].cardsDesertNum = 0;
+            allPlayers[i].cardsDesertList = new int[40 * playerNum];
             playerState[i] = 0;
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
