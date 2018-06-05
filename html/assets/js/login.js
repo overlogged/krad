@@ -23,6 +23,9 @@ var state_login = {
       game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
       game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
 
+      game.add.button(605, 260, 'button', go_forget, this, 1, 0, 2, 0);
+      game.add.bitmapText(620, 265, 'chiller', 'forget', 28);
+
 
   
       show("login");
@@ -32,6 +35,10 @@ var state_login = {
   }
 }
 
+
+function go_forget(){
+  game.state.start('forget');
+}
 
 function go_signup() {
   game.state.start('register');
