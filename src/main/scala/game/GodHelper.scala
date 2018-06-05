@@ -24,6 +24,7 @@ object GodHelper extends MyJsonProtocol{
    * fireTarget is the index of target player(index in UserInfo) of firing
    * only one variable would be used in God in one turn
    */
+  case class ResDecisionFeature(state:String)
 
   def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {
     ResInit(allUserInfo,state,heroList).toJson.toString
@@ -50,7 +51,11 @@ object GodHelper extends MyJsonProtocol{
   }
 
   def getDecisionFeature(str:String):MsgDecisionFeature = {
-    str.parseJson.convertTo[MsgChooseDecision]
+    str.parseJson.convertTo[MsgDecisionFeature]
+  }
+
+  def toDecisionFeature(state:String):String = {
+    ResDecisionFeature(state).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())
