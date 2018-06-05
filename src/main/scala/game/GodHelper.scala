@@ -18,6 +18,7 @@ object GodHelper extends MyJsonProtocol{
    * Int decision is the index in card array
    * if a player does not choose anything, then decision is -1
    */
+
   case class ResChooseDecision(state:String)
   case class MsgDecisionFeature(moveDirection:Int,fireTarget:Int)
   /*
@@ -26,6 +27,7 @@ object GodHelper extends MyJsonProtocol{
    * fireTarget is the index of target player(index in UserInfo) of firing
    * only one variable would be used in God in one turn
    */
+
   case class ResDecisionFeature(state:String)
   case class MsgSeenCard(seenCard:Int)
   /*
@@ -35,6 +37,7 @@ object GodHelper extends MyJsonProtocol{
    * if the player dose not want to use seen cards, seenCard is 0
    * if the player does not have gamble card in hand, he must use seen card (already judged in God)
    */
+
   case class ResSeenCard(state:String)
 
   def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {

@@ -32,49 +32,6 @@ public class God {
     private int[] playerState;
     enum PhaseState{ PREPARE, GAMBLE, ACTION }
     private PhaseState phaseState = PhaseState.PREPARE;
-
-    // Step two: gaming
-    // Stage one: ready
-    //2
-    //申明要使用的主动技               get the skillChoice
-    //send the skillChoice
-
-    //3
-    //申明要使用的行动                 get the moveChoice
-    //send the moveChoice
-    // Stage two: gamble
-    //4
-    // 猜拳                          get the gambleChoice
-    //send the gambleChoice
-    // 充能调整
-    // Stage three: 行动
-    //5
-    //主动技能的释放                   get None
-    //send the skillResult，具体内容暂定
-    //6
-    //开火结果                        get None
-    //send the fireResult，moveChoice不是fire就0，具体内容暂定
-    //7
-    //位置变更                        get None
-    //send the positionResult
-    // Stage four: 结算
-    //8
-    //要素确认                        get None
-    //send the personFactorResult
-    //9
-    //获胜判定                        get None
-    //send the winResult
-    //10
-    //感染判定                        get None
-    //send the infectionResult
-    //11
-    //能量有无溢出                    get None
-    //send the overflowResult
-
-    //12
-    //get哪边赢了                     get None
-    //send the gameOver
-
     public String request(int sid,String msg) {
         int playerIndex = 0;
         for(int i = 0;i < playerNum; i++){
@@ -133,19 +90,14 @@ public class God {
                             result = GodHelper.toDecisionFeature("choose seen card");
                         }
                         else if(playerState[playerIndex] == 3){
-                            if((allPlayers[playerIndex].isSeenCard)|(GodHelper.getSeenCard(msg).seenCard() != 0)){
-                                allPlayers[playerIndex].gamble = GodHelper.getSeenCard(msg).seenCard();
-                                allPlayers[playerIndex].isSeenCard = true;
-                            }
+                            seenCard(sid,msg,allPlayers[playerIndex]);
                             result = GodHelper.toSeenCard("GAMBLE");
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
-                        if(playerState[playerIndex] == 0){
-                            
-                        }
+                        if(playerState[playerIndex] == 0)
                         break;
                     case ACTION:
                         break;
@@ -236,17 +188,23 @@ public class God {
                 allPlayers[i].preLoc = map.sample[1];
         }
     }
-    private Integer feat_choice_count = 0;
     private void featureChoose(int sid,String msg,Player playerMain){
         int decision = playerMain.stratDecision;
         if(decision == GambleChecker.MOVE)
             playerMain.moveDirection = GodHelper.getDecisionFeature(msg).moveDirection();
         else if(decision == GambleChecker.FIRE)
             playerMain.fireTarget = GodHelper.getDecisionFeature(msg).fireTarget();
+    }
+    private Integer seen_card_count = 0;
+    private void seenCard(int sid,String msg,Player playerMain){
+        if((playerMain.isSeenCard)|(GodHelper.getSeenCard(msg).seenCard() != 0)){
+            playerMain.gamble = GodHelper.getSeenCard(msg).seenCard();
+            playerMain.isSeenCard = true;
+        }
         synchronized (this){
-            feat_choice_count += 1;
-            if(feat_choice_count < playerNum){
-                while(feat_choice_count < playerNum){
+            seen_card_count += 1;
+            if(seen_card_count < playerNum){
+                while(seen_card_count < playerNum){
                     try{
                         this.wait();
                     }catch (Exception ex){
