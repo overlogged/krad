@@ -41,7 +41,7 @@ public class Player {
                                            for example, one player shows 3 PAPERS in one turn, then gamble == PAPER
                                            and gambleNum == 3
                                          */
-    int stratDecision;
+    int stratDecision = -1;
     int skillsDecision;
     boolean isWin = false;            /*
                                         victory or defeat in one turn
@@ -57,4 +57,8 @@ public class Player {
     //properties about location
     MapUnit preLoc;                    //present location
     boolean hasElem;                  //if the player maintains the element
+
+    //properties about action
+    int moveDirection;
+    int fireTarget;
 }
