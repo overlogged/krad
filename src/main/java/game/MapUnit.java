@@ -10,7 +10,6 @@ public class MapUnit implements Serializable {
     int status;                  // Judge the mapunit status,1 represent platform,2 represent factor area.
     Factor key = new Factor();   // Store the important thing
     int rank;                    // Store the levels of the
-    int init;                    // Store the first location of fighter
 
     MapUnit(){}
 
