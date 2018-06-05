@@ -6,24 +6,28 @@ var state_login = {
       sid = parseInt(str.split("=")[1]);
       game.state.start('setpw');
     }
-    var background = game.add.image(0, 0, 'background');
-    background.smoothed = true;
-    background.height = game.height;
-    background.width = game.width;
+    else{
+      var background = game.add.image(0, 0, 'background');
+      background.smoothed = true;
+      background.height = game.height;
+      background.width = game.width;
   
-    game.add.bitmapText(350, 130, 'chiller', 'Log In', 70);
-    game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
-    game.add.bitmapText(250, 255, 'chiller', 'Password', 54);
+      game.add.bitmapText(350, 130, 'chiller', 'Log In', 70);
+      game.add.bitmapText(305, 195, 'chiller', 'Email', 54);
+      game.add.bitmapText(250, 255, 'chiller', 'Password', 54);
   
-    game.add.button(270, 320, 'button', go_signup, this, 1, 0, 2, 0);
-    game.add.bitmapText(292, 320, 'chiller', 'Sign Up', 28);
+      game.add.button(270, 320, 'button', go_signup, this, 1, 0, 2, 0);
+      game.add.bitmapText(292, 320, 'chiller', 'Sign Up', 28);
   
-    game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
-    game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
+      game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
+      game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
 
 
   
-    show("login");
+      show("login");
+
+    }
+    
   }
 }
 
