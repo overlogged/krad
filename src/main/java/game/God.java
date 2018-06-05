@@ -2,7 +2,6 @@ package game;
 
 import java.util.TreeMap;
 
-import com.sun.org.glassfish.gmbal.GmbalException;
 import game.GodHelper.*;
 import scala.Option;
 
@@ -18,7 +17,7 @@ public class God {
     private int playerNum;          // how many people to play the game
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;      // whether someone win
-    private CreateMap map;     // map of the game
+    private Map map;     // map of the game
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
@@ -63,8 +62,8 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++) {
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                                 if((allPlayers[playerIndex].handCards[i] == 1)
-                                        |(allPlayers[playerIndex].handCards[i] == 2)
-                                        |(allPlayers[playerIndex].handCards[i] == 3))
+                                        ||(allPlayers[playerIndex].handCards[i] == 2)
+                                        ||(allPlayers[playerIndex].handCards[i] == 3))
                                     isSeenCard = false;
                             }
                             if(isSeenCard)
@@ -114,7 +113,7 @@ public class God {
     }
 
     /**
-     * sample code
+     * units code
      * wait all players to send message
      */
     private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
@@ -183,9 +182,9 @@ public class God {
     private void mapInit(){
         for(int i = 0;i < playerNum;i++){
             if(allPlayers[i].team == Player.HUMAN)
-                allPlayers[i].preLoc = map.sample[5];
+                allPlayers[i].preLoc = map.units[5];
             else if(allPlayers[i].team == Player.ZOMBIE)
-                allPlayers[i].preLoc = map.sample[1];
+                allPlayers[i].preLoc = map.units[1];
         }
     }
     private void featureChoose(int sid,String msg,Player playerMain){
@@ -222,8 +221,7 @@ public class God {
         allPlayers = new Player[playerNum];
         allUserInfo = new UserInfo[playerNum];
         playerState = new int[playerNum];
-        map = new CreateMap(23);
-        map.obtainMap();
+        map = new Map("map/1.map");
 
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];

@@ -12,8 +12,7 @@ public class MapUnit implements Serializable {
     int rank;                    // Store the levels of the
     int init;                    // Store the first location of fighter
 
-    MapUnit() {
-    }
+    MapUnit(){}
 
     MapUnit(int number) {
         edge_number = number;
@@ -22,5 +21,4 @@ public class MapUnit implements Serializable {
             edge[i] = new MapEdge();            //edg[0] is the next,edg[1]is the before
         }
     }
-
 }

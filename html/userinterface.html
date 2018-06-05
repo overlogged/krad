@@ -17,15 +17,19 @@
         game.load.image('background', 'assets/img/userbackground.png');
         game.load.image('userfigure', 'assets/img/figure/figure1.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.image('start', 'assets/img/button/button_reload.png');
-        game.load.image('help', 'assets/img/button/button_question.png');
+        game.load.image('start', 'assets/img/startbutton.png');
+        game.load.image('help', 'assets/img/helpbutton.png');
         game.load.image('figure1', 'assets/img/figure/figure1.png');
         game.load.image('figure2', 'assets/img/figure/figure2.png');
         game.load.image('figure3', 'assets/img/figure/figure3.png');
         game.load.image('figure4', 'assets/img/figure/figure4.png');
         game.load.image('figure5', 'assets/img/figure/figure5.png');
         game.load.image('figure6', 'assets/img/figure/figure6.png');
+        game.load.image('progressbar','assets/img/progress/outprogress.png');
+        game.loda.image('inprogressbar','assets/img/progress/inprogress.png');
+
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
+        
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
 
@@ -38,33 +42,13 @@
         var figurepshow4 = game.add.sprite(480, 20, 'figure4');
         var figurepshow5 = game.add.sprite(480, 140, 'figure5');
         var figurepshow6 = game.add.sprite(480, 260, 'figure6');
+        var progressbar1 = game.add.sprite(10,10,'progressbar');
+        var progressbar2 = game.add.sprite(20,20,'inprogressbar');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
         var user_nickname;
         user_nickname = 'why';
-       //user_nickname = 'why';
-
-      //   $.ajax({
-      //   url: "/api/user?sid＝"+sid,
-      //   type: "GET",
-      //   contentType: 'application/json',
-      //   data: req,
-      //   success: function (data, status) {
-      //     console.log(data);
-      //     console.log(data.nickname);
-      //     console.log(data.avatar);
-      //     var nickname = data.nickname;
-
-
-      //     // window.location.href = ""; //需要跳转的地址
-      //   },
-      //   error: function (data, status) {
-      //     alert("获取信息错误");
-      //     console.log(data);
-      //   }
-      // });
-
 
 
         var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 

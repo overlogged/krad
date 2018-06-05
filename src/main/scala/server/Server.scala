@@ -15,7 +15,7 @@ import com.typesafe.config
 import com.typesafe.config.ConfigFactory
 import common.MyJsonProtocol
 import spray.json._
-import game.{SessionController, UserController, UserModel}
+import game.{Map, SessionController, UserController, UserModel}
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.util.{Failure, Success}
