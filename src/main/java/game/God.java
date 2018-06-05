@@ -16,7 +16,8 @@ public class God {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private int playerNum;          // how many people to play the game
     private Player[] allPlayers;    // preserve the state of players
-    private boolean humanWin;      // whether someone win
+    private boolean humanWin;       // whether human team wins
+    private boolean zombieWin;      // whether zombie team wins
     private Map map;     // map of the game
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
@@ -24,6 +25,8 @@ public class God {
 
     private String[] heroChoices;
     private int[] teamResult;
+    private int[] decisionChoices;
+    private int[] seenCardChoices;
 
 
     enum GameState{ INIT,MAINGAME }
@@ -62,8 +65,8 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++) {
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                                 if((allPlayers[playerIndex].handCards[i] == 1)
-                                        ||(allPlayers[playerIndex].handCards[i] == 2)
-                                        ||(allPlayers[playerIndex].handCards[i] == 3))
+                                        |(allPlayers[playerIndex].handCards[i] == 2)
+                                        |(allPlayers[playerIndex].handCards[i] == 3))
                                     isSeenCard = false;
                             }
                             if(isSeenCard)
@@ -74,11 +77,15 @@ public class God {
                         else if(playerState[playerIndex] == 1){
                             MsgChooseDecision dec = GodHelper.getChooseDecision(msg);
                             // operation to the player's properties
-                            allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
-                            GambleChecker.cardToHeap(cardHeap,dec.decision());
-                            allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
-                            GambleChecker.cardSort(allPlayers[playerIndex].handCards);
-                            allPlayers[playerIndex].handCardsNum -= 1;
+                            if(dec.decision() == -1)
+                                allPlayers[playerIndex].stratDecision = GambleChecker.DEPOSIT;
+                            else{
+                                allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
+                                GambleChecker.cardToHeap(cardHeap,dec.decision());
+                                allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
+                                GambleChecker.cardSort(allPlayers[playerIndex].handCards);
+                                allPlayers[playerIndex].handCardsNum -= 1;
+                            }
                             //ends
                             result = GodHelper.toChooseDecision("choose the feature of the decision");
                             playerState[playerIndex] += 1;
@@ -90,13 +97,17 @@ public class God {
                         }
                         else if(playerState[playerIndex] == 3){
                             seenCard(sid,msg,allPlayers[playerIndex]);
-                            result = GodHelper.toSeenCard("GAMBLE");
+                            result = GodHelper.toSeenCard("GAMBLE",decisionChoices,seenCardChoices);
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
-                        if(playerState[playerIndex] == 0)
+                        if(playerState[playerIndex] == 0){
+                            if(allPlayers[playerIndex].isSeenCard){
+                                playerState[playerIndex] += 1;
+                            }
+                        }
                         break;
                     case ACTION:
                         break;
@@ -225,6 +236,8 @@ public class God {
 
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];
+        decisionChoices = new int[playerNum];
+        seenCardChoices = new int[playerNum];
         cardHeap = new int[40 * playerNum];
 
         for(int i = 0;i < playerNum;i++) {

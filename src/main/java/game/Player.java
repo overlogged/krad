@@ -33,31 +33,33 @@ public class Player {
 
     //properties about gamble
     int gamble = PAPER;                /*
-                                         gamble choices
-                                         if one player does not choose his gamble choice one turn
-                                         then the choice is the same as the last turn
+                                        * gamble choices
+                                        * if one player does not choose his gamble choice one turn
+                                        * then the choice is the same as the last turn
                                         */
-    int gambleNum = 1;                 /*the number of the same gamble cards of one player in one turn
-                                           for example, one player shows 3 PAPERS in one turn, then gamble == PAPER
-                                           and gambleNum == 3
-                                         */
+
+    int gambleNum = 1;                 /*
+                                        * the number of the same gamble cards of one player in one turn
+                                        * for example, one player shows 3 PAPERS in one turn, then gamble == PAPER
+                                        * and gambleNum == 3
+                                        */
     int stratDecision = -1;
     int skillsDecision;
     boolean isSeenCard = false;
     boolean isWin = false;            /*
-                                        victory or defeat in one turn
-                                        this variable should be set as false each turn ends
+                                       * victory or defeat in one turn
+                                       * this variable should be set as false each turn ends
                                        */
 
     //properties about cards
     int handCardsNum = 0;
     int[] handCards;
     int cardsDesertNum = 0;
-    int[] cardsDesertList;           //if there is no card to desert, then the element is -1
+    int[] cardsDesertList;              //if there is no card to desert, then the element is -1
 
     //properties about location
-    MapUnit preLoc;                    //present location
-    boolean hasElem;                  //if the player maintains the element
+    MapUnit preLoc;                     //present location
+    boolean hasElem;                    //if the player maintains the element
 
     //properties about action
     int moveDirection;

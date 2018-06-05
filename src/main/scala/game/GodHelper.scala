@@ -38,7 +38,7 @@ object GodHelper extends MyJsonProtocol{
    * if the player does not have gamble card in hand, he must use seen card (already judged in God)
    */
 
-  case class ResSeenCard(state:String)
+  case class ResSeenCard(state:String,decisionChoices:Array[Int],seenCardChoices:Array[Int])
 
   def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {
     ResInit(allUserInfo,state,heroList).toJson.toString
@@ -76,8 +76,8 @@ object GodHelper extends MyJsonProtocol{
     str.parseJson.convertTo[MsgSeenCard]
   }
 
-  def toSeenCard(state:String):String = {
-    ResSeenCard(state).toJson.toString()
+  def toSeenCard(state:String,decisionChoices:Array[Int],seenCardChoices:Array[Int]):String = {
+    ResSeenCard(state,decisionChoices,seenCardChoices).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())

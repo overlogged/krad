@@ -32,5 +32,5 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val MsgDecisionFeatureFormat = jsonFormat2(MsgDecisionFeature)
   implicit val ResDecisionFeatureFormat = jsonFormat1(ResDecisionFeature)
   implicit val MsgSeenCardFormat = jsonFormat1(MsgSeenCard)
-  implicit val ResSeenCardFormat = jsonFormat1(ResSeenCard)
+  implicit val ResSeenCardFormat = jsonFormat3(ResSeenCard)
 }
