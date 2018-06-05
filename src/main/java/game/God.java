@@ -132,11 +132,19 @@ public class God {
                             result = GodHelper.toDecisionFeature("choose seen card");
                         }
                         else if(playerState[playerIndex] == 3){
+                            if((allPlayers[playerIndex].isSeenCard)|(GodHelper.getSeenCard(msg).seenCard() != 0)){
+                                allPlayers[playerIndex].gamble = GodHelper.getSeenCard(msg).seenCard();
+                                allPlayers[playerIndex].isSeenCard = true;
+                            }
+                            result = GodHelper.toSeenCard("GAMBLE");
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
+                        if(playerState[playerIndex] == 0){
+                            
+                        }
                         break;
                     case ACTION:
                         break;
