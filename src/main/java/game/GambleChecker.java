@@ -15,7 +15,7 @@ public class GambleChecker {
     public static final int DEPOSIT = 7;
     
     // generate an ordered card heap
-    int[] cardHeapInit(int[] cardHeap, int playerNum) {
+    static int[] cardHeapInit(int[] cardHeap, int playerNum) {
         //count variable i
         int i,j;
         // the number of cards equals to 40 * number of players
@@ -48,7 +48,7 @@ public class GambleChecker {
     }
 
     //mix the card heap up using random number
-    int[] cardHeapStir(int[] cardHeap) {
+    static int[] cardHeapStir(int[] cardHeap) {
         for (int i = 0; i < cardHeap.length; i++) {
             int tmp = (int) (Math.random() * cardHeap.length);
             int tmpCard = cardHeap[i];
@@ -59,7 +59,7 @@ public class GambleChecker {
     }
 
     //cards operation
-    void cardSort(int[] cardHeap){
+    static void cardSort(int[] cardHeap){
         for(int i = 0;i < cardHeap.length;i++){
             for(int j = i;j < cardHeap.length;j++){
                 if(cardHeap[i] < cardHeap[j]){
@@ -70,7 +70,8 @@ public class GambleChecker {
             }
         }
     }
-    void cardToPlayer(int card, Player playerMain) {
+
+    static void cardToPlayer(int card, Player playerMain) {
         for(int i = 0;i < playerMain.handCards.length;i++) {
            if(playerMain.handCards[i] == NOTHING) {
                playerMain.handCards[i] = card;
@@ -79,13 +80,15 @@ public class GambleChecker {
            }
         }
     }
-    void cardToHeap(int[] cardHeap, int card) {
+
+    static void cardToHeap(int[] cardHeap, int card) {
         int i = (int) (Math.random() * cardHeap.length);
         while (cardHeap[i] != NOTHING)
             i = (i + 1) % cardHeap.length;
         cardHeap[i] = card;
     }
-    void cardDistribute(int[] cardHeap, Player playerMain, int cardNum) {
+
+    static void cardDistribute(int[] cardHeap, Player playerMain, int cardNum) {
         int distributedCardNum = 0;
         for (int i = 0; i < cardHeap.length; i++) {
             if (cardHeap[i] != NOTHING) {
@@ -99,7 +102,8 @@ public class GambleChecker {
             }
         }
     }
-    void cardDesert(Player playerMain, int[] cardHeap) {
+
+    static void cardDesert(Player playerMain, int[] cardHeap) {
         if(playerMain.handCardsNum > playerMain.healthPoint) {
             playerMain.cardsDesertNum = playerMain.handCardsNum - playerMain.healthPoint;
             for (int i = 0; i < playerMain.cardsDesertNum; i++) {

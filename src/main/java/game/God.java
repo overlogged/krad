@@ -13,9 +13,6 @@ public class God {
     // function initialPlayerCharacter: 1. get the default birth unit from map
     //                                  2. set the value of position
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    GambleChecker gc;
-    PlayerChecker pc;
-
     private int playerNum;          // how many people to play the game
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;      // whether someone win
@@ -29,7 +26,7 @@ public class God {
     private int[] teamResult;
 
 
-    enum GameState{ INIT, MAPINIT, MAINGAME }
+    enum GameState{ INIT,MAINGAME }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
     enum PhaseState{ PREPARE, GAMBLE, ACTION}
@@ -93,25 +90,24 @@ public class God {
                     playerState[playerIndex] += 1;
                 } else if(playerState[playerIndex] == 1) {
                     heroChoose(sid, msg);
-                    gameState = GameState.MAPINIT;
+                    gameState = GameState.MAINGAME;
                     playerState[playerIndex] = 0;
                     result = GodHelper.toChooseHero("Start game", heroChoices,teamResult);
                 }
-                break;
-            case MAPINIT:
                 break;
             case MAINGAME:
                 switch(phaseState){
                     case PREPARE:
                         if(playerState[playerIndex] == 0){
-                            gc.cardDistribute(cardHeap,allPlayers[playerIndex],4);
+                            GambleChecker.cardDistribute(cardHeap,allPlayers[playerIndex],4);
                             playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             result = GodHelper.toCardDistribute("choose strategy decision",playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 1){
-                            allPlayers[playerIndex].gamble = GodHelper.getChooseDecision(msg).decision();
-                            allPlayers[playerIndex].gambleNum = GodHelper.getChooseDecision(msg).cardNum();
+                            MsgChooseDecision des = GodHelper.getChooseDecision(msg);
+                            allPlayers[playerIndex].gamble = des.decision();
+                            allPlayers[playerIndex].gambleNum = des.cardNum();
                             result = GodHelper.toChooseDecision("choose the feature of the decision");
                             playerState[playerIndex] += 1;
                         }
@@ -187,8 +183,8 @@ public class God {
                 }
             } else {
                 teamDivide();
-                gc.cardHeapInit(cardHeap,playerNum);
-                gc.cardHeapStir(cardHeap);
+                GambleChecker.cardHeapInit(cardHeap,playerNum);
+                GambleChecker.cardHeapStir(cardHeap);
                 this.notifyAll();
             }
         }
@@ -231,6 +227,8 @@ public class God {
 
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];
+        cardHeap = new int[playerNum];
+
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
