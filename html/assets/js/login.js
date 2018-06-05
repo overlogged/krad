@@ -1,13 +1,10 @@
 var state_login = {
   preload: function() {
-    var url = window.location.href;
-    console.log(url);
-    if(url.indexOf("?")!=-1){
-      // var str = url.split("?")[1];
-      // sid = parseInt(str.split("=")[1]);
-      game.state.start('setpw');
-    }
-    else{
+      var url = window.location.href;
+      console.log(url);
+      if(url.indexOf("?")!=-1){
+        game.state.start('setpw');
+      }
       var background = game.add.image(0, 0, 'background');
       background.smoothed = true;
       background.height = game.height;
@@ -23,19 +20,29 @@ var state_login = {
       game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
       game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
 
-      game.add.button(605, 260, 'button', go_forget, this, 1, 0, 2, 0);
-      game.add.bitmapText(620, 265, 'chiller', 'forget', 28);
+      game.add.button(615, 260, 'button', go_forget, this, 1, 0, 2, 0);
+      game.add.bitmapText(630, 265, 'chiller', 'forget', 28);
 
+      game.add.button(615, 100, 'button', gohh, this, 1, 0, 2, 0);
+      game.add.button(615, 80, 'button', goha, this, 1, 0, 2, 0);
+  
+      
 
   
       show("login");
 
-    }
+    
     
   }
 }
 
+function goha(){
+  game.state.start('changepw');
+}
 
+function gohh (){
+  game.state.start('setpw');
+}
 function go_forget(){
   game.state.start('forget');
 }
@@ -45,8 +52,8 @@ function go_signup() {
 }
 
 function do_login() {
-  var email = $("#email").val();
-  var password = $("#password").val();
+  var email = $("#login_email").val();
+  var password = $("#login_password").val();
   var req = {
     'email': email,
     'password': password
