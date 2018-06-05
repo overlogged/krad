@@ -23,8 +23,6 @@ var state_login = {
       game.add.button(615, 260, 'button', go_forget, this, 1, 0, 2, 0);
       game.add.bitmapText(630, 265, 'chiller', 'forget', 28);
 
-      game.add.button(615, 100, 'button', gohh, this, 1, 0, 2, 0);
-      game.add.button(615, 80, 'button', goha, this, 1, 0, 2, 0);
   
       
 
@@ -36,13 +34,6 @@ var state_login = {
   }
 }
 
-function goha(){
-  game.state.start('changepw');
-}
-
-function gohh (){
-  game.state.start('setpw');
-}
 function go_forget(){
   game.state.start('forget');
 }
