@@ -58,7 +58,7 @@ object ScalaGodTest extends MyJsonProtocol{
         println(sid,god.request(sid,
           """{"hero":"hero1"}"""
         ))
-//        println(sid,god.request(sid,"start"))
+        println(sid,god.request(sid,""))
       }
     for(f<-fs) {
       f onComplete println
