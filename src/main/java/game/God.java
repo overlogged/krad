@@ -1,6 +1,8 @@
 package game;
 
 import java.util.TreeMap;
+
+import com.sun.org.glassfish.gmbal.GmbalException;
 import game.GodHelper.*;
 import scala.Option;
 
@@ -16,11 +18,10 @@ public class God {
     private int playerNum;          // how many people to play the game
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;      // whether someone win
-    private MapUnit[] gameMap;      // map of the game
+    private CreateMap map;     // map of the game
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
-    private int[] playerHandCard;
 
     private String[] heroChoices;
     private int[] teamResult;
@@ -29,7 +30,7 @@ public class God {
     enum GameState{ INIT,MAINGAME }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
-    enum PhaseState{ PREPARE, GAMBLE, ACTION}
+    enum PhaseState{ PREPARE, GAMBLE, ACTION }
     private PhaseState phaseState = PhaseState.PREPARE;
 
     // Step two: gaming
@@ -92,7 +93,7 @@ public class God {
                     heroChoose(sid, msg);
                     gameState = GameState.MAINGAME;
                     playerState[playerIndex] = 0;
-                    result = GodHelper.toChooseHero("Start game", heroChoices,teamResult);
+                    result = GodHelper.toChooseHero("Start game", heroChoices, teamResult);
                 }
                 break;
             case MAINGAME:
@@ -100,20 +101,24 @@ public class God {
                     case PREPARE:
                         if(playerState[playerIndex] == 0){
                             GambleChecker.cardDistribute(cardHeap,allPlayers[playerIndex],4);
-                            playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
-                            result = GodHelper.toCardDistribute("choose strategy decision",playerHandCard);
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            result = GodHelper.toCardDistribute("choose strategy decision", playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 1){
-                            MsgChooseDecision des = GodHelper.getChooseDecision(msg);
-                            allPlayers[playerIndex].gamble = des.decision();
-                            allPlayers[playerIndex].gambleNum = des.cardNum();
+                            MsgChooseDecision dec = GodHelper.getChooseDecision(msg);
+                            // operation to the player's properties
+                            allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
+                            GambleChecker.cardToHeap(cardHeap,dec.decision());
+                            allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
+                            GambleChecker.cardSort(allPlayers[playerIndex].handCards);
+                            allPlayers[playerIndex].handCardsNum -= 1;
+                            //ends
                             result = GodHelper.toChooseDecision("choose the feature of the decision");
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
-                            featureChoose(sid,msg);
-                            //TODO: return msg to the frontend
+                            featureChoose(sid,msg,allPlayers[playerIndex]);
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }
@@ -183,6 +188,7 @@ public class God {
                 }
             } else {
                 teamDivide();
+                mapInit();
                 GambleChecker.cardHeapInit(cardHeap,playerNum);
                 GambleChecker.cardHeapStir(cardHeap);
                 this.notifyAll();
@@ -200,9 +206,21 @@ public class God {
             }
         }
     }
+    private void mapInit(){
+        for(int i = 0;i < playerNum;i++){
+            if(allPlayers[i].team == Player.HUMAN)
+                allPlayers[i].preLoc = map.sample[5];
+            else if(allPlayers[i].team == Player.ZOMBIE)
+                allPlayers[i].preLoc = map.sample[1];
+        }
+    }
     private Integer feat_choice_count = 0;
-    private void featureChoose(int sid,String msg){
-        //TODO:every player choose the feature of his strategy
+    private void featureChoose(int sid,String msg,Player playerMain){
+        int decision = playerMain.stratDecision;
+        if(decision == GambleChecker.MOVE)
+            playerMain.moveDirection = GodHelper.getDecisionFeature(msg).moveDirection();
+        else if(decision == GambleChecker.FIRE)
+            playerMain.fireTarget = GodHelper.getDecisionFeature(msg).fireTarget();
         synchronized (this){
             feat_choice_count += 1;
             if(feat_choice_count < playerNum){
@@ -224,18 +242,20 @@ public class God {
         allPlayers = new Player[playerNum];
         allUserInfo = new UserInfo[playerNum];
         playerState = new int[playerNum];
+        map = new CreateMap(23);
+        map.obtainMap();
 
         heroChoices = new String[playerNum];
         teamResult = new int[playerNum];
-        cardHeap = new int[playerNum];
+        cardHeap = new int[40 * playerNum];
 
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
             allPlayers[i].handCardsNum = 0;
-            allPlayers[i].handCards = new int[40 * playerNum];
+            allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             allPlayers[i].cardsDesertNum = 0;
-            allPlayers[i].cardsDesertList = new int[40 * playerNum];
+            allPlayers[i].cardsDesertList = new int[4];
             playerState[i] = 0;
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
@@ -265,17 +285,6 @@ public class God {
                 allPlayers[i].mot = Player.character[playersCharacterChoice].mot;
                 allPlayers[i].firePow = Player.character[playersCharacterChoice].firePow;
                 allPlayers[i].range = Player.character[playersCharacterChoice].range;
-                //end
-            }
-        }
-        */
-
-        /*
-        private void initialPlayerPos(int playerNum, Player[] allPlayers, MapUnit[] defaultMap) {
-            for(int i = 0; i < playerNum; i++){
-                //TODO: 地图能不能告诉我出生地址
-                //begin
-                allPlayers[i].preLoc = defaultMap.birthLoc;
                 //end
             }
         }
