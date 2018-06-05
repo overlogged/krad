@@ -124,6 +124,9 @@ public class God {
                         }
                         break;
                     case GAMBLE:
+                        if(playerState[playerIndex] == 0){
+                            
+                        }
                         break;
                     case ACTION:
                         break;
