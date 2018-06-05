@@ -27,8 +27,8 @@ function do_change() {
   }
   var req = {
     'sid':sid,
-    'oldpassword': oldpassword,
-    'newpassword': newpassword
+    'old_password': oldpassword,
+    'new_password': newpassword
   };
   console.log(req);
   var v_password = /[a-zA-Z0-9]{6,18}/.test(newpassword);
