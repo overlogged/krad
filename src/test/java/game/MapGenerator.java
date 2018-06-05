@@ -66,6 +66,7 @@ public class MapGenerator {
         assert (X.units[7].edge[2].adjedg == 23);
         assert (X.units[10].rank == 3);
         assert (MapChecker.outDistance(X.units[3], X.units[8]) == -1);
+        System.out.println(X.fighter_init);
     }
 
     public static void main(String[] args) {
