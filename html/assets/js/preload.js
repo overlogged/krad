@@ -12,8 +12,8 @@ var state_preload = {
     game.load.image('figure6', 'assets/img/figure/figure6.png');
     game.load.image('start', 'assets/img/startbutton.png');
     game.load.image('help', 'assets/img/helpbutton.png');
-    game.load.image('progressbar','assets/img/outprogress.png');
-    game.loda.image('inprogressbar','assets/img/progress.png');
+    game.load.image('outprogress','assets/img/outprogress.png');
+    game.loda.image('inprogress','assets/img/inprogress.png');
 
 
     game.load.onLoadComplete.add(function () {
