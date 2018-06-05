@@ -59,6 +59,9 @@ object ScalaGodTest extends MyJsonProtocol{
           """{"hero":"hero1"}"""
         ))
         println(sid,god.request(sid,""))
+        println(sid,god.request(sid,
+          """{"decision":-1}"""
+        ))
       }
     for(f<-fs) {
       f onComplete println

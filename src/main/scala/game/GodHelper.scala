@@ -4,8 +4,6 @@ import common.MyJsonProtocol
 import game.UserModel.{Stats, User}
 import spray.json._
 
-import concurrent.ExecutionContext.Implicits.global
-
 object GodHelper extends MyJsonProtocol{
   case class UserInfo(index:Int,nickName:String)
   case class ResInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String])
