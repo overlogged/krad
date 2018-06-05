@@ -23,7 +23,7 @@ function do_confirm() {
   var req = {
 
     'sid':sid,
-    'password':password
+    'new_password':password
 
   };
   console.log(req);

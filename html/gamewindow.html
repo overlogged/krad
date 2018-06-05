@@ -17,57 +17,37 @@
     <div id="gamecontainer"></div>
     <div id="cardcontainer"></div>
   <script>
-      var display;
-      var cursors;
-      var map = [{x:143,y:820},{x:164,y:760},{x:185,y:700},{x:206,y:645},{x:227,y:590},{x:248,y:535},{x:269,y:480}];
+      var player_num=4;
+      var player = new Array();
+      var map = [{x:410,y:10},{x:410,y:60},{x:410,y:120},{x:410,y:180},{x:410,y:240},{x:410,y:290},{x:410,y:345},{x:340,y:420},
+      {x:435,y:480},{x:456,y:535},{x:474,y:595},{x:490,y:650},{x:515,y:710},{x:540,y:765},{x:568,y:820},
+      {x:350,y:865},{x:143,y:820},{x:164,y:765},{x:185,y:710},{x:202,y:650},{x:227,y:595},{x:248,y:535},{x:269,y:480}];
       
       var game = new Phaser.Game(780, 899, Phaser.CANVAS, 'gamecontainer', {
        preload: function () {
         game.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
         game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
         game.load.image('fighter1','assets/img/gamewindow/fighter2.png');
+        game.load.image('fighter2','assets/img/gamewindow/fighter1.png');
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
       },
+
       create: function () {
+       /* game.time.desiredFps = 60; */
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.world.setBounds(0, 0,game.width, game.height);
-        display = game.add.sprite(164, 760, 'fighter1');
-        display.anchor.x=0.5;
-        display.anchor.y=0.5;
-        game.physics.p2.enable(display);
-        display.body.fixedRotation = true;
+        do_init(0);
         var background = game.add.sprite(0,0,'gamebackground');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        game.world.setChildIndex(background,1); 
-        game.world.setChildIndex(display,1);
-        cursors = game.input.keyboard.createCursorKeys();
-        game.camera.follow(display, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+        game.world.setChildIndex(background,0); 
       },
-     update: function () {
-      display.body.setZeroVelocity();
-    if (cursors.up.isDown)
-    {
-        display.body.moveUp(300);
-        cursors.up.isDown = false;
-    }
-    else if (cursors.down.isDown)
-    {   
-        display.body.moveDown(300);
-        cursors.down.isDown = false;
-    }
 
-    if (cursors.left.isDown)
-    {
-        display.body.velocity.x = -300;
-        cursors.left.isDown = false;
-    }
-    else if (cursors.right.isDown)
-    {
-        display.body.moveRight(300);
-        cursors.right.isDown = false;
-    }
+     update: function () {
+       for(var i = 0;i<player_num;i++){
+        player[i].body.setZeroVelocity();
+       }
       }
       });
 
@@ -81,13 +61,36 @@
         cardbackground.smoothed = true;
         cardbackground.height = card.height;
         cardbackground.width = card.width;
-    var movebutton = card.add.button(0,0 , 'button', do_move,this, 1, 0, 2, 0);
+    var movebutton = card.add.button(0,0 , 'button', do_poison ,this, 1, 0, 2, 0);
+    var movebutton = card.add.button(100,0 , 'button', do_move ,this, 1, 0, 2, 0);
       },
     });
-    function do_move(mark){
-      mark=5;
-      display.body.x=map[mark].x;
-      display.body.y=map[mark].y;
+    function do_move(){
+      mark=7;
+      people=0;
+      player[people].body.x=map[mark].x;
+      player[people].body.y=map[mark].y;
+    }
+    function do_poison(people){
+      people=0;
+      var x = player[people].body.x;
+      var y = player[people].body.y;
+      player[people].kill();
+      player[people] = game.add.sprite(x, y, 'fighter2');
+      player[people].anchor.x=0.5;
+      player[people].anchor.y=0.5;
+      game.physics.p2.enable(player[people]);
+      game.world.setChildIndex(player[people],1);
+    }
+    function do_init(init_location){
+      for(var i=0;i<player_num;i++){
+         player[i] = game.add.sprite(map[init_location].x+20*i,map[init_location].y,'fighter1');
+         player[i].anchor.x=0.5;
+         player[i].anchor.y=0.5;
+         game.physics.p2.enable(player[i]);
+         player[i].body.fixedRotation = true;
+         player[i].body.embedded = true;
+      }
     }
 </script>
 </body>
