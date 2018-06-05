@@ -143,7 +143,7 @@ public class GambleChecker {
                 players[i].isWin = win(players[i], players[j]);
                 if (players[i].isWin) {
                     if (players[i].energy < players[i].healthPoint)
-                        players[i].energy += 1;
+                        players[i].energy += players[i].gambleNum;
                     break;
                 }
             }

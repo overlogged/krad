@@ -17,7 +17,7 @@ object GodHelper extends MyJsonProtocol{
    * if a player does not choose anything, then decision is -1
    */
 
-  case class ResChooseDecision(state:String)
+  case class ResChooseDecision(state:String,handCards:Array[Int])
   case class MsgDecisionFeature(moveDirection:Int,fireTarget:Int)
   /*
    * about MsgDecisionFeature
@@ -37,6 +37,18 @@ object GodHelper extends MyJsonProtocol{
    */
 
   case class ResSeenCard(state:String,decisionChoices:Array[Int],seenCardChoices:Array[Int])
+  case class MsgChooseGamble(gambleCard:Int,cardNum:Int)
+  /*
+   * gambleCard tells the index of gamble card the player use in this turn
+   * cardNum tells how many cards this player choose to use in this turn
+   */
+  case class ResChooseGamble(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],handCards:Array[Int])
+  /*
+   * gambleChoices tell what gamble choice players choose
+   * cardNumList tell how many card they choose to use
+   * playerWinList tells which players win and which lose
+   * after gamble handcards should be refreshed
+   */
 
   def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {
     ResInit(allUserInfo,state,heroList).toJson.toString
@@ -58,8 +70,8 @@ object GodHelper extends MyJsonProtocol{
     str.parseJson.convertTo[MsgChooseDecision]
   }
 
-  def toChooseDecision(state:String):String = {
-    ResChooseDecision(state).toJson.toString()
+  def toChooseDecision(state:String,handCards:Array[Int]):String = {
+    ResChooseDecision(state,handCards).toJson.toString()
   }
 
   def getDecisionFeature(str:String):MsgDecisionFeature = {
@@ -76,6 +88,14 @@ object GodHelper extends MyJsonProtocol{
 
   def toSeenCard(state:String,decisionChoices:Array[Int],seenCardChoices:Array[Int]):String = {
     ResSeenCard(state,decisionChoices,seenCardChoices).toJson.toString()
+  }
+
+  def getChooseGamble(str:String):MsgChooseGamble = {
+    str.parseJson.convertTo[MsgChooseGamble]
+  }
+
+  def toChooseGamble(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],handCards:Array[Int]):String = {
+    ResChooseGamble(state,gambleChoices,cardNumList,playerWinList,handCards).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())

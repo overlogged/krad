@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import game.GodHelper.*;
 import scala.Option;
+import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class God {
 
@@ -27,6 +28,9 @@ public class God {
     private int[] teamResult;
     private int[] decisionChoices;
     private int[] seenCardChoices;
+    private int[] gambleChoices;
+    private int[] cardNumList;
+    private int[] playerWinList;
 
 
     enum GameState{ INIT,MAINGAME }
@@ -87,7 +91,10 @@ public class God {
                                 allPlayers[playerIndex].handCardsNum -= 1;
                             }
                             //ends
-                            result = GodHelper.toChooseDecision("choose the feature of the decision");
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toChooseDecision("choose the feature of the decision",playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
@@ -97,20 +104,21 @@ public class God {
                         }
                         else if(playerState[playerIndex] == 3){
                             seenCard(sid,msg,allPlayers[playerIndex]);
-                            result = GodHelper.toSeenCard("GAMBLE",decisionChoices,seenCardChoices);
+                            result = GodHelper.toSeenCard("GAMBLE:choose gamble",decisionChoices,seenCardChoices);
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
-                        if(playerState[playerIndex] == 0){
-                            if(allPlayers[playerIndex].isSeenCard){
-                                playerState[playerIndex] += 1;
+                            gambleChoose(msg,allPlayers[playerIndex],playerIndex);
+                            for(int i = 0;i < playerNum;i++) {
+                                if(allPlayers[i].isWin)
+                                    playerWinList[i] = 1;
                             }
-                            else{
-
-                            }
-                        }
+                        int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                        for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                            playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toChooseGamble("ACTION",gambleChoices,cardNumList,playerWinList,playerHandCard);
                         break;
                     case ACTION:
                         break;
@@ -212,12 +220,12 @@ public class God {
     private Integer seen_card_count = 0;
     private void seenCard(int sid,String msg,Player playerMain){
         MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
-        if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
-            playerMain.gamble = msgSeenCard.seenCard();
-            playerMain.isSeenCard = true;
-        }
         synchronized (this){
             seen_card_count += 1;
+            if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
+                playerMain.gamble = msgSeenCard.seenCard();
+                playerMain.isSeenCard = true;
+            }
             if(seen_card_count < playerNum){
                 while(seen_card_count < playerNum){
                     try{
@@ -227,6 +235,38 @@ public class God {
                     }
                 }
             }else {
+                this.notifyAll();
+            }
+        }
+    }
+    private Integer gamble_count = 0;
+    private void gambleChoose(String msg, Player playerMain,int playerIndex){
+        MsgChooseGamble msgChooseGamble = GodHelper.getChooseGamble(msg);
+        synchronized (this){
+            gamble_count += 1;
+            if(!playerMain.isSeenCard) {
+                playerMain.gamble = playerMain.handCards[msgChooseGamble.gambleCard()];
+                playerMain.gambleNum = msgChooseGamble.cardNum();
+                for(int i = 0;i < msgChooseGamble.cardNum();i++) {
+                    GambleChecker.cardToHeap(cardHeap,playerMain.handCards[msgChooseGamble.gambleCard()]);
+                    playerMain.handCards[msgChooseGamble.gambleCard()] = GambleChecker.NOTHING;
+                    GambleChecker.cardSort(playerMain.handCards);
+                    playerMain.handCardsNum -= 1;
+                }
+                gambleChoices[playerIndex] = playerMain.handCards[msgChooseGamble.gambleCard()];
+                cardNumList[playerIndex] = msgChooseGamble.cardNum();
+            }
+            if(gamble_count < playerNum){
+                while(gamble_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }
+            else{
+                GambleChecker.winJudge(playerNum,allPlayers);
                 this.notifyAll();
             }
         }
@@ -244,6 +284,9 @@ public class God {
         decisionChoices = new int[playerNum];
         seenCardChoices = new int[playerNum];
         cardHeap = new int[40 * playerNum];
+        gambleChoices = new int[playerNum];
+        cardNumList = new int[playerNum];
+        playerWinList = new int[playerNum];
 
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
