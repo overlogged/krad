@@ -102,6 +102,16 @@ public class God {
                         if(playerState[playerIndex] == 0){
                             GambleChecker.cardDistribute(cardHeap,allPlayers[playerIndex],4);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            boolean isSeenCard = true;
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++) {
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                                if((allPlayers[playerIndex].handCards[i] == 1)
+                                        |(allPlayers[playerIndex].handCards[i] == 2)
+                                        |(allPlayers[playerIndex].handCards[i] == 3))
+                                    isSeenCard = false;
+                            }
+                            if(isSeenCard)
+                                allPlayers[playerIndex].isSeenCard = true;
                             result = GodHelper.toCardDistribute("choose strategy decision", playerHandCard);
                             playerState[playerIndex] += 1;
                         }
@@ -119,6 +129,10 @@ public class God {
                         }
                         else if(playerState[playerIndex] == 2){
                             featureChoose(sid,msg,allPlayers[playerIndex]);
+                            playerState[playerIndex] += 1;
+                            result = GodHelper.toDecisionFeature("choose seen card");
+                        }
+                        else if(playerState[playerIndex] == 3){
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }

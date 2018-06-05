@@ -43,7 +43,7 @@ public class Player {
                                          */
     int stratDecision = -1;
     int skillsDecision;
-    enum 
+    boolean isSeenCard = false;
     boolean isWin = false;            /*
                                         victory or defeat in one turn
                                         this variable should be set as false each turn ends

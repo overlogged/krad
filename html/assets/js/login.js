@@ -1,6 +1,7 @@
 var state_login = {
   preload: function() {
     var url = window.location.href;
+    console.log(url);
     if(url.indexOf("?")!=-1){
       var str = url.split("?")[1];
       sid = parseInt(str.split("=")[1]);
