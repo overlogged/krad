@@ -18,7 +18,7 @@ public class God {
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;       // whether human team wins
     private boolean zombieWin;      // whether zombie team wins
-    private Map map;     // map of the game
+    private Map map;                // map of the game
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
@@ -106,6 +106,9 @@ public class God {
                         if(playerState[playerIndex] == 0){
                             if(allPlayers[playerIndex].isSeenCard){
                                 playerState[playerIndex] += 1;
+                            }
+                            else{
+
                             }
                         }
                         break;
@@ -199,16 +202,18 @@ public class God {
         }
     }
     private void featureChoose(int sid,String msg,Player playerMain){
+        MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
         int decision = playerMain.stratDecision;
         if(decision == GambleChecker.MOVE)
-            playerMain.moveDirection = GodHelper.getDecisionFeature(msg).moveDirection();
+            playerMain.moveDirection = decisionFeature.moveDirection();
         else if(decision == GambleChecker.FIRE)
-            playerMain.fireTarget = GodHelper.getDecisionFeature(msg).fireTarget();
+            playerMain.fireTarget = decisionFeature.fireTarget();
     }
     private Integer seen_card_count = 0;
     private void seenCard(int sid,String msg,Player playerMain){
-        if((playerMain.isSeenCard)|(GodHelper.getSeenCard(msg).seenCard() != 0)){
-            playerMain.gamble = GodHelper.getSeenCard(msg).seenCard();
+        MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
+        if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
+            playerMain.gamble = msgSeenCard.seenCard();
             playerMain.isSeenCard = true;
         }
         synchronized (this){
