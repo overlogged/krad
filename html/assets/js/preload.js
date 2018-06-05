@@ -13,6 +13,7 @@ var state_preload = {
     game.load.image('start', 'assets/img/startbutton.png');
     game.load.image('help', 'assets/img/helpbutton.png');
 
+
     game.load.onLoadComplete.add(function () {
       game.state.start('login');
     })
