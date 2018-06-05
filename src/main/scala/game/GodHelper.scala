@@ -11,20 +11,31 @@ object GodHelper extends MyJsonProtocol{
   case class ResInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String])
   case class MsgChooseHero(hero:String)
   case class ResChooseHero(state:String,heroChoices:Array[String],teamResult:Array[Int])
-  case class ResCardDistribute(state:String, handCards:Array[Int])
+  case class ResCardDistribute(state:String,handCards:Array[Int])
   case class MsgChooseDecision(decision:Int)
-  /* about MsgChooseDecision
+  /*
+   * about MsgChooseDecision
    * Int decision is the index in card array
    * if a player does not choose anything, then decision is -1
    */
   case class ResChooseDecision(state:String)
   case class MsgDecisionFeature(moveDirection:Int,fireTarget:Int)
-  /* about MsgDecisionFeature
+  /*
+   * about MsgDecisionFeature
    * moveDirection is the index of mapUnit that player chose to move towards
    * fireTarget is the index of target player(index in UserInfo) of firing
    * only one variable would be used in God in one turn
    */
   case class ResDecisionFeature(state:String)
+  case class MsgSeenCard(seenCard:Int)
+  /*
+   * about MsgSeenCard
+   * if the player choose to use "Seen Card",then seenCard is an integer of 1 to 3
+   * 1 fot PAPER, 2 for SCISSORS, 3 for STONES
+   * if the player dose not want to use seen cards, seenCard is 0
+   * if the player does not have gamble card in hand, he must use seen card (already judged in God)
+   */
+  case class ResSeenCard(state:String)
 
   def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {
     ResInit(allUserInfo,state,heroList).toJson.toString
@@ -56,6 +67,14 @@ object GodHelper extends MyJsonProtocol{
 
   def toDecisionFeature(state:String):String = {
     ResDecisionFeature(state).toJson.toString()
+  }
+
+  def getSeenCard(str:String):MsgSeenCard = {
+    str.parseJson.convertTo[MsgSeenCard]
+  }
+
+  def toSeenCard(state:String):String = {
+    ResSeenCard(state).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())
