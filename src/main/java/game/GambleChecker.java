@@ -18,8 +18,6 @@ public class GambleChecker {
     static int[] cardHeapInit(int[] cardHeap, int playerNum) {
         //count variable i
         int i,j;
-        // the number of cards equals to 40 * number of players
-        cardHeap = new int[40 * playerNum];
         //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:STONE = 8:12:8:4:4:4
         for (i = 0; i < 8 * playerNum; i++) {
             cardHeap[i] = FIRE;
