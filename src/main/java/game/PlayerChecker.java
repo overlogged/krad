@@ -44,7 +44,7 @@ public class PlayerChecker{
 //    }
 
     static void fire(Map map,Player playerPos,Player playerPas){
-        distance = MapChecker.outDistance(map.units[playerPas.preLoc],map.units[playerPos.preLoc]);
+        distance = MapChecker.distance(map.units[playerPas.preLoc],map.units[playerPos.preLoc]);
         if(playerPos.range>=distance) {
             if(playerPas.healthPoint - playerPos.energyConsume > 4)
                 playerPas.healthPoint -= playerPos.energyConsume;

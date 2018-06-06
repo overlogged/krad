@@ -7,7 +7,7 @@ public class GambleChecker {
     public static final int NOTHING = 0;
     public static final int PAPER = 1;
     public static final int SCISSORS = 2;
-    public static final int STONE = 3;
+    public static final int ROCK = 3;
     //constant about strategy decision
     public static final int MOVE = 4;
     public static final int FIRE = 5;
@@ -18,7 +18,7 @@ public class GambleChecker {
     static int[] cardHeapInit(int[] cardHeap, int playerNum) {
         //count variable i
         int i,j;
-        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:STONE = 8:12:8:4:4:4
+        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 8:12:8:4:4:4
         for (i = 0; i < 8 * playerNum; i++) {
             cardHeap[i] = FIRE;
         }
@@ -40,7 +40,7 @@ public class GambleChecker {
         }
         j = i;
         for (; i < j + 4 * playerNum; i++) {
-            cardHeap[i] = STONE;
+            cardHeap[i] = ROCK;
         }
         return cardHeap;
     }
@@ -101,18 +101,15 @@ public class GambleChecker {
         }
     }
 
-    static void cardDesert(Player playerMain, int[] cardHeap) {
-        if(playerMain.handCardsNum > playerMain.healthPoint) {
-            playerMain.cardsDesertNum = playerMain.handCardsNum - playerMain.healthPoint;
-            for (int i = 0; i < playerMain.cardsDesertNum; i++) {
-                if(playerMain.cardsDesertList[i] != -1) {
-                    cardToHeap(cardHeap, playerMain.handCards[playerMain.cardsDesertList[i]]);
-                    playerMain.handCards[playerMain.cardsDesertList[i]] = NOTHING;
-                    playerMain.handCardsNum--;
-                }
-            }
-            cardSort(playerMain.handCards);
+    static void cardDesert(Player playerMain, int[] cardHeap,int[] desertList) {
+        for (int i = 0; i < desertList.length; i++) {
+            if(desertList[i] == -1)
+                break;
+            cardToHeap(cardHeap, playerMain.handCards[desertList[i]]);
+            playerMain.handCards[desertList[i]] = NOTHING;
+            playerMain.handCardsNum--;
         }
+        cardSort(playerMain.handCards);
     }
 
     /*

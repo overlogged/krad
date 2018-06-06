@@ -1,6 +1,6 @@
 package common
 
-import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDecisionFeature, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDecisionFeature, ResInit, ResSeenCard, ResWinJudge, UserInfo}
+import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDecisionFeature, MsgDesertAccount, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDecisionFeature, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
@@ -25,10 +25,10 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val RequestGameFormat = jsonFormat2(RequestGame)
   implicit val ResUserInfoFormat = jsonFormat2(UserInfo)
   implicit val ResChooseHeroFormat = jsonFormat3(ResChooseHero)
-  implicit val ResInitFormat = jsonFormat3(ResInit)
+  implicit val ResInitFormat = jsonFormat4(ResInit)
   implicit val ResCardDistributeFormat = jsonFormat2(ResCardDistribute)
   implicit val MsgChooseDecisionFormat = jsonFormat1(MsgChooseDecision)
-  implicit val ResChooseDecisionFormat = jsonFormat2(ResChooseDecision)
+  implicit val ResChooseDecisionFormat = jsonFormat4(ResChooseDecision)
   implicit val MsgDecisionFeatureFormat = jsonFormat2(MsgDecisionFeature)
   implicit val ResDecisionFeatureFormat = jsonFormat1(ResDecisionFeature)
   implicit val MsgSeenCardFormat = jsonFormat1(MsgSeenCard)
@@ -36,4 +36,13 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val MsgChooseGambleFormat = jsonFormat1(MsgChooseGamble)
   implicit val ResChooseGambleFormat = jsonFormat2(ResChooseGamble)
   implicit val ResWinJudgeFormat = jsonFormat4(ResWinJudge)
+  implicit val ResDepositAccountFormat = jsonFormat2(ResDepositAccount)
+  implicit val ResSkillsAccountFormat = jsonFormat1(ResSkillsAccount)
+  implicit val ResFireAccountFormat = jsonFormat2(ResFireAccount)
+  implicit val ResMoveAccountFormat = jsonFormat2(ResMoveAccount)
+  implicit val ResElemAccountFormat = jsonFormat2(ResElemAccount)
+  implicit val ResHumanVictoryFormat = jsonFormat1(ResHumanVictory)
+  implicit val ResInfectionAccountFormat = jsonFormat2(ResInfectionAccount)
+  implicit val MsgDesertAccountFormat = jsonFormat1(MsgDesertAccount)
+  implicit val ResDesertAccountFormat = jsonFormat3(ResDesertAccount)
 }

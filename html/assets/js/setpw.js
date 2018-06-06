@@ -46,7 +46,6 @@ function do_confirm() {
       alert("修改成功");
       console.log(data);
       console.log(sid);
-      game.state.start('userinterface'); //需要跳转的地址
     },
     error: function (data, status) {
       alert("修改失败");
