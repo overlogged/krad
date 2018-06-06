@@ -1,5 +1,7 @@
 package game;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 public class PlayerChecker{
     static MapChecker myMap = new MapChecker();
     private static int distance;
@@ -16,8 +18,7 @@ public class PlayerChecker{
 
     //energy acquiring and consuming
     static void energyAcq(Player playerMain,int energyVal){
-        if(playerMain.energy<playerMain.healthPoint)
-            playerMain.energy+=energyVal;
+        playerMain.energy+=energyVal;
     }
     static void energyConsume(Player playerMain,int energyVal) {
         if(playerMain.energy>=energyVal)
@@ -25,48 +26,37 @@ public class PlayerChecker{
         else
             playerMain.energy=0;
     }
-    static void gambleAward(Player playerMain,FrontEndData awardData){
-        if(playerMain.isWin){
-            switch(playerMain.stratDecision){
-                case Player.MOVE:
-                    move(playerMain,playerMain.energy,awardData.moveDirection);
-                    break;
-                case Player.FIRE:
-                    fire(awardData.playerPos,awardData.playerPas,awardData.fireDirection);
-                    break;
-                case Player.DEPOSIT:
-                    if(playerMain.energy<playerMain.healthPoint)
-                        energyAcq(playerMain,1);
-                    break;
-            }
-        }
-    }
+//    static void gambleAward(Player playerMain,FrontEndData awardData){
+//        if(playerMain.isWin){
+//            switch(playerMain.stratDecision){
+//                case Player.MOVE:
+//                    move(playerMain,playerMain.energy,awardData.moveDirection);
+//                    break;
+//                case Player.FIRE:
+//                    fire(awardData.playerPos,awardData.playerPas);
+//                    break;
+//                case Player.DEPOSIT:
+//                    if(playerMain.energy<playerMain.healthPoint)
+//                        energyAcq(playerMain,1);
+//                    break;
+//            }
+//        }
+//    }
 
-    //location changing
-    // in mapchecker
-    static MapUnit destCal(MapUnit preLoc,int engery, MapEdge direction){
-        MapUnit dest=new MapUnit();
-        return dest;
-    }
-    //in playerchecker
-    static void move(Player playerMain,int energy,MapEdge direction){
-        MapUnit dest=destCal(playerMain.preLoc, playerMain.energy, direction);
-        //energy cost
-        energyConsume(playerMain,energy);
-        playerMain.preLoc=dest;
-    }
-    static void fire(Player playerPos,Player playerPas,MapEdge direction){
-        distance = myMap.outDistance(playerPas.preLoc,playerPos.preLoc);
+    static void fire(Map map,Player playerPos,Player playerPas){
+        distance = MapChecker.outDistance(map.units[playerPas.preLoc],map.units[playerPos.preLoc]);
         if(playerPos.range>=distance) {
-            playerPas.healthPoint-= playerPos.firePow;
-            //TODO:energy consuming
+            if(playerPas.healthPoint - playerPos.energyConsume > 4)
+                playerPas.healthPoint -= playerPos.energyConsume;
+            else
+                playerPas.healthPoint = 4;
         }
     }
 
     //team changing
-    void infection(Player playerPos,Player playerPas){
+    static Boolean infection(Map map, Player playerPos, Player playerPas){
         if(playerPos.preLoc == playerPas.preLoc) {
-            if(playerPos.preLoc.status==1) {
+            if(map.units[playerPos.preLoc].status==1) {
                 if (playerPos.team == Player.ZOMBIE & playerPas.team == Player.HUMAN) {
                     playerPas.team = Player.ZOMBIE;
                     playerPas.energy = 0;
@@ -74,8 +64,10 @@ public class PlayerChecker{
                     playerPas.firePow = 0;
                     playerPas.range = 0;
                     playerPas.healthPoint = 0;
+                    return true;
                 }
             }
         }
+        return false;
     }
 }
