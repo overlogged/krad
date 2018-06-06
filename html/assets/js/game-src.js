@@ -1,13 +1,13 @@
 function request(msg,callback) {
   var sid = $("#sid").val();
-  console.log(sid);
   $.ajax({
     url: "/api/game",
     type: "POST",
     contentType: 'application/json',
     data: JSON.stringify({'sid':parseInt(sid),'msg':JSON.stringify(msg)}),
-    success: function(data,status){
-      log(data);
+    success: function(str,status){
+      var data = JSON.parse(str);
+      log(str);
       state = data.state;
       callback(data,status);
     },

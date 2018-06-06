@@ -1,7 +1,6 @@
 function request(msg, callback) {
   var sid;
   sid = $('#sid').val();
-  console.log(sid);
   $.ajax({
     url: '/api/game',
     type: 'POST',
@@ -10,8 +9,11 @@ function request(msg, callback) {
       'sid': parseInt(sid),
       'msg': JSON.stringify(msg)
     }),
-    success: function (data, status) {
-      log(data);
+    success: function (str, status) {
+      var data;
+      data = JSON.parse(str);
+      log(str);
+      log(data.state);
       state = data.state;
       callback(data, status);
     },
