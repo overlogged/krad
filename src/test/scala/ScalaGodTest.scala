@@ -1,10 +1,6 @@
 package game
 
-import java.security.cert.PKIXRevocationChecker
-
 import common.MyJsonProtocol
-import game.GodHelper._
-
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration

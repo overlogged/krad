@@ -18,9 +18,23 @@ function log(x){
   $("#console").innerHTML = $("#console").innerHTML + "\n" + x;
 }
 
+$("#restart").click(function(){
+  $.ajax({
+    url: "/api/restart",
+    type: "POST",
+    success: function(){
+      log("restart success");
+    }
+  });
+});
+
 // for continuation.js
 arguments = {}
 
-// choose hero
-request({},cont(data,status));
-log(data);
+var state="init";
+$("#submit").click(function(){
+  request({},cont(data,status));
+  log(data);
+});
+
+

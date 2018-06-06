@@ -1,11 +1,8 @@
 package game;
 
 import java.util.TreeMap;
-
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import game.GodHelper.*;
 import scala.Option;
-import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class God {
 

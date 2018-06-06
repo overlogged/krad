@@ -109,6 +109,12 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
       }
     } ~
+      path("restart") {
+        post {
+          SessionController.test()
+          complete(HttpResponse(StatusCodes.Accepted))
+        }
+      } ~
       path("session" / "login") {
         post {
           entity(as[RequestLogin]) { req =>
