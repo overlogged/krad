@@ -23,13 +23,8 @@ var state_login = {
       game.add.button(615, 260, 'button', go_forget, this, 1, 0, 2, 0);
       game.add.bitmapText(630, 265, 'chiller', 'forget', 28);
 
-<<<<<<< HEAD
-      game.add.button(400,400,'button',hehe,this,1,0,2,0);
-
-=======
   
       
->>>>>>> dev
 
   
       show("login");
@@ -39,12 +34,6 @@ var state_login = {
   }
 }
 
-<<<<<<< HEAD
-function hehe(){
-  game.state.start('setpw');
-}
-=======
->>>>>>> dev
 function go_forget(){
   game.state.start('forget');
 }
