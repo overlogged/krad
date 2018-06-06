@@ -21,8 +21,8 @@
       var arrow = new Array();
       var player = new Array();
       var p_choose =new Array();
-      var arrow_sum = [1,1,0,1,1,1,0,1];
-      var map = [{x:410,y:10},{x:410,y:60},{x:410,y:120},{x:410,y:180},{x:410,y:240},{x:410,y:290},{x:410,y:345},{x:340,y:420},
+      var arrow_union = [1,1,0,1,1,1,0,1];
+      var map = [{x:410,y:10},{x:410,y:60},{x:410,y:130},{x:410,y:180},{x:410,y:240},{x:410,y:290},{x:410,y:345},{x:340,y:420},
       {x:435,y:480},{x:456,y:535},{x:474,y:595},{x:490,y:650},{x:515,y:710},{x:540,y:765},{x:568,y:820},
       {x:350,y:865},{x:143,y:820},{x:164,y:765},{x:185,y:710},{x:202,y:650},{x:227,y:595},{x:248,y:535},{x:269,y:480}];
       
@@ -58,23 +58,202 @@
       }
       });
 
-    var card = new Phaser.Game(780, 400, Phaser.CANVAS, 'cardcontainer',{
+
+      var cardlist = new Array();
+        var cardpressed = new Array();
+        var staticinvalidcard = new Array();
+        var dynamicinvalidcard = new Array();
+        var a;
+        for (a = 0; a <= 17; a++) {
+            cardpressed[a] = 0;
+            staticinvalidcard[a] = 1;
+            dynamicinvalidcard[a] = 0;
+            cardlist[a] = 0;
+        }
+        cardlist = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5]; 
+
+
+
+
+    var card = new Phaser.Game(800, 568, Phaser.CANVAS, 'cardcontainer',{
       preload: function () {
-        card.load.image('cardbackground','assets/img/inputbox1.png');
+        card.load.image('gamebackground', 'assets/img/userbackground.png');
         card.load.spritesheet('arrow','assets/img/gamewindow/arrow.png',90,36);
         card.load.spritesheet('button','assets/buttons/button1.png',100,34);
+        card.load.spritesheet('handcard_move', 'assets/img/gamewindow/handcard_move.png', 105, 250);
+        card.load.spritesheet('handcard_shoot', 'assets/img/gamewindow/handcard_shoot.png', 105, 250);
+        card.load.spritesheet('handcard_skill', 'assets/img/gamewindow/handcard_skill.png', 105, 250);
+        card.load.spritesheet('handcard_rock', 'assets/img/gamewindow/handcard_rock.png', 105, 250);
+        card.load.spritesheet('handcard_scissors', 'assets/img/gamewindow/handcard_scissors.png', 105, 250);
+        card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 105, 250);
+        card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 105, 250);
+        card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png');
+
       },
       create: function () {
-    var cardbackground = card.add.sprite(0,0,'cardbackground');
-        cardbackground.smoothed = true;
-        cardbackground.height = card.height;
-        cardbackground.width = card.width;
-        do_chooseplayer();
-        do_arrowupadate();
-      },
-    });
-    function do_move(){
-      mark=7;
+       var i;
+       var san = 0;//how many cards was chosen
+       var pedometer=2;//0 - test stage; 1 - prepare stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+       
+    function checkcard() {
+        alert('sending completed');
+    }
+    function staticinvalidchoice() {
+        switch (pedometer) {
+            case 0:
+                break;
+            case 1:
+                for (i = 0; i <= 17; i++) {
+                    switch (cardlist[i]) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            staticinvalidcard[i] = 1;
+                            break;
+                        case 4:
+                        case 5:
+                        case 6:
+                            staticinvalidcard[i] = 0;
+                            break;
+                    }
+                }
+                break;
+            case 2:
+                for (i = 0; i <= 17; i++) {
+                    switch (cardlist[i]) {
+                        case 0:
+                        case 4:
+                        case 5:
+                        case 6:
+                            staticinvalidcard[i] = 1;
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
+                            staticinvalidcard[i] = 0;
+                            break;
+                    }
+                }
+                break;
+            case 3:
+                for (i = 0; i <= 17; i++) staticinvalidcard[i] = 1;
+                break;
+            case 4:
+                for (i = 0; i <= 17; i++) {
+                    if (cardlist[i] == 0) staticinvalidcard[i] = 1;
+                    else staticinvalidcard[i] = 0;
+                }
+        }
+    }
+    function dynamiclock(targeter) {
+        var j;
+        switch (pedometer) {
+            case 1:
+                for (j = 0; j <= 17; j++) {
+                    if ((j != targeter) && (staticinvalidcard[j] != 1)) {
+                        staticinvalidcard[j] = 1;
+                        dynamicinvalidcard[j] = 1;
+                        handcardslot[j].setFrames(2, 2, 2, 2);
+                    }
+                }
+                break;
+            case 2:
+                for (j = 0; j <= 17; j++) {
+                    if ((cardlist[j] != cardlist[targeter]) && (staticinvalidcard[j] != 1)) {
+                        staticinvalidcard[j] = 1;
+                        dynamicinvalidcard[j] = 1;
+                        handcardslot[j].setFrames(2, 2, 2, 2);
+                    }
+                }
+                break;
+        }
+    }
+    function dynamicunlock(targeter) {
+        var j;
+        for (j = 0; j <= 17; j++) {
+            if (dynamicinvalidcard[j] == 1) {
+                staticinvalidcard[j] = 0;
+                dynamicinvalidcard[j] = 0;
+                handcardslot[j].setFrames(1, 0, 0, 0);
+            }
+        }
+    }
+    function targetcard(button) {
+        var num;
+        if (button.y == 270) num = (button.x - 10) / 45 + 9;//emmmmmm try to locate the button
+        else num = (button.x - 10) / 45;
+        if (staticinvalidcard[num]) alert('invalid choice');
+        else if (cardpressed[num]) {
+            cardpressed[num] = 0;
+            button.setFrames(1, 0, 0, 0);
+            san--;
+            if(san==0)dynamicunlock(num);
+        }
+        else {
+            cardpressed[num] = 1;
+            button.setFrames(1, 1, 1, 1);
+            san++;
+            dynamiclock(num);
+        } 
+        
+    }
+    var background = card.add.sprite(0, 0, 'gamebackground');
+    var checkbutton = card.add.button(480, 47.5, 'checkbutton', checkcard, this);
+    var handcardslot = new Array();
+    for (i = 0; i <= 17; i++) {
+        if (i <= 8) handcardslot[i] = card.add.button(10 + 45 * i, 10, 'handcard_blank', targetcard, this, 2, 2, 2, 2);
+        if (i > 8) handcardslot[i] = card.add.button(10 + 45 * (i - 9), 270, 'handcard_blank', targetcard, this, 2, 2, 2, 2);
+    }
+    function refreshcard() {
+        staticinvalidchoice();
+        for (i = 0; i <= 17; i++) {
+            switch (cardlist[i]) {
+                case 0:
+                    handcardslot[i].loadTexture('handcard_blank', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+                case 1:
+                    handcardslot[i].loadTexture('handcard_paper', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+                case 2:
+                    handcardslot[i].loadTexture('handcard_scissors', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+                case 3:
+                    handcardslot[i].loadTexture('handcard_rock', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+                case 4:
+                    handcardslot[i].loadTexture('handcard_move', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+                case 5:
+                    handcardslot[i].loadTexture('handcard_shoot', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+                case 6:
+                    handcardslot[i].loadTexture('handcard_skill', 1 + staticinvalidcard[i]);
+                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+                    else handcardslot[i].setFrames(1, 0, 0, 0);
+                    break;
+            }
+        }
+    }
+    refreshcard();
+    do_arrowgenerate(arrow_union);
+    do_chooseplayer();
+}
+});
+    function do_move(mark){
+      //mark=7;
       people=0;
       player[people].body.x=map[mark].x+people*20+(4-player_num)*10;
       player[people].body.y=map[mark].y;
@@ -98,18 +277,22 @@
          player[i].body.fixedRotation = true;
       }
     }
-    function do_arrowupadate(){
-        for(var i =0 ;i<8;i++){
-            arrow[i]=card.add.button(700,250,'arrow',do_move,this,1,2,0,0);
-            arrow[i].anchor.x=0;
-            arrow[i].anchor.y=0.5;
-            arrow[i].angle = -45*(3-i);
+    function do_arrowgenerate(arrow_union){
+        for(var z =0 ;z<8;z++){
+          if(arrow_union[z]!=0){
+            arrow[z]=card.add.button(650,300,'arrow',function(){do_move(2)},this,1,2,0,0);
+            arrow[z].anchor.x=0;
+            arrow[z].anchor.y=0.5;
+            arrow[z].angle = -45*(3-z);
+          }
         }
     }
     function do_chooseplayer(){
-      for(var i=0;i<4;i++){
-         p_choose[i] = card.add.button(500+i*60, 350, 'button', do_move, this, 1, 0, 2, 0);
+      for(var z=0;z<4;z++){
+         p_choose[z] = card.add.button(500+z*60, 400, 'button', do_move, this, 1, 0, 2, 0);
       }
+    }
+    function do_decision(){
     }
 </script>
 </body>

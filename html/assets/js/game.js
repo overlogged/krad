@@ -41,8 +41,8 @@ arguments = {}
 
 var state="Init";
 $("#ok").click(function(){
-  var arg0 = $("#arg0").val();
-  var arg1 = $("#arg1").val();
+  var arg0 = $("#arg0").val();  //card ok
+  var arg1 = $("#arg1").val();  //
   var arg2 = $("#arg2").val();
   var arg3 = $("#arg3").val();
   var arg4 = $("#arg4").val();
