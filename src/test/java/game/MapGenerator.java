@@ -22,18 +22,18 @@ public class MapGenerator {
             }
 
             map.units[i] = new MapUnit(edge_number);
-            map.units[i].mark = i + 1;
+            map.units[i].mark = i;
             map.units[i].status = 0;
 
             if (i == 22) {
                 map.units[i].edge[0].adjedg = 8;
             } else {
-                map.units[i].edge[0].adjedg = i + 2;
+                map.units[i].edge[0].adjedg = i + 1;
             }
             map.units[i].edge[0].distance = 1;
 
             if (edge_number >= 2) {
-                map.units[i].edge[1].adjedg = i;
+                map.units[i].edge[1].adjedg = i-1 ;
                 map.units[i].edge[1].distance = 1;
             }
             if (i < 7) {
@@ -47,11 +47,11 @@ public class MapGenerator {
             }
         }
 
-        map.units[8].edge[2].adjedg = 7;
+        map.units[8].edge[2].adjedg = 6;
         map.units[8].edge[2].distance = 2;
         map.units[22].edge[2].distance = 2;
-        map.units[22].edge[2].adjedg = 7;
-        map.units[7].edge[2].adjedg = 23;
+        map.units[22].edge[2].adjedg = 6;
+        map.units[7].edge[2].adjedg = 22;
         map.units[7].edge[2].distance = 1;
 
         map.units[7].status = 1;
@@ -63,10 +63,16 @@ public class MapGenerator {
 
     static void map1_test() {
         Map X = new Map("map/1.map");
+<<<<<<< HEAD
         assert (X.units[7].edge[2].adjedg == 23);
         assert (X.units[10].rank == 3);
         assert (MapChecker.outDistance(X.units[3], X.units[8]) == -1);
         System.out.println(X.fighter_init);
+=======
+        assert (X.units[7].edge[2].adjedg==22);
+        assert (X.units[10].rank==3);
+        assert (MapChecker.outDistance(X.units[3],X.units[8])==-1);
+>>>>>>> 28e34bfa8e99bf966d139989c0422cc134f640c6
     }
 
     public static void main(String[] args) {

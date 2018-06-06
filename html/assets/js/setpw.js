@@ -5,17 +5,15 @@ var state_setpw = {
     game.add.bitmapText(275, 195, 'chiller', 'Password', 54);
     game.add.bitmapText(280, 255, 'chiller', 'Confirm', 54);
 
-    game.add.button(315, 320, 'button', do_confirm, this, 1, 0, 2, 0);
-    game.add.bitmapText(330, 325, 'chiller', 'Confirm', 28);
+    game.add.button(440, 320, 'button', do_confirm, this, 1, 0, 2, 0);
+    game.add.bitmapText(460, 325, 'chiller', 'Confirm', 28);
 
-    game.add.button(470, 320, 'button', go_backloginsp, this, 1, 0, 2, 0);
-    game.add.bitmapText(485, 325, 'chiller', 'Back', 28);
+    show("setpw");
+
   }
 }
 
-function go_backloginsp(){
-  game.state.start('login');
-}
+
 
 function do_confirm() {
   var password = $("#setpw_password").val();
@@ -48,7 +46,7 @@ function do_confirm() {
       alert("修改成功");
       console.log(data);
       console.log(sid);
-      game.state.start('login'); //需要跳转的地址
+      game.state.start('userinterface'); //需要跳转的地址
     },
     error: function (data, status) {
       alert("修改失败");

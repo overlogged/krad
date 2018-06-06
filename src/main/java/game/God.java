@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import game.GodHelper.*;
 import scala.Option;
+import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class God {
 
@@ -18,7 +19,7 @@ public class God {
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;       // whether human team wins
     private boolean zombieWin;      // whether zombie team wins
-    private Map map;     // map of the game
+    private Map map;                // map of the game
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
@@ -27,6 +28,9 @@ public class God {
     private int[] teamResult;
     private int[] decisionChoices;
     private int[] seenCardChoices;
+    private int[] gambleChoices;
+    private int[] cardNumList;
+    private int[] playerWinList;
 
 
     enum GameState{ INIT,MAINGAME }
@@ -86,27 +90,42 @@ public class God {
                                 GambleChecker.cardSort(allPlayers[playerIndex].handCards);
                                 allPlayers[playerIndex].handCardsNum -= 1;
                             }
+                            decisionChoices[playerIndex] = allPlayers[playerIndex].stratDecision;
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             //ends
-                            result = GodHelper.toChooseDecision("choose the feature of the decision");
+                            result = GodHelper.toChooseDecision("choose the feature of the decision",playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
-                            featureChoose(sid,msg,allPlayers[playerIndex]);
+                            featureChoose(msg,allPlayers[playerIndex]);
                             playerState[playerIndex] += 1;
                             result = GodHelper.toDecisionFeature("choose seen card");
                         }
                         else if(playerState[playerIndex] == 3){
-                            seenCard(sid,msg,allPlayers[playerIndex]);
-                            result = GodHelper.toSeenCard("GAMBLE",decisionChoices,seenCardChoices);
+                            seenCard(playerIndex,msg,allPlayers[playerIndex]);
+                            result = GodHelper.toSeenCard("GAMBLE:choose gamble",decisionChoices,seenCardChoices);
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
-                        if(playerState[playerIndex] == 0){
-                            if(allPlayers[playerIndex].isSeenCard){
-                                playerState[playerIndex] += 1;
+                        if(playerState[playerIndex] == 0) {
+                            gambleChoose(msg,allPlayers[playerIndex],playerIndex);
+                            playerState[playerIndex] += 1;
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toChooseGamble("win judge",playerHandCard);
+                        }
+                        if(playerState[playerIndex] == 1){
+                            winJudge();
+                            for(int i = 0;i < playerNum;i++) {
+                                if(allPlayers[i].isWin)
+                                    playerWinList[i] = 1;
                             }
+                            result = GodHelper.toWinJudge("ACTION",gambleChoices,cardNumList,playerWinList);
                         }
                         break;
                     case ACTION:
@@ -193,26 +212,29 @@ public class God {
     private void mapInit(){
         for(int i = 0;i < playerNum;i++){
             if(allPlayers[i].team == Player.HUMAN)
-                allPlayers[i].preLoc = map.units[5];
+                allPlayers[i].preLoc = map.units[4];
             else if(allPlayers[i].team == Player.ZOMBIE)
-                allPlayers[i].preLoc = map.units[1];
+                allPlayers[i].preLoc = map.units[0];
         }
     }
-    private void featureChoose(int sid,String msg,Player playerMain){
+    private void featureChoose(String msg,Player playerMain){
+        MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
         int decision = playerMain.stratDecision;
         if(decision == GambleChecker.MOVE)
-            playerMain.moveDirection = GodHelper.getDecisionFeature(msg).moveDirection();
+            playerMain.moveDirection = decisionFeature.moveDirection();
         else if(decision == GambleChecker.FIRE)
-            playerMain.fireTarget = GodHelper.getDecisionFeature(msg).fireTarget();
+            playerMain.fireTarget = decisionFeature.fireTarget();
     }
     private Integer seen_card_count = 0;
-    private void seenCard(int sid,String msg,Player playerMain){
-        if((playerMain.isSeenCard)|(GodHelper.getSeenCard(msg).seenCard() != 0)){
-            playerMain.gamble = GodHelper.getSeenCard(msg).seenCard();
-            playerMain.isSeenCard = true;
-        }
+    private void seenCard(int playerIndex,String msg,Player playerMain){
+        MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
         synchronized (this){
             seen_card_count += 1;
+            if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
+                playerMain.gamble = msgSeenCard.seenCard();
+                playerMain.isSeenCard = true;
+                seenCardChoices[playerIndex] = 1;
+            }
             if(seen_card_count < playerNum){
                 while(seen_card_count < playerNum){
                     try{
@@ -222,6 +244,43 @@ public class God {
                     }
                 }
             }else {
+                this.notifyAll();
+            }
+        }
+    }
+    private void gambleChoose(String msg, Player playerMain,int playerIndex){
+        MsgChooseGamble msgChooseGamble = GodHelper.getChooseGamble(msg);
+        int[] gambleChoose = new int[msgChooseGamble.gambleCard().length];
+        for(int i = 0;i < msgChooseGamble.gambleCard().length;i++)
+            gambleChoose[i] = msgChooseGamble.gambleCard()[i];
+        if(!playerMain.isSeenCard) {
+            playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
+            playerMain.gambleNum = gambleChoose.length;
+            for(int i = 0;i < playerMain.gambleNum;i++) {
+                GambleChecker.cardToHeap(cardHeap,playerMain.handCards[ playerMain.handCards[gambleChoose[i]] ]);
+                playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
+                GambleChecker.cardSort(playerMain.handCards);
+                playerMain.handCardsNum -= 1;
+            }
+            gambleChoices[playerIndex] = playerMain.gamble;
+            cardNumList[playerIndex] = playerMain.gambleNum;
+        }
+    }
+
+    private Integer gamble_count = 0;
+    private void winJudge(){
+        synchronized (this){
+            gamble_count += 1;
+            if(gamble_count < playerNum){
+                while(gamble_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else{
+                GambleChecker.winJudge(playerNum,allPlayers);
                 this.notifyAll();
             }
         }
@@ -239,6 +298,9 @@ public class God {
         decisionChoices = new int[playerNum];
         seenCardChoices = new int[playerNum];
         cardHeap = new int[40 * playerNum];
+        gambleChoices = new int[playerNum];
+        cardNumList = new int[playerNum];
+        playerWinList = new int[playerNum];
 
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
