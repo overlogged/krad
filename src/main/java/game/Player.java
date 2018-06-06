@@ -6,9 +6,10 @@ public class Player {
     public static final int HUMAN = 0;
     public static final int ZOMBIE = 1;
     //constant about gamble cards
+    public static final int NOTHING = 0;
     public static final int PAPER = 1;
     public static final int SCISSORS = 2;
-    public static final int STONE = 3;
+    public static final int ROCK = 3;
     //constant about strategy decision
     public static final int MOVE = 4;
     public static final int DEPOSIT = 5;
@@ -54,8 +55,6 @@ public class Player {
     //properties about cards
     int handCardsNum = 0;
     int[] handCards;
-    int cardsDesertNum = 0;
-    int[] cardsDesertList;              //if there is no card to desert, then the element is -1
 
     //properties about location
     int preLoc;                         //present location: the index of the mapUnit

@@ -6,6 +6,7 @@ public class Map {
     MapUnit[] units;                 // Means obj array of mapunit
     int fighter_init;                // Store the first location of fighter
     int poisoner_init;               // Store the first location of poisoner
+    int fighter_evacuate;            // Store the evacuate location of fighters
 
     Map(int number) {                 // Create a obj array
         units = new MapUnit[number];
@@ -18,6 +19,7 @@ public class Map {
             int number = ois.readInt();
             fighter_init = ois.readInt();
             poisoner_init = ois.readInt();
+            fighter_evacuate = ois.readInt();
             units = new MapUnit[number];
             for (int i = 0; fileInput.available() > 0; i++) {
                 try {
@@ -38,6 +40,7 @@ public class Map {
             out.writeInt(units.length);
             out.writeInt(fighter_init);
             out.writeInt(poisoner_init);
+            out.writeInt(fighter_evacuate);
             for (MapUnit e : units) {
                 out.writeObject(e);
             }

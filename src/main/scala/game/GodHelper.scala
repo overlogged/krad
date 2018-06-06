@@ -6,7 +6,7 @@ import spray.json._
 
 object GodHelper extends MyJsonProtocol{
   case class UserInfo(index:Int,nickName:String)
-  case class ResInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String])
+  case class ResInit(allUserInfo:Array[UserInfo],state:String,myIndex:Int,heroList:Array[String])
   case class MsgChooseHero(hero:String)
   case class ResChooseHero(state:String,heroChoices:Array[String],teamResult:Array[Int])
   case class ResCardDistribute(state:String,handCards:Array[Int])
@@ -31,7 +31,7 @@ object GodHelper extends MyJsonProtocol{
   /*
    * about MsgSeenCard
    * if the player choose to use "Seen Card",then seenCard is an integer of 1 to 3
-   * 1 fot PAPER, 2 for SCISSORS, 3 for STONES
+   * 1 fot PAPER, 2 for SCISSORS, 3 for ROCKS
    * if the player dose not want to use seen cards, seenCard is 0
    * if the player does not have gamble card in hand, he must use seen card (already judged in God)
    */
@@ -45,13 +45,22 @@ object GodHelper extends MyJsonProtocol{
   case class ResWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int])
   /*
    * gambleChoices tell what gamble choice players choose
-   * cardNumList tell how many card they choose to use
+   * cardNumList tell how many card they choose to used
    * playerWinList tells which players win and which lose
    * after gamble handcards should be refreshed
    */
+  case class ResDepositAccount(state:String,eneregyList:Array[Int])
+  case class ResSkillsAccount(state:String)
+  case class ResFireAccount(state:String,healthPointList:Array[Int])
+  case class ResMoveAccount(state:String,locationList:Array[Int])
+  case class ResElemAccount(state:String,elemList:Array[Int])
+  case class ResHumanVictory(state:String)
+  case class ResInfectionAccount(state:String,teamList:Array[Int])
+  case class MsgDesertAccount(desertCardList:Array[Int])
+  case class ResDesertAccount(state:String,energy:Int,handCards:Array[Int])
 
-  def toInit(allUserInfo:Array[UserInfo],state:String,heroList:Array[String]):String = {
-    ResInit(allUserInfo,state,heroList).toJson.toString
+  def toInit(allUserInfo:Array[UserInfo],state:String,myIndex:Int,heroList:Array[String]):String = {
+    ResInit(allUserInfo,state,myIndex,heroList).toJson.toString
   }
 
   def getChooseHero(str:String):MsgChooseHero = {
@@ -100,6 +109,45 @@ object GodHelper extends MyJsonProtocol{
 
   def toWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int]):String = {
     ResWinJudge(state,gambleChoices,cardNumList,playerWinList).toJson.toString()
+  }
+
+  def toDepositAccount(state:String,energyList:Array[Int]):String = {
+    ResDepositAccount(state,energyList).toJson.toString()
+  }
+
+  def toSkillsAccount(state:String):String = {
+    ResSkillsAccount(state).toJson.toString()
+  }
+
+  def toFireAccount(state:String,healthPointList:Array[Int]):String = {
+    ResFireAccount(state,healthPointList).toJson.toString()
+  }
+
+  def toMoveAccount(state:String,locationList:Array[Int]):String = {
+    ResMoveAccount(state,locationList).toJson.toString()
+  }
+
+  def toElemAccount(state:String,elementList:Array[Int]):String = {
+    ResMoveAccount(state,elementList).toJson.toString()
+  }
+
+  def toHumanVictory(state:String):String = {
+    ResHumanVictory(state).toJson.toString()
+  }
+
+  def toInfectionAccount(state:String,teamList:Array[Int]):String = {
+    ResInfectionAccount(state,teamList).toJson.toString()
+  }
+  /*
+   * teamList: 0 for Human ,1 for Zombie
+   */
+
+  def getDesertAccount(str:String):MsgDesertAccount = {
+    str.parseJson.convertTo[MsgDesertAccount]
+  }
+
+  def toDesertAccount(state:String,energy:Int,handCards:Array[Int]):String = {
+    ResDesertAccount(state,energy,handCards).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())

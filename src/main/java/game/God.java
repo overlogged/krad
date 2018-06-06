@@ -17,6 +17,8 @@ public class God {
     private String[] heroList = {"0"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
+    private int[] availableFireTarget;
+    private int[] availableMoveDirection;
 
     private String[] heroChoices;
     private int[] teamResult;
@@ -25,13 +27,17 @@ public class God {
     private int[] gambleChoices;
     private int[] cardNumList;
     private int[] playerWinList;
-
-
-    enum GameState{ INIT,MAINGAME }
+    private int[] energyList;
+    private int[] healthPointList;
+    private int[] locationList;
+    private int[] elementList;
+    private int[] teamList;
+    enum GameState{ INIT,MAINGAME,END }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
     enum PhaseState{ PREPARE, GAMBLE, ACTION }
     private PhaseState phaseState = PhaseState.PREPARE;
+
     public String request(int sid,String msg) {
         int playerIndex = 0;
         for(int i = 0;i < playerNum; i++){
@@ -44,7 +50,7 @@ public class God {
         switch(gameState) {
             case INIT:
                 if(playerState[playerIndex] == 0) {
-                    result = GodHelper.toInit(allUserInfo, "Choose hero", heroList);
+                    result = GodHelper.toInit(allUserInfo, "Choose hero",playerIndex, heroList);
                     playerState[playerIndex] += 1;
                 } else if(playerState[playerIndex] == 1) {
                     heroChoose(sid, msg);
@@ -113,7 +119,7 @@ public class God {
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             result = GodHelper.toChooseGamble("win judge",playerHandCard);
                         }
-                        if(playerState[playerIndex] == 1){
+                        else if(playerState[playerIndex] == 1){
                             winJudge();
                             for(int i = 0;i < playerNum;i++) {
                                 if(allPlayers[i].isWin)
@@ -121,10 +127,68 @@ public class God {
                             }
                             playerState[playerIndex] = 0;
                             phaseState = PhaseState.ACTION;
-                            result = GodHelper.toWinJudge("ACTION",gambleChoices,cardNumList,playerWinList);
+                            result = GodHelper.toWinJudge("ACTION: deposit account",gambleChoices,cardNumList,playerWinList);
                         }
                         break;
                     case ACTION:
+                        if(playerState[playerIndex] == 0){
+                            depositAccount();
+                            result = GodHelper.toDepositAccount("skills account",energyList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 1){
+                            skillsAccount();
+                            result = GodHelper.toSkillsAccount("fire account");
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 2){
+                            fireAccount();
+                            result = GodHelper.toFireAccount("move account",healthPointList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 3){
+                            moveAccount();
+                            result = GodHelper.toMoveAccount("element account",locationList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 4){
+                            elemAccount();
+                            result = GodHelper.toElemAccount("if human wins",elementList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 5){
+                            humanVictory();
+                            if(humanWin) {
+                                result = GodHelper.toHumanVictory("Game Over, Human wins");
+                                playerState[playerIndex] = 0;
+                                gameState = GameState.END;
+                            }
+                            else {
+                                result = GodHelper.toHumanVictory("infection account");
+                                playerState[playerIndex] += 1;
+                            }
+                        }
+                        else if(playerState[playerIndex] == 6){
+                            infectionAccount();
+                            if(zombieWin){
+                                result = GodHelper.toInfectionAccount("Game Over, zombie wins",teamList);
+                                playerState[playerIndex] = 0;
+                                gameState = GameState.END;
+                            }
+                            else {
+                                result = GodHelper.toInfectionAccount("desert account", teamList);
+                                playerState[playerIndex] += 1;
+                            }
+                        }
+                        else if(playerState[playerIndex] == 7){
+                            desertAccount(playerIndex,msg);
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toDesertAccount("PREPARE: choose decision",allPlayers[playerIndex].energy,playerHandCard)
+                            phaseState = PhaseState.PREPARE;
+                            playerState[playerIndex] = 0;
+                        }
                         break;
                 }
                 break;
@@ -214,6 +278,7 @@ public class God {
                 allPlayers[i].preLoc = map.poisoner_init;
         }
     }
+
     // functions for GAMBLE stage
     private void featureChoose(String msg,Player playerMain){
         MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
@@ -289,57 +354,86 @@ public class God {
             }
         }
     }
+
     // functions for ACTION stage
     private void depositAccount(){
-        for(int i = 0;i < playerNum; i++){
-            PlayerChecker.energyConsume(allPlayers[i],allPlayers[i].energyConsume);
-            if(allPlayers[i].isWin)
-                PlayerChecker.energyAcq(allPlayers[i],allPlayers[i].gambleNum);
+        for(int i = 0;i < playerNum;i++) {
+            PlayerChecker.energyConsume(allPlayers[i], allPlayers[i].energyConsume);
+            if (allPlayers[i].isWin)
+                PlayerChecker.energyAcq(allPlayers[i], allPlayers[i].gambleNum);
+            energyList[i] = allPlayers[i].energy;
         }
     }
     private void skillsAccount(){}     //TODO:skills
     private void fireAccount(){
-        for(int i = 0;i < playerNum;i++){
-            if(allPlayers[i].stratDecision == GambleChecker.FIRE){
-                PlayerChecker.fire(map,allPlayers[i],allPlayers[allPlayers[i].fireTarget]);
-            }
+        for(int i = 0;i < playerNum;i++) {
+            if (allPlayers[i].stratDecision == GambleChecker.FIRE)
+                PlayerChecker.fire(map, allPlayers[i], allPlayers[allPlayers[i].fireTarget]);
+            healthPointList[i] = allPlayers[i].healthPoint;
         }
     }
     private void moveAccount(){
-        for(int i = 0;i < playerNum;i++){
-            if(allPlayers[i].stratDecision == GambleChecker.MOVE)
-                allPlayers[i].preLoc = MapChecker.tryMove(map,allPlayers[i].preLoc,allPlayers[i].moveDirection,allPlayers[i].energyConsume);
+        for(int i = 0;i < playerNum;i ++) {
+            if (allPlayers[i].stratDecision == GambleChecker.MOVE)
+                allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
+            locationList[i] = allPlayers[i].preLoc;
         }
     }
     private void elemAccount(){
         for(int i = 0;i < playerNum;i++){
-            if(map.units[allPlayers[i].preLoc].status == 2)
+            if (map.units[allPlayers[i].preLoc].status == 2)
+            {
                 allPlayers[i].hasElem = true;
+                elementList[i] = 1;
+            }
             //TODO: a player got element, he should obtain scores
         }
     }
     private void humanVictory(){
-//        for(int i = 0;i < playerNum;i++){
-//            if(allPlayers[i].preLoc == map.fighter_evacuate) {
-//                humanWin = true;
-//                //TODO: a player arrived at evacuate spot, he should obtain scores
-//            }
-//        }
-    }
-    private void infectedVictory(){
         for(int i = 0;i < playerNum;i++) {
-            for (int j = 0; j < playerNum; j++){
-                PlayerChecker.infection(map,allPlayers[i],allPlayers[j]);
+            if (allPlayers[i].preLoc == map.fighter_evacuate) {
+                humanWin = true;
+                //TODO: a player arrived at evacuate spot, he should obtain scores
+            }
+        }
+    }
+    private void infectionAccount(){
+        for(int i = 0;i < playerNum;i++) {
+            for(int j = 0;j < playerNum;j++) {
+                PlayerChecker.infection(map, allPlayers[i], allPlayers[j]);
                 //TODO: one player infected another,he should obtain scores
             }
         }
+        for(int i = 0;i < playerNum;i++)
+            teamList[i] = allPlayers[i].team;
         Boolean flag = true;
         for(int i = 0;i < playerNum;i++){
             if(allPlayers[i].team == Player.HUMAN)
                 flag = false;
         }
-        if(flag == true)
+        if(flag)
             zombieWin = true;
+    }
+    private int desert_count = 0;
+    private void desertAccount(int playerIndex,String msg){
+        MsgDesertAccount msgDesertAccount = GodHelper.getDesertAccount(msg);
+        synchronized (this){
+            desert_count += 1;
+            GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,msgDesertAccount.desertCardList());
+            if(allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
+                allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
+            if(desert_count < playerNum){
+                while(desert_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else{
+                this.notifyAll();
+            }
+        }
     }
 
     public void initialPlayer(int[] playerSID)  {
@@ -357,47 +451,23 @@ public class God {
         gambleChoices = new int[playerNum];
         cardNumList = new int[playerNum];
         playerWinList = new int[playerNum];
+        energyList = new int[playerNum];
+        healthPointList = new int[playerNum];
+        locationList = new int[playerNum];
+        elementList = new int[playerNum];
+        teamList = new int[playerNum];
 
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
             allPlayers[i].handCardsNum = 0;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
-            allPlayers[i].cardsDesertNum = 0;
-            allPlayers[i].cardsDesertList = new int[4];
             playerState[i] = 0;
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
             else allPlayers[i].user_info = user.get();
             allUserInfo[i] = new UserInfo(i,allPlayers[i].user_info.nickname());
         }
-        /*
-        // TODO: get the playersCharacterChoice from 前端
-        int[] playersCharacterChoice=new int[playerNum];
-        // begin
-        // 这段要写怎么从前端搞过来，我下面随便写的
-        for (int i = 0; i < playerNum; i++){
-            playersCharacterChoice[i] = System.in.read();
-        }
-        // end
-
-        this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
-        this.initialPlayerPos(playerNum, allPlayers, );
-        */
-        /*
-        private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
-
-            for(int i = 0; i < playerNum; i++){
-                // TODO: 从player里面例化出来character，然后赋值
-                //begin
-                allPlayers[i].healthPoint = Player.character[playersCharacterChoice].healthPoint;
-                allPlayers[i].mot = Player.character[playersCharacterChoice].mot;
-                allPlayers[i].firePow = Player.character[playersCharacterChoice].firePow;
-                allPlayers[i].range = Player.character[playersCharacterChoice].range;
-                //end
-            }
-        }
-        */
     }
 
     /*

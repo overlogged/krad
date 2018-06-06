@@ -32,7 +32,7 @@ public class GambleCheckerTest {
 
         frontEndData.players[0].gamble = Player.PAPER;
         frontEndData.players[1].gamble = Player.SCISSORS;
-        frontEndData.players[2].gamble = Player.STONE;
+        frontEndData.players[2].gamble = Player.ROCK;
         frontEndData.players[3].gamble = Player.SCISSORS;
     }
 
@@ -63,7 +63,7 @@ public class GambleCheckerTest {
         assert cardType[0] == 0 : "NOTHING CARD ERROR";
         assert cardType[1] == 4 * playerNum : "PAPER CARD ERROR";
         assert cardType[2] == 4 * playerNum : "SCISSORS CARD ERROR";
-        assert cardType[3] == 4 * playerNum : "STONE CARD ERROR";
+        assert cardType[3] == 4 * playerNum : "ROCK CARD ERROR";
         assert cardType[4] == 12 * playerNum : "MOVE CARD ERROR";
         assert cardType[5] == 8 * playerNum : "FIRE CARD ERROR";
         assert cardType[6] == 8 * playerNum : "SKILLS CARD ERROR";
@@ -85,7 +85,7 @@ public class GambleCheckerTest {
         assert cardType[0] == 0 : "NOTHING CARD ERROR";
         assert cardType[1] == 4 * playerNum : "PAPER CARD ERROR";
         assert cardType[2] == 4 * playerNum : "SCISSORS CARD ERROR";
-        assert cardType[3] == 4 * playerNum : "STONE CARD ERROR";
+        assert cardType[3] == 4 * playerNum : "ROCK CARD ERROR";
         assert cardType[4] == 12 * playerNum : "MOVE CARD ERROR";
         assert cardType[5] == 8 * playerNum : "FIRE CARD ERROR";
         assert cardType[6] == 8 * playerNum : "SKILLS CARD ERROR";
