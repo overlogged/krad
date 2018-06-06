@@ -5,8 +5,12 @@ function request(msg,callback) {
     url: "/api/game",
     type: "POST",
     contentType: 'application/json',
-    data: JSON.stringify({'sid':sid,'msg':JSON.stringify(msg)}),
-    success: callback,
+    data: JSON.stringify({'sid':parseInt(sid),'msg':JSON.stringify(msg)}),
+    success: function(data,status){
+      log(data);
+      state = data.state;
+      callback(data,status);
+    },
     error: function (data, status) {
       console.log(data);
     }
@@ -15,10 +19,11 @@ function request(msg,callback) {
 
 function log(x){
   console.log(x);
-  $("#console").innerHTML = $("#console").innerHTML + "\n" + x;
+  $("#console").html($("#console").html()+"<br></br>"+x);
 }
 
 $("#restart").click(function(){
+  $("#console").html("console:");
   $.ajax({
     url: "/api/restart",
     type: "POST",
@@ -31,10 +36,42 @@ $("#restart").click(function(){
 // for continuation.js
 arguments = {}
 
-var state="init";
-$("#submit").click(function(){
-  request({},cont(data,status));
-  log(data);
+var state="Init";
+$("#ok").click(function(){
+  var arg0 = $("#arg0").val();
+  var arg1 = $("#arg0").val();
+  var arg2 = $("#arg0").val();
+  var arg3 = $("#arg0").val();
+  var arg4 = $("#arg0").val();
+  var arg5 = $("#arg0").val();
+  
+  var req = {};
+
+  if(state=="Init"){
+  }else if(state=="Choose hero"){
+    req = {
+      hero:"hero"
+    };
+  }else if(state=="Start game"){
+  }else if(state=="choose strategy decision"){
+    req = {
+      decision: parseInt(arg0)
+    }
+  }else if(state=="choose the feature of the decision"){
+    req = {
+      moveDirection: parseInt(arg0),
+      fireTarget: parseInt(arg1)
+    }
+  }else if(state=="choose seen card"){
+    req = {
+      seenCard: parseInt(arg0)
+    }
+  }else if(state=="GAMBLE:choose gamble"){
+    req = {
+      gambleCard:[parseInt(arg0)]
+    }
+  }
+  request(req,cont(data,status));
 });
 
 
