@@ -8,8 +8,9 @@ public class MapGenerator {
     static void map1() {
         int number = 23;
         Map map = new Map(number);
-        map.poisoner_init = 1;
-        map.fighter_init = 5;
+        map.poisoner_init = 0;
+        map.fighter_init = 4;
+        map.fighter_evacuate = 0;
 
         for (int i = 0; i < map.units.length; i++) {
             int edge_number;
