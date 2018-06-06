@@ -111,15 +111,22 @@ public class God {
                         }
                         break;
                     case GAMBLE:
+                        if(playerState[playerIndex] == 0) {
                             gambleChoose(msg,allPlayers[playerIndex],playerIndex);
+                            playerState[playerIndex] += 1;
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toChooseGamble("win judge",playerHandCard)
+                        }
+                        if(playerState[playerIndex] == 1){
+                            winJudge();
                             for(int i = 0;i < playerNum;i++) {
                                 if(allPlayers[i].isWin)
                                     playerWinList[i] = 1;
                             }
-                        int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
-                        for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
-                            playerHandCard[i] = allPlayers[playerIndex].handCards[i];
-                            result = GodHelper.toChooseGamble("ACTION",gambleChoices,cardNumList,playerWinList,playerHandCard);
+                            result = GodHelper.toWinJudge("ACTION",gambleChoices,cardNumList,playerWinList);
+                        }
                         break;
                     case ACTION:
                         break;
@@ -205,9 +212,9 @@ public class God {
     private void mapInit(){
         for(int i = 0;i < playerNum;i++){
             if(allPlayers[i].team == Player.HUMAN)
-                allPlayers[i].preLoc = map.units[5];
+                allPlayers[i].preLoc = map.units[4];
             else if(allPlayers[i].team == Player.ZOMBIE)
-                allPlayers[i].preLoc = map.units[1];
+                allPlayers[i].preLoc = map.units[0];
         }
     }
     private void featureChoose(String msg,Player playerMain){
@@ -241,26 +248,29 @@ public class God {
             }
         }
     }
-    private Integer gamble_count = 0;
     private void gambleChoose(String msg, Player playerMain,int playerIndex){
         MsgChooseGamble msgChooseGamble = GodHelper.getChooseGamble(msg);
         int[] gambleChoose = new int[msgChooseGamble.gambleCard().length];
         for(int i = 0;i < msgChooseGamble.gambleCard().length;i++)
             gambleChoose[i] = msgChooseGamble.gambleCard()[i];
+        if(!playerMain.isSeenCard) {
+            playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
+            playerMain.gambleNum = gambleChoose.length;
+            for(int i = 0;i < playerMain.gambleNum;i++) {
+                GambleChecker.cardToHeap(cardHeap,playerMain.handCards[ playerMain.handCards[gambleChoose[i]] ]);
+                playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
+                GambleChecker.cardSort(playerMain.handCards);
+                playerMain.handCardsNum -= 1;
+            }
+            gambleChoices[playerIndex] = playerMain.gamble;
+            cardNumList[playerIndex] = playerMain.gambleNum;
+        }
+    }
+
+    private Integer gamble_count = 0;
+    private void winJudge(){
         synchronized (this){
             gamble_count += 1;
-            if(!playerMain.isSeenCard) {
-                playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
-                playerMain.gambleNum = gambleChoose.length;
-                for(int i = 0;i < playerMain.gambleNum;i++) {
-                    GambleChecker.cardToHeap(cardHeap,playerMain.handCards[ playerMain.handCards[gambleChoose[i]] ]);
-                    playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
-                    GambleChecker.cardSort(playerMain.handCards);
-                    playerMain.handCardsNum -= 1;
-                }
-                gambleChoices[playerIndex] = playerMain.gamble;
-                cardNumList[playerIndex] = playerMain.gambleNum;
-            }
             if(gamble_count < playerNum){
                 while(gamble_count < playerNum){
                     try{
@@ -269,8 +279,7 @@ public class God {
                         ex.printStackTrace();
                     }
                 }
-            }
-            else{
+            }else{
                 GambleChecker.winJudge(playerNum,allPlayers);
                 this.notifyAll();
             }

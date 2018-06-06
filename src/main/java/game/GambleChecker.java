@@ -142,8 +142,10 @@ public class GambleChecker {
                     continue;
                 players[i].isWin = win(players[i], players[j]);
                 if (players[i].isWin) {
-                    if (players[i].energy < players[i].healthPoint)
+                    if (players[i].energy + players[i].gambleNum < players[i].healthPoint)
                         players[i].energy += players[i].gambleNum;
+                    else
+                        players[i].energy = players[i].healthPoint;
                     break;
                 }
             }

@@ -41,7 +41,8 @@ object GodHelper extends MyJsonProtocol{
   /*
    * gambleCard is the gamble choice that one player chooses to use
    */
-  case class ResChooseGamble(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],handCards:Array[Int])
+  case class ResChooseGamble(state:String,handCards:Array[Int])
+  case class ResWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int])
   /*
    * gambleChoices tell what gamble choice players choose
    * cardNumList tell how many card they choose to use
@@ -93,8 +94,12 @@ object GodHelper extends MyJsonProtocol{
     str.parseJson.convertTo[MsgChooseGamble]
   }
 
-  def toChooseGamble(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],handCards:Array[Int]):String = {
-    ResChooseGamble(state,gambleChoices,cardNumList,playerWinList,handCards).toJson.toString()
+  def toChooseGamble(state:String,handCards:Array[Int]):String = {
+    ResChooseGamble(state,handCards).toJson.toString()
+  }
+
+  def toWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int]):String = {
+    ResWinJudge(state,gambleChoices,cardNumList,playerWinList).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())
