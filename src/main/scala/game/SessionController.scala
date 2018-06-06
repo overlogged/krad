@@ -64,9 +64,13 @@ object SessionController {
   }
 
   def test(): Unit = {
-    val god = new God()
-    god.initialPlayer(Array(0))
-    states += (0->SessionState(StatePlaying,god))
+    for(arr<-Seq(Array(0),Array(1,2),Array(3,4,5,6))){
+      val god = new God
+      god.initialPlayer(arr)
+      for(x<-arr){
+        states += (x->SessionState(StatePlaying,god))
+      }
+    }
   }
 
   // api for http server

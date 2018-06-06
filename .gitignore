@@ -7,3 +7,6 @@ log.txt
 deploy/
 .DS_Store
 .vs/
+.classpath
+.project
+.settings/

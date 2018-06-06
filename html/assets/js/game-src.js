@@ -1,6 +1,6 @@
-var sid = 0
-
 function request(msg,callback) {
+  var sid = $("#sid").val();
+  console.log(sid);
   $.ajax({
     url: "/api/game",
     type: "POST",
@@ -12,10 +12,15 @@ function request(msg,callback) {
     }
   });
 }
+
+function log(x){
+  console.log(x);
+  $("#console").innerHTML = $("#console").innerHTML + "\n" + x;
+}
+
 // for continuation.js
 arguments = {}
 
 // choose hero
 request({},cont(data,status));
-
-console.log(data);
+log(data);

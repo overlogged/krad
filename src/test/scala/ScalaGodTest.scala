@@ -66,7 +66,10 @@ object ScalaGodTest extends MyJsonProtocol{
         """{"moveDirection":-1,"fireTarget":-1}"""
         ))
         println(sid,god.request(sid,
-          """{"seenCard":0}"""
+          """{"seenCard":2}"""
+        ))
+        println(sid,god.request(sid,
+        """{"gambleCard":[0]}"""
         ))
       }
     for(f<-fs) {
