@@ -2,19 +2,13 @@ package game;
 
 import java.util.TreeMap;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import game.GodHelper.*;
 import scala.Option;
 import scala.concurrent.java8.FuturesConvertersImpl;
 
 public class God {
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // class: store all Player
-    // function initialPlayerCharacter: 1. get the choice of players from initialPlayer
-    //                                  2. set the value of character value
-    // function initialPlayerCharacter: 1. get the default birth unit from map
-    //                                  2. set the value of position
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private int playerNum;          // how many people to play the game
     private Player[] allPlayers;    // preserve the state of players
     private boolean humanWin;       // whether human team wins
@@ -125,6 +119,8 @@ public class God {
                                 if(allPlayers[i].isWin)
                                     playerWinList[i] = 1;
                             }
+                            playerState[playerIndex] = 0;
+                            phaseState = PhaseState.ACTION;
                             result = GodHelper.toWinJudge("ACTION",gambleChoices,cardNumList,playerWinList);
                         }
                         break;
@@ -168,6 +164,7 @@ public class God {
         }
     }
 
+    // functions for INIT stage
     private Integer choice_count = 0;
     private void heroChoose(int sid,String msg){
         int playerIndex;
@@ -212,18 +209,26 @@ public class God {
     private void mapInit(){
         for(int i = 0;i < playerNum;i++){
             if(allPlayers[i].team == Player.HUMAN)
-                allPlayers[i].preLoc = map.units[4];
+                allPlayers[i].preLoc = map.fighter_init;
             else if(allPlayers[i].team == Player.ZOMBIE)
-                allPlayers[i].preLoc = map.units[0];
+                allPlayers[i].preLoc = map.poisoner_init;
         }
     }
+    // functions for GAMBLE stage
     private void featureChoose(String msg,Player playerMain){
         MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
         int decision = playerMain.stratDecision;
-        if(decision == GambleChecker.MOVE)
+        if(decision == GambleChecker.MOVE) {
             playerMain.moveDirection = decisionFeature.moveDirection();
-        else if(decision == GambleChecker.FIRE)
+            playerMain.energyConsume = Math.min(playerMain.energy,playerMain.mot);
+        }
+        else if(decision == GambleChecker.FIRE) {
             playerMain.fireTarget = decisionFeature.fireTarget();
+            playerMain.energyConsume = Math.min(playerMain.energy,playerMain.firePow);
+        }
+        else if(decision == GambleChecker.DEPOSIT){
+            playerMain.energyConsume = 0;
+        }
     }
     private Integer seen_card_count = 0;
     private void seenCard(int playerIndex,String msg,Player playerMain){
@@ -233,7 +238,7 @@ public class God {
             if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
                 playerMain.gamble = msgSeenCard.seenCard();
                 playerMain.isSeenCard = true;
-                seenCardChoices[playerIndex] = 1;
+                seenCardChoices[playerIndex] = msgSeenCard.seenCard();
             }
             if(seen_card_count < playerNum){
                 while(seen_card_count < playerNum){
@@ -266,7 +271,6 @@ public class God {
             cardNumList[playerIndex] = playerMain.gambleNum;
         }
     }
-
     private Integer gamble_count = 0;
     private void winJudge(){
         synchronized (this){
@@ -284,6 +288,58 @@ public class God {
                 this.notifyAll();
             }
         }
+    }
+    // functions for ACTION stage
+    private void depositAccount(){
+        for(int i = 0;i < playerNum; i++){
+            PlayerChecker.energyConsume(allPlayers[i],allPlayers[i].energyConsume);
+            if(allPlayers[i].isWin)
+                PlayerChecker.energyAcq(allPlayers[i],allPlayers[i].gambleNum);
+        }
+    }
+    private void skillsAccount(){}     //TODO:skills
+    private void fireAccount(){
+        for(int i = 0;i < playerNum;i++){
+            if(allPlayers[i].stratDecision == GambleChecker.FIRE){
+                PlayerChecker.fire(map,allPlayers[i],allPlayers[allPlayers[i].fireTarget]);
+            }
+        }
+    }
+    private void moveAccount(){
+        for(int i = 0;i < playerNum;i++){
+            if(allPlayers[i].stratDecision == GambleChecker.MOVE)
+                allPlayers[i].preLoc = MapChecker.tryMove(map,allPlayers[i].preLoc,allPlayers[i].moveDirection,allPlayers[i].energyConsume);
+        }
+    }
+    private void elemAccount(){
+        for(int i = 0;i < playerNum;i++){
+            if(map.units[allPlayers[i].preLoc].status == 2)
+                allPlayers[i].hasElem = true;
+            //TODO: a player got element, he should obtain scores
+        }
+    }
+    private void humanVictory(){
+//        for(int i = 0;i < playerNum;i++){
+//            if(allPlayers[i].preLoc == map.fighter_evacuate) {
+//                humanWin = true;
+//                //TODO: a player arrived at evacuate spot, he should obtain scores
+//            }
+//        }
+    }
+    private void infectedVictory(){
+        for(int i = 0;i < playerNum;i++) {
+            for (int j = 0; j < playerNum; j++){
+                PlayerChecker.infection(map,allPlayers[i],allPlayers[j]);
+                //TODO: one player infected another,he should obtain scores
+            }
+        }
+        Boolean flag = true;
+        for(int i = 0;i < playerNum;i++){
+            if(allPlayers[i].team == Player.HUMAN)
+                flag = false;
+        }
+        if(flag == true)
+            zombieWin = true;
     }
 
     public void initialPlayer(int[] playerSID)  {

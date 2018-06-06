@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Map {
     MapUnit[] units;                 // Means obj array of mapunit
-    int fighter_init;               // Store the first location of finghter
+    int fighter_init;                // Store the first location of fighter
     int poisoner_init;               // Store the first location of poisoner
 
     Map(int number) {                 // Create a obj array

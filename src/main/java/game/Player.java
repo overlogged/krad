@@ -46,10 +46,10 @@ public class Player {
     int stratDecision = -1;
     int skillsDecision;
     boolean isSeenCard = false;
-    boolean isWin = false;            /*
-                                       * victory or defeat in one turn
-                                       * this variable should be set as false each turn ends
-                                       */
+    boolean isWin = false;             /*
+                                        * victory or defeat in one turn
+                                        * this variable should be set as false each turn ends
+                                        */
 
     //properties about cards
     int handCardsNum = 0;
@@ -58,10 +58,11 @@ public class Player {
     int[] cardsDesertList;              //if there is no card to desert, then the element is -1
 
     //properties about location
-    MapUnit preLoc;                     //present location
+    int preLoc;                         //present location: the index of the mapUnit
     boolean hasElem;                    //if the player maintains the element
 
     //properties about action
+    int energyConsume;                  // energy that should be used when accounting
     int moveDirection;
     int fireTarget;
 }

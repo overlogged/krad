@@ -26,10 +26,12 @@
       var game = new Phaser.Game(780, 899, Phaser.CANVAS, 'gamecontainer', {
        preload: function () {
         game.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
-        game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
-        game.load.image('fighter1','assets/img/gamewindow/fighter2.png');
-        game.load.image('fighter2','assets/img/gamewindow/fighter1.png');
-        game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+        game.load.image('fighter1','assets/img/gamewindow/fighter1.png');
+        game.load.image('fighter2','assets/img/gamewindow/fighter2.png');
+        game.load.image('fighter3','assets/img/gamewindow/fighter3.png');
+        game.load.image('poisoner1','assets/img/gamewindow/poisoner1.png');
+        game.load.image('poisoner2','assets/img/gamewindow/poisoner2.png');
+        game.load.image('poisoner3','assets/img/gamewindow/poisoner3.png');
       },
 
       create: function () {
@@ -76,7 +78,7 @@
       var x = player[people].body.x;
       var y = player[people].body.y;
       player[people].kill();
-      player[people] = game.add.sprite(x, y, 'fighter2');
+      player[people] = game.add.sprite(x, y, 'poisoner1');
       player[people].anchor.x=0.5;
       player[people].anchor.y=0.5;
       game.physics.p2.enable(player[people]);
@@ -89,7 +91,6 @@
          player[i].anchor.y=0.5;
          game.physics.p2.enable(player[i]);
          player[i].body.fixedRotation = true;
-         player[i].body.embedded = true;
       }
     }
 </script>
