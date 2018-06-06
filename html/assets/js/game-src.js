@@ -22,6 +22,8 @@ function log(x){
   $("#console").html($("#console").html()+"<br></br>"+x);
 }
 
+function do_nothing(){}
+
 $("#restart").click(function(){
   $("#console").html("console:");
   $.ajax({
@@ -71,7 +73,7 @@ $("#ok").click(function(){
       gambleCard:[parseInt(arg0)]
     }
   }
-  request(req,cont(data,status));
+  request(req,do_nothing);
 });
 
 
