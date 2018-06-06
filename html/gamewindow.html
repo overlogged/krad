@@ -17,7 +17,7 @@
     <div id="gamecontainer"></div>
     <div id="cardcontainer"></div>
   <script>
-      var player_num=4;
+      var player_num=3;
       var player = new Array();
       var map = [{x:410,y:10},{x:410,y:60},{x:410,y:120},{x:410,y:180},{x:410,y:240},{x:410,y:290},{x:410,y:345},{x:340,y:420},
       {x:435,y:480},{x:456,y:535},{x:474,y:595},{x:490,y:650},{x:515,y:710},{x:540,y:765},{x:568,y:820},
@@ -29,9 +29,11 @@
         game.load.image('fighter1','assets/img/gamewindow/fighter1.png');
         game.load.image('fighter2','assets/img/gamewindow/fighter2.png');
         game.load.image('fighter3','assets/img/gamewindow/fighter3.png');
+        game.load.image('fighter4','assets/img/gamewindow/fighter4.png');
         game.load.image('poisoner1','assets/img/gamewindow/poisoner1.png');
         game.load.image('poisoner2','assets/img/gamewindow/poisoner2.png');
         game.load.image('poisoner3','assets/img/gamewindow/poisoner3.png');
+        game.load.image('poisoner4','assets/img/gamewindow/poisoner4.png');
       },
 
       create: function () {
@@ -70,23 +72,22 @@
     function do_move(){
       mark=7;
       people=0;
-      player[people].body.x=map[mark].x;
+      player[people].body.x=map[mark].x+people*20+(4-player_num)*10;
       player[people].body.y=map[mark].y;
     }
     function do_poison(people){
-      people=0;
+      people=2;
       var x = player[people].body.x;
       var y = player[people].body.y;
       player[people].kill();
-      player[people] = game.add.sprite(x, y, 'poisoner1');
+      player[people] = game.add.sprite(x, y, 'poisoner'+(people+1).toString());
       player[people].anchor.x=0.5;
       player[people].anchor.y=0.5;
       game.physics.p2.enable(player[people]);
-      game.world.setChildIndex(player[people],1);
     }
     function do_init(init_location){
       for(var i=0;i<player_num;i++){
-         player[i] = game.add.sprite(map[init_location].x+20*i,map[init_location].y,'fighter1');
+         player[i] = game.add.sprite(map[init_location].x+i*20+(4-player_num)*10,map[init_location].y,'fighter'+ (i+1).toString());
          player[i].anchor.x=0.5;
          player[i].anchor.y=0.5;
          game.physics.p2.enable(player[i]);
