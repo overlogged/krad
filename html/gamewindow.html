@@ -9,8 +9,8 @@
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
   <style>
-       #gamecontainer{ height:400px; width: 800px; margin: 0px 0px ;  outline: 1px solid rgb(11, 206, 212); overflow: auto;}
-       #cardcontainer{ height:50px; width: 600px; margin: 0px 0px  ; outline: 0px solid rgb(11, 206, 212); overflow: auto ;}
+       #gamecontainer{ height:400px; width: 800px; margin: 0px 0px ;  outline: 0px solid rgb(11, 206, 212); overflow: auto;}
+       #cardcontainer{ height:300px; width: 800px; margin: 0px 0px  ; outline: 0px solid rgb(11, 206, 212); overflow: auto ;}
 </style>
 </head>
 <body>
@@ -18,7 +18,10 @@
     <div id="cardcontainer"></div>
   <script>
       var player_num=3;
+      var arrow = new Array();
       var player = new Array();
+      var p_choose =new Array();
+      var arrow_sum = [1,1,0,1,1,1,0,1];
       var map = [{x:410,y:10},{x:410,y:60},{x:410,y:120},{x:410,y:180},{x:410,y:240},{x:410,y:290},{x:410,y:345},{x:340,y:420},
       {x:435,y:480},{x:456,y:535},{x:474,y:595},{x:490,y:650},{x:515,y:710},{x:540,y:765},{x:568,y:820},
       {x:350,y:865},{x:143,y:820},{x:164,y:765},{x:185,y:710},{x:202,y:650},{x:227,y:595},{x:248,y:535},{x:269,y:480}];
@@ -55,9 +58,10 @@
       }
       });
 
-    var card = new Phaser.Game(600, 50, Phaser.CANVAS, 'cardcontainer',{
+    var card = new Phaser.Game(780, 400, Phaser.CANVAS, 'cardcontainer',{
       preload: function () {
         card.load.image('cardbackground','assets/img/inputbox1.png');
+        card.load.spritesheet('arrow','assets/img/gamewindow/arrow.png',90,36);
         card.load.spritesheet('button','assets/buttons/button1.png',100,34);
       },
       create: function () {
@@ -65,8 +69,8 @@
         cardbackground.smoothed = true;
         cardbackground.height = card.height;
         cardbackground.width = card.width;
-    var movebutton = card.add.button(0,0 , 'button', do_poison ,this, 1, 0, 2, 0);
-    var movebutton = card.add.button(100,0 , 'button', do_move ,this, 1, 0, 2, 0);
+        do_chooseplayer();
+        do_arrowupadate();
       },
     });
     function do_move(){
@@ -92,6 +96,19 @@
          player[i].anchor.y=0.5;
          game.physics.p2.enable(player[i]);
          player[i].body.fixedRotation = true;
+      }
+    }
+    function do_arrowupadate(){
+        for(var i =0 ;i<8;i++){
+            arrow[i]=card.add.button(700,250,'arrow',do_move,this,1,2,0,0);
+            arrow[i].anchor.x=0;
+            arrow[i].anchor.y=0.5;
+            arrow[i].angle = -45*(3-i);
+        }
+    }
+    function do_chooseplayer(){
+      for(var i=0;i<4;i++){
+         p_choose[i] = card.add.button(500+i*60, 350, 'button', do_move, this, 1, 0, 2, 0);
       }
     }
 </script>
