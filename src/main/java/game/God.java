@@ -190,6 +190,15 @@ public class God {
                             result = GodHelper.toDesertAccount("PREPARE: choose decision",allPlayers[playerIndex].energy,playerHandCard);
                             phaseState = PhaseState.PREPARE;
                             playerState[playerIndex] = 0;
+                            // reset all temp variables
+                            for(int i = 0;i < playerNum;i++){
+                                availableFireTarget[i] = 0;
+                                decisionChoices[i] = 7;
+                                seenCardChoices[i] = 0;
+                                gambleChoices[i] = GambleChecker.PAPER;
+                                cardNumList[i] = 0;
+                                playerWinList[i] = 0;
+                            }
                         }
                         break;
                 }
