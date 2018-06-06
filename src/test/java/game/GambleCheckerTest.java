@@ -16,9 +16,9 @@ public class GambleCheckerTest {
 
         frontEndData.players[0].healthPoint = 10;
         frontEndData.players[0].handCards = new int[40 * frontEndData.playerNum];
-        frontEndData.players[0].cardsDesertList = new int[40 * frontEndData.playerNum];
-        for(int i = 0;i < frontEndData.players[0].cardsDesertList.length;i++)
-            frontEndData.players[0].cardsDesertList[i] = -1;
+//        frontEndData.players[0].cardsDesertList = new int[40 * frontEndData.playerNum];
+//        for(int i = 0;i < frontEndData.players[0].cardsDesertList.length;i++)
+//            frontEndData.players[0].cardsDesertList[i] = -1;
 
         frontEndData.players[0].energy = 10;
         frontEndData.players[1].energy = 9;
@@ -133,21 +133,21 @@ public class GambleCheckerTest {
         assert j == totalCardHeap - cardNum : "HEAP NUMBER ERROR";
         assert playerMain.handCardsNum == cardNum : "HAND CARD NUMBER ERROR";
         System.out.println();
-        playerMain.cardsDesertNum = playerMain.handCardsNum - playerMain.healthPoint;
-        System.out.println(playerMain.handCards[10]);
-        System.out.println(playerMain.handCards[11]);
-        System.out.println();
-        playerMain.cardsDesertList[0] = 10;
-        playerMain.cardsDesertList[1] = 11;
-        GambleChecker.cardDesert(playerMain,cardHeap);
-        assert playerMain.handCardsNum == cardNum - playerMain.cardsDesertNum : "HAND CARD AFTER DESERT ERROR";
+//        playerMain.cardsDesertNum = playerMain.handCardsNum - playerMain.healthPoint;
+//        System.out.println(playerMain.handCards[10]);
+//        System.out.println(playerMain.handCards[11]);
+//        System.out.println();
+//        playerMain.cardsDesertList[0] = 10;
+//        playerMain.cardsDesertList[1] = 11;
+//        GambleChecker.cardDesert(playerMain,cardHeap);
+//        assert playerMain.handCardsNum == cardNum - playerMain.cardsDesertNum : "HAND CARD AFTER DESERT ERROR";
         for(i = 0;i < playerMain.handCardsNum;i++)
             System.out.println(playerMain.handCards[i]);
         for(i = 0,j = 0;i < cardHeap.length;i++){
             if(cardHeap[i] != 0)
                 j++;
         }
-        assert j == totalCardHeap - cardNum + playerMain.cardsDesertNum : "HEAP CARD NUMBER AFTER DESERT ERROR";
+//        assert j == totalCardHeap - cardNum + playerMain.cardsDesertNum : "HEAP CARD NUMBER AFTER DESERT ERROR";
     }
 
     public static void main(String argv[]){
