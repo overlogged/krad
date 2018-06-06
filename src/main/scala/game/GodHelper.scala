@@ -17,11 +17,17 @@ object GodHelper extends MyJsonProtocol{
    * if a player does not choose anything, then decision is -1
    */
 
-  case class ResChooseDecision(state:String,handCards:Array[Int])
+  case class ResChooseDecision(state:String,handCards:Array[Int],availableFireTarget:Array[Int],availableMoveDirection:Array[Int])
+  /*
+   * availableFireTarget tells which players can be fired
+   * eg: if(availableFireTarget[i] = 1, it means that allPlayers[i] is in range
+   * availableMoveDirecion is the same
+   */
+
   case class MsgDecisionFeature(moveDirection:Int,fireTarget:Int)
   /*
    * about MsgDecisionFeature
-   * moveDirection is the index of mapUnit that player chose to move towards
+   * moveDirection is the direction of the player chooses (0-7)
    * fireTarget is the index of target player(index in UserInfo) of firing
    * only one variable would be used in God in one turn
    */
@@ -79,8 +85,8 @@ object GodHelper extends MyJsonProtocol{
     str.parseJson.convertTo[MsgChooseDecision]
   }
 
-  def toChooseDecision(state:String,handCards:Array[Int]):String = {
-    ResChooseDecision(state,handCards).toJson.toString()
+  def toChooseDecision(state:String,handCards:Array[Int],availableFireTarget:Array[Int],availableMoveDirection:Array[Int]):String = {
+    ResChooseDecision(state,handCards,availableFireTarget,availableMoveDirection).toJson.toString()
   }
 
   def getDecisionFeature(str:String):MsgDecisionFeature = {

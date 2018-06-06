@@ -92,11 +92,16 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             //ends
-                            result = GodHelper.toChooseDecision("choose the feature of the decision",playerHandCard);
+                            for(int i = 0; i < playerNum;i++){
+                                if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
+                                    availableFireTarget[i] = 1;
+                            }
+                            toDirection(playerIndex);
+                            result = GodHelper.toChooseDecision("choose the feature of the decision",playerHandCard,availableFireTarget,availableMoveDirection);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
-                            featureChoose(msg,allPlayers[playerIndex]);
+                            featureChoose(msg,allPlayers[playerIndex],playerIndex);
                             playerState[playerIndex] += 1;
                             result = GodHelper.toDecisionFeature("choose seen card");
                         }
@@ -279,9 +284,10 @@ public class God {
     }
 
     // functions for GAMBLE stage
-    private void featureChoose(String msg,Player playerMain){
+    private void featureChoose(String msg,Player playerMain,int playerIndex){
         MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
         int decision = playerMain.stratDecision;
+        int direction = toLoc(playerIndex,decisionFeature.moveDirection());
         if(decision == GambleChecker.MOVE) {
             playerMain.moveDirection = decisionFeature.moveDirection();
             playerMain.energyConsume = Math.min(playerMain.energy,playerMain.mot);
@@ -351,6 +357,76 @@ public class God {
                 GambleChecker.winJudge(playerNum,allPlayers);
                 this.notifyAll();
             }
+        }
+    }
+    /* transform between direction and location
+     * dirty functions
+     */
+    private void toDirection(int playerIndex){
+        if(allPlayers[playerIndex].preLoc == 7) {
+            availableMoveDirection[0] = 1;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 1;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 15){
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 1;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 1;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 0){
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else{
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+    }
+    private int toLoc(int playerIndex,int direction){
+        if(allPlayers[playerIndex].preLoc == 7){
+            if(direction == 5)
+                return 6;
+            else if(direction == 0)
+                return 8;
+            else
+                return 22;
+        }
+        else if(allPlayers[playerIndex].preLoc == 15){
+            if(direction == 6)
+                return 14;
+            else
+                return 16;
+        }
+        else if(allPlayers[playerIndex].preLoc == 0){
+            return 1;
+        }
+        else {
+            if(direction == 1)
+                return allPlayers[playerIndex].preLoc++;
+            else
+                return allPlayers[playerIndex].preLoc--;
         }
     }
 
@@ -455,6 +531,8 @@ public class God {
         locationList = new int[playerNum];
         elementList = new int[playerNum];
         teamList = new int[playerNum];
+        availableFireTarget = new int[playerNum];
+        availableMoveDirection = new int[8];
 
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();

@@ -28,7 +28,7 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val ResInitFormat = jsonFormat4(ResInit)
   implicit val ResCardDistributeFormat = jsonFormat2(ResCardDistribute)
   implicit val MsgChooseDecisionFormat = jsonFormat1(MsgChooseDecision)
-  implicit val ResChooseDecisionFormat = jsonFormat2(ResChooseDecision)
+  implicit val ResChooseDecisionFormat = jsonFormat4(ResChooseDecision)
   implicit val MsgDecisionFeatureFormat = jsonFormat2(MsgDecisionFeature)
   implicit val ResDecisionFeatureFormat = jsonFormat1(ResDecisionFeature)
   implicit val MsgSeenCardFormat = jsonFormat1(MsgSeenCard)
