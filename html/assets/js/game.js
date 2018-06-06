@@ -8,6 +8,7 @@ function request(msg,callback) {
     success: function(str,status){
       var data = JSON.parse(str);
       log(str);
+      log(state);
       state = data.state;
       callback(data,status);
     },
