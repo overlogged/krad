@@ -117,7 +117,7 @@ public class God {
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
-                            result = GodHelper.toChooseGamble("win judge",playerHandCard)
+                            result = GodHelper.toChooseGamble("win judge",playerHandCard);
                         }
                         if(playerState[playerIndex] == 1){
                             winJudge();
