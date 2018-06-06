@@ -90,20 +90,21 @@ public class God {
                                 GambleChecker.cardSort(allPlayers[playerIndex].handCards);
                                 allPlayers[playerIndex].handCardsNum -= 1;
                             }
-                            //ends
+                            decisionChoices[playerIndex] = allPlayers[playerIndex].stratDecision;
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            //ends
                             result = GodHelper.toChooseDecision("choose the feature of the decision",playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
-                            featureChoose(sid,msg,allPlayers[playerIndex]);
+                            featureChoose(msg,allPlayers[playerIndex]);
                             playerState[playerIndex] += 1;
                             result = GodHelper.toDecisionFeature("choose seen card");
                         }
                         else if(playerState[playerIndex] == 3){
-                            seenCard(sid,msg,allPlayers[playerIndex]);
+                            seenCard(playerIndex,msg,allPlayers[playerIndex]);
                             result = GodHelper.toSeenCard("GAMBLE:choose gamble",decisionChoices,seenCardChoices);
                             phaseState = PhaseState.GAMBLE;
                             playerState[playerIndex] = 0;
@@ -209,7 +210,7 @@ public class God {
                 allPlayers[i].preLoc = map.units[1];
         }
     }
-    private void featureChoose(int sid,String msg,Player playerMain){
+    private void featureChoose(String msg,Player playerMain){
         MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
         int decision = playerMain.stratDecision;
         if(decision == GambleChecker.MOVE)
@@ -218,13 +219,14 @@ public class God {
             playerMain.fireTarget = decisionFeature.fireTarget();
     }
     private Integer seen_card_count = 0;
-    private void seenCard(int sid,String msg,Player playerMain){
+    private void seenCard(int playerIndex,String msg,Player playerMain){
         MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
         synchronized (this){
             seen_card_count += 1;
             if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
                 playerMain.gamble = msgSeenCard.seenCard();
                 playerMain.isSeenCard = true;
+                seenCardChoices[playerIndex] = 1;
             }
             if(seen_card_count < playerNum){
                 while(seen_card_count < playerNum){
@@ -242,19 +244,22 @@ public class God {
     private Integer gamble_count = 0;
     private void gambleChoose(String msg, Player playerMain,int playerIndex){
         MsgChooseGamble msgChooseGamble = GodHelper.getChooseGamble(msg);
+        int[] gambleChoose = new int[msgChooseGamble.gambleCard().length];
+        for(int i = 0;i < msgChooseGamble.gambleCard().length;i++)
+            gambleChoose[i] = msgChooseGamble.gambleCard()[i];
         synchronized (this){
             gamble_count += 1;
             if(!playerMain.isSeenCard) {
-                playerMain.gamble = playerMain.handCards[msgChooseGamble.gambleCard()];
-                playerMain.gambleNum = msgChooseGamble.cardNum();
-                for(int i = 0;i < msgChooseGamble.cardNum();i++) {
-                    GambleChecker.cardToHeap(cardHeap,playerMain.handCards[msgChooseGamble.gambleCard()]);
-                    playerMain.handCards[msgChooseGamble.gambleCard()] = GambleChecker.NOTHING;
+                playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
+                playerMain.gambleNum = gambleChoose.length;
+                for(int i = 0;i < playerMain.gambleNum;i++) {
+                    GambleChecker.cardToHeap(cardHeap,playerMain.handCards[ playerMain.handCards[gambleChoose[i]] ]);
+                    playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
                     GambleChecker.cardSort(playerMain.handCards);
                     playerMain.handCardsNum -= 1;
                 }
-                gambleChoices[playerIndex] = playerMain.handCards[msgChooseGamble.gambleCard()];
-                cardNumList[playerIndex] = msgChooseGamble.cardNum();
+                gambleChoices[playerIndex] = playerMain.gamble;
+                cardNumList[playerIndex] = playerMain.gambleNum;
             }
             if(gamble_count < playerNum){
                 while(gamble_count < playerNum){

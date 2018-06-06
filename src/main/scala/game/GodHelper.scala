@@ -37,10 +37,9 @@ object GodHelper extends MyJsonProtocol{
    */
 
   case class ResSeenCard(state:String,decisionChoices:Array[Int],seenCardChoices:Array[Int])
-  case class MsgChooseGamble(gambleCard:Int,cardNum:Int)
+  case class MsgChooseGamble(gambleCard:Array[Int])
   /*
-   * gambleCard tells the index of gamble card the player use in this turn
-   * cardNum tells how many cards this player choose to use in this turn
+   * gambleCard is the gamble choice that one player chooses to use
    */
   case class ResChooseGamble(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],handCards:Array[Int])
   /*
