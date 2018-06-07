@@ -383,10 +383,6 @@
       }
     }
 
-    function do_checkcard() { //function for checkbutton
-      alert('sending completed');
-    }
-
     function do_handcardslot() {
       for (slots = 0; slots <= 17; slots++) { //create handcard slots
         if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard,
@@ -424,6 +420,26 @@
       }
     }
 
+    function do_checkcard() {     // function for checkbutton
+      alert('sending completed');
+    }
+
+    var phaseState = "Main";
+    var playerState = "0.0";
+    function do_init(){
+      // init
+      request({},function(data_init0){
+        request({hero:"hero"},function(data_init1){
+          request({},function(data_main_0_0){
+            console.log("data_init0",data_init0);
+            console.log("data_init1",data_init1);
+            console.log("data_main_0_0",data_main_0_0);
+            playerState = "0.1";
+          });
+        });
+      });
+    }
+
     function do_decision(strategy) {
       req = {
         decision: strategy
@@ -454,9 +470,8 @@
       }
     }
 
-
     function request(msg, callback) {
-      var sid = $("#sid").val();
+      var sid = 0;    // todo: remove
       $.ajax({
         url: "/api/game",
         type: "POST",
@@ -469,7 +484,7 @@
           var data = JSON.parse(str);
           console.log(str);
           console.log(data.state);
-          callback(data, status);
+          if(callback) callback(data, status);
         },
 
         error: function (data, status) {
