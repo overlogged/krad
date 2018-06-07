@@ -19,11 +19,11 @@ var state_userinterface = {
     game.add.bitmapText(215, 60, 'chiller', user.stats.score.toString(), 54);
 
 
-    game.add.button(340, 70, 'button', go_changepw, this, 1, 0, 2, 0);
-    game.add.bitmapText(360, 70, 'chiller', 'password', 28);
+    game.add.button(380, 70, 'button', go_changepw, this, 1, 0, 2, 0);
+    game.add.bitmapText(400, 70, 'chiller', 'password', 28);
 
-    game.add.button(340, 30, 'button', go_changeprofile, this, 1, 0, 2, 0);
-    game.add.bitmapText(360, 30, 'chiller', 'profile', 28);
+    game.add.button(380, 30, 'button', go_changeprofile, this, 1, 0, 2, 0);
+    game.add.bitmapText(400, 30, 'chiller', 'profile', 28);
 
     game.add.button(150, 100, 'start', do_match, this);
     game.add.button(-150, 200, 'help', go_help, this);

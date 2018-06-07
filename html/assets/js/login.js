@@ -20,8 +20,8 @@ var state_login = {
       game.add.button(450, 320, 'button', do_login, this, 1, 0, 2, 0);
       game.add.bitmapText(475, 322, 'chiller', 'Log In', 28);
 
-      game.add.button(615, 260, 'button', go_forget, this, 1, 0, 2, 0);
-      game.add.bitmapText(630, 265, 'chiller', 'forget', 28);
+      game.add.button(580, 260, 'button', go_forget, this, 1, 0, 2, 0);
+      game.add.bitmapText(600, 265, 'chiller', 'forget', 28);
       show("login");
   }
 }
