@@ -47,13 +47,13 @@ public class God {
         switch(gameState) {
             case INIT:
                 if(playerState[playerIndex] == 0) {
-                    result = GodHelper.toInit(allUserInfo, "Choose hero",playerIndex, heroList);
+                    result = GodHelper.toInit(allUserInfo, "choose hero",playerIndex, heroList);
                     playerState[playerIndex] += 1;
                 } else if(playerState[playerIndex] == 1) {
                     heroChoose(sid, msg);
                     gameState = GameState.MAINGAME;
                     playerState[playerIndex] = 0;
-                    result = GodHelper.toChooseHero("Start game", heroChoices, teamResult);
+                    result = GodHelper.toChooseHero("start game", heroChoices, teamResult);
                 }
                 break;
             case MAINGAME:
@@ -72,7 +72,12 @@ public class God {
                             }
                             if(isSeenCard)
                                 allPlayers[playerIndex].isSeenCard = true;
-                            result = GodHelper.toCardDistribute("choose strategy decision", playerHandCard);
+                            for(int i = 0; i < playerNum;i++){
+                                if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
+                                    availableFireTarget[i] = 1;
+                            }
+                            toDirection(playerIndex);
+                            result = GodHelper.toCardDistribute("choose strategy decision", playerHandCard,availableFireTarget,availableMoveDirection);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 1){
@@ -88,24 +93,15 @@ public class God {
                                 allPlayers[playerIndex].handCardsNum -= 1;
                             }
                             decisionChoices[playerIndex] = allPlayers[playerIndex].stratDecision;
+                            featureChoose(msg,allPlayers[playerIndex],playerIndex);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             //ends
-                            for(int i = 0; i < playerNum;i++){
-                                if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
-                                    availableFireTarget[i] = 1;
-                            }
-                            toDirection(playerIndex);
-                            result = GodHelper.toChooseDecision("choose the feature of the decision",playerHandCard,availableFireTarget,availableMoveDirection);
+                            result = GodHelper.toChooseDecision("choose seen card",playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
-                            featureChoose(msg,allPlayers[playerIndex],playerIndex);
-                            playerState[playerIndex] += 1;
-                            result = GodHelper.toDecisionFeature("choose seen card");
-                        }
-                        else if(playerState[playerIndex] == 3){
                             seenCard(playerIndex,msg,allPlayers[playerIndex]);
                             result = GodHelper.toSeenCard("GAMBLE:choose gamble",decisionChoices,seenCardChoices);
                             phaseState = PhaseState.GAMBLE;
@@ -161,7 +157,7 @@ public class God {
                         else if(playerState[playerIndex] == 5){
                             humanVictory();
                             if(humanWin) {
-                                result = GodHelper.toHumanVictory("Game Over, Human wins");
+                                result = GodHelper.toHumanVictory("Game Over, human wins");
                                 playerState[playerIndex] = 0;
                                 gameState = GameState.END;
                             }
@@ -294,7 +290,7 @@ public class God {
 
     // functions for GAMBLE stage
     private void featureChoose(String msg,Player playerMain,int playerIndex){
-        MsgDecisionFeature decisionFeature = GodHelper.getDecisionFeature(msg);
+        MsgChooseDecision decisionFeature = GodHelper.getChooseDecision(msg);
         int decision = playerMain.stratDecision;
         int direction = toLoc(playerIndex,decisionFeature.moveDirection());
         if(decision == GambleChecker.MOVE) {
@@ -316,6 +312,7 @@ public class God {
             seen_card_count += 1;
             if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
                 playerMain.gamble = msgSeenCard.seenCard();
+                playerMain.gambleNum = 1;
                 playerMain.isSeenCard = true;
                 seenCardChoices[playerIndex] = msgSeenCard.seenCard();
             }
@@ -346,9 +343,9 @@ public class God {
                 GambleChecker.cardSort(playerMain.handCards);
                 playerMain.handCardsNum -= 1;
             }
-            gambleChoices[playerIndex] = playerMain.gamble;
-            cardNumList[playerIndex] = playerMain.gambleNum;
         }
+        gambleChoices[playerIndex] = playerMain.gamble;
+        cardNumList[playerIndex] = playerMain.gambleNum;
     }
     private Integer gamble_count = 0;
     private void winJudge(){
@@ -373,18 +370,8 @@ public class God {
      */
     private void toDirection(int playerIndex){
         if(allPlayers[playerIndex].preLoc == 7) {
-            availableMoveDirection[0] = 1;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 1;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 1;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        }
-        else if(allPlayers[playerIndex].preLoc == 15){
             availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
+            availableMoveDirection[1] = 1;
             availableMoveDirection[2] = 0;
             availableMoveDirection[3] = 0;
             availableMoveDirection[4] = 1;
@@ -392,13 +379,23 @@ public class God {
             availableMoveDirection[6] = 1;
             availableMoveDirection[7] = 0;
         }
-        else if(allPlayers[playerIndex].preLoc == 0){
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 1;
-            availableMoveDirection[2] = 0;
+        else if(allPlayers[playerIndex].preLoc == 15){
+            availableMoveDirection[0] = 1;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 1;
             availableMoveDirection[3] = 0;
             availableMoveDirection[4] = 0;
             availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 0){
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
             availableMoveDirection[6] = 0;
             availableMoveDirection[7] = 0;
         }

@@ -56,10 +56,7 @@ object ScalaGodTest extends MyJsonProtocol{
         ))
         println(sid,god.request(sid,""))
         println(sid,god.request(sid,
-          """{"decision":0}"""
-        ))
-        println(sid,god.request(sid,
-        """{"moveDirection":-1,"fireTarget":-1}"""
+          """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
         ))
         println(sid,god.request(sid,
           """{"seenCard":2}"""
@@ -67,6 +64,12 @@ object ScalaGodTest extends MyJsonProtocol{
         println(sid,god.request(sid,
         """{"gambleCard":[0]}"""
         ))
+        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,""))
       }
     for(f<-fs) {
       f onComplete println
