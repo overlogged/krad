@@ -63,7 +63,6 @@ public class PlayerChecker{
                     playerPas.hasElem = false;
                     playerPas.firePow = 0;
                     playerPas.range = 0;
-                    playerPas.healthPoint = 0;
                     return true;
                 }
             }
