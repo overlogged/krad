@@ -48,9 +48,7 @@ function do_match() {
     data: JSON.stringify(req),
     success: function (data, status) {
       console.log(data);
-      console.log(data.sid);
-      console.log(data.user);
-      window.location.href="gamewindow.html?sid="+data.sid;  
+      window.location.href="gamewindow.html?sid="+sid;  
     },
     error: function (data, status) {
       alert("匹配失败");

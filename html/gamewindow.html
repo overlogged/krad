@@ -200,30 +200,8 @@
       var j;
       staticlock();
       for (i = 0; i <= 17; i++) {
-        switch (cardlist[i]) {
-          case 0:
-            j = 'blank';
-            break;
-          case 1:
-            j = 'paper';
-            break;
-          case 2:
-            j = 'scissors';
-            break;
-          case 3:
-            j = 'rock';
-            break;
-          case 4:
-            j = 'move';
-            break;
-          case 5:
-            j = 'shoot';
-            break;
-          case 6:
-            j = 'skill';
-            break;
-        }
-        j = 'handcard_' + j;
+        var lookup_table = ['blank','paper','scissors','rock','move','shoot','skill'];
+        j = 'handcard_' + lookup_table[cardlist[i]];
         handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
         if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
         else handcardslot[i].setFrames(1, 0, 0, 0);
@@ -424,8 +402,10 @@
       alert('sending completed');
     }
 
-    var phaseState = "Main";
-    var playerState = "0.0";
+    var phase_state = "Main";
+    var player_state = "0.0";
+    var player_index = 0;
+    var team_result = [];
     function do_init(){
       // init
       request({},function(data_init0){
@@ -434,7 +414,9 @@
             console.log("data_init0",data_init0);
             console.log("data_init1",data_init1);
             console.log("data_main_0_0",data_main_0_0);
-            playerState = "0.1";
+            player_state = "0.1";
+            player_index = data_init0.index;
+            team_result = data_init1.team_result;
           });
         });
       });
@@ -481,8 +463,8 @@
           'msg': JSON.stringify(msg)
         }),
         success: function (str, status) {
-          var data = JSON.parse(str);
           console.log(str);
+          var data = JSON.parse(str);
           console.log(data.state);
           if(callback) callback(data, status);
         },
@@ -492,6 +474,9 @@
         }
       });
     }
+
+    do_init();
+  
   </script>
 </body>
 
