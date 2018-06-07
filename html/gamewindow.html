@@ -21,7 +21,7 @@
       var arrow = new Array();
       var player = new Array();
       var p_choose =new Array();
-      var arrow_union = [1,1,0,1,1,1,0,1];
+      var arrow_union = [1,1,1,0,1,1,1,0];
       var map = [{x:410,y:10},{x:410,y:60},{x:410,y:130},{x:410,y:180},{x:410,y:240},{x:410,y:290},{x:410,y:345},{x:340,y:420},
       {x:435,y:480},{x:456,y:535},{x:474,y:595},{x:490,y:650},{x:515,y:710},{x:540,y:765},{x:568,y:820},
       {x:350,y:865},{x:143,y:820},{x:164,y:765},{x:185,y:710},{x:202,y:650},{x:227,y:595},{x:248,y:535},{x:269,y:480}];
@@ -59,18 +59,22 @@
       });
 
 
+      var handcardslot = new Array();
       var cardlist = new Array();
-        var cardpressed = new Array();
-        var staticinvalidcard = new Array();
-        var dynamicinvalidcard = new Array();
-        var a;
-        for (a = 0; a <= 17; a++) {
-            cardpressed[a] = 0;
-            staticinvalidcard[a] = 1;
-            dynamicinvalidcard[a] = 0;
-            cardlist[a] = 0;
-        }
-        cardlist = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5]; 
+      var cardtargeted = new Array();
+      var staticinvalidcard = new Array();
+      var dynamicinvalidcard = new Array();
+      var act;
+      var san = 0;//how many cards was chosen
+      var pedometer = 1;//0 - test stage; 1 - prepare stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+      var slots;
+      for (act = 0; act <= 17; act++) {
+          cardtargeted[act] = 0;
+          staticinvalidcard[act] = 1;
+          dynamicinvalidcard[act] = 0;
+          cardlist[act] = 0;
+      }
+      cardlist = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 0, 0, 0];;
 
 
 
@@ -91,14 +95,73 @@
 
       },
       create: function () {
-       var i;
-       var san = 0;//how many cards was chosen
-       var pedometer=2;//0 - test stage; 1 - prepare stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
-       
-    function checkcard() {
-        alert('sending completed');
+          var background = card.add.sprite(0, 0, 'gamebackground');
+          var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
+          do_handcardslot();
+          refreshcard();
+         // do_arrowgenerate(arrow_union);
+         // do_chooseplayer();
+      }
+    });
+
+    function refreshcard() {
+        var i;
+        var j;
+        staticlock();
+        for (i = 0; i <= 17; i++) {
+            switch (cardlist[i]) {
+                case 0:
+                    j = 'blank';
+                    break;
+                case 1:
+                    j = 'paper';
+                    break;
+                case 2:
+                    j = 'scissors';
+                    break;
+                case 3:
+                    j = 'rock';
+                    break;
+                case 4:
+                    j = 'move';
+                    break;
+                case 5:
+                    j = 'shoot';
+                    break;
+                case 6:
+                    j = 'skill';
+                    break;
+            }
+            j = 'handcard_' + j;
+            handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
+            if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+            else handcardslot[i].setFrames(1, 0, 0, 0);
+        }
     }
-    function staticinvalidchoice() {
+
+    function targetcard(button) {
+        var num;
+        if (button.y == 130) num = (button.x - 10) / 45 + 9;//emmmmmm try to locate the button
+        else num = (button.x - 10) / 45;
+        if (staticinvalidcard[num]);//is it a locked button?
+        else if (cardtargeted[num]) {//a button is about to be untargeted
+            cardtargeted[num] = 0;
+            button.setFrames(1, 0, 0, 0);
+            san--;
+            if (san == 0) dynamicunlock(num);
+            if (pedometer == 1) steerTGP(0, cardlist[num]);
+        }
+        else {//a button is about to be targeted
+            cardtargeted[num] = 1;
+            button.setFrames(1, 1, 1, 1);
+            san++;
+            dynamiclock(num);
+            if (pedometer == 1) steerTGP(1, cardlist[num]);
+        }
+    }
+
+    function staticlock() {//some static rules for which card cannot be targeted  
+        var i;
         switch (pedometer) {
             case 0:
                 break;
@@ -146,7 +209,8 @@
                 }
         }
     }
-    function dynamiclock(targeter) {
+
+    function dynamiclock(targeter) {//some rules for which cards cannot be targeted at the same time
         var j;
         switch (pedometer) {
             case 1:
@@ -169,6 +233,7 @@
                 break;
         }
     }
+
     function dynamicunlock(targeter) {
         var j;
         for (j = 0; j <= 17; j++) {
@@ -179,85 +244,14 @@
             }
         }
     }
-    function targetcard(button) {
-        var num;
-        if (button.y == 270) num = (button.x - 10) / 45 + 9;//emmmmmm try to locate the button
-        else num = (button.x - 10) / 45;
-        if (staticinvalidcard[num]) alert('invalid choice');
-        else if (cardpressed[num]) {
-            cardpressed[num] = 0;
-            button.setFrames(1, 0, 0, 0);
-            san--;
-            if(san==0)dynamicunlock(num);
-        }
-        else {
-            cardpressed[num] = 1;
-            button.setFrames(1, 1, 1, 1);
-            san++;
-            dynamiclock(num);
-        } 
-        
-    }
-    var background = card.add.sprite(0, 0, 'gamebackground');
-    var checkbutton = card.add.button(480, 47.5, 'checkbutton', checkcard, this);
-    var handcardslot = new Array();
-    for (i = 0; i <= 17; i++) {
-        if (i <= 8) handcardslot[i] = card.add.button(10 + 45 * i, 10, 'handcard_blank', targetcard, this, 2, 2, 2, 2);
-        if (i > 8) handcardslot[i] = card.add.button(10 + 45 * (i - 9), 270, 'handcard_blank', targetcard, this, 2, 2, 2, 2);
-    }
-    function refreshcard() {
-        staticinvalidchoice();
-        for (i = 0; i <= 17; i++) {
-            switch (cardlist[i]) {
-                case 0:
-                    handcardslot[i].loadTexture('handcard_blank', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-                case 1:
-                    handcardslot[i].loadTexture('handcard_paper', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-                case 2:
-                    handcardslot[i].loadTexture('handcard_scissors', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-                case 3:
-                    handcardslot[i].loadTexture('handcard_rock', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-                case 4:
-                    handcardslot[i].loadTexture('handcard_move', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-                case 5:
-                    handcardslot[i].loadTexture('handcard_shoot', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-                case 6:
-                    handcardslot[i].loadTexture('handcard_skill', 1 + staticinvalidcard[i]);
-                    if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-                    else handcardslot[i].setFrames(1, 0, 0, 0);
-                    break;
-            }
-        }
-    }
-    refreshcard();
-    do_arrowgenerate(arrow_union);
-    do_chooseplayer();
-}
-});
+
     function do_move(mark){
       //mark=7;
       people=0;
       player[people].body.x=map[mark].x+people*20+(4-player_num)*10;
       player[people].body.y=map[mark].y;
     }
+
     function do_poison(people){
       people=2;
       var x = player[people].body.x;
@@ -268,6 +262,7 @@
       player[people].anchor.y=0.5;
       game.physics.p2.enable(player[people]);
     }
+
     function do_init(init_location){
       for(var i=0;i<player_num;i++){
          player[i] = game.add.sprite(map[init_location].x+i*20+(4-player_num)*10,map[init_location].y,'fighter'+ (i+1).toString());
@@ -276,24 +271,66 @@
          game.physics.p2.enable(player[i]);
          player[i].body.fixedRotation = true;
       }
-    }
-    function do_arrowgenerate(arrow_union){
-        for(var z =0 ;z<8;z++){
-          if(arrow_union[z]!=0){
-            arrow[z]=card.add.button(650,300,'arrow',function(){do_move(2)},this,1,2,0,0);
-            arrow[z].anchor.x=0;
-            arrow[z].anchor.y=0.5;
-            arrow[z].angle = -45*(3-z);
-          }
+      }
+
+    function do_arrowgenerate(arrow_union) {
+        for (var z = 0; z < 8; z++) {
+            if (arrow_union[z] != 0) {
+                arrow[z] = card.add.button(630, 250, 'arrow', function () { do_move(2) }, this, 1, 2, 0, 0);
+                arrow[z].anchor.x = 0;
+                arrow[z].anchor.y = 0.5;
+                arrow[z].angle = -45 * (3 - z);
+            }
         }
     }
-    function do_chooseplayer(){
-      for(var z=0;z<4;z++){
-         p_choose[z] = card.add.button(500+z*60, 400, 'button', do_move, this, 1, 0, 2, 0);
-      }
+
+    function do_chooseplayer() {
+        for (var z = 0; z < 4; z++) {
+            p_choose[z] = card.add.button(500 + z * 60, 200, 'button', do_move, this, 1, 0, 2, 0);
+        }
     }
+
     function do_decision(){
     }
+
+
+    function do_checkcard() {//function for checkbutton
+        alert('sending completed');
+    }
+
+    function do_handcardslot() {
+        for (slots = 0; slots <= 17; slots++) {//create handcard slots
+            if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard, this, 2, 2, 2, 2);
+            if (slots > 8) handcardslot[slots] = card.add.button(10 + 45 * (slots - 9), 130, 'handcard_blank', targetcard, this, 2, 2, 2, 2);
+        }
+    }
+
+    function steerTGP(mode, type) {//check which button will be show,steer or TGP?
+        var j;
+        if (mode) {
+            switch (type) {
+                case 4:
+                    do_arrowgenerate(arrow_union);
+                    break;
+                case 5:
+                    do_chooseplayer();
+                    break;
+            }
+        }
+        else {
+            switch (type) {
+                case 4:
+                    for (j = 0; j < 8; j++) {
+                        if (arrow_union[j] != 0) arrow[j].kill();
+                    }
+                    break;
+                case 5:
+                    for (j = 0; j < 4; j++)p_choose[j].kill();
+                    break;
+            }
+        }
+    }
+
 </script>
 </body>
 
