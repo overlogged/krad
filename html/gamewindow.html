@@ -584,12 +584,19 @@
       }
       else if(state=='ACTION.0.6'){
         // 队伍胜利情况 = data.teamList;
+        team_result = data.teamList;
+        for (var i = 0; i < player_num; i++) {
+          if (team_result[i] == 1) {
+            do_poison(i);
+          }
+        }
         pedometer = 4;
         refreshcard();
       }
       else if(state=='ACTION.0.7'){
         //玩家能量信息= data.energy;
         handcardslot = data.handCards;
+        pedometer = 1;
         refreshcard();
       }
     }
