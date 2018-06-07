@@ -9,30 +9,23 @@ object GodHelper extends MyJsonProtocol{
   case class ResInit(allUserInfo:Array[UserInfo],state:String,myIndex:Int,heroList:Array[String])
   case class MsgChooseHero(hero:String)
   case class ResChooseHero(state:String,heroChoices:Array[String],teamResult:Array[Int])
-  case class ResCardDistribute(state:String,handCards:Array[Int])
-  case class MsgChooseDecision(decision:Int)
-  /*
-   * about MsgChooseDecision
-   * Int decision is the index in card array
-   * if a player does not choose anything, then decision is -1
-   */
-
-  case class ResChooseDecision(state:String,handCards:Array[Int],availableFireTarget:Array[Int],availableMoveDirection:Array[Int])
+  case class ResCardDistribute(state:String,handCards:Array[Int],availableFireTarget:Array[Int],availableMoveDirection:Array[Int])
   /*
    * availableFireTarget tells which players can be fired
    * eg: if(availableFireTarget[i] = 1, it means that allPlayers[i] is in range
    * availableMoveDirecion is the same
    */
 
-  case class MsgDecisionFeature(moveDirection:Int,fireTarget:Int)
+  case class MsgChooseDecision(decision:Int,moveDirection:Int,fireTarget:Int)
   /*
-   * about MsgDecisionFeature
+   * about MsgChooseDecision
+   * Int decision is the index in card array
+   * if a player does not choose anything, then decision is -1
    * moveDirection is the direction of the player chooses (0-7)
    * fireTarget is the index of target player(index in UserInfo) of firing
    * only one variable would be used in God in one turn
    */
-
-  case class ResDecisionFeature(state:String)
+  case class ResChooseDecision(state:String,handCards:Array[Int])
   case class MsgSeenCard(seenCard:Int)
   /*
    * about MsgSeenCard
@@ -77,24 +70,16 @@ object GodHelper extends MyJsonProtocol{
     ResChooseHero(state,heroChoices,teamResult).toJson.toString
   }
 
-  def toCardDistribute(state:String,handCards:Array[Int]):String = {
-    ResCardDistribute(state,handCards).toJson.toString
+  def toCardDistribute(state:String,handCards:Array[Int],availableFireTarget:Array[Int],availableMoveDirection:Array[Int]):String = {
+    ResCardDistribute(state,handCards,availableFireTarget,availableMoveDirection).toJson.toString
   }
 
   def getChooseDecision(str:String):MsgChooseDecision = {
     str.parseJson.convertTo[MsgChooseDecision]
   }
 
-  def toChooseDecision(state:String,handCards:Array[Int],availableFireTarget:Array[Int],availableMoveDirection:Array[Int]):String = {
-    ResChooseDecision(state,handCards,availableFireTarget,availableMoveDirection).toJson.toString()
-  }
-
-  def getDecisionFeature(str:String):MsgDecisionFeature = {
-    str.parseJson.convertTo[MsgDecisionFeature]
-  }
-
-  def toDecisionFeature(state:String):String = {
-    ResDecisionFeature(state).toJson.toString()
+  def toChooseDecision(state:String,handCards:Array[Int]):String = {
+    ResChooseDecision(state,handCards).toJson.toString()
   }
 
   def getSeenCard(str:String):MsgSeenCard = {

@@ -1,6 +1,6 @@
 package common
 
-import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDecisionFeature, MsgDesertAccount, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDecisionFeature, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
+import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDesertAccount, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
@@ -26,11 +26,9 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val ResUserInfoFormat = jsonFormat2(UserInfo)
   implicit val ResChooseHeroFormat = jsonFormat3(ResChooseHero)
   implicit val ResInitFormat = jsonFormat4(ResInit)
-  implicit val ResCardDistributeFormat = jsonFormat2(ResCardDistribute)
-  implicit val MsgChooseDecisionFormat = jsonFormat1(MsgChooseDecision)
-  implicit val ResChooseDecisionFormat = jsonFormat4(ResChooseDecision)
-  implicit val MsgDecisionFeatureFormat = jsonFormat2(MsgDecisionFeature)
-  implicit val ResDecisionFeatureFormat = jsonFormat1(ResDecisionFeature)
+  implicit val ResCardDistributeFormat = jsonFormat4(ResCardDistribute)
+  implicit val MsgChooseDecisionFormat = jsonFormat3(MsgChooseDecision)
+  implicit val ResChooseDecisionFormat = jsonFormat2(ResChooseDecision)
   implicit val MsgSeenCardFormat = jsonFormat1(MsgSeenCard)
   implicit val ResSeenCardFormat = jsonFormat3(ResSeenCard)
   implicit val MsgChooseGambleFormat = jsonFormat1(MsgChooseGamble)
