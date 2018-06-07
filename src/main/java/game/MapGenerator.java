@@ -1,11 +1,11 @@
 package game;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import server.Server;
+
+import java.io.PrintWriter;
 
 public class MapGenerator {
-    static void map1() {
+    public static void map1() {
         int number = 23;
         Map map = new Map(number);
         map.poisoner_init = 0;
@@ -62,15 +62,13 @@ public class MapGenerator {
         map.toFile("map/1.map");
     }
 
-    static void map1_test() {
-        Map X = new Map("map/1.map");
-        assert (X.units[7].edge[2].adjedg==22);
-        assert (X.units[10].rank==3);
-        assert (MapChecker.outDistance(X.units[3],X.units[8])==-1);
-    }
-
-    public static void main(String[] args) {
-        map1();
-        map1_test();
+    public static void generate(){
+        try{
+            java.lang.Runtime rt = java.lang.Runtime.getRuntime();
+            java.lang.Process p = rt.exec("mkdir -p map");
+            map1();
+        }catch (Exception ex){
+            ex.printStackTrace(new PrintWriter(Server.log_file()));
+        }
     }
 }
