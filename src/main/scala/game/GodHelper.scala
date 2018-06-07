@@ -118,8 +118,8 @@ object GodHelper extends MyJsonProtocol{
     ResMoveAccount(state,locationList).toJson.toString()
   }
 
-  def toElemAccount(state:String,elementList:Array[Int]):String = {
-    ResMoveAccount(state,elementList).toJson.toString()
+  def toElemAccount(state:String,elemList:Array[Int]):String = {
+    ResMoveAccount(state,elemList).toJson.toString()
   }
 
   def toHumanVictory(state:String):String = {

@@ -138,6 +138,8 @@ public class GambleChecker {
                 if (players[i].team == players[j].team)
                     continue;
                 players[i].isWin = win(players[i], players[j]);
+                if(players[i].isWin)
+                    break;
             }
         }
     }

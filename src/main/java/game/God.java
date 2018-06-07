@@ -472,7 +472,7 @@ public class God {
     }
     private void humanVictory(){
         for(int i = 0;i < playerNum;i++) {
-            if (allPlayers[i].preLoc == map.fighter_evacuate) {
+            if ((allPlayers[i].preLoc == map.fighter_evacuate)&(allPlayers[i].hasElem)) {
                 humanWin = true;
                 //TODO: a player arrived at evacuate spot, he should obtain scores
             }
