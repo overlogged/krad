@@ -153,13 +153,14 @@
     });
 
     var handcardslot = [];
+    var seencardslot = [];
     var cardlist = [];
     var cardtargeted = [];
     var staticinvalidcard = [];
     var dynamicinvalidcard = [];
     var act;
-    var san = 0; //how many cards was chosen
-    var pedometer = 1; //0 - test stage; 1 - prepare stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var san; //how many cards was chosen
+    var pedometer = 0; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
@@ -187,19 +188,43 @@
         card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 105, 250);
         card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png');
         card.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+        card.load.spritesheet('seen', 'assets/buttons/button.png', 100, 26);
 
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
         var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
+        var seenbutton = card.add.button()
         do_handcardslot();
         refreshcard();
       }
     });
 
+    function do_seencardslot() {
+      var j;
+      for (j = 0; j <= 3; j++) {
+        seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0)
+      }
+    }
+
+    function checkseencard(button) {
+      var j;
+      var num;
+      num = (button.x - 100) / 150;
+      num = 3 - num;
+      do_seencard(num);
+      for (j = 0; j <= 3; j++) seencardslot[j].kill();
+    }
+
     function refreshcard() {
       var i;
       var j;
+      san = 0;
+      for (i = 0; i <= 17; i++) {
+        cardtargeted[j] = 0;
+        staticinvalidcard[j] = 0;
+        dynamicinvalidcard[j] = 0;
+      }
       staticlock();
       for (i = 0; i <= 17; i++) {
         var lookup_table = ['blank', 'paper', 'scissors', 'rock', 'move', 'shoot', 'skill'];
@@ -208,6 +233,7 @@
         if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
         else handcardslot[i].setFrames(1, 0, 0, 0);
       }
+      if (pedometer == 5) do_seencardslot();
     }
 
     function targetcard(button) {
@@ -270,6 +296,7 @@
           }
           break;
         case 3:
+        case 5:
           for (i = 0; i <= 17; i++) staticinvalidcard[i] = 1;
           break;
         case 4:
@@ -397,6 +424,37 @@
       }
     }
 
+    function do_checkcard() { // function for checkbutton
+      //alert('sending completed');
+      var j;
+      switch (pedometer) {
+        case 1:
+          for (j = 0; j <= 17; j++) {
+            if (cardtargeted[j]) {
+              do_decision(j);
+            }
+            break;
+          }
+          break;
+        case 2:
+          for (j = 0; j <= 17; j++) {
+            if (cardtargeted[j]) {
+              san--;
+              do_gamblecard;
+            }
+            if (san == 0) break;
+          }
+        case 4:
+          for (j = 0; j <= 17; j++) {
+            if (cardtargeted[j]) {
+              san--;
+              do_dessert;
+            }
+            if (san == 0) break;
+          }
+      }
+    }
+
     var phase_state = "Main";
     var player_state = "0.0";
     var player_index = 0;
@@ -486,6 +544,10 @@ moveDirection: direction,
       req = {
         gambleCard: rank
       }
+    }
+
+    function do_dessert() {
+
     }
 
     function request(msg, callback) {

@@ -25,8 +25,8 @@ var state_userinterface = {
     game.add.button(380, 30, 'button', go_changeprofile, this, 1, 0, 2, 0);
     game.add.bitmapText(400, 30, 'chiller', 'profile', 28);
 
-    game.add.button(150, 100, 'start', do_match, this);
-    game.add.button(-150, 200, 'help', go_help, this);
+    game.add.button(250, 210, 'start', do_match, this);
+    game.add.button(50, 400, 'help', go_help, this);
     show("userinterface");
   }
 }
