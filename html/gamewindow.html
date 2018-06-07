@@ -161,7 +161,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 1; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 0; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
     var p_decision=10;
     for (act = 0; act <= 17; act++) {
@@ -457,41 +457,40 @@
           }
       }
 
-      if (state == 'INIT.0') {
-      }
-      else if (state == 'INT.1') {
-        req={
-          heroChoices: string=['water']
-        }
-      }
-      else if (state == 'MAINGAME.0.0') {
-      }
-      else if (state == 'MAINGAME.0.1') {
-
-      }
-      else if (state == 'MAINGAME.0.3') {
-      }
-      else if (state=='MAINGAME.1.0'){
-      }
-      else if (state =='MAINGAME.1.1'){
-      }
-      else if(state=='ACTION.0.0'){
-      }
-      else if(state=='ACTION.0.1'){
-
-      }
-      else if(state=='ACTION.0.2'){
-      }
-      else if(state=='ACTION.0.3'){
-      }
-      else if(state=='ACTION.0.4'){
-      }
-      else if(state='ACTION.0.5'){
-      }
-      else if(state=='ACTION.0.6'){
-      }
-      else if(state=='ACTION.0.7'){
-      }
+      if (state == "Init") {
+        state="choose hero";
+     }
+     else if (state == "choose hero") {
+       req = {
+         hero: "fire"
+       }
+     }
+     else if (state == "start game") {
+     }
+     else if (state == "choose strategy decision") {
+     }            
+     else if (state == "choose seen card") {
+     }
+     else if (state=="GAMBLE:choose gamble"){
+     }
+     else if (state =="win judge"){
+     }
+     else if(state=="ACTION: deposit account"){
+     }
+     else if(state=="skills account"){
+     }
+     else if(state=="fire account"){
+     }
+     else if(state=="move account"){
+     }
+     else if(state=="element account"){
+     }
+     else if(state="judge win"){
+     }
+     else if(state=="Game if over"){
+     }
+     else if(state=="desert account"){
+     }
       request(req,callback);
     }
 
@@ -499,7 +498,7 @@
     var player_state = "0.0";
     var player_index = 0;
     var team_result = [];
-    var state;
+    var state="Init";
     function do_init() {
       // init
       request({}, function (data_init0) {
@@ -520,10 +519,10 @@
 
 
     function do_callback(data, status) {
-      if (state == 'INIT.0') {
-
+      if (state == "Init") {
+         state="choose hero";
       }
-      else if (state == 'INT.1') {
+      else if (state == "choose hero") {
         player_num = data.teamResult.length;
         team_result = data.teamResult;
         do_initplayer(4);
@@ -535,54 +534,65 @@
             player[i].body.y = map[0].y;
           }
         }
+        state="start game";
       }
-      else if (state == 'MAINGAME.0.0') {
+      else if (state == "start game") {
         arrow_union = data.availableMoveDirection;
         handcardslot = data.handCards;
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
+        state = "choose strategy decision";
       }
-      else if (state == 'MAINGAME.0.1') {
+      else if (state == "choose strategy decision") {
        handcardslot = data.handCards;
        pedometer = 5;
        refreshcard();
-      }                  //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
-      else if (state == 'MAINGAME.0.3') {
+       state = "choose seen card";
+      }            
+      else if (state == "choose seen card") {
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
         pedometer = 2;
         refreshcard();
+        state = "GAMBLE:choose gamble";
       }
-      else if (state=='MAINGAME.1.0'){
+      else if (state=="GAMBLE:choose gamble"){
         handcardslot = data.handCards;
         pedometer = 3;
         refreshcard();
+        state = "win judge";
       }
-      else if (state =='MAINGAME.1.1'){
+      else if (state =="win judge"){
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
+        state="ACTION: deposit account";
       }
-      else if(state=='ACTION.0.0'){
+      else if(state=="ACTION: deposit account"){
         //剩余的能量点数  = data.eneregyList;
+        state = "skills account";
       }
-      else if(state=='ACTION.0.1'){
-
+      else if(state=="skills account"){
+        state = "fire account";
       }
-      else if(state=='ACTION.0.2'){
+      else if(state=="fire account"){
         // 剩余的生命值 = data.healthPointList;
+        state = "move account";
       }
-      else if(state=='ACTION.0.3'){
+      else if(state=="move account"){
          playerloc_union = data.locationList;
+         state = "element account";
       }
-      else if(state=='ACTION.0.4'){
+      else if(state=="element account"){
         // 所有人的要素情况 = data.elemList;
+        state = "judge win";
       }
-      else if(state='ACTION.0.5'){
+      else if(state="judge win"){
         // 返回字符串判断谁胜利
+        state = "Game if over";
       }
-      else if(state=='ACTION.0.6'){
+      else if(state=="Game if over"){
         // 队伍胜利情况 = data.teamList;
         team_result = data.teamList;
         for (var i = 0; i < player_num; i++) {
@@ -592,12 +602,14 @@
         }
         pedometer = 4;
         refreshcard();
+        state = "desert account";
       }
-      else if(state=='ACTION.0.7'){
+      else if(state=="desert account"){
         //玩家能量信息= data.energy;
         handcardslot = data.handCards;
         pedometer = 1;
         refreshcard();
+        state = "choose strategy decision";
       }
     }
 
@@ -646,7 +658,6 @@
           var data = JSON.parse(str);
           console.log(data.state);
           if (callback) callback(data, status);
-          state = data.state;
         },
 
         error: function (data, status) {
