@@ -35,7 +35,7 @@
     var url = window.location.href;
     var sid = parseInt(url.split("?sid=")[1]);
     console.log("sid:", sid);
-
+    var state="Init";
     var player_num = 3;
     var arrow = [];
     var player = [];
@@ -498,7 +498,6 @@
     var player_state = "0.0";
     var player_index = 0;
     var team_result = [];
-    var state="Init";
     function do_init() {
       // init
       request({}, function (data_init0) {
