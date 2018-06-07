@@ -271,6 +271,10 @@ public class God {
     private void teamDivide(){
         int zombie = (int)( Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
+        allPlayers[zombie].energy = 0;
+        allPlayers[zombie].hasElem = false;
+        allPlayers[zombie].firePow = 0;
+        allPlayers[zombie].range = 0;
         teamResult[zombie] = Player.ZOMBIE;
         for(int i = 0;i < allPlayers.length;i++){
             if(i != zombie) {
@@ -546,6 +550,13 @@ public class God {
             allPlayers[i].handCardsNum = 0;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             playerState[i] = 0;
+
+//            allPlayers[i].healthPoint = 10;
+//            allPlayers[i].range = 10;
+//            allPlayers[i].energy = 4;
+//            allPlayers[i].mot = 3;
+//            allPlayers[i].firePow =3;
+
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
             else allPlayers[i].user_info = user.get();
