@@ -43,78 +43,80 @@
     var p_text = [];
     var req = {};
     var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
+    var fire_union = [];
+    var start = false;
     var map = [{
-        x: 410,
-        y: 10
-      }, {
-        x: 410,
-        y: 60
-      }, {
-        x: 410,
-        y: 130
-      }, {
-        x: 410,
-        y: 180
-      }, {
-        x: 410,
-        y: 240
-      }, {
-        x: 410,
-        y: 290
-      }, {
-        x: 410,
-        y: 345
-      }, {
-        x: 340,
-        y: 420
-      },
-      {
-        x: 435,
-        y: 480
-      }, {
-        x: 456,
-        y: 535
-      }, {
-        x: 474,
-        y: 595
-      }, {
-        x: 490,
-        y: 650
-      }, {
-        x: 515,
-        y: 710
-      }, {
-        x: 540,
-        y: 765
-      }, {
-        x: 568,
-        y: 820
-      },
-      {
-        x: 350,
-        y: 865
-      }, {
-        x: 143,
-        y: 820
-      }, {
-        x: 164,
-        y: 765
-      }, {
-        x: 185,
-        y: 710
-      }, {
-        x: 202,
-        y: 650
-      }, {
-        x: 227,
-        y: 595
-      }, {
-        x: 248,
-        y: 535
-      }, {
-        x: 269,
-        y: 480
-      }
+      x: 410,
+      y: 10
+    }, {
+      x: 410,
+      y: 60
+    }, {
+      x: 410,
+      y: 130
+    }, {
+      x: 410,
+      y: 180
+    }, {
+      x: 410,
+      y: 240
+    }, {
+      x: 410,
+      y: 290
+    }, {
+      x: 410,
+      y: 345
+    }, {
+      x: 340,
+      y: 420
+    },
+    {
+      x: 435,
+      y: 480
+    }, {
+      x: 456,
+      y: 535
+    }, {
+      x: 474,
+      y: 595
+    }, {
+      x: 490,
+      y: 650
+    }, {
+      x: 515,
+      y: 710
+    }, {
+      x: 540,
+      y: 765
+    }, {
+      x: 568,
+      y: 820
+    },
+    {
+      x: 350,
+      y: 865
+    }, {
+      x: 143,
+      y: 820
+    }, {
+      x: 164,
+      y: 765
+    }, {
+      x: 185,
+      y: 710
+    }, {
+      x: 202,
+      y: 650
+    }, {
+      x: 227,
+      y: 595
+    }, {
+      x: 248,
+      y: 535
+    }, {
+      x: 269,
+      y: 480
+    }
     ];
 
     var game = new Phaser.Game(780, 899, Phaser.CANVAS, 'gamecontainer', {
@@ -133,18 +135,20 @@
       create: function () {
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.world.setBounds(0, 0, game.width, game.height);
-        do_initplayer(0);
         var background = game.add.sprite(0, 0, 'gamebackground');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
+        //do_initplayer(0);
         game.world.setChildIndex(background, 0);
       },
 
       update: function () {
+        if(start){
         for (var i = 0; i < player_num; i++) {
           player[i].body.setZeroVelocity();
         }
+      }
       }
     });
 
@@ -190,8 +194,6 @@
         var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
         do_handcardslot();
         refreshcard();
-        // do_arrowgenerate(arrow_union);
-        // do_chooseplayer();
       }
     });
 
@@ -200,7 +202,7 @@
       var j;
       staticlock();
       for (i = 0; i <= 17; i++) {
-        var lookup_table = ['blank','paper','scissors','rock','move','shoot','skill'];
+        var lookup_table = ['blank', 'paper', 'scissors', 'rock', 'move', 'shoot', 'skill'];
         j = 'handcard_' + lookup_table[cardlist[i]];
         handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
         if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
@@ -320,7 +322,6 @@
     }
 
     function do_poison(people) {
-      people = 2;
       var x = player[people].body.x;
       var y = player[people].body.y;
       player[people].kill();
@@ -344,9 +345,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', function () {
-            do_direction(z);
-          }, this, 1, 2, 0, 0);
+          arrow[z] = card.add.button(630, 250, 'arrow', function () { do_direction(z, -1); }, this, 1, 2, 0, 0);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
@@ -356,7 +355,7 @@
 
     function do_targetgenerate() {
       for (var z = 0; z < 4; z++) {
-        p_choose[z] = card.add.button(480 + z * 70, 200, 'button', do_move, this, 1, 0, 2, 0);
+        p_choose[z] = card.add.button(480 + z * 70, 200, 'button', function () { do_target(-1, z) }, this, 1, 0, 2, 0);
         p_text[z] = card.add.bitmapText(490 + z * 70, 200, 'chiller', 'player' + z.toString(), 28);
       }
     }
@@ -398,22 +397,19 @@
       }
     }
 
-    function do_checkcard() {     // function for checkbutton
-      alert('sending completed');
-    }
-
     var phase_state = "Main";
     var player_state = "0.0";
     var player_index = 0;
     var team_result = [];
-    function do_init(){
+    var state;
+    function do_init() {
       // init
-      request({},function(data_init0){
-        request({hero:"hero"},function(data_init1){
-          request({},function(data_main_0_0){
-            console.log("data_init0",data_init0);
-            console.log("data_init1",data_init1);
-            console.log("data_main_0_0",data_main_0_0);
+      request({}, function (data_init0) {
+        request({ hero: "hero" }, function (data_init1) {
+          request({}, function (data_main_0_0) {
+            console.log("data_init0", data_init0);
+            console.log("data_init1", data_init1);
+            console.log("data_main_0_0", data_main_0_0);
             player_state = "0.1";
             player_index = data_init0.index;
             team_result = data_init1.team_result;
@@ -422,15 +418,60 @@
       });
     }
 
+
+    function do_checkcard() {     // function for checkbutton
+      alert('sending completed');
+      if (state == 'INT.0') { }
+      else if (state == 'INT.1') { req = { hero: "fire,water,sword,herat" } }
+      request(req, do_callback);
+    }
+
+
+    function do_callback(data, status) {
+      if (state == 'INIT.0') {
+
+      }
+      else if (state == 'INT.1') {
+        player_num = data.teamResult.length;
+        team_result = data.teamResult;
+        do_initplayer(0);
+        start = true;
+        for (var i = 0; i < player_num; i++) {
+          if (team_result[i] == 1) {
+            do_poison(i);
+          }
+        }
+      }
+      else if (state == '0.0') {
+        arrow_union = data.availableMoveDirection;
+        //card = data.handCards;
+        //fire_union = data.availableFireTarget;
+      }
+      else if (state = '0.1') {
+        //card = data.handCards;
+      }
+      else if (state = '0.3') {
+        //decision_union = data.decisionChoices;
+        //seencard_union = data.seenCardChoices;
+      }
+      else if (state='1.0'){
+        //card = data.handCards;
+      }
+      else if (state ='1.1'){
+
+      }
+    }
+
     function do_decision(strategy) {
       req = {
         decision: strategy
       }
     }
 
-    function do_direction(direction) {
-      req = {
-        moveDirection: direction,
+    function do_target(direction, target) {
+      req = {        
+moveDirection: direction,
+        fireTarget: target
       }
     }
 
@@ -440,11 +481,6 @@
       }
     }
 
-    function do_firetarget(target) {
-      req = {
-        fireTarget: target
-      }
-    }
 
     function do_gamblecard(rank) {
       req = {
@@ -465,7 +501,8 @@
           console.log(str);
           var data = JSON.parse(str);
           console.log(data.state);
-          if(callback) callback(data, status);
+          state = data.state;
+          if (callback) callback(data, status);
         },
 
         error: function (data, status) {
@@ -474,8 +511,6 @@
       });
     }
 
-    do_init();
-  
   </script>
 </body>
 
