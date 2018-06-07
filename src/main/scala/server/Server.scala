@@ -18,6 +18,7 @@ import spray.json._
 import game.{Map, SessionController, UserController, UserModel}
 
 import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
 
 /**
@@ -198,13 +199,15 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("session" / "match") {
-        post {
-          entity(as[RequestMatch]) { req =>
-            log("post", "session/match")
-            onComplete(SessionController.matchPlayers(req)) {
-              case Success(Some(_)) => complete(HttpResponse(StatusCodes.Accepted))
-              case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+        withRequestTimeout(Duration.Inf) {    // todo: 2 min
+          post {
+            entity(as[RequestMatch]) { req =>
+              log("post", "session/match")
+              onComplete(SessionController.matchPlayers(req)) {
+                case Success(Some(_)) => complete(HttpResponse(StatusCodes.Accepted))
+                case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
+                case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+              }
             }
           }
         }

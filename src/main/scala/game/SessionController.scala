@@ -106,7 +106,7 @@ object SessionController {
   var matching_count = 0
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
-    val player_count = 4
+    val player_count = 3
     def ready() = states.get(req.sid).exists(_.state == StateReady)
     states.get(req.sid).map { state =>
       this.synchronized {

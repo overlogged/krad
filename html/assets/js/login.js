@@ -22,15 +22,7 @@ var state_login = {
 
       game.add.button(615, 260, 'button', go_forget, this, 1, 0, 2, 0);
       game.add.bitmapText(630, 265, 'chiller', 'forget', 28);
-
-  
-      
-
-  
       show("login");
-
-    
-    
   }
 }
 
@@ -61,7 +53,7 @@ function do_login() {
     contentType: 'application/json',
     data: JSON.stringify(req),
     success: function (data, status) {
-      alert("登录成功");
+      // alert("登录成功");
       sid = data.sid;
       user = data.user;
       game.state.start('userinterface');

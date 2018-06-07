@@ -200,6 +200,7 @@ public class God {
                 }
                 break;
             case END:
+                result = "{\"state\":\"End\"}";
                 break;
         }
 
