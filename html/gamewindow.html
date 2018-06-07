@@ -44,6 +44,7 @@
     var req = {};
     var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
     var fire_union = [];
+    var playerloc_union = [];
     var start = false;
     var map = [{
       x: 410,
@@ -160,8 +161,9 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 1; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
+    var p_decision=10;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -342,10 +344,11 @@
       }
     }
 
-    function do_move(mark) {
-      people = 0;
-      player[people].body.x = map[mark].x + people * 20 + (4 - player_num) * 10;
-      player[people].body.y = map[mark].y;
+    function do_move() {
+      for (var people = 0;people<player_num;people++){
+      player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
+      player[people].body.y = map[playerloc_union[people]].y;
+      }
     }
 
     function do_poison(people) {
@@ -425,7 +428,7 @@
     }
 
     function do_checkcard() { // function for checkbutton
-      //alert('sending completed');
+                              //alert('sending completed');
       var j;
       switch (pedometer) {
         case 1:
@@ -440,7 +443,7 @@
           for (j = 0; j <= 17; j++) {
             if (cardtargeted[j]) {
               san--;
-              do_gamblecard;
+              do_gamblecard();
             }
             if (san == 0) break;
           }
@@ -448,11 +451,48 @@
           for (j = 0; j <= 17; j++) {
             if (cardtargeted[j]) {
               san--;
-              do_dessert;
+              do_dessert();
             }
             if (san == 0) break;
           }
       }
+
+      if (state == 'INIT.0') {
+      }
+      else if (state == 'INT.1') {
+        req={
+          heroChoices: string=['water']
+        }
+      }
+      else if (state == 'MAINGAME.0.0') {
+      }
+      else if (state == 'MAINGAME.0.1') {
+
+      }
+      else if (state == 'MAINGAME.0.3') {
+      }
+      else if (state=='MAINGAME.1.0'){
+      }
+      else if (state =='MAINGAME.1.1'){
+      }
+      else if(state=='ACTION.0.0'){
+      }
+      else if(state=='ACTION.0.1'){
+
+      }
+      else if(state=='ACTION.0.2'){
+      }
+      else if(state=='ACTION.0.3'){
+      }
+      else if(state=='ACTION.0.4'){
+      }
+      else if(state='ACTION.0.5'){
+      }
+      else if(state=='ACTION.0.6'){
+      }
+      else if(state=='ACTION.0.7'){
+      }
+      request(req,callback);
     }
 
     var phase_state = "Main";
@@ -477,12 +517,6 @@
     }
 
 
-    function do_checkcard() {     // function for checkbutton
-      alert('sending completed');
-      if (state == 'INT.0') { }
-      else if (state == 'INT.1') { req = { hero: "fire,water,sword,herat" } }
-      request(req, do_callback);
-    }
 
 
     function do_callback(data, status) {
@@ -492,43 +526,82 @@
       else if (state == 'INT.1') {
         player_num = data.teamResult.length;
         team_result = data.teamResult;
-        do_initplayer(0);
+        do_initplayer(4);
         start = true;
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
             do_poison(i);
+            player[i].body.x = map[0].x + i * 20 + (4 - player_num) * 10;
+            player[i].body.y = map[0].y;
           }
         }
       }
-      else if (state == '0.0') {
+      else if (state == 'MAINGAME.0.0') {
         arrow_union = data.availableMoveDirection;
-        //card = data.handCards;
+        handcardslot = data.handCards;
+        pedometer = 1;
         //fire_union = data.availableFireTarget;
+        refreshcard();
       }
-      else if (state = '0.1') {
-        //card = data.handCards;
-      }
-      else if (state = '0.3') {
+      else if (state == 'MAINGAME.0.1') {
+       handcardslot = data.handCards;
+       pedometer = 5;
+       refreshcard();
+      }                  //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+      else if (state == 'MAINGAME.0.3') {
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
+        pedometer = 2;
+        refreshcard();
       }
-      else if (state='1.0'){
-        //card = data.handCards;
+      else if (state=='MAINGAME.1.0'){
+        handcardslot = data.handCards;
+        pedometer = 3;
+        refreshcard();
       }
-      else if (state ='1.1'){
+      else if (state =='MAINGAME.1.1'){
+        //   每人出牌的选择  = data.gambleChoices;
+        //   每人出了几张牌  = data.cardNumList;
+        //   哪些玩家赢了   =  data.playerWinList;
+      }
+      else if(state=='ACTION.0.0'){
+        //剩余的能量点数  = data.eneregyList;
+      }
+      else if(state=='ACTION.0.1'){
 
+      }
+      else if(state=='ACTION.0.2'){
+        // 剩余的生命值 = data.healthPointList;
+      }
+      else if(state=='ACTION.0.3'){
+         playerloc_union = data.locationList;
+      }
+      else if(state=='ACTION.0.4'){
+        // 所有人的要素情况 = data.elemList;
+      }
+      else if(state='ACTION.0.5'){
+        // 返回字符串判断谁胜利
+      }
+      else if(state=='ACTION.0.6'){
+        // 队伍胜利情况 = data.teamList;
+        pedometer = 4;
+        refreshcard();
+      }
+      else if(state=='ACTION.0.7'){
+        //玩家能量信息= data.energy;
+        handcardslot = data.handCards;
+        refreshcard();
       }
     }
 
     function do_decision(strategy) {
-      req = {
-        decision: strategy
-      }
+      p_decision = strategy;
     }
 
     function do_target(direction, target) {
-      req = {        
-moveDirection: direction,
+      req = {
+        decision: p_decision,       
+        moveDirection: direction,
         fireTarget: target
       }
     }
@@ -540,14 +613,16 @@ moveDirection: direction,
     }
 
 
-    function do_gamblecard(rank) {
-      req = {
-        gambleCard: rank
-      }
+    function do_gamblecard(cardarray) {
+          req = {
+          gambleCard : cardtargeted
+        }
     }
 
     function do_dessert() {
-
+      req={
+        desertCardList: cardtargeted
+      }
     }
 
     function request(msg, callback) {
@@ -563,8 +638,8 @@ moveDirection: direction,
           console.log(str);
           var data = JSON.parse(str);
           console.log(data.state);
-          state = data.state;
           if (callback) callback(data, status);
+          state = data.state;
         },
 
         error: function (data, status) {
