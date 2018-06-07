@@ -15,7 +15,7 @@ import com.typesafe.config
 import com.typesafe.config.ConfigFactory
 import common.MyJsonProtocol
 import spray.json._
-import game.{Map, SessionController, UserController, UserModel}
+import game._
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration.Duration
@@ -236,6 +236,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
     }
     Http().bindAndHandle(route, config.web_host, config.web_port)
     SessionController.test()
+    MapGenerator.generate();
     log("bind", s"${config.web_host}:${config.web_port}")
   }
 }

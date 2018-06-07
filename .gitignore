@@ -10,3 +10,4 @@ deploy/
 .classpath
 .project
 .settings/
+*.map
