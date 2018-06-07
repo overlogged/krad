@@ -1,6 +1,9 @@
 package game
 
 import common.MyJsonProtocol
+import server.Server
+import server.Server.RequestGame
+
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
@@ -44,27 +47,27 @@ object ScalaGodTest extends MyJsonProtocol{
     Thread.sleep(8000)
   }
 
-  def main(args: Array[String]): Unit = {
-    val sids = 0 to 3
+  def test1(): Unit ={
+    val sids = 0 to 1
     val god = new God
     god.initialPlayer(sids.toArray)
     val fs = for(sid<-sids)
       yield Future{
-        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,"{}"))
         println(sid,god.request(sid,
           """{"hero":"hero1"}"""
         ))
-        println(sid,god.request(sid,""))
+        println(sid,god.request(sid,"{}"))
         println(sid,god.request(sid,
           """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
         ))
 
         println(sid, god.request(sid,
-            """{"seenCard":3}"""
-          ))
+          """{"seenCard":3}"""
+        ))
 
         println(sid,god.request(sid,
-        """{"gambleCard":[0]}"""
+          """{"gambleCard":[0]}"""
         ))
         // win judge
         println(sid,god.request(sid,""))
@@ -91,5 +94,22 @@ object ScalaGodTest extends MyJsonProtocol{
       f onComplete println
       Await.ready(f,Duration.Inf)
     }
+  }
+
+  def test2(): Unit ={
+    SessionController.test()
+    val fs = for(sid<-0 to 1)
+      yield
+        for(data1<-SessionController.gameRequest(RequestGame(sid,"{}"));
+            data2<-SessionController.gameRequest(RequestGame(sid,"{\"hero\":\"hero\"}"));
+            data3<-SessionController.gameRequest(RequestGame(sid,"{}"))) yield (data1,data2,data3)
+    for(f<-fs){
+      f onComplete println
+      Await.ready(f,Duration.Inf)
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    test2()
   }
 }
