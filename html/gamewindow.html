@@ -394,9 +394,9 @@
     function do_handcardslot() {
       for (slots = 0; slots <= 17; slots++) { //create handcard slots
         if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard,
-          this, 2, 2, 2, 2);
+          this, 1, 0, 0, 0);
         if (slots > 8) handcardslot[slots] = card.add.button(10 + 45 * (slots - 9), 130, 'handcard_blank',
-          targetcard, this, 2, 2, 2, 2);
+          targetcard, this, 1, 0, 0, 0);
       }
     }
 
