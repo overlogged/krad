@@ -523,8 +523,8 @@
          state="choose hero";
       }
       else if (state == "choose hero") {
-        player_num = data.teamResult.length;
         team_result = data.teamResult;
+        player_num = team_result.length;
         do_initplayer(4);
         start = true;
         for (var i = 0; i < player_num; i++) {
