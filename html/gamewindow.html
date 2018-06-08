@@ -406,8 +406,10 @@
         switch (type) {
           case 4:
             do_arrowgenerate(arrow_union);
+            //alert('move');
             break;
           case 5:
+            //alert('fire');
             do_targetgenerate();
             break;
         }
@@ -417,12 +419,14 @@
             for (j = 0; j < 8; j++) {
               if (arrow_union[j] != 0) arrow[j].kill();
             }
+            //alert('dontmove');
             break;
           case 5:
             for (j = 0; j < 4; j++) {
               p_choose[j].kill();
               p_text[j].alpha = 0;
             };
+            //alert('dontfire');
             break;
         }
       }
