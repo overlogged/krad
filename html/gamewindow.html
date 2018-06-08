@@ -463,7 +463,7 @@
      else if (state == "choose hero") {
        req = {
          hero: "fire"
-       }
+       };
      }
      else if (state == "start game") {
      }
@@ -656,7 +656,7 @@
           console.log(str);
           var data = JSON.parse(str);
           console.log(data.state);
-          if (callback) callback(data, status);
+          callback(data, status);
         },
 
         error: function (data, status) {
