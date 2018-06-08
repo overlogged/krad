@@ -556,7 +556,7 @@
       else if (state == "start game") {
         arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
-        do_fillcardlist;
+        do_fillcardlist();
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
@@ -564,7 +564,7 @@
       }
       else if (state == "choose strategy decision") {
        cardlist = data.handCards;
-       do_fillcardlist;
+       do_fillcardlist();
        pedometer = 5;
        refreshcard();
        state = "choose seen card";
@@ -578,7 +578,7 @@
       }
       else if (state=="GAMBLE:choose gamble"){
         cardlist = data.handCards;
-        do_fillcardlist;
+        do_fillcardlist();
         pedometer = 3;
         refreshcard();
         state = "win judge";
@@ -627,7 +627,7 @@
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
         cardlist = data.handCards;
-        do_fillcardlist;
+        do_fillcardlist();
         pedometer = 1;
         refreshcard();
         state = "choose strategy decision";
