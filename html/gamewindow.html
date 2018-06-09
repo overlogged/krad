@@ -556,6 +556,7 @@
 
     function do_callback(data, status) {
       if (state == "Init") {
+        state="choose hero";
       }
       else if (state == "choose hero") {
         team_result = data.teamResult;
@@ -569,6 +570,7 @@
             player[i].body.y = map[0].y;
           }
         }
+        state = "start game";
       }
       else if (state == "start game") {
         arrow_union = data.availableMoveDirection;
@@ -577,12 +579,14 @@
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
+        state = "choose strategy decision";
       }
       else if (state == "choose strategy decision") {
        cardlist = data.handCards;
        do_fillcardlist();
        pedometer = 5;
        refreshcard();
+       state = "choose strategy decision";
       }            
       else if (state == "choose seen card") {
         //decision_union = data.decisionChoices;
@@ -687,7 +691,6 @@
           var data = JSON.parse(str);
           console.log(data.state);
           callback(data, status);
-          state = data.state;
         },
 
         error: function (data, status) {
