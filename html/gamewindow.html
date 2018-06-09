@@ -452,7 +452,7 @@
       switch (pedometer) {
         case 1:
           for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
+            if (cardtargeted[j]==1) {
               do_decision(j);
             }
             break;
@@ -477,6 +477,7 @@
       }
 
       if (state == "Init") {
+        req = {}
      }
      else if (state == "choose hero") {
        req = {
@@ -484,6 +485,7 @@
        };
      }
      else if (state == "start game") {
+      req = {}
      }
      else if (state == "choose strategy decision") {
      }            
@@ -492,22 +494,39 @@
      else if (state=="GAMBLE:choose gamble"){
      }
      else if (state =="win judge"){
+      req = {}
      }
      else if(state=="ACTION: deposit account"){
+      req = {}
      }
      else if(state=="skills account"){
+      req = {}
      }
      else if(state=="fire account"){
+      req = {}
      }
      else if(state=="move account"){
+      req = {}
      }
      else if(state=="element account"){
+      req = {}
      }
-     else if(state="judge win"){
+     else if(state="if human wins"){
+       req={}
      }
-     else if(state=="Game if over"){
+     else if(state=="Game Over, human wins"){
+       req={}
+     }
+     else if(state=="infection account"){
+       req={}
+     }
+     else if(state=="Game Over,zombie wins"){
      }
      else if(state=="desert account"){
+     }
+     else if(state=="PREPARE: choose decision"){
+       state = "start game";
+       req = {}
      }
       request(req,do_callback);
     }
@@ -537,7 +556,6 @@
 
     function do_callback(data, status) {
       if (state == "Init") {
-         state="choose hero";
       }
       else if (state == "choose hero") {
         team_result = data.teamResult;
@@ -551,7 +569,6 @@
             player[i].body.y = map[0].y;
           }
         }
-        state="start game";
       }
       else if (state == "start game") {
         arrow_union = data.availableMoveDirection;
@@ -560,77 +577,68 @@
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
-        state = "choose strategy decision";
       }
       else if (state == "choose strategy decision") {
        cardlist = data.handCards;
        do_fillcardlist();
        pedometer = 5;
        refreshcard();
-       state = "choose seen card";
       }            
       else if (state == "choose seen card") {
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
         pedometer = 2;
         refreshcard();
-        state = "GAMBLE:choose gamble";
       }
       else if (state=="GAMBLE:choose gamble"){
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-        state = "win judge";
       }
       else if (state =="win judge"){
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
-        state="ACTION: deposit account";
       }
       else if(state=="ACTION: deposit account"){
         //剩余的能量点数  = data.eneregyList;
-        state = "skills account";
       }
       else if(state=="skills account"){
-        state = "fire account";
       }
       else if(state=="fire account"){
         // 剩余的生命值 = data.healthPointList;
-        state = "move account";
       }
       else if(state=="move account"){
          playerloc_union = data.locationList;
-         state = "element account";
+         do_move();
       }
       else if(state=="element account"){
         // 所有人的要素情况 = data.elemList;
-        state = "judge win";
       }
-      else if(state="judge win"){
-        // 返回字符串判断谁胜利
-        state = "Game if over";
+      else if(state=="if human wins"){
       }
-      else if(state=="Game if over"){
-        // 队伍胜利情况 = data.teamList;
+      else if(state=="Game Over, human wins"){
+        // 游戏结束
+      }
+      else if(state=="infection account"){
         team_result = data.teamList;
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
             do_poison(i);
           }
         }
-        pedometer = 4;
-        refreshcard();
-        state = "desert account";
+      }
+      else if(state=="Game Over,zombie wins"){
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
         cardlist = data.handCards;
         do_fillcardlist();
-        pedometer = 1;
+        pedometer =4;
         refreshcard();
-        state = "choose strategy decision";
+      }
+      else if(state=="PREPARE: choose decision"){
       }
     }
 
@@ -679,6 +687,7 @@
           var data = JSON.parse(str);
           console.log(data.state);
           callback(data, status);
+          state = data.state;
         },
 
         error: function (data, status) {
