@@ -375,7 +375,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', function () { do_target(z, -1); }, this, 1, 2, 0, 0);
+          arrow[z] = card.add.button(630, 250, 'arrow', function () { do_target(z, -1); }, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
@@ -653,7 +653,7 @@
         //玩家能量信息= data.energy;
         cardlist = data.handCards;
         do_fillcardlist();
-        pedometer =4;
+        pedometer = 4;
         refreshcard();
         state="PREPARE: choose decision";
       }
