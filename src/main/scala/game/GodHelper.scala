@@ -57,6 +57,7 @@ object GodHelper extends MyJsonProtocol{
   case class ResInfectionAccount(state:String,teamList:Array[Int])
   case class MsgDesertAccount(desertCardList:Array[Int])
   case class ResDesertAccount(state:String,energy:Int,handCards:Array[Int])
+  case class ResGameOver(state:String,scoreList:Array[Int])
 
   def toInit(allUserInfo:Array[UserInfo],state:String,myIndex:Int,heroList:Array[String]):String = {
     ResInit(allUserInfo,state,myIndex,heroList).toJson.toString
@@ -139,6 +140,10 @@ object GodHelper extends MyJsonProtocol{
 
   def toDesertAccount(state:String,energy:Int,handCards:Array[Int]):String = {
     ResDesertAccount(state,energy,handCards).toJson.toString()
+  }
+
+  def toGameOver(state:String,scoreList:Array[Int]):String = {
+    ResGameOver(state,scoreList).toJson.toString()
   }
 
   val ghostUser = User("ghost@ghost.com", "ghost", "figure1", 0, "password",Stats())
