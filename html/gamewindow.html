@@ -164,7 +164,7 @@
     var san; //how many cards was chosen
     var pedometer = 0; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
-    var p_decision=6;
+    var p_decision=-1;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -392,10 +392,10 @@
 
     function do_handcardslot() {
       for (slots = 0; slots <= 17; slots++) { //create handcard slots
-        if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard,
+        if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', function(){targetcard(handcardslot[slots])},
           this, 1, 0, 0, 0);
         if (slots > 8) handcardslot[slots] = card.add.button(10 + 45 * (slots - 9), 130, 'handcard_blank',
-          targetcard, this, 1, 0, 0, 0);
+        function(){targetcard(handcardslot[slots])}, this, 1, 0, 0, 0);
       }
     }
 
