@@ -375,7 +375,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', function () { do_target(z, -1); }, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(630, 250, 'arrow', function () { var temp=z ;do_target(z, -1); }, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
@@ -561,7 +561,7 @@
 
     function do_callback(data, status) {
       if (state == "Init") {
-        state="choose hero";
+        //state="choose hero";
       }
       else if (state == "choose hero") {
         team_result = data.teamResult;
@@ -575,7 +575,7 @@
             player[i].body.y = map[0].y;
           }
         }
-        state = "start game";
+       // state = "start game";
       }
       else if (state == "start game") {
         arrow_union = data.availableMoveDirection;
