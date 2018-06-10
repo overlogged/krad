@@ -488,6 +488,11 @@
       req = {}
      }
      else if (state == "choose strategy decision") {
+      req = {
+        decision: -1,       
+        moveDirection: -1,
+        fireTarget: -1
+      }
      }            
      else if (state == "choose seen card") {
      }
@@ -667,6 +672,7 @@
         moveDirection: direction,
         fireTarget: target
       }
+      alert(direction+"+"+target);
     }
 
     function do_seencard(rank) {
