@@ -708,6 +708,7 @@
           var data = JSON.parse(str);
           console.log(data.state);
           callback(data, status);
+          state = data.state;
         },
 
         error: function (data, status) {
