@@ -584,57 +584,57 @@
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
-        state = "choose strategy decision";
+       // state = "choose strategy decision";
       }
       else if (state == "choose strategy decision") {
        cardlist = data.handCards;
        do_fillcardlist();
        pedometer = 5;
        refreshcard();
-       state = "choose seen card";
+       //state = "choose seen card";
       }            
       else if (state == "choose seen card") {
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
         pedometer = 2;
         refreshcard();
-        state="GAMBLE:choose gamble";
+        //state="GAMBLE:choose gamble";
       }
       else if (state=="GAMBLE:choose gamble"){
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-        state ="win judge";
+       // state ="win judge";
       }
       else if (state =="win judge"){
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
-        state="ACTION: deposit account";
+       // state="ACTION: deposit account";
       }
       else if(state=="ACTION: deposit account"){
         //剩余的能量点数  = data.eneregyList;
-        state="skills account";
+       // state="skills account";
       }
       else if(state=="skills account"){
-        state="fire account";
+       // state="fire account";
       }
       else if(state=="fire account"){
         // 剩余的生命值 = data.healthPointList;
-        state="move account";
+        //state="move account";
       }
       else if(state=="move account"){
          playerloc_union = data.locationList;
          do_move();
-         state="element account";
+         //state="element account";
       }
       else if(state=="element account"){
         // 所有人的要素情况 = data.elemList;
-        state="if human wins";
+       // state="if human wins";
       }
       else if(state=="if human wins"){
-        state="Game Over, human wins";
+      //  state="Game Over, human wins";
       }
       else if(state=="Game Over, human wins"){
         // 游戏结束
@@ -655,7 +655,7 @@
         do_fillcardlist();
         pedometer = 4;
         refreshcard();
-        state="PREPARE: choose decision";
+       // state="PREPARE: choose decision";
       }
       else if(state=="PREPARE: choose decision"){
       }
