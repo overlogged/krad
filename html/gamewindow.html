@@ -165,6 +165,7 @@
     var pedometer = 0; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
     var p_decision=-1;
+    var seencard_flag =false;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -494,9 +495,10 @@
         fireTarget: -1
       }
      }            
-     else if (state == "choose seen card") {
+     else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
      }
      else if (state=="GAMBLE:choose gamble"){
+
      }
      else if (state =="win judge"){
       req = {}
@@ -676,6 +678,12 @@
     }
 
     function do_seencard(rank) {
+      if(rank !=0){
+        seencard_flag = true;
+      }
+      else{
+        rank=-1;
+      }
       req = {
         seenCard: rank
       }
