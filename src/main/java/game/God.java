@@ -29,6 +29,8 @@ public class God {
     private int[] locationList;
     private int[] elementList;
     private int[] teamList;
+    private int[] scoreList;
+
     enum GameState{ INIT,MAINGAME,END }
     private GameState gameState = GameState.INIT;
     private int[] playerState;
@@ -281,6 +283,10 @@ public class God {
             if(i != zombie) {
                 allPlayers[i].team = Player.HUMAN;
                 teamResult[i] = Player.HUMAN;
+                allPlayers[i].healthPoint = 6;
+                allPlayers[i].range = 3;
+                allPlayers[i].mot = 4;
+                allPlayers[i].firePow =3;
             }
         }
     }
@@ -543,6 +549,7 @@ public class God {
         elementList = new int[playerNum];
         teamList = new int[playerNum];
         availableFireTarget = new int[playerNum];
+        scoreList = new int[playerNum];
         availableMoveDirection = new int[8];
 
         for(int i = 0;i < playerNum;i++) {
@@ -551,12 +558,7 @@ public class God {
             allPlayers[i].handCardsNum = 0;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             playerState[i] = 0;
-
-//            allPlayers[i].healthPoint = 10;
-//            allPlayers[i].range = 10;
-//            allPlayers[i].energy = 4;
-//            allPlayers[i].mot = 3;
-//            allPlayers[i].firePow =3;
+            scoreList[i] = 0;
 
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
