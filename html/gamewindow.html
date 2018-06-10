@@ -154,6 +154,7 @@
       }
     });
 
+    var seencardtext = [];
     var handcardslot = [];
     var seencardslot = [];
     var cardlist = [];
@@ -171,7 +172,9 @@
       staticinvalidcard[act] = 1;
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
-    }
+      }
+      //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
+      //do_fillcardlist();
 
     var card = new Phaser.Game(780, 320, Phaser.CANVAS, 'cardcontainer', {
       preload: function () {
@@ -204,9 +207,12 @@
     });
 
     function do_seencardslot() {
-      var j;
+        var j;
+      var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
       for (j = 0; j <= 3; j++) {
-        seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0)
+        seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0);
+        seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
+        seencardtext[j].fontSize = 20;
       }
     }
 
@@ -216,7 +222,10 @@
       num = (button.x - 100) / 150;
       num = 3 - num;
       do_seencard(num);
-      for (j = 0; j <= 3; j++) seencardslot[j].kill();
+      for (j = 0; j <= 3; j++) {
+        seencardslot[j].kill();
+        seencardtext[j].kill();
+      }
     }
 
     function refreshcard() {
@@ -450,23 +459,28 @@
     function do_checkcard() { // function for checkbutton
                               //alert('sending completed');
       var j;
+      var g = [];
       switch (pedometer) {
         case 1:
           for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]==1) {
+            if (cardtargeted[j]) {
               do_decision(j);
+              steerTGP(0, cardlist[j]);
             }
-            break;
           }
           break;
         case 2:
+          var k=0;
           for (j = 0; j <= 17; j++) {
             if (cardtargeted[j]) {
-              san--;
-              do_gamblecard();
+                san--;
+                g[k] = j;
+                k++;
             }
             if (san == 0) break;
           }
+          do_gamblecard(g);
+          break;
         case 4:
           for (j = 0; j <= 17; j++) {
             if (cardtargeted[j]) {
@@ -475,6 +489,7 @@
             }
             if (san == 0) break;
           }
+          break;
       }
 
       if (state == "Init") {
@@ -692,7 +707,7 @@
 
     function do_gamblecard(cardarray) {
           req = {
-          gambleCard : cardtargeted
+          gambleCard : cardarray
         }
     }
 
