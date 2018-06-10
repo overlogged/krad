@@ -1,6 +1,6 @@
 package common
 
-import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDesertAccount, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
+import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDesertAccount, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResGameOver, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
@@ -43,4 +43,5 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val ResInfectionAccountFormat = jsonFormat2(ResInfectionAccount)
   implicit val MsgDesertAccountFormat = jsonFormat1(MsgDesertAccount)
   implicit val ResDesertAccountFormat = jsonFormat3(ResDesertAccount)
+  implicit val ResGameOverFormat = jsonFormat2(ResGameOver)
 }

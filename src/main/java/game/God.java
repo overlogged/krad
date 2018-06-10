@@ -202,7 +202,7 @@ public class God {
                 }
                 break;
             case END:
-                result = "{\"state\":\"End\"}";
+                result = GodHelper.toGameOver("END",scoreList);
                 break;
         }
 
@@ -274,7 +274,6 @@ public class God {
     private void teamDivide(){
         int zombie = (int)( Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
-        allPlayers[zombie].energy = 0;
         allPlayers[zombie].hasElem = false;
         allPlayers[zombie].firePow = 0;
         allPlayers[zombie].range = 0;
