@@ -371,6 +371,12 @@ public class God {
                 }
             }else{
                 GambleChecker.winJudge(playerNum,allPlayers);
+                for(int i = 0;i < playerNum;i++){
+                    if(allPlayers[i].isWin)
+                        scoreList[i] += 5;
+                    else
+                        scoreList[i] -= 5;
+                }
                 this.notifyAll();
             }
         }
@@ -471,11 +477,17 @@ public class God {
         }
     }
     private void elemAccount(){
+        int elemNum = 0;
         for(int i = 0;i < playerNum;i++){
             if (map.units[allPlayers[i].preLoc].status == 2)
             {
                 allPlayers[i].hasElem = true;
                 elementList[i] = 1;
+                for(int j = 0;j < playerNum;j++){
+                    if(elementList[j] == 1)
+                        elemNum += 1;
+                }
+                scoreList[i] += elemNum * 25;
             }
             //TODO: a player got element, he should obtain scores
         }
@@ -491,8 +503,8 @@ public class God {
     private void infectionAccount(){
         for(int i = 0;i < playerNum;i++) {
             for(int j = 0;j < playerNum;j++) {
-                PlayerChecker.infection(map, allPlayers[i], allPlayers[j]);
-                //TODO: one player infected another,he should obtain scores
+                if(PlayerChecker.infection(map, allPlayers[i], allPlayers[j]))
+                    scoreList[i] += 25;
             }
         }
         for(int i = 0;i < playerNum;i++)
@@ -557,7 +569,7 @@ public class God {
             allPlayers[i].handCardsNum = 0;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             playerState[i] = 0;
-            scoreList[i] = 0;
+            scoreList[i] = 100;
 
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();

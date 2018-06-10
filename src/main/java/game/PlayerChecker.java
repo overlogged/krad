@@ -57,7 +57,7 @@ public class PlayerChecker{
     static Boolean infection(Map map, Player playerPos, Player playerPas){
         if(playerPos.preLoc == playerPas.preLoc) {
             if(map.units[playerPos.preLoc].status==1) {
-                if (playerPos.team == Player.ZOMBIE & playerPas.team == Player.HUMAN) {
+                if (playerPos.team == Player.ZOMBIE & playerPas.team == Player.HUMAN ) {
                     playerPas.team = Player.ZOMBIE;
                     playerPas.energy = 0;
                     playerPas.hasElem = false;
