@@ -143,6 +143,7 @@
         background.width = game.width;
         //do_initplayer(0);
         game.world.setChildIndex(background, 0);
+       // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
       },
 
       update: function () {
@@ -744,6 +745,9 @@
           callback(data, status);
           state = data.state;
           if(state =="desert account"){
+            req = {
+              desertCardList: []
+            }
             do_fillcardlist();
              pedometer = 4;
              refreshcard();
