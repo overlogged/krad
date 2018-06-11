@@ -508,11 +508,6 @@
       req = {}
      }
      else if (state == "choose strategy decision") {
-      req = {
-        decision: -1,       
-        moveDirection: -1,
-        fireTarget: -1
-      }
      }            
      else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
      }
@@ -752,6 +747,13 @@
             do_fillcardlist();
              pedometer = 4;
              refreshcard();
+          }
+          else if(state =="choose strategy decision"){
+            req = {
+             decision: -1,       
+             moveDirection: -1,
+             fireTarget: -1
+           }
           }
         },
 
