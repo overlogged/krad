@@ -385,10 +385,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', function (button) { 
-            var temp = ((button.angle/45)-3);
-            do_target(temp, -1); }
-            , this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(630, 250, 'arrow', fix_arrow, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
@@ -398,7 +395,7 @@
 
     function do_targetgenerate() {
       for (var z = 0; z < 4; z++) {
-        p_choose[z] = card.add.button(480 + z * 70, 200, 'button', fix_arrow, this, 1, 0, 2, 0);
+        p_choose[z] = card.add.button(480 + z * 70, 200, 'button', function () { do_target(-1, z) }, this, 1, 0, 2, 0);
         p_text[z] = card.add.bitmapText(490 + z * 70, 200, 'chiller', 'player' + z.toString(), 28);
       }
     }
