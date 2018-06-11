@@ -196,11 +196,17 @@
         card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png');
         card.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
         card.load.spritesheet('seen', 'assets/buttons/button.png', 100, 26);
+        card.load.spritesheet('pad', 'assets/img/inputbox1.png', 150, 60);
 
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
         var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
+        var statepad = card.add.sprite(610, 50, 'pad');
+        var statepadtext_head = card.add.text(620, 55, 'stage');
+        var statepadtext_body = card.add.text(620, 80);
+        statepadtext_head.fontSize = 20;
+        statepadtext_body.fontSize = 20;
         var seenbutton = card.add.button();
         do_handcardslot();
         refreshcard();
@@ -604,6 +610,7 @@
        // state = "choose strategy decision";
       }
       else if (state == "choose strategy decision") {
+       statepadtext_body.text = '决策阶段';
        cardlist = data.handCards;
        do_fillcardlist();
        pedometer = 5;
@@ -613,18 +620,21 @@
       else if (state == "choose seen card") {
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
+        statepadtext_body.text = '明牌阶段';
         pedometer = 2;
         refreshcard();
         //state="GAMBLE:choose gamble";
       }
-      else if (state=="GAMBLE:choose gamble"){
+      else if (state == "GAMBLE:choose gamble") {
+        statepadtext_body.text = '出拳阶段';
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
        // state ="win judge";
       }
-      else if (state =="win judge"){
+      else if (state == "win judge") {
+        statepadtext_body.text = '结算阶段';
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
@@ -668,6 +678,7 @@
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
+        statepadtext_body.text = '弃牌阶段';
         cardlist = data.handCards;
        // state="PREPARE: choose decision";
       }
