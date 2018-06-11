@@ -385,7 +385,10 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', function () { var temp=z ;do_target(z, -1); }, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(630, 250, 'arrow', function (button) { 
+            var temp = ((button.angle/45)-3);
+            do_target(temp, -1); }
+            , this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
@@ -679,8 +682,7 @@
     }
 
     function do_decision(strategy) {
-      p_decision = strategy;
-      alert(p_decision);
+      p_decision = strategy
     }
 
     function do_target(direction, target) {
