@@ -482,13 +482,16 @@
           do_gamblecard(g);
           break;
         case 4:
+          var k =0 ;
           for (j = 0; j <= 17; j++) {
             if (cardtargeted[j]) {
               san--;
-              do_dessert();
+              g[k] = j;
+              k++;
             }
             if (san == 0) break;
           }
+          do_dessert(g);
           break;
       }
 
@@ -719,9 +722,9 @@
         }
     }
 
-    function do_dessert() {
+    function do_dessert(cardarray) {
       req={
-        desertCardList: cardtargeted
+        desertCardList: cardarray
       }
     }
 
