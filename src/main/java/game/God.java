@@ -339,12 +339,14 @@ public class God {
             }
         }
     }
-    private void gambleChoose(String msg, Player playerMain,int playerIndex){
+    private void gambleChoose(String msg,Player playerMain,int playerIndex){
         MsgChooseGamble msgChooseGamble = GodHelper.getChooseGamble(msg);
         int[] gambleChoose = new int[msgChooseGamble.gambleCard().length];
         for(int i = 0;i < msgChooseGamble.gambleCard().length;i++)
             gambleChoose[i] = msgChooseGamble.gambleCard()[i];
         if(!playerMain.isSeenCard) {
+            if(msgChooseGamble.gambleCard() == null)
+                playerMain.gamble = 1;
             playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
             playerMain.gambleNum = gambleChoose.length;
             for(int i = 0;i < playerMain.gambleNum;i++) {
