@@ -32,8 +32,7 @@ var state_userinterface = {
 }
 
 function go_help() {
-  // game.state.start('help');
-  alert("暂无帮助");
+  game.state.start('help');
 }
 
 function do_match() {
