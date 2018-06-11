@@ -670,9 +670,6 @@
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
         cardlist = data.handCards;
-        do_fillcardlist();
-        pedometer = 4;
-        refreshcard();
        // state="PREPARE: choose decision";
       }
       else if(state=="PREPARE: choose decision"){
@@ -743,6 +740,11 @@
           console.log(data.state);
           callback(data, status);
           state = data.state;
+          if(state =="desert account"){
+            do_fillcardlist();
+             pedometer = 4;
+             refreshcard();
+          }
         },
 
         error: function (data, status) {
