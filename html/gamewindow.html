@@ -358,7 +358,7 @@
     function do_move() {
       for (var people = 0;people<player_num;people++){
       player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
-      player[people].body.y = map[playerloc_union[people]].y;
+      player[people].body.y = map[playerloc_union[people]].y-10;
       }
     }
 
@@ -745,8 +745,9 @@
           callback(data, status);
           state = data.state;
           if(state =="desert account"){
+            var empty = [];
             req = {
-              desertCardList: []
+              desertCardList: empty
             }
             do_fillcardlist();
              pedometer = 4;
