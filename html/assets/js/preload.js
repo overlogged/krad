@@ -32,4 +32,5 @@ game.state.add('changepw',state_changepw);
 game.state.add('setpw',state_setpw);
 game.state.add('changeprofile', state_changeprofile);
 game.state.add('userinterface', state_userinterface);
+game.state.add('help', state_help);
 game.state.start('preload');
