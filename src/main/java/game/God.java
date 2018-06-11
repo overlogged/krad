@@ -100,14 +100,23 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             //ends
-                            result = GodHelper.toChooseDecision("choose seen card",playerHandCard);
+                            if(allPlayers[playerIndex].isSeenCard)
+                                result = GodHelper.toChooseDecision("must choose seen card",playerHandCard);
+                            else
+                                result = GodHelper.toChooseDecision("choose seen card",playerHandCard);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
                             seenCard(playerIndex,msg,allPlayers[playerIndex]);
-                            result = GodHelper.toSeenCard("GAMBLE:choose gamble",decisionChoices,seenCardChoices);
+                            if(allPlayers[playerIndex].isSeenCard) {
+                                result = GodHelper.toSeenCard("GAMBLE: win judge", decisionChoices, seenCardChoices);
+                                playerState[playerIndex] = 1;
+                            }
+                            else{
+                                result = GodHelper.toSeenCard("GAMBLE: choose gamble", decisionChoices, seenCardChoices);
+                                playerState[playerIndex] = 0;
+                            }
                             phaseState = PhaseState.GAMBLE;
-                            playerState[playerIndex] = 0;
                         }
                         break;
                     case GAMBLE:
