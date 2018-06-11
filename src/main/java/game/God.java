@@ -522,7 +522,8 @@ public class God {
         MsgDesertAccount msgDesertAccount = GodHelper.getDesertAccount(msg);
         synchronized (this){
             desert_count += 1;
-            GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,msgDesertAccount.desertCardList());
+            if(msgDesertAccount.desertCardList() != null)
+                GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,msgDesertAccount.desertCardList());
             if(allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
                 allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
             if(desert_count < playerNum){
