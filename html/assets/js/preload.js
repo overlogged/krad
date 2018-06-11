@@ -24,7 +24,7 @@ var state_preload = {
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'container');
 
 game.state.add('preload', state_preload);
-
+game.state.add('help', state_help);
 game.state.add('login', state_login);
 game.state.add('register', state_register);
 game.state.add('forget', state_forget);
@@ -32,5 +32,5 @@ game.state.add('changepw',state_changepw);
 game.state.add('setpw',state_setpw);
 game.state.add('changeprofile', state_changeprofile);
 game.state.add('userinterface', state_userinterface);
-game.state.add('help', state_help);
+
 game.state.start('preload');

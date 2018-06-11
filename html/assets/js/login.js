@@ -24,6 +24,7 @@ var state_login = {
       game.add.bitmapText(600, 265, 'chiller', 'forget', 28);
 
 
+
       show("login");
   }
 }
