@@ -108,14 +108,11 @@ public class God {
                         }
                         else if(playerState[playerIndex] == 2){
                             seenCard(playerIndex,msg,allPlayers[playerIndex]);
-                            if(allPlayers[playerIndex].isSeenCard) {
+                            if(allPlayers[playerIndex].isSeenCard)
                                 result = GodHelper.toSeenCard("GAMBLE: win judge", decisionChoices, seenCardChoices);
-                                playerState[playerIndex] = 1;
-                            }
-                            else{
+                            else
                                 result = GodHelper.toSeenCard("GAMBLE: choose gamble", decisionChoices, seenCardChoices);
-                                playerState[playerIndex] = 0;
-                            }
+                            playerState[playerIndex] = 0;
                             phaseState = PhaseState.GAMBLE;
                         }
                         break;
