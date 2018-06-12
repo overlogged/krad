@@ -164,7 +164,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - test stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -590,6 +590,7 @@
 
     function do_callback(data, status) {
       if (state == "Init") {
+        pedometer = 0;
         //state="choose hero";
       }
       else if (state == "choose hero") {
@@ -641,6 +642,7 @@
        // state ="win judge";
       }
       else if (state == "win judge") {
+        pedometer = 0;
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
