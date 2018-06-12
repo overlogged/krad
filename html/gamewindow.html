@@ -604,6 +604,7 @@
        // state = "start game";
       }
       else if (state == "start game") {
+        statepadtext_body.text = '决策阶段';
         arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
         do_fillcardlist();
@@ -613,7 +614,7 @@
        // state = "choose strategy decision";
       }
       else if (state == "choose strategy decision") {
-       statepadtext_body.text = '决策阶段';
+       statepadtext_body.text = '明牌阶段';
        cardlist = data.handCards;
        do_fillcardlist();
        pedometer = 5;
@@ -621,15 +622,15 @@
        //state = "choose seen card";
       }            
       else if (state == "choose seen card") {
+        statepadtext_body.text = '出拳阶段';
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
-        statepadtext_body.text = '明牌阶段';
         pedometer = 2;
         refreshcard();
         //state="GAMBLE:choose gamble";
       }
       else if (state == "GAMBLE:choose gamble") {
-        statepadtext_body.text = '出拳阶段';
+        statepadtext_body.text = '结算阶段';
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
@@ -637,7 +638,6 @@
        // state ="win judge";
       }
       else if (state == "win judge") {
-        statepadtext_body.text = '结算阶段';
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
@@ -677,11 +677,11 @@
           }
         }
       }
-      else if(state=="Game Over,zombie wins"){
+      else if (state == "Game Over,zombie wins") {
+        statepadtext_body.text = '弃牌阶段';
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
-        statepadtext_body.text = '弃牌阶段';
         cardlist = data.handCards;
        // state="PREPARE: choose decision";
       }
