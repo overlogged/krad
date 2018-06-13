@@ -236,7 +236,7 @@
       do_seencard(num);
       for (j = 0; j <= 3; j++) {
         seencardslot[j].kill();
-        seencardtext[j].kill();
+        seencardtext[j].alpha=0;
       }
     }
 
@@ -725,9 +725,6 @@
     function do_seencard(rank) {
       if(rank !=0){
         seencard_flag = true;
-      }
-      else{
-        rank=-1;
       }
       req = {
         seenCard: rank
