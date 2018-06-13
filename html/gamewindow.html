@@ -760,12 +760,11 @@
           callback(data, status);
           state = data.state;
           if(state =="desert account"){
-            req = {
-              desertCardList: empty
-            }
+            do_dessert(empty);
             do_fillcardlist();
              pedometer = 4;
              refreshcard();
+             alert("i do it");
           }
           else if(state =="choose strategy decision"){
             req = {
