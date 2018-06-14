@@ -170,7 +170,9 @@
     var statepadtext_head;
     var statepadtext_body;
     var p_decision=-1;
+    var is_must = false;
     var seencard_flag =false;
+    var empty = [];
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -234,7 +236,7 @@
       do_seencard(num);
       for (j = 0; j <= 3; j++) {
         seencardslot[j].kill();
-        seencardtext[j].kill();
+        seencardtext[j].alpha=0;
       }
     }
 
@@ -527,6 +529,9 @@
      else if (state=="GAMBLE:choose gamble"){
 
      }
+     else if(state == "GAMBLE: win judge"){
+         do_gamblecard(empty);
+     }
      else if (state =="win judge"){
       req = {}
      }
@@ -619,22 +624,20 @@
        // state = "choose strategy decision";
       }
       else if (state == "choose strategy decision") {
-       statepadtext_body.text = '明牌阶段';
-       cardlist = data.handCards;
-       do_fillcardlist();
-       pedometer = 5;
-       refreshcard();
        //state = "choose seen card";
+       statepadtext_body.text = '明牌阶段';
+            cardlist = data.handCards;
+            do_fillcardlist();
+            pedometer = 5;
+            refreshcard();
       }            
-      else if (state == "choose seen card") {
+      else if ((state == "choose seen card")||(state =="must choose seen card")) {
         statepadtext_body.text = '出拳阶段';
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
-        pedometer = 2;
-        refreshcard();
         //state="GAMBLE:choose gamble";
       }
-      else if (state == "GAMBLE:choose gamble") {
+      else if ((state == "GAMBLE:choose gamble")||(state == "GAMBLE:win judge")) {
         statepadtext_body.text = '结算阶段';
         cardlist = data.handCards;
         do_fillcardlist();
@@ -642,7 +645,7 @@
         refreshcard();
        // state ="win judge";
       }
-      else if (state == "win judge") {
+      else if ((state == "win judge")) {
         pedometer = 0;
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
@@ -690,6 +693,7 @@
         //玩家能量信息= data.energy;
         cardlist = data.handCards;
        // state="PREPARE: choose decision";
+       alert("i do it");
       }
       else if(state=="PREPARE: choose decision"){
       }
@@ -722,9 +726,6 @@
     function do_seencard(rank) {
       if(rank !=0){
         seencard_flag = true;
-      }
-      else{
-        rank=-1;
       }
       req = {
         seenCard: rank
@@ -760,10 +761,7 @@
           callback(data, status);
           state = data.state;
           if(state =="desert account"){
-            var empty = [];
-            req = {
-              desertCardList: empty
-            }
+            do_dessert(empty);
             do_fillcardlist();
              pedometer = 4;
              refreshcard();
@@ -774,6 +772,10 @@
              moveDirection: -1,
              fireTarget: -1
            }
+          }
+          else if(state == "GAMBLE:choose gamble"){
+            pedometer = 2;
+            refreshcard();
           }
         },
 
