@@ -110,6 +110,6 @@ object ScalaGodTest extends MyJsonProtocol{
   }
 
   def main(args: Array[String]): Unit = {
-    test2()
+    test1()
   }
 }
