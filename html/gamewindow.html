@@ -488,8 +488,8 @@
             if (cardtargeted[j]) {
                 san--;
                 g[k] = j;
-                k++;
-            }
+                  k++;
+              }
             if (san == 0) break;
           }
           do_gamblecard(g);
@@ -730,6 +730,7 @@
       req = {
         seenCard: rank
       }
+      alert("choose card"+req.seenCard);
     }
 
 
@@ -776,6 +777,11 @@
           else if(state == "GAMBLE: choose gamble"){
             pedometer = 2;
             refreshcard();
+          }
+          else if(state == "must choose seen card"){
+            req={
+              seenCard: 1
+            }
           }
         },
 
