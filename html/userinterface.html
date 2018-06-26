@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
+  <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  
+  <script>
+    var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
+      preload: function () {
+        game.load.image('background', 'assets/img/userbackground.png');
+        game.load.image('userfigure', 'assets/img/figure/figure1.png');
+        game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
+        game.load.image('start', 'assets/img/startbutton.png');
+        game.load.image('help', 'assets/img/helpbutton.png');
+        game.load.image('progressbar','assets/img/outprogress.png');
+        //game.loda.image('inprogressbar','assets/img/progress.png');
+
+        game.load.image('figure1', 'assets/img/figure/figure1.png');
+        game.load.image('figure2', 'assets/img/figure/figure2.png');
+        game.load.image('figure3', 'assets/img/figure/figure3.png');
+        game.load.image('figure4', 'assets/img/figure/figure4.png');
+        game.load.image('figure5', 'assets/img/figure/figure5.png');
+        game.load.image('figure6', 'assets/img/figure/figure6.png');
+        
+
+        game.load.spritesheet('button','assets/buttons/button1.png',100,34);
+        
+        game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+      },
+
+      create: function () {
+        var background = game.add.sprite(0, 0, 'background');
+        var userfigure = game.add.sprite(-150, -100, 'userfigure');
+        var figurepshow1 = game.add.sprite(350, 20, 'figure1');
+        var figurepshow2 = game.add.sprite(350, 140, 'figure2');
+        var figurepshow3 = game.add.sprite(350, 260, 'figure3');
+        var figurepshow4 = game.add.sprite(480, 20, 'figure4');
+        var figurepshow5 = game.add.sprite(480, 140, 'figure5');
+        var figurepshow6 = game.add.sprite(480, 260, 'figure6');
+        var progressbar1 = game.add.sprite(10,10,'progressbar');
+        var progressbar2 = game.add.sprite(20,20,'inprogressbar');
+        background.smoothed = true;
+        background.height = game.height;
+        background.width = game.width;
+        var user_nickname;
+        user_nickname = 'why';
+
+
+        var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
+        var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
+
+        var nicknameText = game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
+        var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
+        var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
+        var usergrade = game.add.bitmapText(215, 60, 'chiller', '???', 54);
+        
+        
+        var changepw = game.add.button(380, 70, 'button', do_changepw, this, 1, 0, 2, 0);
+        var changepwText = game.add.bitmapText(400, 70, 'chiller', 'password', 28);
+
+        var changeprofile = game.add.button(380, 30, 'button', do_changeprofile, this, 1, 0, 2, 0);
+        var changeprofileText = game.add.bitmapText(400, 30, 'chiller', 'profile', 28);
+
+        var startgame = game.add.button(250, 210, 'start', do_match, this);
+
+        var userhelp = game.add.button(50, 400, 'help', do_help, this);
+
+        
+      }
+    });
+
+    function do_help() {
+      game.state.start(help);
+
+    }
+
+    function do_match(){
+      var req = {
+        'sid':sid
+      };
+      $.ajax({
+        url: "/api/session/match",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(req),
+        success: function (data, status) {
+          alert("正在匹配");
+          console.log(data);
+          console.log(data.sid);
+          console.log(data.user);
+          // window.location.href = ""; //需要跳转的地址
+        },
+        error: function (data, status) {
+          alert("匹配失败");
+          console.log(data);
+        }
+      });
+    }
+
+
+    function do_changepw() {
+      game.state.start('changepw');
+    }
+
+
+    function do_changeprofile() {
+      game.state.start('changeprofile');
+    }
+
+
+  </script>
+
+</body>
+
+</html>

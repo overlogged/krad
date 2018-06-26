@@ -1,0 +1,797 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
+  <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+  <style>
+    #gamecontainer {
+      height: 400px;
+      width: 800px;
+      margin: 0px 0px;
+      outline: 0px solid rgb(11, 206, 212);
+      overflow: auto;
+    }
+
+    #cardcontainer {
+      height: 300px;
+      width: 800px;
+      margin: 0px 0px;
+      outline: 0px solid rgb(11, 206, 212);
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="gamecontainer"></div>
+  <div id="cardcontainer"></div>
+  <script>
+    // get sid
+    var url = window.location.href;
+    var sid = parseInt(url.split("?sid=")[1]);
+    //sid = 1;
+    console.log("sid:", sid);
+    var state="Init";
+    var player_num = 3;
+    var arrow = [];
+    var player = [];
+    var p_choose = [];
+    var p_text = [];
+    var req = {};
+    var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
+    var fire_union = [];
+    var playerloc_union = [];
+    var start = false;
+    var map = [{
+      x: 410,
+      y: 10
+    }, {
+      x: 410,
+      y: 60
+    }, {
+      x: 410,
+      y: 130
+    }, {
+      x: 410,
+      y: 180
+    }, {
+      x: 410,
+      y: 240
+    }, {
+      x: 410,
+      y: 290
+    }, {
+      x: 410,
+      y: 345
+    }, {
+      x: 340,
+      y: 420
+    },
+    {
+      x: 435,
+      y: 480
+    }, {
+      x: 456,
+      y: 535
+    }, {
+      x: 474,
+      y: 595
+    }, {
+      x: 490,
+      y: 650
+    }, {
+      x: 515,
+      y: 710
+    }, {
+      x: 540,
+      y: 765
+    }, {
+      x: 568,
+      y: 820
+    },
+    {
+      x: 350,
+      y: 865
+    }, {
+      x: 143,
+      y: 820
+    }, {
+      x: 164,
+      y: 765
+    }, {
+      x: 185,
+      y: 710
+    }, {
+      x: 202,
+      y: 650
+    }, {
+      x: 227,
+      y: 595
+    }, {
+      x: 248,
+      y: 535
+    }, {
+      x: 269,
+      y: 480
+    }
+    ];
+
+    var game = new Phaser.Game(780, 899, Phaser.CANVAS, 'gamecontainer', {
+      preload: function () {
+        game.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
+        game.load.image('fighter1', 'assets/img/gamewindow/fighter1.png');
+        game.load.image('fighter2', 'assets/img/gamewindow/fighter2.png');
+        game.load.image('fighter3', 'assets/img/gamewindow/fighter3.png');
+        game.load.image('fighter4', 'assets/img/gamewindow/fighter4.png');
+        game.load.image('poisoner1', 'assets/img/gamewindow/poisoner1.png');
+        game.load.image('poisoner2', 'assets/img/gamewindow/poisoner2.png');
+        game.load.image('poisoner3', 'assets/img/gamewindow/poisoner3.png');
+        game.load.image('poisoner4', 'assets/img/gamewindow/poisoner4.png');
+      },
+
+      create: function () {
+        game.physics.startSystem(Phaser.Physics.P2JS);
+        game.world.setBounds(0, 0, game.width, game.height);
+        var background = game.add.sprite(0, 0, 'gamebackground');
+        background.smoothed = true;
+        background.height = game.height;
+        background.width = game.width;
+        //do_initplayer(0);
+        game.world.setChildIndex(background, 0);
+       // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
+      },
+
+      update: function () {
+        if(start){
+        for (var i = 0; i < player_num; i++) {
+          player[i].body.setZeroVelocity();
+        }
+      }
+      }
+    });
+
+    var seencardtext = [];
+    var handcardslot = [];
+    var seencardslot = [];
+    var cardlist = [];
+    var cardtargeted = [];
+    var staticinvalidcard = [];
+    var dynamicinvalidcard = [];
+    var act;
+    var san; //how many cards was chosen
+    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var slots;
+    var statepad;
+    var statepadtext_head;
+    var statepadtext_body;
+    var p_decision=-1;
+    var is_must = false;
+    var seencard_flag =false;
+    var empty = [];
+    for (act = 0; act <= 17; act++) {
+      cardtargeted[act] = 0;
+      staticinvalidcard[act] = 1;
+      dynamicinvalidcard[act] = 0;
+      cardlist[act] = 0;
+      }
+      //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
+      //do_fillcardlist();
+
+    var card = new Phaser.Game(780, 320, Phaser.CANVAS, 'cardcontainer', {
+      preload: function () {
+        card.load.image('gamebackground', 'assets/img/userbackground.png');
+        card.load.spritesheet('arrow', 'assets/img/gamewindow/arrow.png', 90, 36);
+        card.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
+        card.load.spritesheet('handcard_move', 'assets/img/gamewindow/handcard_move.png', 105, 250);
+        card.load.spritesheet('handcard_shoot', 'assets/img/gamewindow/handcard_shoot.png', 105,
+          250);
+        card.load.spritesheet('handcard_skill', 'assets/img/gamewindow/handcard_skill.png', 105,
+          250);
+        card.load.spritesheet('handcard_rock', 'assets/img/gamewindow/handcard_rock.png', 105, 250);
+        card.load.spritesheet('handcard_scissors', 'assets/img/gamewindow/handcard_scissors.png',
+          105, 250);
+        card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 105,
+          250);
+        card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 105, 250);
+        card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png');
+        card.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+        card.load.spritesheet('seen', 'assets/buttons/button.png', 100, 26);
+        card.load.spritesheet('pad', 'assets/img/inputbox1.png', 150, 60);
+
+      },
+      create: function () {
+        var background = card.add.sprite(0, 0, 'gamebackground');
+        var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
+        statepad = card.add.sprite(610, 50, 'pad');
+        statepadtext_head = card.add.text(620, 55, 'stage');
+        statepadtext_body = card.add.text(620, 80,'ready');
+        statepadtext_head.fontSize = 20;
+        statepadtext_body.fontSize = 20;
+        //var seenbutton = card.add.button();
+        do_handcardslot();
+        refreshcard();
+      }
+    });
+
+    function do_seencardslot() {
+        var j;
+      var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
+      for (j = 0; j <= 3; j++) {
+        seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0);
+        seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
+        seencardtext[j].fontSize = 20;
+      }
+    }
+
+    function checkseencard(button) {
+      var j;
+      var num;
+      num = (button.x - 100) / 150;
+      num = 3 - num;
+      do_seencard(num);
+      for (j = 0; j <= 3; j++) {
+        seencardslot[j].kill();
+        seencardtext[j].alpha=0;
+      }
+    }
+
+    function refreshcard() {
+      var i;
+      var j;
+      san = 0;
+      for (i = 0; i <= 17; i++) {
+        cardtargeted[j] = 0;
+        staticinvalidcard[j] = 0;
+        dynamicinvalidcard[j] = 0;
+      }
+      staticlock();
+      for (i = 0; i <= 17; i++) {
+        var lookup_table = ['blank', 'paper', 'scissors', 'rock', 'move', 'shoot', 'skill'];
+        j = 'handcard_' + lookup_table[cardlist[i]];
+        handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
+        if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
+        else handcardslot[i].setFrames(1, 0, 0, 0);
+      }
+      if (pedometer == 5) do_seencardslot();
+    }
+
+    function targetcard(button) {
+      var num;
+      if (button.y == 130) num = (button.x - 10) / 45 + 9; //emmmmmm try to locate the button
+      else num = (button.x - 10) / 45;
+      if (staticinvalidcard[num]); //is it a locked button?
+      else if (cardtargeted[num]) { //a button is about to be untargeted
+        cardtargeted[num] = 0;
+        button.setFrames(1, 0, 0, 0);
+        san--;
+        if (san == 0) dynamicunlock(num);
+        if (pedometer == 1) steerTGP(0, cardlist[num]);
+      } else { //a button is about to be targeted
+        cardtargeted[num] = 1;
+        button.setFrames(1, 1, 1, 1);
+        san++;
+        dynamiclock(num);
+        if (pedometer == 1) steerTGP(1, cardlist[num]);
+      }
+    }
+
+    function staticlock() { //some static rules for which card cannot be targeted  
+      var i;
+      switch (pedometer) {
+        case 0:
+          for (i =0; i <= 17; i++)staticinvalidcard[i] = 1;
+          break;
+        case 1:
+          for (i = 0; i <= 17; i++) {
+            switch (cardlist[i]) {
+              case 0:
+              case 1:
+              case 2:
+              case 3:
+                staticinvalidcard[i] = 1;
+                break;
+              case 4:
+              case 5:
+              case 6:
+                staticinvalidcard[i] = 0;
+                break;
+            }
+          }
+          break;
+        case 2:
+          for (i = 0; i <= 17; i++) {
+            switch (cardlist[i]) {
+              case 0:
+              case 4:
+              case 5:
+              case 6:
+                staticinvalidcard[i] = 1;
+                break;
+              case 1:
+              case 2:
+              case 3:
+                staticinvalidcard[i] = 0;
+                break;
+            }
+          }
+          break;
+        case 3:
+        case 5:
+          for (i = 0; i <= 17; i++) staticinvalidcard[i] = 1;
+          break;
+        case 4:
+          for (i = 0; i <= 17; i++) {
+            if (cardlist[i] == 0) staticinvalidcard[i] = 1;
+            else staticinvalidcard[i] = 0;
+          }
+      }
+    }
+
+    function dynamiclock(targeter) { //some rules for which cards cannot be targeted at the same time
+      var j;
+      switch (pedometer) {
+        case 1:
+          for (j = 0; j <= 17; j++) {
+            if ((j != targeter) && (staticinvalidcard[j] != 1)) {
+              staticinvalidcard[j] = 1;
+              dynamicinvalidcard[j] = 1;
+              handcardslot[j].setFrames(2, 2, 2, 2);
+            }
+          }
+          break;
+        case 2:
+          for (j = 0; j <= 17; j++) {
+            if ((cardlist[j] != cardlist[targeter]) && (staticinvalidcard[j] != 1)) {
+              staticinvalidcard[j] = 1;
+              dynamicinvalidcard[j] = 1;
+              handcardslot[j].setFrames(2, 2, 2, 2);
+            }
+          }
+          break;
+      }
+    }
+
+    function dynamicunlock(targeter) {
+      var j;
+      for (j = 0; j <= 17; j++) {
+        if (dynamicinvalidcard[j] == 1) {
+          staticinvalidcard[j] = 0;
+          dynamicinvalidcard[j] = 0;
+          handcardslot[j].setFrames(1, 0, 0, 0);
+        }
+      }
+    }
+
+    function do_move() {
+      for (var people = 0;people<player_num;people++){
+      player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
+      player[people].body.y = map[playerloc_union[people]].y-10;
+      }
+    }
+
+    function do_poison(people) {
+      var x = player[people].body.x;
+      var y = player[people].body.y;
+      player[people].kill();
+      player[people] = game.add.sprite(x, y, 'poisoner' + (people + 1).toString());
+      player[people].anchor.x = 0.5;
+      player[people].anchor.y = 0.5;
+      game.physics.p2.enable(player[people]);
+    }
+
+    function do_initplayer(init_location) {
+      for (var i = 0; i < player_num; i++) {
+        player[i] = game.add.sprite(map[init_location].x + i * 20 + (4 - player_num) * 10, map[init_location].y,
+          'fighter' + (i + 1).toString());
+        player[i].anchor.x = 0.5;
+        player[i].anchor.y = 0.5;
+        game.physics.p2.enable(player[i]);
+        player[i].body.fixedRotation = true;
+      }
+    }
+
+    function do_arrowgenerate(arrow_union) {
+      for (var z = 0; z < 8; z++) {
+        if (arrow_union[z] != 0) {
+          arrow[z] = card.add.button(630, 250, 'arrow', fix_arrow, this, 1, 2, 0, 2);
+          arrow[z].anchor.x = 0;
+          arrow[z].anchor.y = 0.5;
+          arrow[z].angle = -45 * (3 - z);
+        }
+      }
+    }
+
+    function do_targetgenerate() {
+      for (var z = 0; z < 4; z++) {
+        p_choose[z] = card.add.button(480 + z * 70, 200, 'button', fix_choose, this, 1, 0, 2, 0);
+        p_text[z] = card.add.bitmapText(490 + z * 70, 200, 'chiller', 'player' + z.toString(), 28);
+      }
+    }
+
+    function do_handcardslot() {
+      for (slots = 0; slots <= 17; slots++) { //create handcard slots
+        if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard,
+          this, 1, 0, 0, 0);
+        if (slots > 8) handcardslot[slots] = card.add.button(10 + 45 * (slots - 9), 130, 'handcard_blank',
+        targetcard, this, 1, 0, 0, 0);
+      }
+    }
+
+    function steerTGP(mode, type) { //check which button will be show,steer or TGP?
+      var j;
+      if (mode) {
+        switch (type) {
+          case 4:
+            do_arrowgenerate(arrow_union);
+            break;
+          case 5:
+            do_targetgenerate();
+            break;
+        }
+      } else {
+        switch (type) {
+          case 4:
+            for (j = 0; j < 8; j++) {
+              if (arrow_union[j] != 0) arrow[j].kill();
+            }
+            break;
+          case 5:
+            for (j = 0; j < 4; j++) {
+              p_choose[j].kill();
+              p_text[j].alpha = 0;
+            };
+            break;
+        }
+      }
+    }
+
+    function do_fillcardlist() {
+      var j;
+      for (j = 0; j <= 17; j++) {
+        switch (cardlist[j]) {
+          case 0:
+          case 1:
+          case 2:
+          case 3:
+          case 4:
+          case 5:
+          case 6:
+            break;
+          default:
+            cardlist[j] = 0;
+            break;
+        }
+      }
+    }
+
+    function do_checkcard() { // function for checkbutton
+                              //alert('sending completed');
+      var j;
+      var g = [];
+      switch (pedometer) {
+        case 1:
+          for (j = 0; j <= 17; j++) {
+            if (cardtargeted[j]) {
+              do_decision(j);
+              steerTGP(0, cardlist[j]);
+            }
+          }
+          break;
+        case 2:
+          var k=0;
+          for (j = 0; j <= 17; j++) {
+            if (cardtargeted[j]) {
+                san--;
+                g[k] = j;
+                  k++;
+              }
+            if (san == 0) break;
+          }
+          do_gamblecard(g);
+          break;
+        case 4:
+          var k =0 ;
+          for (j = 0; j <= 17; j++) {
+            if (cardtargeted[j]) {
+              san--;
+              g[k] = j;
+              k++;
+            }
+            if (san == 0) break;
+          }
+          do_dessert(g);
+          break;
+        default:
+          statepadtext_body.text='操作受限';
+          break;
+      }
+
+      if (state == "Init") {
+        req = {}
+     }
+     else if (state == "choose hero") {
+       req = {
+         hero: "fire"
+       };
+     }
+     else if (state == "start game") {
+      req = {}
+     }
+     else if (state == "choose strategy decision") {
+     }            
+     else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
+     }
+     else if (state=="GAMBLE:choose gamble"){
+
+     }
+     else if(state == "GAMBLE: win judge"){
+         do_gamblecard(empty);
+     }
+     else if (state =="win judge"){
+      req = {}
+     }
+     else if(state=="ACTION: deposit account"){
+      req = {}
+     }
+     else if(state=="skills account"){
+      req = {}
+     }
+     else if(state=="fire account"){
+      req = {}
+     }
+     else if(state=="move account"){
+      req = {}
+     }
+     else if(state=="element account"){
+      req = {}
+     }
+     else if(state="if human wins"){
+       req={}
+     }
+     else if(state=="Game Over, human wins"){
+       req={}
+     }
+     else if(state=="infection account"){
+       req={}
+     }
+     else if(state=="Game Over,zombie wins"){
+     }
+     else if(state=="desert account"){
+     }
+     else if(state=="PREPARE: choose decision"){
+       state = "start game";
+       req = {}
+     }
+      request(req,do_callback);
+    }
+
+    var phase_state = "Main";
+    var player_state = "0.0";
+    var player_index = 0;
+    var team_result = [0,0,0,1];
+    function do_init() {
+      // init
+      request({}, function (data_init0) {
+        request({ hero: "hero" }, function (data_init1) {
+          request({}, function (data_main_0_0) {
+            console.log("data_init0", data_init0);
+            console.log("data_init1", data_init1);
+            console.log("data_main_0_0", data_main_0_0);
+            player_state = "0.1";
+            player_index = data_init0.index;
+            team_result = data_init1.team_result;
+          });
+        });
+      });
+    }
+
+
+
+    
+
+    function do_callback(data, status) {
+      if (state == "Init") {
+        pedometer = 0;
+        //state="choose hero";
+      }
+      else if (state == "choose hero") {
+        team_result = data.teamResult;
+        player_num = team_result.length;
+        do_initplayer(4);
+        start = true;
+        for (var i = 0; i < player_num; i++) {
+          if (team_result[i] == 1) {
+            do_poison(i);
+            player[i].body.x = map[0].x + i * 20 + (4 - player_num) * 10;
+            player[i].body.y = map[0].y;
+          }
+        }
+       // state = "start game";
+      }
+      else if (state == "start game") {
+        statepadtext_body.text = '决策阶段';
+        arrow_union = data.availableMoveDirection;
+        cardlist = data.handCards;
+        do_fillcardlist();
+        pedometer = 1;
+        //fire_union = data.availableFireTarget;
+        refreshcard();
+       // state = "choose strategy decision";
+      }
+      else if (state == "choose strategy decision") {
+       //state = "choose seen card";
+       statepadtext_body.text = '明牌阶段';
+            cardlist = data.handCards;
+            do_fillcardlist();
+            pedometer = 5;
+            refreshcard();
+      }            
+      else if ((state == "choose seen card")||(state =="must choose seen card")) {
+        statepadtext_body.text = '出拳阶段';
+        //decision_union = data.decisionChoices;
+        //seencard_union = data.seenCardChoices;
+        //state="GAMBLE:choose gamble";
+      }
+      else if ((state == "GAMBLE: choose gamble")||(state == "GAMBLE:win judge")) {
+        statepadtext_body.text = '结算阶段';
+        cardlist = data.handCards;
+        do_fillcardlist();
+        pedometer = 3;
+        refreshcard();
+       // state ="win judge";
+      }
+      else if ((state == "win judge")) {
+        pedometer = 0;
+        //   每人出牌的选择  = data.gambleChoices;
+        //   每人出了几张牌  = data.cardNumList;
+        //   哪些玩家赢了   =  data.playerWinList;
+       // state="ACTION: deposit account";
+      }
+      else if(state=="ACTION: deposit account"){
+        //剩余的能量点数  = data.eneregyList;
+       // state="skills account";
+      }
+      else if(state=="skills account"){
+       // state="fire account";
+      }
+      else if(state=="fire account"){
+        // 剩余的生命值 = data.healthPointList;
+        //state="move account";
+      }
+      else if(state=="move account"){
+         playerloc_union = data.locationList;
+         do_move();
+         //state="element account";
+      }
+      else if(state=="element account"){
+        // 所有人的要素情况 = data.elemList;
+       // state="if human wins";
+      }
+      else if(state=="if human wins"){
+      //  state="Game Over, human wins";
+      }
+      else if(state=="Game Over, human wins"){
+        // 游戏结束
+      }
+      else if(state=="infection account"){
+        team_result = data.teamList;
+        for (var i = 0; i < player_num; i++) {
+          if (team_result[i] == 1) {
+            do_poison(i);
+          }
+        }
+      }
+      else if (state == "Game Over,zombie wins") {
+        statepadtext_body.text = '弃牌阶段';
+      }
+      else if(state=="desert account"){
+        //玩家能量信息= data.energy;
+        cardlist = data.handCards;
+       // state="PREPARE: choose decision";
+       alert("i do it");
+      }
+      else if(state=="PREPARE: choose decision"){
+      }
+    }
+
+    function fix_arrow(button){
+      var temp = ((button.angle)/45 +3);
+     // alert(temp);
+      do_target(temp,-1);
+    }
+    function fix_choose(button){
+      var temp= (button.x-480)/70 ;
+      do_target(-1,temp);
+    }
+
+
+    function do_decision(strategy) {
+      p_decision = strategy
+    }
+
+    function do_target(direction, target) {
+      req = {
+        decision: p_decision,       
+        moveDirection: direction,
+        fireTarget: target
+      }
+      alert(direction+"+"+target);
+    }
+
+    function do_seencard(rank) {
+      if(rank !=0){
+        seencard_flag = true;
+      }
+      req = {
+        seenCard: rank
+      }
+      alert("choose card"+req.seenCard);
+    }
+
+
+    function do_gamblecard(cardarray) {
+          req = {
+          gambleCard : cardarray
+        }
+    }
+
+    function do_dessert(cardarray) {
+      req={
+        desertCardList: cardarray
+      }
+    }
+
+    function request(msg, callback) {
+      $.ajax({
+        url: "/api/game",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify({
+          'sid': parseInt(sid),
+          'msg': JSON.stringify(msg)
+        }),
+        success: function (str, status) {
+          console.log(str);
+          var data = JSON.parse(str);
+          console.log(data.state);
+          callback(data, status);
+          state = data.state;
+          if(state =="desert account"){
+            do_dessert(empty);
+            do_fillcardlist();
+             pedometer = 4;
+             refreshcard();
+          }
+          else if(state =="choose strategy decision"){
+            req = {
+             decision: -1,       
+             moveDirection: -1,
+             fireTarget: -1
+           }
+          }
+          else if(state == "GAMBLE: choose gamble"){
+            pedometer = 2;
+            refreshcard();
+          }
+          else if(state == "must choose seen card"){
+            req={
+              seenCard: 1
+            }
+          }
+        },
+
+        error: function (data, status) {
+          console.log(data);
+        }
+      });
+    }
+
+  </script>
+</body>
+
+</html>
