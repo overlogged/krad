@@ -748,7 +748,10 @@
       req={
         desertCardList: cardarray
       }
-      alert("desposed"+req.desertCardList[0]+"and");
+      if(req.desertCardList[0]!=-1){
+      alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
+      }
+      alert("depose empty");
     }
 
     function request(msg, callback) {
