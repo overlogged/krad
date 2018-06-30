@@ -370,7 +370,7 @@
     function do_move() {
       for (var people = 0;people<player_num;people++){
       player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
-      player[people].body.y = map[playerloc_union[people]].y-10;
+      player[people].body.y = map[playerloc_union[people]].y;
       }
     }
 
@@ -382,6 +382,7 @@
       player[people].anchor.x = 0.5;
       player[people].anchor.y = 0.5;
       game.physics.p2.enable(player[people]);
+      player[people].body.fixedRotation = true;
     }
 
     function do_initplayer(init_location) {
@@ -744,6 +745,7 @@
       req={
         desertCardList: cardarray
       }
+      alert("desposed"+req.desertCardList);
     }
 
     function request(msg, callback) {
