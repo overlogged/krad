@@ -566,6 +566,7 @@
      else if(state=="Game Over,zombie wins"){
      }
      else if(state=="desert account"){
+       do_dessert(g);
      }
      else if(state=="PREPARE: choose decision"){
        state = "start game";
@@ -751,7 +752,9 @@
       if(req.desertCardList[0]!=-1){
       alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
       }
+      else{
       alert("depose empty");
+      }
     }
 
     function request(msg, callback) {
