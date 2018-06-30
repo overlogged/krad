@@ -172,7 +172,7 @@
     var p_decision=-1;
     var is_must = false;
     var seencard_flag =false;
-    var empty = [];
+    var empty = [-1];
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -370,7 +370,7 @@
     function do_move() {
       for (var people = 0;people<player_num;people++){
       player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
-      player[people].body.y = map[playerloc_union[people]].y-10;
+      player[people].body.y = map[playerloc_union[people]].y;
       }
     }
 
@@ -382,6 +382,7 @@
       player[people].anchor.x = 0.5;
       player[people].anchor.y = 0.5;
       game.physics.p2.enable(player[people]);
+      player[people].body.fixedRotation = true;
     }
 
     function do_initplayer(init_location) {
@@ -488,8 +489,8 @@
             if (cardtargeted[j]) {
                 san--;
                 g[k] = j;
-                k++;
-            }
+                  k++;
+              }
             if (san == 0) break;
           }
           do_gamblecard(g);
@@ -525,6 +526,9 @@
      else if (state == "choose strategy decision") {
      }            
      else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
+     }
+     else if (state == "must choose seen card"){
+        alert(req.seenCard);
      }
      else if (state=="GAMBLE:choose gamble"){
 
@@ -637,7 +641,7 @@
         //seencard_union = data.seenCardChoices;
         //state="GAMBLE:choose gamble";
       }
-      else if ((state == "GAMBLE:choose gamble")||(state == "GAMBLE:win judge")) {
+      else if ((state == "GAMBLE: choose gamble")||(state == "GAMBLE:win judge")) {
         statepadtext_body.text = '结算阶段';
         cardlist = data.handCards;
         do_fillcardlist();
@@ -730,6 +734,7 @@
       req = {
         seenCard: rank
       }
+      alert("choose card"+req.seenCard);                        //test
     }
 
 
@@ -742,6 +747,12 @@
     function do_dessert(cardarray) {
       req={
         desertCardList: cardarray
+      }
+      if(req.desertCardList[0]!=-1){
+      alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
+      }
+      else{
+      alert("depose empty");
       }
     }
 
@@ -773,9 +784,14 @@
              fireTarget: -1
            }
           }
-          else if(state == "GAMBLE:choose gamble"){
+          else if(state == "GAMBLE: choose gamble"){
             pedometer = 2;
             refreshcard();
+          }
+          else if(state == "must choose seen card"){
+            req={
+              seenCard: 1
+            }
           }
         },
 
