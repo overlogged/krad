@@ -172,7 +172,7 @@
     var p_decision=-1;
     var is_must = false;
     var seencard_flag =false;
-    var empty = [];
+    var empty = [-1];
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -748,7 +748,7 @@
       req={
         desertCardList: cardarray
       }
-      alert("desposed"+req.desertCardList);
+      alert("desposed"+req.desertCardList[0]+"and");
     }
 
     function request(msg, callback) {
