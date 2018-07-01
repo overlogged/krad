@@ -574,7 +574,7 @@
      }
     var seent = JSON.stringify({
           'sid': parseInt(sid),
-          'msg': JSON.stringify(msg)
+          'msg': JSON.stringify(req)
         })
       console.log("give back :"+seent);
       request(req,do_callback);
@@ -730,7 +730,7 @@
         moveDirection: direction,
         fireTarget: target
       }
-      alert(direction+"+"+target);
+      alert("choose strategy"+req.decision+"+"+direction+"+"+target);
     }
 
     function do_seencard(rank) {
