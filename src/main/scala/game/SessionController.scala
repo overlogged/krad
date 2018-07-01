@@ -117,7 +117,9 @@ object SessionController {
           matching_count -= player_count
           val choosed_players = new Array[Int](player_count)
           val god = new God()
-          var i = 0
+
+          var i = 1
+          choosed_players(0) = req.sid
           for (player <- states) if (i < player_count && player._2.state == StateMatching) {
             choosed_players(i) = player._1
             i += 1
