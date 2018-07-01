@@ -722,6 +722,7 @@
 
     function do_decision(strategy) {
       p_decision = strategy;
+      alert("you choose"+p_decision);
     }
 
     function do_target(direction, target) {
@@ -754,12 +755,8 @@
       req={
         desertCardList: cardarray
       }
-      /*if(req.desertCardList[0]!=-1){
-      alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
-      }
-      else{
-      alert("depose empty");
-      }*/
+      var seent2=JSON.stringify(req);
+      alert(sent2);
     }
 
     function request(msg, callback) {
