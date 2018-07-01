@@ -97,7 +97,7 @@ object ScalaGodTest extends MyJsonProtocol{
   }
 
   def test2(): Unit ={
-    SessionController.test()
+    SessionController.addGhost()
     val fs = for(sid<-0 to 1)
       yield
         for(data1<-SessionController.gameRequest(RequestGame(sid,"{}"));

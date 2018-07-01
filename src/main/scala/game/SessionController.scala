@@ -63,12 +63,25 @@ object SessionController {
     }
   }
 
-  def test(): Unit = {
-    for(arr<-Seq(Array(0),Array(1,2),Array(3,4,5,6))){
+  val ghostGroup = Seq(Array(0),Array(1,2),Array(3,4,5,6))
+  def addGhost(): Unit = {
+    for(arr<-ghostGroup){
       val god = new God
       god.initialPlayer(arr)
       for(x<-arr){
         states += (x->SessionState(StatePlaying,god))
+        map.set(x,"ghost@ghost.com")
+      }
+    }
+  }
+
+  def removeGhost(): Unit = {
+    for(arr<-ghostGroup;
+        sid<-arr) {
+      try{
+        states.remove(sid)
+      }catch {
+        case _ => {}
       }
     }
   }

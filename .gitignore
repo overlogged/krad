@@ -1,7 +1,7 @@
 .idea/
 target/
 *.class
-krad.iml
+*.iml
 config.txt
 log.txt
 deploy/

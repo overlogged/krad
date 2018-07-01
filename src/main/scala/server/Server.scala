@@ -112,7 +112,13 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
     } ~
       path("restart") {
         post {
-          SessionController.test()
+          SessionController.addGhost()
+          complete(HttpResponse(StatusCodes.Accepted))
+        }
+      } ~
+      path("shutdown") {
+        post {
+          SessionController.removeGhost()
           complete(HttpResponse(StatusCodes.Accepted))
         }
       } ~
@@ -199,7 +205,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("session" / "match") {
-        withRequestTimeout(Duration.Inf) {    // todo: 2 min
+        withRequestTimeout(Duration.Inf) { // todo: 2 min
           post {
             entity(as[RequestMatch]) { req =>
               log("post", "session/match")
@@ -235,7 +241,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       case _ => {}
     }
     Http().bindAndHandle(route, config.web_host, config.web_port)
-    SessionController.test()
+    SessionController.addGhost()
     MapGenerator.generate();
     log("bind", s"${config.web_host}:${config.web_port}")
   }
