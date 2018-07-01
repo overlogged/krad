@@ -749,12 +749,13 @@
       req={
         desertCardList: cardarray
       }
-      if(req.desertCardList[0]!=-1){
+      var seent=JSON.stringify(req);
+      /*if(req.desertCardList[0]!=-1){
       alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
       }
       else{
       alert("depose empty");
-      }
+      }*/
     }
 
     function request(msg, callback) {
