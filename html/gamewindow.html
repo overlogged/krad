@@ -169,7 +169,7 @@
     var statepad;
     var statepadtext_head;
     var statepadtext_body;
-    var p_decision=-1;
+    var p_decision= -1;
     var is_must = false;
     var seencard_flag =false;
     var empty = [-1];
@@ -576,7 +576,7 @@
           'sid': parseInt(sid),
           'msg': JSON.stringify(req)
         })
-      console.log("give back :"+seent);
+      console.log("give back :"+seent+"while req = "+ JSON.stringify(req));
       request(req,do_callback);
     }
 
@@ -721,7 +721,7 @@
 
 
     function do_decision(strategy) {
-      p_decision = strategy
+      p_decision = strategy;
     }
 
     function do_target(direction, target) {
