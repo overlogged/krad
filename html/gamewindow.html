@@ -568,10 +568,6 @@
      }
      else if(state=="desert account"){
      }
-     else if(state=="PREPARE: choose decision"){
-       state = "start game";
-       req = {}
-     }
     var seent = JSON.stringify({
           'sid': parseInt(sid),
           'msg': JSON.stringify(req)
@@ -631,7 +627,7 @@
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
-       // state = "choose strategy decision";
+       // state = "choose strategy decision"; 
       }
       else if (state == "choose strategy decision") {
        //state = "choose seen card";
@@ -701,11 +697,13 @@
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
+        statepadtext_body.text = '决策阶段';
+        arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
-       // state="PREPARE: choose decision";
-       alert("i do it");
-      }
-      else if(state=="PREPARE: choose decision"){
+        do_fillcardlist();
+        pedometer = 1;
+        //fire_union = data.availableFireTarget;
+        refreshcard();
       }
     }
 
