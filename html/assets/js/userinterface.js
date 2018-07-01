@@ -13,17 +13,17 @@ var state_userinterface = {
     game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
     game.add.sprite(-150, -100, user.avatar);
 
-    game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
-    game.add.bitmapText(260, 20, 'chiller', user.nickname, 54);
-    game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
-    game.add.bitmapText(215, 60, 'chiller', user.stats.score.toString(), 54);
+    game.add.bitmapText(120, 20, 'desyrel', 'nickname:', 36);
+    game.add.bitmapText(260, 20, 'desyrel', user.nickname, 36);
+    game.add.bitmapText(120, 60, 'desyrel', 'grade:', 36);
+    game.add.bitmapText(215, 60, 'desyrel', user.stats.score.toString(), 36);
 
 
-    game.add.button(380, 70, 'button', go_changepw, this, 1, 0, 2, 0);
-    game.add.bitmapText(400, 70, 'chiller', 'password', 28);
+    game.add.button(240, 115, 'button', go_changepw, this, 1, 0, 2, 0);
+    game.add.bitmapText(255, 115, 'chiller', 'password', 28);
 
-    game.add.button(380, 30, 'button', go_changeprofile, this, 1, 0, 2, 0);
-    game.add.bitmapText(400, 30, 'chiller', 'profile', 28);
+    game.add.button(120, 115, 'button', go_changeprofile, this, 1, 0, 2, 0);
+    game.add.bitmapText(145, 115, 'chiller', 'profile', 28);
 
     game.add.button(250, 210, 'start', do_match, this);
     game.add.button(50, 400, 'help', go_help, this);

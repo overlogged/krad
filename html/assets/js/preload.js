@@ -4,6 +4,8 @@ var state_preload = {
     game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
     game.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
     game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+    game.load.bitmapFont('desyrel', 'assets/fonts/desyrel.png', 'assets/fonts/desyrel.xml');
+    game.load.bitmapFont('desyrel-pink', 'assets/fonts/desyrel-pink.png', 'assets/fonts/desyrel-pink.xml');
     game.load.image('figure1', 'assets/img/figure/figure1.png');
     game.load.image('figure2', 'assets/img/figure/figure2.png');
     game.load.image('figure3', 'assets/img/figure/figure3.png');
