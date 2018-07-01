@@ -572,6 +572,11 @@
        state = "start game";
        req = {}
      }
+    var seent = JSON.stringify({
+          'sid': parseInt(sid),
+          'msg': JSON.stringify(msg)
+        })
+      console.log("give back :"+seent);
       request(req,do_callback);
     }
 
@@ -749,8 +754,6 @@
       req={
         desertCardList: cardarray
       }
-      var seent=JSON.stringify(req);
-      alert(seent);
       /*if(req.desertCardList[0]!=-1){
       alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
       }
