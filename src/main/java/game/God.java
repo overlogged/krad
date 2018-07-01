@@ -528,10 +528,13 @@ public class God {
     private int desert_count = 0;
     private void desertAccount(int playerIndex,String msg){
         MsgDesertAccount msgDesertAccount = GodHelper.getDesertAccount(msg);
+        int[] cardList = new int[msgDesertAccount.desertCardList().length];
+        for(int i = 0;i < cardList.length; i++)
+            cardList[i] = msgDesertAccount.desertCardList()[i];
         synchronized (this){
             desert_count += 1;
-            if((msgDesertAccount.desertCardList() != null)&(msgDesertAccount.desertCardList()[0] != -1))
-                GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,msgDesertAccount.desertCardList());
+            if(cardList[0] != -1)
+                GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,cardList);
             if(allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
                 allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
             if(desert_count < playerNum){
