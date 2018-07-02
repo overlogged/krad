@@ -196,6 +196,9 @@ public class God {
                             result = GodHelper.toDesertAccount("card distribute",allPlayers[playerIndex].energy,playerHandCard);
                             phaseState = PhaseState.PREPARE;
                             playerState[playerIndex] = 0;
+                            seen_card_count = 0;
+                            gamble_count = 0;
+                            desert_count = 0;
                             // reset all temp variables
                             for(int i = 0;i < playerNum;i++){
                                 availableFireTarget[i] = 0;
