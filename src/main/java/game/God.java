@@ -201,9 +201,9 @@ public class God {
                             desert_count = 0;
                             // reset all temp variables
                             for(int i = 0;i < playerNum;i++){
-                                allPlayers[i].stratDecision = 7;
+                                allPlayers[i].stratDecision = GambleChecker.DEPOSIT;
                                 availableFireTarget[i] = 0;
-                                decisionChoices[i] = 7;
+                                decisionChoices[i] = GambleChecker.DEPOSIT;
                                 seenCardChoices[i] = 0;
                                 gambleChoices[i] = GambleChecker.PAPER;
                                 cardNumList[i] = 0;
@@ -483,7 +483,7 @@ public class God {
     }
     private void moveAccount(){
         for(int i = 0;i < playerNum;i ++) {
-            if (allPlayers[i].stratDecision == GambleChecker.MOVE)
+            if (decisionChoices[i] == GambleChecker.MOVE)
                 allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
             locationList[i] = allPlayers[i].preLoc;
         }
