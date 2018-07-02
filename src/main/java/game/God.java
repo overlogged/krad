@@ -201,6 +201,7 @@ public class God {
                             desert_count = 0;
                             // reset all temp variables
                             for(int i = 0;i < playerNum;i++){
+                                allPlayers[i].stratDecision = 7;
                                 availableFireTarget[i] = 0;
                                 decisionChoices[i] = 7;
                                 seenCardChoices[i] = 0;
@@ -514,6 +515,7 @@ public class God {
     private void infectionAccount(){
         for(int i = 0;i < playerNum;i++) {
             for(int j = 0;j < playerNum;j++) {
+                PlayerChecker.infection(map,allPlayers[i],allPlayers[j]);
                 if(PlayerChecker.infection(map, allPlayers[i], allPlayers[j]))
                     scoreList[i] += 25;
             }
