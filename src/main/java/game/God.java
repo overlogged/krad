@@ -74,6 +74,8 @@ public class God {
                             }
                             if(isSeenCard)
                                 allPlayers[playerIndex].isSeenCard = true;
+                            else
+                                allPlayers[playerIndex].isSeenCard = false;
                             for(int i = 0; i < playerNum;i++){
                                 if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
                                     availableFireTarget[i] = 1;
