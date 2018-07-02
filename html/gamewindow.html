@@ -527,12 +527,11 @@
      else if (state == "choose strategy decision") {
      }            
      else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
+        do_gamblecard(empty);
      }
      else if (state == "must choose seen card"){
-        alert(req.seenCard);
      }
      else if (state=="GAMBLE:choose gamble"){
-
      }
      else if(state == "GAMBLE: win judge"){
          do_gamblecard(empty);
