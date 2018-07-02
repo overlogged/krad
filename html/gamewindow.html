@@ -44,7 +44,7 @@
     var p_text = [];
     var req = {};
     var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
-    var fire_union = [];
+    var fire_union = [1,1,1,1];
     var playerloc_union = [];
     var start = false;
     var map = [{
@@ -407,10 +407,12 @@
       }
     }
 
-    function do_targetgenerate() {
+    function do_targetgenerate(fire_union) {
       for (var z = 0; z < 4; z++) {
+        if(fire_union[z]!=0){
         p_choose[z] = card.add.button(480 + z * 70, 200, 'button', fix_choose, this, 1, 0, 2, 0);
         p_text[z] = card.add.bitmapText(490 + z * 70, 200, 'chiller', 'player' + z.toString(), 28);
+        }
       }
     }
 
@@ -431,7 +433,7 @@
             do_arrowgenerate(arrow_union);
             break;
           case 5:
-            do_targetgenerate();
+            do_targetgenerate(fire_union);
             break;
         }
       } else {
@@ -618,7 +620,6 @@
             player[i].body.y = map[0].y;
           }
         }
-       // state = "start game";
       }
       else if (state == "start game") {
         statepadtext_body.text = '决策阶段';
@@ -626,7 +627,7 @@
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 1;
-        //fire_union = data.availableFireTarget;
+        fire_union = data.availableFireTarget;
         refreshcard();
        // state = "choose strategy decision"; 
       }
@@ -703,7 +704,6 @@
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 0;
-        //fire_union = data.availableFireTarget；
         refreshcard();
       }
       else if(state=="card distribute")
@@ -713,7 +713,7 @@
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 1;
-        //fire_union = data.availableFireTarget；
+        fire_union = data.availableFireTarget;
         refreshcard();
         cardtargeted = [];
       }
