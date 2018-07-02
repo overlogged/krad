@@ -79,6 +79,7 @@ object UserModel extends MyJsonProtocol{
     log("info", "please start mongodb with `auth=false`")
     log("mongodb", cmd)
     admin_db.eval(cmd)
+    register("ghost@ghost.com","ghost","figure1",0,"ghost")
     log("migrant", "init db")
     log("info", "please restart mongodb with `auth=true`")
   }

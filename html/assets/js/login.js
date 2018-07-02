@@ -29,9 +29,6 @@ var state_login = {
   }
 }
 
-
-
-
 function go_forget(){
   game.state.start('forget');
 }

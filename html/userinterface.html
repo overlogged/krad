@@ -33,6 +33,8 @@
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
         
         game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+        game.load.bitmapFont('desyrel', 'assets/fonts/desyrel.png', 'assets/fonts/desyrel.xml');
+        game.load.bitmapFont('desyrel-pink', 'assets/fonts/desyrel-pink.png', 'assets/fonts/desyrel-pink.xml');
       },
 
       create: function () {
@@ -50,23 +52,23 @@
         background.height = game.height;
         background.width = game.width;
         var user_nickname;
-        user_nickname = 'why';
+        user_nickname = 'hhhhhhhh';
 
 
         var infectedText = game.add.bitmapText(500, 80, 'chiller', 'infected', 54); 
         var tacticalText = game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
 
-        var nicknameText = game.add.bitmapText(120, 20, 'chiller', 'nickname:', 54);
-        var usernickname = game.add.bitmapText(260, 20, 'chiller', user_nickname, 54);
-        var gradeText = game.add.bitmapText(120, 60, 'chiller', 'grade:', 54);
-        var usergrade = game.add.bitmapText(215, 60, 'chiller', '???', 54);
+        var nicknameText = game.add.bitmapText(120, 20, 'desyrel', 'nickname:', 36);
+        var usernickname = game.add.bitmapText(290, 20, 'desyrel', user_nickname, 36);
+        var gradeText = game.add.bitmapText(120, 60, 'desyrel', 'grade:', 36);
+        var usergrade = game.add.bitmapText(215, 60, 'desyrel', '???', 36);
         
         
-        var changepw = game.add.button(380, 70, 'button', do_changepw, this, 1, 0, 2, 0);
-        var changepwText = game.add.bitmapText(400, 70, 'chiller', 'password', 28);
+        var changepw = game.add.button(240, 115, 'button', do_changepw, this, 1, 0, 2, 0);
+        var changepwText = game.add.bitmapText(255, 115, 'chiller', 'password', 30);
 
-        var changeprofile = game.add.button(380, 30, 'button', do_changeprofile, this, 1, 0, 2, 0);
-        var changeprofileText = game.add.bitmapText(400, 30, 'chiller', 'profile', 28);
+        var changeprofile = game.add.button(120, 115, 'button', do_changeprofile, this, 1, 0, 2, 0);
+        var changeprofileText = game.add.bitmapText(145, 115, 'chiller', 'profile', 30);
 
         var startgame = game.add.button(250, 210, 'start', do_match, this);
 

@@ -169,7 +169,7 @@
     var statepad;
     var statepadtext_head;
     var statepadtext_body;
-    var p_decision=-1;
+    var p_decision= -1;
     var is_must = false;
     var seencard_flag =false;
     var empty = [-1];
@@ -555,7 +555,7 @@
      else if(state=="element account"){
       req = {}
      }
-     else if(state="if human wins"){
+     else if(state=="if human wins"){
        req={}
      }
      else if(state=="Game Over, human wins"){
@@ -568,10 +568,11 @@
      }
      else if(state=="desert account"){
      }
-     else if(state=="PREPARE: choose decision"){
-       state = "start game";
-       req = {}
-     }
+    var seent = JSON.stringify({
+          'sid': parseInt(sid),
+          'msg': JSON.stringify(req)
+        })
+      console.log("give back :"+seent+"while req = "+ JSON.stringify(req));
       request(req,do_callback);
     }
 
@@ -626,7 +627,7 @@
         pedometer = 1;
         //fire_union = data.availableFireTarget;
         refreshcard();
-       // state = "choose strategy decision";
+       // state = "choose strategy decision"; 
       }
       else if (state == "choose strategy decision") {
        //state = "choose seen card";
@@ -696,11 +697,14 @@
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
+        statepadtext_body.text = '决策阶段';
+        arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
-       // state="PREPARE: choose decision";
-       alert("i do it");
-      }
-      else if(state=="PREPARE: choose decision"){
+        do_fillcardlist();
+        pedometer = 1;
+        //fire_union = data.availableFireTarget；
+        refreshcard();
+        cardtargeted = [];
       }
     }
 
@@ -716,7 +720,10 @@
 
 
     function do_decision(strategy) {
-      p_decision = strategy
+      p_decision = strategy;
+      req.decision = p_decision;
+      alert("you choose"+p_decision);
+      p_decision = -1;
     }
 
     function do_target(direction, target) {
@@ -725,7 +732,7 @@
         moveDirection: direction,
         fireTarget: target
       }
-      alert(direction+"+"+target);
+      alert("choose strategy"+req.decision+"+"+direction+"+"+target);
     }
 
     function do_seencard(rank) {
@@ -749,12 +756,8 @@
       req={
         desertCardList: cardarray
       }
-      if(req.desertCardList[0]!=-1){
-      alert("desposed"+req.desertCardList[0]+"and"+req.desertCardList[1]);
-      }
-      else{
-      alert("depose empty");
-      }
+      var seent2 = JSON.stringify(req);
+      alert(seent2);
     }
 
     function request(msg, callback) {
