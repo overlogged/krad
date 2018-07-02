@@ -63,11 +63,11 @@ object ScalaGodTest extends MyJsonProtocol{
         ))
 
         println(sid, god.request(sid,
-          """{"seenCard":3}"""
+          """{"seenCard":0}"""
         ))
 
         println(sid,god.request(sid,
-          """{"gambleCard":[0]}"""
+          """{"gambleCard":[3]}"""
         ))
         // win judge
         println(sid,god.request(sid,""))
@@ -87,7 +87,7 @@ object ScalaGodTest extends MyJsonProtocol{
         println(sid,god.request(sid,""))
         // desert
         println(sid,god.request(sid,
-          """{"desertCardList":[]}"""
+          """{"desertCardList":[-1]}"""
         ))
       }
     for(f<-fs) {

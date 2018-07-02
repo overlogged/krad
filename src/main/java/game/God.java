@@ -191,7 +191,7 @@ public class God {
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
-                            result = GodHelper.toDesertAccount("choose strategy decision",allPlayers[playerIndex].energy,playerHandCard);
+                            result = GodHelper.toDesertAccount("card distribute",allPlayers[playerIndex].energy,playerHandCard);
                             phaseState = PhaseState.PREPARE;
                             playerState[playerIndex] = 0;
                             // reset all temp variables
@@ -533,7 +533,7 @@ public class God {
             cardList[i] = msgDesertAccount.desertCardList()[i];
         synchronized (this){
             desert_count += 1;
-            if(cardList[0] != -1)
+            if((cardList[0] != -1)&(msgDesertAccount.desertCardList()!= null))
                 GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,cardList);
             if(allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
                 allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
