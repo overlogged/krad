@@ -568,6 +568,10 @@
      }
      else if(state=="desert account"){
      }
+     else if(state=="card distribute")
+     {
+       req={}
+     }
     var seent = JSON.stringify({
           'sid': parseInt(sid),
           'msg': JSON.stringify(req)
@@ -697,6 +701,15 @@
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
+        statepadtext_body.text = '发牌阶段';
+        cardlist = data.handCards;
+        do_fillcardlist();
+        pedometer = 0;
+        //fire_union = data.availableFireTarget；
+        refreshcard();
+      }
+      else if(state=="card distribute")
+      {
         statepadtext_body.text = '决策阶段';
         arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
