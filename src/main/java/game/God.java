@@ -290,9 +290,7 @@ public class God {
             if(i != zombie) {
                 allPlayers[i].team = Player.HUMAN;
                 teamResult[i] = Player.HUMAN;
-                allPlayers[i].healthPoint = 6;
                 allPlayers[i].range = 3;
-                allPlayers[i].mot = 4;
                 allPlayers[i].firePow =3;
             }
         }
@@ -353,7 +351,7 @@ public class God {
         for(int i = 0;i < msgChooseGamble.gambleCard().length;i++)
             gambleChoose[i] = msgChooseGamble.gambleCard()[i];
         if(!playerMain.isSeenCard) {
-            if(msgChooseGamble.gambleCard() == null)
+            if((msgChooseGamble.gambleCard() == null)|(msgChooseGamble.gambleCard()[0] == -1))
                 playerMain.gamble = 1;
             playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
             playerMain.gambleNum = gambleChoose.length;
@@ -581,6 +579,8 @@ public class God {
             allPlayers[i] = new Player();
             allPlayers[i].SID = playerSID[i];
             allPlayers[i].handCardsNum = 0;
+            allPlayers[i].healthPoint = 6;
+            allPlayers[i].mot = 4;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             playerState[i] = 0;
             scoreList[i] = 100;
