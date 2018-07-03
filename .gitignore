@@ -1,9 +1,13 @@
 .idea/
 target/
 *.class
-krad.iml
+*.iml
 config.txt
 log.txt
 deploy/
-*.map
 .DS_Store
+.vs/
+.classpath
+.project
+.settings/
+*.map

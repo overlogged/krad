@@ -44,6 +44,13 @@ object UserModel extends MyJsonProtocol{
   object User {
     val boy = 0
     val girl = 1
+
+    def apply(email: String,
+              nickname: String,
+              avatar: String,
+              gender: Int,
+              password: String,
+              stats: Stats): User = new User(email, nickname, avatar, gender, password, stats)
   }
 
   // database
@@ -72,6 +79,7 @@ object UserModel extends MyJsonProtocol{
     log("info", "please start mongodb with `auth=false`")
     log("mongodb", cmd)
     admin_db.eval(cmd)
+    register("ghost@ghost.com","ghost","figure1",0,"ghost")
     log("migrant", "init db")
     log("info", "please restart mongodb with `auth=true`")
   }
@@ -126,6 +134,21 @@ object UserModel extends MyJsonProtocol{
           stats <- one.getAs[String]("stats").flatMap { x => Some(x.parseJson.convertTo[Stats]) }
         ) yield User(email, nickname, avatar, gender, "", stats)
       }
+  }
+
+  /**
+    * get profile
+    */
+  def getProfile(email:String):Option[User] = {
+    Option(col_users.findOne(MongoDBObject("email" -> email))).flatMap{ one =>
+      for (
+        email <- one.getAs[String]("email");
+        nickname <- one.getAs[String]("nickname");
+        avatar <- one.getAs[String]("avatar");
+        gender <- one.getAs[Int]("gender");
+        stats <- one.getAs[String]("stats").flatMap { x => Some(x.parseJson.convertTo[Stats]) }
+      ) yield User(email, nickname, avatar, gender, "", stats)
+    }
   }
 
   /**

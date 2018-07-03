@@ -3,23 +3,23 @@ package game
 import common.Mail
 import common.MyUtils._
 import game.SessionController.{createSession, map}
+import game.UserModel.User
 import server.Server.{RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestSetNewPassword, config}
 import server.Server.executionContext
+
 import scala.concurrent.Future
 
 object UserController {
   /**
     * forget password
     */
-  def forget(req:RequestForgetPassword) : Future[String] = {
+  def forget(req:RequestForgetPassword) : Option[Future[Unit]] = {
     val uid = req.email
     UserModel.checkUser(uid).map { _ =>
       val sid = createSession(uid)
       val title = "[Krad] 重置密码"
-      val text = s"请点击以下链接以重置密码： ${config.web_url}/changepassword.html?sid=$sid"
+      val text = s"请点击以下链接以重置密码： ${config.web_url}krad.html?sid=$sid"
       Mail.send(req.email, title, text)
-    }.getOrElse{
-      Future("")
     }
   }
 
@@ -47,6 +47,15 @@ object UserController {
   def changeProfile(req:RequestChangeProfile) : Option[Unit] = {
     map.getB(req.sid).flatMap { uid =>
       UserModel.changeProfile(uid,req.nickname,req.avatar,req.gender)
+    }
+  }
+
+  /**
+    * get profile
+    */
+  def getProfile(sid:Int): Option[User] = {
+    map.getB(sid).flatMap { uid =>
+      UserModel.getProfile(uid)
     }
   }
 }

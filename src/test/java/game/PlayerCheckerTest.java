@@ -4,6 +4,7 @@ public class PlayerCheckerTest {
     public final static int INF = 2147483647;
     static PlayerCheckerTest test = new PlayerCheckerTest();
     static PlayerChecker pc = new PlayerChecker();
+    Map map;
 
     void playerInit(Player playerA) {
         playerA.team = Player.ZOMBIE;
@@ -17,7 +18,7 @@ public class PlayerCheckerTest {
 
     void printPlayerStatus(Player playerMain) {
         System.out.println("player's status");
-        System.out.println("name: " + playerMain.name);
+        System.out.println("name: " );
         System.out.println("team: " + playerMain.team);
         System.out.println("present location: " + playerMain.preLoc);
         System.out.println("gamble this turn: " + playerMain.gamble);
@@ -36,10 +37,10 @@ public class PlayerCheckerTest {
         playerB = new Player();
         playerA.team = Player.ZOMBIE;
         playerB.team = Player.HUMAN;
-        playerB.preLoc.status = 1;
+        map.units[playerB.preLoc].status = 1;
         playerA.preLoc=playerB.preLoc;
         pc.elemAcq(playerB);
-        pc.infection(playerA, playerB);
+        pc.infection(map,playerA, playerB);
         assert playerB.team==Player.ZOMBIE : "infection failed! ";
         assert playerB.energy==0 : "energy not lost";
         assert playerB.hasElem==false : "elem not lost";
@@ -63,7 +64,7 @@ public class PlayerCheckerTest {
         assert playerMain.hasElem==false;
         pc.elemAcq(playerMain);
         assert playerMain.hasElem==true;
-        pc.infection(playerPos,playerMain);
+        pc.infection(map,playerPos,playerMain);
         assert playerMain.hasElem==false;
     }
 

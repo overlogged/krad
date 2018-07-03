@@ -1,440 +1,600 @@
 package game;
 
-import java.io.IOException;
-import game.GodController.*;
+import java.util.TreeMap;
+import game.GodHelper.*;
+import scala.Option;
 
 public class God {
 
+    private int playerNum;          // how many people to play the game
+    private Player[] allPlayers;    // preserve the state of players
+    private boolean humanWin;       // whether human team wins
+    private boolean zombieWin;      // whether zombie team wins
+    private Map map;                // map of the game
+    private String[] heroList = {"0"};
+    private UserInfo[] allUserInfo;
+    private int[] cardHeap;
+    private int[] availableFireTarget;
+    private int[] availableMoveDirection;
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // class: store all Player
-    // function initialPlayerCharacter: 1. get the choice of players from initialPlayer
-    //                                  2. set the value of character value
-    // function initialPlayerCharacter: 1. get the default birth unit from map
-    //                                  2. set the value of position
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private int playerNum;      //how many people to play the game
-    private Player[] allPlayers;//preserve the state of players
-    private boolean humanWin;   //whether someone win
-    private MapUnit[] gameMap;  //map of the game
-    int gameState;              //state of the game:
-    //1
-    // Step one: init                   get the heroChoice
-    //send the heroChoice
+    private String[] heroChoices;
+    private int[] teamResult;
+    private int[] decisionChoices;
+    private int[] seenCardChoices;
+    private int[] gambleChoices;
+    private int[] cardNumList;
+    private int[] playerWinList;
+    private int[] energyList;
+    private int[] healthPointList;
+    private int[] locationList;
+    private int[] elementList;
+    private int[] teamList;
+    private int[] scoreList;
 
-    // Step two: gaming
-    // Stage one: ready
-    //2
-    //申明要使用的主动技               get the skillChoice
-    //send the skillChoice
+    enum GameState{ INIT,MAINGAME,END }
+    private GameState gameState = GameState.INIT;
+    private int[] playerState;
+    enum PhaseState{ PREPARE, GAMBLE, ACTION }
+    private PhaseState phaseState = PhaseState.PREPARE;
 
-    //3
-    //申明要使用的行动                 get the moveChoice
-    //send the moveChoice
-    // Stage two: gamble
-    //4
-    // 猜拳                          get the gambleChoice
-    //send the gambleChoice
-    // 充能调整
-    // Stage three: 行动
-    //5
-    //主动技能的释放                   get None
-    //send the skillResult，具体内容暂定
-    //6
-    //开火结果                        get None
-    //send the fireResult，moveChoice不是fire就0，具体内容暂定
-    //7
-    //位置变更                        get None
-    //send the positionResult
-    // Stage four: 结算
-    //8
-    //要素确认                        get None
-    //send the personFactorResult
-    //9
-    //获胜判定                        get None
-    //send the winResult
-    //10
-    //感染判定                        get None
-    //send the infectionResult
-    //11
-    //能量有无溢出                    get None
-    //send the overflowResult
-
-    //12
-    //get哪边赢了                     get None
-    //send the gameOver
     public String request(int sid,String msg) {
-
-        if(true) // choose hero
-        {
-            MsgChooseHero choose =  GodController.getChooseHero(msg);
-
-        }
-        return GodController.toChooseHero(0,"result");
-
-    }
-
-    public void initialPlayer(int[] playerSID) throws IOException {
-        playerNum = playerSID.length;
-
-        for (int i = 0; i < playerNum; i++){
-            allPlayers[i].SID = playerSID[i];
-        }
-
-
-
-
-        /*
-        // TODO: get the playersCharacterChoice from 前端
-        int[] playersCharacterChoice=new int[playerNum];
-        // begin
-        // 这段要写怎么从前端搞过来，我下面随便写的
-        for (int i = 0; i < playerNum; i++){
-            playersCharacterChoice[i] = System.in.read();
-        }
-        // end
-
-        this.initialPlayerCharacter(playerNum, allPlayers, playersCharacterChoice);
-        this.initialPlayerPos(playerNum, allPlayers, );
-        */
-/*
-        private void initialPlayerCharacter(int playerNum, Player[] allPlayers, int[] playersCharacterChoice) {
-
-            for(int i = 0; i < playerNum; i++){
-                // TODO: 从player里面例化出来character，然后赋值
-                //begin
-                allPlayers[i].healthPoint = Player.character[playersCharacterChoice].healthPoint;
-                allPlayers[i].mot = Player.character[playersCharacterChoice].mot;
-                allPlayers[i].firePow = Player.character[playersCharacterChoice].firePow;
-                allPlayers[i].range = Player.character[playersCharacterChoice].range;
-                //end
+        int playerIndex = 0;
+        for(int i = 0;i < playerNum; i++){
+            if(allPlayers[i].SID == sid) {
+                playerIndex = i;
+                break;
             }
         }
+        String result = "{\"state\":\"Error\"}";
+        switch(gameState) {
+            case INIT:
+                if(playerState[playerIndex] == 0) {
+                    result = GodHelper.toInit(allUserInfo, "choose hero",playerIndex, heroList);
+                    playerState[playerIndex] += 1;
+                } else if(playerState[playerIndex] == 1) {
+                    heroChoose(sid, msg);
+                    gameState = GameState.MAINGAME;
+                    playerState[playerIndex] = 0;
+                    result = GodHelper.toChooseHero("start game", heroChoices, teamResult);
+                }
+                break;
+            case MAINGAME:
+                switch(phaseState){
+                    case PREPARE:
+                        if(playerState[playerIndex] == 0){
+                            GambleChecker.cardDistribute(cardHeap,allPlayers[playerIndex],4);
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            boolean isSeenCard = true;
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++) {
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                                if((allPlayers[playerIndex].handCards[i] == 1)
+                                        |(allPlayers[playerIndex].handCards[i] == 2)
+                                        |(allPlayers[playerIndex].handCards[i] == 3))
+                                    isSeenCard = false;
+                            }
+                            if(isSeenCard)
+                                allPlayers[playerIndex].isSeenCard = true;
+                            else
+                                allPlayers[playerIndex].isSeenCard = false;
+                            for(int i = 0; i < playerNum;i++){
+                                if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
+                                    availableFireTarget[i] = 1;
+                            }
+                            toDirection(playerIndex);
+                            result = GodHelper.toCardDistribute("choose strategy decision", playerHandCard,availableFireTarget,availableMoveDirection);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 1){
+                            MsgChooseDecision dec = GodHelper.getChooseDecision(msg);
+                            // operation to the player's properties
+                            if(dec.decision() == -1)
+                                allPlayers[playerIndex].stratDecision = GambleChecker.DEPOSIT;
+                            else{
+                                allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
+                                GambleChecker.cardToHeap(cardHeap,dec.decision());
+                                allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
+                                GambleChecker.cardSort(allPlayers[playerIndex].handCards);
+                                allPlayers[playerIndex].handCardsNum -= 1;
+                            }
+                            decisionChoices[playerIndex] = allPlayers[playerIndex].stratDecision;
+                            featureChoose(msg,allPlayers[playerIndex],playerIndex);
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            //ends
+                            if(allPlayers[playerIndex].isSeenCard)
+                                result = GodHelper.toChooseDecision("must choose seen card",playerHandCard);
+                            else
+                                result = GodHelper.toChooseDecision("choose seen card",playerHandCard);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 2){
+                            seenCard(playerIndex,msg,allPlayers[playerIndex]);
+                            if(allPlayers[playerIndex].isSeenCard)
+                                result = GodHelper.toSeenCard("GAMBLE: win judge", decisionChoices, seenCardChoices);
+                            else
+                                result = GodHelper.toSeenCard("GAMBLE: choose gamble", decisionChoices, seenCardChoices);
+                            playerState[playerIndex] = 0;
+                            phaseState = PhaseState.GAMBLE;
+                        }
+                        break;
+                    case GAMBLE:
+                        if(playerState[playerIndex] == 0) {
+                            gambleChoose(msg,allPlayers[playerIndex],playerIndex);
+                            playerState[playerIndex] += 1;
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toChooseGamble("win judge",playerHandCard);
+                        }
+                        else if(playerState[playerIndex] == 1){
+                            winJudge();
+                            for(int i = 0;i < playerNum;i++) {
+                                if(allPlayers[i].isWin)
+                                    playerWinList[i] = 1;
+                            }
+                            playerState[playerIndex] = 0;
+                            phaseState = PhaseState.ACTION;
+                            result = GodHelper.toWinJudge("ACTION: deposit account",gambleChoices,cardNumList,playerWinList);
+                        }
+                        break;
+                    case ACTION:
+                        if(playerState[playerIndex] == 0){
+                            depositAccount();
+                            result = GodHelper.toDepositAccount("skills account",energyList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 1){
+                            skillsAccount();
+                            result = GodHelper.toSkillsAccount("fire account");
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 2){
+                            fireAccount();
+                            result = GodHelper.toFireAccount("move account",healthPointList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 3){
+                            moveAccount();
+                            result = GodHelper.toMoveAccount("element account",locationList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 4){
+                            elemAccount();
+                            result = GodHelper.toElemAccount("if human wins",elementList);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 5){
+                            humanVictory();
+                            if(humanWin) {
+                                result = GodHelper.toHumanVictory("Game Over, human wins");
+                                playerState[playerIndex] = 0;
+                                gameState = GameState.END;
+                            }
+                            else {
+                                result = GodHelper.toHumanVictory("infection account");
+                                playerState[playerIndex] += 1;
+                            }
+                        }
+                        else if(playerState[playerIndex] == 6){
+                            infectionAccount();
+                            if(zombieWin){
+                                result = GodHelper.toInfectionAccount("Game Over, zombie wins",teamList);
+                                playerState[playerIndex] = 0;
+                                gameState = GameState.END;
+                            }
+                            else {
+                                result = GodHelper.toInfectionAccount("desert account", teamList);
+                                playerState[playerIndex] += 1;
+                            }
+                        }
+                        else if(playerState[playerIndex] == 7){
+                            desertAccount(playerIndex,msg);
+                            int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
+                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            result = GodHelper.toDesertAccount("card distribute",allPlayers[playerIndex].energy,playerHandCard);
+                            phaseState = PhaseState.PREPARE;
+                            playerState[playerIndex] = 0;
+                            seen_card_count = 0;
+                            gamble_count = 0;
+                            desert_count = 0;
+                            // reset all temp variables
+                            for(int i = 0;i < playerNum;i++){
+                                allPlayers[i].stratDecision = 7;
+                                availableFireTarget[i] = 0;
+                                decisionChoices[i] = 7;
+                                seenCardChoices[i] = 0;
+                                gambleChoices[i] = GambleChecker.PAPER;
+                                cardNumList[i] = 0;
+                                playerWinList[i] = 0;
+                            }
+                        }
+                        break;
+                }
+                break;
+            case END:
+                result = GodHelper.toGameOver("END",scoreList);
+                break;
+        }
 
-        private void initialPlayerPos(int playerNum, Player[] allPlayers, MapUnit[] defaultMap) {
-            for(int i = 0; i < playerNum; i++){
-                //TODO: 地图能不能告诉我出生地址
-                //begin
-                allPlayers[i].preLoc = defaultMap.birthLoc;
-                //end
+        // for debug
+        if(result.equals("{\"state\":\"Error\"}")){
+            System.out.printf("%d %s %s\n",sid,msg,gameState.toString());
+        }
+
+        return result;
+    }
+
+    /**
+     * units code
+     * wait all players to send message
+     */
+    private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
+    private void waitAllPlayers(){
+        synchronized (wait_map){
+            Integer counter = wait_map.get(gameState);
+            if(counter==null) counter = 0;
+            counter++;
+            wait_map.put(gameState,counter);
+            if(counter < playerNum){
+                do{
+                    try{
+                        wait_map.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                    counter = wait_map.get(gameState);
+                }while (counter < playerNum);
+            } else {
+                wait_map.notifyAll();
             }
         }
-*/
     }
 
-
-
-/*
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func: start the game
-    // set map
-    // ask everyone to choose character
-    // set everyone at its initial point
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void initialGame(int[] SID) throws IOException {
-        AllPlayer defaultNewPlayer = new AllPlayer();
-        defaultNewPlayer.allPlayers = new Player[];
-        //TODO: setmap
-        //begin
-        //我这里用的是特殊案例
-        gameMap = Create();
-        //end
-        //choose character
-        defaultNewPlayer.initialPlayer(SID);
-    }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func: at the beginning of each term, player tell if he uses skill
-    // all players choose whether use skill
-    //     default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void tellSkill(AllPlayer defaultAllPlayer) throws IOException {
-        // TODO: 1.问前端这人要不要搞事
-        // TODO: 2.从前端知道这人搞不搞事
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            System.out.print("你想用技能吗？");
-            //TODO: Player::skillDecisions
-            //begin
-            defaultAllPlayer.allPlayers[i].skillsDecision = System.in.read();
-            //end
-        }
-    }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func: at the beginning of each term, player tell the action for this term
-    // all players choose which action to use
-    //     default: getEnergy
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void tellAction(AllPlayer defaultAllPlayer) throws IOException{
-        // TODO: 1.问前端这人想搞什么事
-        // TODO: 2.从前端知道这人搞不搞事
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++) {
-            System.out.print("你想做什么行动？");
-            //TODO: Player::moveDecision
-            //begin
-            defaultAllPlayer.allPlayers[i].stratDecision = System.in.read();
-            //end
-        }
-    }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:
-    // 要素确认
-    //    default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void checkFactor(AllPlayer defaultAllPlayer){
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            if(!defaultAllPlayer.allPlayers[i].hasElem && defaultAllPlayer.allPlayers[i].preLoc.status==1
-                    && defaultAllPlayer.allPlayers[i].team == Player.HUMAN)
-                defaultAllPlayer.allPlayers[i].hasElem = true;
-            else
-                ;
-        }
-    }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:
-    // 按某个顺序使用技能
-    // 根据技能调整人物
-    //    default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void useSkill(AllPlayer defaultAllPlayer) throws IOException{
-        // TODO 安排顺序，体现在下面是怎么for的
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            // TODO: SkillsChecker
-            // begin
-            if(defaultAllPlayer.allPlayers[i].skillsDecision != 0)
-                ;
-                // end
-            else
-                ;
-        }
-    }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:
-    // 开火
-    //    default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void fire(AllPlayer defaultAllPlayer) throws IOException{
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            // TODO: 前端交互：这是给谁fire的
-            System.out.print("你想对几号玩家fire？");
-            //begin
-            int fired = System.in.read();
-            //end
-            // TODO: 前端交互：这是给哪个方向fire的
-            System.out.print("你想对几号玩家fire？");
-            //begin
-            int fireDirection = System.in.read();
-            //end
-            // TODO: fire好像那边还在修改
-            // TODO: 把fire改成静态
-            // begin
-            if(defaultAllPlayer.allPlayers[i].stratDecision == Player.FIRE) {
-                PlayerChecker.fire(defaultAllPlayer.allPlayers[i].preLoc, defaultAllPlayer.allPlayers[fired].preLoc, defaultAllPlayer.allPlayers[i].preLoc.edge[fireDirection]);
+    // functions for INIT stage
+    private Integer choice_count = 0;
+    private void heroChoose(int sid,String msg){
+        int playerIndex;
+        String heroChoice;
+        MsgChooseHero choose = GodHelper.getChooseHero(msg);
+        synchronized (this){
+            choice_count += 1;
+            for( playerIndex = 0;playerIndex < playerNum;playerIndex++){
+                if(allPlayers[playerIndex].SID == sid) {
+                    allPlayers[playerIndex].chara = choose.hero();
+                    heroChoices[playerIndex] = choose.hero();
+                }
             }
-            // end
-            else
-                continue;
+            if(choice_count < playerNum){
+                while (choice_count < playerNum){
+                    try {
+                        this.wait();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            } else {
+                teamDivide();
+                mapInit();
+                GambleChecker.cardHeapInit(cardHeap,playerNum);
+                GambleChecker.cardHeapStir(cardHeap);
+                this.notifyAll();
+            }
+        }
+    }
+    private void teamDivide(){
+        int zombie = (int)( Math.random() * playerNum);
+        allPlayers[zombie].team = Player.ZOMBIE;
+        allPlayers[zombie].hasElem = false;
+        allPlayers[zombie].firePow = 0;
+        allPlayers[zombie].range = 0;
+        teamResult[zombie] = Player.ZOMBIE;
+        for(int i = 0;i < allPlayers.length;i++){
+            if(i != zombie) {
+                allPlayers[i].team = Player.HUMAN;
+                teamResult[i] = Player.HUMAN;
+                allPlayers[i].range = 3;
+                allPlayers[i].firePow =3;
+            }
+        }
+    }
+    private void mapInit(){
+        for(int i = 0;i < playerNum;i++){
+            if(allPlayers[i].team == Player.HUMAN)
+                allPlayers[i].preLoc = map.fighter_init;
+            else if(allPlayers[i].team == Player.ZOMBIE)
+                allPlayers[i].preLoc = map.poisoner_init;
         }
     }
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:
-    // 石头剪刀布
-    //    default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void gamble(AllPlayer defaultAllPlayer) throws IOException{
-
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            System.out.print("你猜拳想出啥？");
-            // TODO: 前端交互
-            // begin
-            defaultAllPlayer.allPlayers[i].gamble = System.in.read();
-            // end
-            // 通过调用gamblechecker来进行充能调整
-            GambleChecker.winJudge(defaultAllPlayer.playerNum, defaultAllPlayer.allPlayers);
+    // functions for GAMBLE stage
+    private void featureChoose(String msg,Player playerMain,int playerIndex){
+        MsgChooseDecision decisionFeature = GodHelper.getChooseDecision(msg);
+        int decision = playerMain.stratDecision;
+        int direction = toLoc(playerIndex,decisionFeature.moveDirection());
+        if(decision == GambleChecker.MOVE) {
+            playerMain.moveDirection = decisionFeature.moveDirection();
+            playerMain.energyConsume = Math.min(playerMain.energy,playerMain.mot);
+        }
+        else if(decision == GambleChecker.FIRE) {
+            playerMain.fireTarget = decisionFeature.fireTarget();
+            playerMain.energyConsume = Math.min(playerMain.energy,playerMain.firePow);
+        }
+        else if(decision == GambleChecker.DEPOSIT){
+            playerMain.energyConsume = 0;
         }
     }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:
-    // 判断移动距离
-    //    default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void movePlayers(AllPlayer defaultAllPlayer) throws IOException{
-        for(int i = 0; i < defaultAllPlayer.playerNum; i++){
-            System.out.print("你想走哪个方向？");
-            // TODO: 前端交互
-            // begin
-            defaultAllPlayer.allPlayers[i].gamble = System.in.read();
-            // end
+    private Integer seen_card_count = 0;
+    private void seenCard(int playerIndex,String msg,Player playerMain){
+        MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
+        synchronized (this){
+            seen_card_count += 1;
+            if((playerMain.isSeenCard)|(msgSeenCard.seenCard() != 0)){
+                playerMain.gamble = msgSeenCard.seenCard();
+                playerMain.gambleNum = 1;
+                playerMain.isSeenCard = true;
+                seenCardChoices[playerIndex] = msgSeenCard.seenCard();
+            }
+            if(seen_card_count < playerNum){
+                while(seen_card_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else {
+                this.notifyAll();
+            }
         }
     }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:游戏结束
-    // 感染者赢：所有人都是zombie
-    // 生存者赢：拿到要素
-    //    default: no
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    void gameOver(boolean humanwin){
-        if (humanwin){
-            //TODO: if (humanWin), tell 前端
-            System.out.print("Human win!");
+    private void gambleChoose(String msg,Player playerMain,int playerIndex){
+        MsgChooseGamble msgChooseGamble = GodHelper.getChooseGamble(msg);
+        int[] gambleChoose = new int[msgChooseGamble.gambleCard().length];
+        for(int i = 0;i < msgChooseGamble.gambleCard().length;i++)
+            gambleChoose[i] = msgChooseGamble.gambleCard()[i];
+        if(!playerMain.isSeenCard) {
+            if((msgChooseGamble.gambleCard() == null)|(msgChooseGamble.gambleCard()[0] == -1))
+                playerMain.gamble = 1;
+            playerMain.gamble = playerMain.handCards[ gambleChoose[0] ];
+            playerMain.gambleNum = gambleChoose.length;
+            for(int i = 0;i < playerMain.gambleNum;i++) {
+                GambleChecker.cardToHeap(cardHeap,playerMain.handCards[ playerMain.handCards[gambleChoose[i]] ]);
+                playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
+                GambleChecker.cardSort(playerMain.handCards);
+                playerMain.handCardsNum -= 1;
+            }
+        }
+        gambleChoices[playerIndex] = playerMain.gamble;
+        cardNumList[playerIndex] = playerMain.gambleNum;
+    }
+    private Integer gamble_count = 0;
+    private void winJudge(){
+        synchronized (this){
+            gamble_count += 1;
+            if(gamble_count < playerNum){
+                while(gamble_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else{
+                GambleChecker.winJudge(playerNum,allPlayers);
+                for(int i = 0;i < playerNum;i++){
+                    if(allPlayers[i].isWin)
+                        scoreList[i] += 5;
+                    else
+                        scoreList[i] -= 5;
+                }
+                this.notifyAll();
+            }
+        }
+    }
+    /* transform between direction and location
+     * dirty functions
+     */
+    private void toDirection(int playerIndex){
+        if(allPlayers[playerIndex].preLoc == 7) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 1;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 1;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 15){
+            availableMoveDirection[0] = 1;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 1;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 0){
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
         }
         else{
-
-            //TODO: if (zombieWin), tell 前端
-            System.out.print("Zombie win!");
-        }
-        //TODO:前端可能需要展示数据？
-        //TODO:清理本局游戏残留数据
-    }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func:判断胜负
-    // 感染者赢：所有人都是zombie
-    // 生存者赢：拿到要素
-    //    return: 有没有结束游戏
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    boolean checkWhetherWin(AllPlayer defaultAllPlayer){
-        boolean zombieLocalWin = checkWhetherZombieWin(defaultAllPlayer);
-        boolean humanLocalWin = checkWhetherHumanWin(defaultAllPlayer);
-        if(humanLocalWin) {
-            humanWin = true;
-            return true;
-        }
-        else if(zombieLocalWin) {
-            humanWin = false;
-            gameOver(true);
-            return true;
-        }
-        else
-            return false;
-    }
-
-    boolean checkWhetherZombieWin(AllPlayer defaultAllPlayer){
-        boolean win = true;
-        for (int i = 0; i < defaultAllPlayer.playerNum; i++)
-            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN){
-                win = false;
-                break;
-            }
-        return win;
-    }
-    boolean checkWhetherHumanWin(AllPlayer defaultAllPlayer){
-        boolean win = false;
-        for (int i = 0; i < defaultAllPlayer.playerNum; i++)
-            //TODO: status加一个离开点leave
-            //begin
-            if(defaultAllPlayer.allPlayers[i].team == Player.HUMAN &&
-                    defaultAllPlayer.allPlayers[i].preLoc.status == MapUnit.LEAVE &&
-                    defaultAllPlayer.allPlayers[i].hasElem == true){
-                win = true;
-                break;
-            }
-        //end
-
-        return win;
-    }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func: 大家感染状态
-    // 感染：human和zombie在同一格子
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void checkWhetherInfect(AllPlayer defaultAllplayer){
-        for (int i = 0; i < defaultAllplayer.playerNum; i++){
-            for (int j = i+1; j < defaultAllplayer.playerNum; j++){
-                // TODO: 让PlayerChecker.infection静态
-                PlayerChecker.infection(defaultAllPlayer.allPlayers[i], defaultAllPlayer.allPlayers[j]);
-            }
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
         }
     }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // func: 有没有人能量溢出
-    // 溢出：变成最大值
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    void checkWhetherEnergyOverflow(AllPlayer defaultAllplayer){
-        for (int i = 0; i < defaultAllplayer.playerNum; i++){
-            if (defaultAllplayer.allPlayers[i].energy > defaultAllplayer.allPlayers[i].healthPoint){
-                defaultAllplayer.allPlayers[i].energy = defaultAllplayer.allPlayers[i].healthPoint;
-            }
-        }
-    }
-    void game() throws  IOException{
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Step one: init
-        // func: 获取人的数目然后进行初始化
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-        // TODO: 跟前端交互来完成获得SID[]
-        //begin
-        initialGame(int[] SID);
-        //end
-
-
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Step two: gaming
-        // func: 在每个周期进行操作
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-        while(true){
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            // Stage one: ready
-            // func: 申明要使用的主动技
-            //      申明要使用的行动
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            //1 申明要使用的主动技
-            tellSkill(defaultAllPlayer);
-            //2 申明要使用的行动
-            tellAction(defaultAllPlayer);
-
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            // Stage two: gamble
-            // func: 猜拳并记录结果，充能调整
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            gamble(defaultAllPlayer);
-
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            // Stage three: 行动
-            // func: 主动技能的释放
-            //      开火结果
-            //      位置变更
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            //1 主动技能的释放
-            useSkill(defaultAllPlayer);
-            //2 开火结果
-            fire(defaultAllPlayer);
-            //3 位置变更
-            movePlayers(defaultAllPlayer);
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            // Stage four: 结算
-            // func: 要 素 确 认
-            //      获胜判定
-            //      感染判定
-            //      能量有无溢出
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            //1 要素确认
-            checkFactor(defaultAllPlayer);
-            //2 获胜判定
-            if(checkWhetherWin(defaultAllPlayer))
-                break;
+    private int toLoc(int playerIndex,int direction){
+        if(allPlayers[playerIndex].preLoc == 7){
+            if(direction == 5)
+                return 6;
+            else if(direction == 0)
+                return 8;
             else
-                ;
-            //3 感染判定
-            checkWhetherInfect(defaultAllPlayer);
-            //4 能量有无溢出
-            checkWhetherEnergyOverflow(defaultAllPlayer);
-
+                return 22;
         }
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Step three: closing
-        // func: 结束
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        gameOver(humanWin);
+        else if(allPlayers[playerIndex].preLoc == 15){
+            if(direction == 6)
+                return 14;
+            else
+                return 16;
+        }
+        else if(allPlayers[playerIndex].preLoc == 0){
+            return 1;
+        }
+        else {
+            if(direction == 1)
+                return allPlayers[playerIndex].preLoc++;
+            else
+                return allPlayers[playerIndex].preLoc--;
+        }
     }
-    */
+
+    // functions for ACTION stage
+    private void depositAccount(){
+        for(int i = 0;i < playerNum;i++) {
+            PlayerChecker.energyConsume(allPlayers[i], allPlayers[i].energyConsume);
+            if (allPlayers[i].isWin)
+                PlayerChecker.energyAcq(allPlayers[i], allPlayers[i].gambleNum);
+            energyList[i] = allPlayers[i].energy;
+        }
+    }
+    private void skillsAccount(){}     //TODO:skills
+    private void fireAccount(){
+        for(int i = 0;i < playerNum;i++) {
+            if (allPlayers[i].stratDecision == GambleChecker.FIRE)
+                PlayerChecker.fire(map, allPlayers[i], allPlayers[allPlayers[i].fireTarget]);
+            healthPointList[i] = allPlayers[i].healthPoint;
+        }
+    }
+    private void moveAccount(){
+        for(int i = 0;i < playerNum;i ++) {
+            if (allPlayers[i].stratDecision == GambleChecker.MOVE)
+                allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
+            locationList[i] = allPlayers[i].preLoc;
+        }
+    }
+    private void elemAccount(){
+        int elemNum = 0;
+        for(int i = 0;i < playerNum;i++){
+            if (map.units[allPlayers[i].preLoc].status == 2)
+            {
+                allPlayers[i].hasElem = true;
+                elementList[i] = 1;
+                for(int j = 0;j < playerNum;j++){
+                    if(elementList[j] == 1)
+                        elemNum += 1;
+                }
+                scoreList[i] += elemNum * 25;
+            }
+            //TODO: a player got element, he should obtain scores
+        }
+    }
+    private void humanVictory(){
+        for(int i = 0;i < playerNum;i++) {
+            if ((allPlayers[i].preLoc == map.fighter_evacuate)&(allPlayers[i].hasElem)) {
+                humanWin = true;
+                //TODO: a player arrived at evacuate spot, he should obtain scores
+            }
+        }
+    }
+    private void infectionAccount(){
+        for(int i = 0;i < playerNum;i++) {
+            for(int j = 0;j < playerNum;j++) {
+                PlayerChecker.infection(map,allPlayers[i],allPlayers[j]);
+                if(PlayerChecker.infection(map, allPlayers[i], allPlayers[j]))
+                    scoreList[i] += 25;
+            }
+        }
+        for(int i = 0;i < playerNum;i++)
+            teamList[i] = allPlayers[i].team;
+        Boolean flag = true;
+        for(int i = 0;i < playerNum;i++){
+            if(allPlayers[i].team == Player.HUMAN)
+                flag = false;
+        }
+        if(flag)
+            zombieWin = true;
+    }
+    private int desert_count = 0;
+    private void desertAccount(int playerIndex,String msg){
+        MsgDesertAccount msgDesertAccount = GodHelper.getDesertAccount(msg);
+        int[] cardList = new int[msgDesertAccount.desertCardList().length];
+        for(int i = 0;i < cardList.length; i++)
+            cardList[i] = msgDesertAccount.desertCardList()[i];
+        synchronized (this){
+            desert_count += 1;
+            if((cardList[0] != -1)&(msgDesertAccount.desertCardList()!= null))
+                GambleChecker.cardDesert(allPlayers[playerIndex],cardHeap,cardList);
+            if(allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
+                allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
+            if(desert_count < playerNum){
+                while(desert_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else{
+                this.notifyAll();
+            }
+        }
+    }
+
+    public void initialPlayer(int[] playerSID)  {
+        playerNum = playerSID.length;
+        allPlayers = new Player[playerNum];
+        allUserInfo = new UserInfo[playerNum];
+        playerState = new int[playerNum];
+        map = new Map("map/1.map");
+
+        heroChoices = new String[playerNum];
+        teamResult = new int[playerNum];
+        decisionChoices = new int[playerNum];
+        seenCardChoices = new int[playerNum];
+        cardHeap = new int[40 * playerNum];
+        gambleChoices = new int[playerNum];
+        cardNumList = new int[playerNum];
+        playerWinList = new int[playerNum];
+        energyList = new int[playerNum];
+        healthPointList = new int[playerNum];
+        locationList = new int[playerNum];
+        elementList = new int[playerNum];
+        teamList = new int[playerNum];
+        availableFireTarget = new int[playerNum];
+        scoreList = new int[playerNum];
+        availableMoveDirection = new int[8];
+
+        for(int i = 0;i < playerNum;i++) {
+            allPlayers[i] = new Player();
+            allPlayers[i].SID = playerSID[i];
+            allPlayers[i].handCardsNum = 0;
+            allPlayers[i].healthPoint = 6;
+            allPlayers[i].mot = 4;
+            allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
+            playerState[i] = 0;
+            scoreList[i] = 100;
+
+            Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
+            if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
+            else allPlayers[i].user_info = user.get();
+            allUserInfo[i] = new UserInfo(i,allPlayers[i].user_info.nickname());
+        }
+    }
+
 }

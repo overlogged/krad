@@ -1,6 +1,6 @@
 package common
 
-import org.apache.commons.mail.HtmlEmail
+import org.apache.commons.mail.{EmailException, HtmlEmail}
 import server.Server
 import server.Server.config
 
@@ -14,18 +14,27 @@ object Mail {
 
   /**
     * send an email
+    *
     * @return Future
     */
-  def send(to:String,subject:String,text:String) = Future {
-    val email = new HtmlEmail
-    email.setHostName(config.email_host)
-    email.setAuthentication(config.email_username,config.email_password)
-    email.addTo(to)
-    email.setFrom(config.email_username)
-    email.setSubject(subject)
-    email.setCharset("utf-8")
-    email.setHtmlMsg(text)
-    Server.log("[send]",to+subject+text)
-    email.send
+  def send(to: String, subject: String, text: String) = Future {
+    try {
+      val email = new HtmlEmail
+      email.setHostName(config.email_host)
+      email.setSmtpPort(25)
+      email.setAuthentication(config.email_username, config.email_password)
+      email.addTo(to)
+      email.setFrom(config.email_username)
+      email.setSubject(subject)
+      email.setCharset("utf-8")
+      email.setHtmlMsg(text)
+      email.send
+      Server.log("verbose send", to + " " + subject + " " + text)
+    } catch {
+      case e: EmailException => {
+        e.printStackTrace()
+      }
+    }
+    ()
   }
 }
