@@ -147,9 +147,9 @@
     </build>
     <repositories>
         <repository>
-            <id>nexus-ustc</id>
-            <name>Nexus</name>
-            <url>http://maven.proxy.ustclug.org/maven2/</url>
+            <id>nexus-163</id>
+            <name>Nexus 163</name>
+            <url>http://mirrors.163.com/maven/repository/maven-public/</url>
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
@@ -161,10 +161,9 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>nexus-ustc</id>
-            <name>Nexus</name>
-            <url>http://maven.proxy.ustclug.org/maven2/</url>
-            <layout>default</layout>
+            <id>nexus-163</id>
+            <name>Nexus 163</name>
+            <url>http://mirrors.163.com/maven/repository/maven-public/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
