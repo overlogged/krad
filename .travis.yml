@@ -3,6 +3,9 @@ language: java
 jdk:
 - openjdk8
 
+before_install:
+- mv ./pom.xml.travis ./pom.xml
+
 script:
 - openssl aes-256-cbc -K $encrypted_b044faba5aca_key -iv $encrypted_b044faba5aca_iv -in deploy_rsa.enc -out ~/.ssh/id_rsa -d
 - eval "$(ssh-agent -s)"
@@ -10,7 +13,6 @@ script:
 - ssh-add ~/.ssh/id_rsa
 - echo "StrictHostKeyChecking no" > ~/.ssh/config
 - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/html ubuntu@119.29.32.204:/var/www
-- mv ./pom.xml.travis ./pom.xml
 - mvn clean scala:compile compile package -DskipTests=true
 
 branches:
