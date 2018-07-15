@@ -677,26 +677,24 @@
         //state="move account";
       }
       else if (state == "move account") {
-        statepadtext_body.text = '要素结算';
+        statepadtext_body.text = '要素判定';
         playerloc_union = data.locationList;
         do_move();
         //state="element account";
       }
       else if (state == "element account") {
-        statepadtext_body.text = '人赢判定';
         // 所有人的要素情况 = data.elemList;
         // state="if human wins";
       }
       else if (state == "if human wins") {
-        //statepadtext_body.text = '人赢实锤';
+        statepadtext_body.text = '感染判定';
         //  state="Game Over, human wins";
       }
       else if (state == "Game Over, human wins") {
-        statepadtext_body.text = '感染判定';
         // 游戏结束
       }
       else if (state == "infection account") {
-        //statepadtext_body.text = '尸赢实锤';
+        statepadtext_body.text = '弃牌阶段';
         team_result = data.teamList;
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
@@ -705,7 +703,6 @@
         }
       }
       else if (state == "Game Over,zombie wins") {
-        statepadtext_body.text = '弃牌阶段';
       }
       else if(state=="desert account"){
         //玩家能量信息= data.energy;
