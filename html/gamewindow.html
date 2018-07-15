@@ -511,7 +511,7 @@
           do_dessert(g);
           break;
         default:
-          statepadtext_body.text='操作受限';
+          //statepadtext_body.text='操作受限';
           break;
       }
 
@@ -647,7 +647,7 @@
         //state="GAMBLE:choose gamble";
       }
       else if ((state == "GAMBLE: choose gamble")||(state == "GAMBLE:win judge")) {
-        statepadtext_body.text = '结算阶段';
+        statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
@@ -655,39 +655,48 @@
        // state ="win judge";
       }
       else if ((state == "win judge")) {
+        statepadtext_body.text = '猜拳结算';
         pedometer = 0;
         //   每人出牌的选择  = data.gambleChoices;
         //   每人出了几张牌  = data.cardNumList;
         //   哪些玩家赢了   =  data.playerWinList;
-       // state="ACTION: deposit account";
+        // state="ACTION: deposit account";
       }
-      else if(state=="ACTION: deposit account"){
+      else if (state == "ACTION: deposit account") {
+        statepadtext_body.text = '蓄能结算';
         //剩余的能量点数  = data.eneregyList;
-       // state="skills account";
+        // state="skills account";
       }
-      else if(state=="skills account"){
-       // state="fire account";
+      else if (state == "skills account") {
+        statepadtext_body.text = '开火结算';
+        // state="fire account";
       }
-      else if(state=="fire account"){
+      else if (state == "fire account") {
+        statepadtext_body.text = '移动结算';
         // 剩余的生命值 = data.healthPointList;
         //state="move account";
       }
-      else if(state=="move account"){
-         playerloc_union = data.locationList;
-         do_move();
-         //state="element account";
+      else if (state == "move account") {
+        statepadtext_body.text = '要素结算';
+        playerloc_union = data.locationList;
+        do_move();
+        //state="element account";
       }
-      else if(state=="element account"){
+      else if (state == "element account") {
+        statepadtext_body.text = '人赢判定';
         // 所有人的要素情况 = data.elemList;
-       // state="if human wins";
+        // state="if human wins";
       }
-      else if(state=="if human wins"){
-      //  state="Game Over, human wins";
+      else if (state == "if human wins") {
+        statepadtext_body.text = '人赢实锤';
+        //  state="Game Over, human wins";
       }
-      else if(state=="Game Over, human wins"){
+      else if (state == "Game Over, human wins") {
+        statepadtext_body.text = '感染判定';
         // 游戏结束
       }
-      else if(state=="infection account"){
+      else if (state == "infection account") {
+        statepadtext_body.text = '尸赢实锤';
         team_result = data.teamList;
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
