@@ -1,41 +1,41 @@
 var state_help = {
     preload: function() {
-        var background = game.add.image(0, 0, 'background');
+        var background = game.add.image(0, 0, 'userbackground');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        game.add.button(600, 490, 'button', go_backloginhelp, this, 1, 0, 2, 0);
-        game.add.bitmapText(620, 495, 'chiller', 'Back', 28);
-        game.add.bitmapText(350, 30, 'chiller', 'Help', 70);
+        game.add.button(665, 525, 'button', go_backloginhelp, this, 1, 0, 2, 0);
+        game.add.bitmapText(690, 530, 'chiller', 'Back', 28);
+        game.add.bitmapText(350, 25, 'chiller', 'Help', 75);
 
-        var text_1='游戏准备：';
-        var text_2='开始游戏前，应当进行角色选定与阵营划分及地图选择，';
-        var text_3='用户决定角色，用随机分配的方式划出感染者阵营。';
-        var text_4='关于角色：';
-        var text_5='机动性：单次运动所能行进的最大距离';
-        var text_6='火力：单次开火所能消耗的最大能量';
-        var text_7='射程：开火能够击中的最远距离';
-        var text_8='生命值：能够储存的能量上限以及手牌上限';
-        var text_9='技能：角色独有的特殊能力';
-        var text_10='卡牌系统：';
-        var text_11='玩家会持有一系列手牌，手牌分为决策牌（包括移动、开火、';
-        var text_12='使用主动技能）和出拳牌（石头、剪刀、布）。'
-        var text_13='回合模式：';
-        var text_14='分为准备阶段、出拳阶段、行动阶段，往复循环';
-        game.add.text(80, 85, text_1);
-        game.add.text(60, 115, text_2);
-        game.add.text(10, 145, text_3);
-        game.add.text(80, 175, text_4);
-        game.add.text(10, 205, text_5);
-        game.add.text(10, 235, text_6);
-        game.add.text(10, 265, text_7);
-        game.add.text(10, 295, text_8);
-        game.add.text(10, 325, text_9);
-        game.add.text(80, 355, text_10);
-        game.add.text(60, 385, text_11);
-        game.add.text(10, 415, text_12);
-        game.add.text(80, 455, text_13);
-        game.add.text(10, 495, text_14);
+        var text_1='Prepare for the game:';
+        var text_2='Before you started, characters should be chosen, team should be decided and map  ';
+        var text_3='ought to be selected.Characters are chosen by players,and team is divided arbitrarily.';
+        var text_4='The properties of characters:';
+        var text_5='MOTILITY represents how much map unit you can cover in one turn';
+        var text_6='FIREPOWER represents how much energy will be used on firing';
+        var text_7='RANGE represents how far you bullet can reach';
+        var text_8='HEALTHPOINT represents you upper limit of energy and hand cards';
+        var text_9='SKILLS represents the unique ability that only your character owns';
+        var text_10='Card System:：';
+        var text_11=' Players will get a set of hand cards, which include Strategy Cards (Move, Fire ';
+        var text_12='and use Skills)and Gamble Cards(Rock, Scissors and Paper)'
+        var text_13='The game will cycle in three stages before one side wins or the game becomes to ';
+        var text_14='to long to continue ---- PREPARE, GAMBLE, ACTION(or ACCOUNT)';
+        game.add.bitmapText(80, 85, 'chiller', text_1, 45);
+        game.add.bitmapText(60, 115, 'chiller', text_2, 34);
+        game.add.bitmapText(10, 145, 'chiller', text_3, 34);
+        game.add.bitmapText(80, 175, 'chiller', text_4, 45);
+        game.add.bitmapText(60, 210, 'chiller', text_5, 34);
+        game.add.bitmapText(60, 245, 'chiller', text_6, 34);
+        game.add.bitmapText(60, 280, 'chiller', text_7, 34);
+        game.add.bitmapText(60, 315, 'chiller', text_8, 34);
+        game.add.bitmapText(60, 350, 'chiller', text_9, 34);
+        game.add.bitmapText(80, 385, 'chiller', text_10, 45);
+        game.add.bitmapText(60, 425, 'chiller', text_11, 34);
+        game.add.bitmapText(10, 465, 'chiller', text_12, 34);
+        game.add.bitmapText(60, 495, 'chiller', text_13, 34);
+        game.add.bitmapText(10, 525, 'chiller', text_14, 34);
 
         show("help");
     }
