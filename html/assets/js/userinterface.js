@@ -1,6 +1,6 @@
 var state_userinterface = {
   preload: function () {
-    game.add.sprite(0, 0, 'background');
+    game.add.sprite(0, 0, 'background2');
 
     game.add.sprite(350, 20, 'figure1');
     game.add.sprite(350, 140, 'figure2');
@@ -13,10 +13,10 @@ var state_userinterface = {
     game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
     game.add.sprite(-150, -100, user.avatar);
 
-    game.add.bitmapText(120, 20, 'desyrel', 'nickname:', 36);
-    game.add.bitmapText(290, 20, 'desyrel', user.nickname, 36);
-    game.add.bitmapText(120, 60, 'desyrel', 'grade:', 36);
-    game.add.bitmapText(215, 60, 'desyrel', user.stats.score.toString(), 36);
+    game.add.bitmapText(120, 20, 'chiller', 'nickname:', 36);
+    game.add.bitmapText(290, 20, 'chiller', user.nickname, 36);
+    game.add.bitmapText(120, 60, 'chiller', 'grade:', 36);
+    game.add.bitmapText(215, 60, 'chiller', user.stats.score.toString(), 36);
 
 
     game.add.button(240, 115, 'button', go_changepw, this, 1, 0, 2, 0);

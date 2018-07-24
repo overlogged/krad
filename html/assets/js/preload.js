@@ -1,6 +1,8 @@
 var state_preload = {
   preload: function () {
     game.load.image('background', 'assets/img/background1.png');
+    game.load.image('background2', 'assets/img/background2.png');
+    game.load.image('userbackground', 'assets/img/userbackground.png');
     game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
     game.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
     game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
