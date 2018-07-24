@@ -44,6 +44,7 @@ function do_confirm() {
     data: JSON.stringify(req),
     success: function (data, status) {
       alert("修改成功");
+      game.state.start('login');
       console.log(data);
       console.log(sid);
     },
