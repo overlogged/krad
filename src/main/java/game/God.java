@@ -64,18 +64,7 @@ public class God {
                         if(playerState[playerIndex] == 0){
                             GambleChecker.cardDistribute(cardHeap,allPlayers[playerIndex],4);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
-                            boolean isSeenCard = true;
-                            for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++) {
-                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
-                                if((allPlayers[playerIndex].handCards[i] == 1)
-                                        |(allPlayers[playerIndex].handCards[i] == 2)
-                                        |(allPlayers[playerIndex].handCards[i] == 3))
-                                    isSeenCard = false;
-                            }
-                            if(isSeenCard)
-                                allPlayers[playerIndex].isSeenCard = true;
-                            else
-                                allPlayers[playerIndex].isSeenCard = false;
+                            seenCardJudge(playerIndex,playerHandCard);
                             for(int i = 0; i < playerNum;i++){
                                 if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
                                     availableFireTarget[i] = 1;
@@ -86,6 +75,7 @@ public class God {
                         }
                         else if(playerState[playerIndex] == 1){
                             MsgChooseDecision dec = GodHelper.getChooseDecision(msg);
+
                             // operation to the player's properties
                             if(dec.decision() == -1)
                                 allPlayers[playerIndex].stratDecision = GambleChecker.DEPOSIT;
@@ -102,6 +92,7 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             //ends
+
                             if(allPlayers[playerIndex].isSeenCard)
                                 result = GodHelper.toChooseDecision("must choose seen card",playerHandCard);
                             else
@@ -313,8 +304,12 @@ public class God {
         MsgChooseDecision decisionFeature = GodHelper.getChooseDecision(msg);
         int decision = playerMain.stratDecision;
         int direction = toLoc(playerIndex,decisionFeature.moveDirection());
+
+        if((decision < 4)|(decision > 7))
+            decision = GambleChecker.DEPOSIT;
+
         if(decision == GambleChecker.MOVE) {
-            playerMain.moveDirection = decisionFeature.moveDirection();
+            playerMain.moveDirection = direction;
             playerMain.energyConsume = Math.min(playerMain.energy,playerMain.mot);
         }
         else if(decision == GambleChecker.FIRE) {
@@ -556,6 +551,7 @@ public class God {
         }
     }
 
+    //other auxiliary functions
     public void initialPlayer(int[] playerSID)  {
         playerNum = playerSID.length;
         allPlayers = new Player[playerNum];
@@ -595,6 +591,20 @@ public class God {
             else allPlayers[i].user_info = user.get();
             allUserInfo[i] = new UserInfo(i,allPlayers[i].user_info.nickname());
         }
+    }
+    public void seenCardJudge(int playerIndex,int[] playerHandCard){
+        boolean isSeenCard = true;
+        for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++) {
+            playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+            if((allPlayers[playerIndex].handCards[i] == 1)
+                    |(allPlayers[playerIndex].handCards[i] == 2)
+                    |(allPlayers[playerIndex].handCards[i] == 3))
+                isSeenCard = false;
+        }
+        if(isSeenCard)
+            allPlayers[playerIndex].isSeenCard = true;
+        else
+            allPlayers[playerIndex].isSeenCard = false;
     }
 
 }
