@@ -10,23 +10,61 @@
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
   <style>
     #gamecontainer {
-      height: 470px;
+      height: 480px;
       width: 800px;
-      margin: 0px 0px 0px 250px;
+      margin: 0px 0px 0px 0px;
       overflow: auto;
+      float: left;
+    }
+
+    #statuscontainer {
+      height: 470px;
+      width: 50px;
+      overflow: auto;
+      float: left;
     }
 
     #cardcontainer {
       height: 200px;
       width: 800px;
-      margin:  0px 0px 0px 250px;
+      margin: 0px 0px 0px 250px;
       overflow: auto;
+    }
+
+    .element,
+    .outer-container {
+      margin: 0px 0px 0px 250px;
+      width: 780px;
+      height: 480px;
+      float: left;
+    }
+
+    .outer-container {
+      border: 0px solid purple;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .inner-container {
+      position: absolute;
+      left: 0;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    .inner-container::-webkit-scrollbar {
+      display: none;
     }
   </style>
 </head>
 
 <body>
-  <div id="gamecontainer"></div>
+  <div class="outer-container">
+    <div class="inner-container">
+      <div id="gamecontainer"></div>
+    </div>
+  </div>
+  <div id="statuscontainer"></div>
   <div id="cardcontainer"></div>
   <script>
     // get sid
@@ -154,7 +192,19 @@
         }
       }
     });
+    var statusbox = new Phaser.Game(780, 899, Phaser.CANVAS, 'statuscontainer', {
+      preload: function () {
+        statusbox.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
 
+      },
+
+      create: function () {
+        var background = statusbox.add.sprite(0, 0, 'gamebackground');
+        background.smoothed = true;
+        background.height = statusbox.height;
+        background.width = statusbox.width;
+      },
+    });
     var seencardtext = [];
     var handcardslot = [];
     var seencardslot = [];
@@ -623,25 +673,25 @@
       else if (state == "choose strategy decision") {
         statepadtext_body.text = '决策阶段';
         req = {
-                decision: -1,
-                moveDirection: -1,
-                fireTarget: -1
-              }
+          decision: -1,
+          moveDirection: -1,
+          fireTarget: -1
+        }
         arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 1;
         fire_union = data.availableFireTarget;
         refreshcard();
-        
+
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
-       if (state == "must choose seen card") {
-              req = {
-                seenCard: 1
-              }
-            }
+        if (state == "must choose seen card") {
+          req = {
+            seenCard: 1
+          }
+        }
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 5;
@@ -650,11 +700,11 @@
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE:win judge")) {
         statepadtext_body.text = '出拳阶段';
         if (state == "GAMBLE: choose gamble") {
-              pedometer = 2;
-              refreshcard();
-            }
-        else{
-        do_gamblecard(empty);
+          pedometer = 2;
+          refreshcard();
+        }
+        else {
+          do_gamblecard(empty);
         }
         //decision_union = data.decisionChoices;
         //seencard_union = data.seenCardChoices;
@@ -710,7 +760,7 @@
       else if (state == "Game Over,zombie wins") {
         statepadtext_body.text = '游戏结束，感染者获胜！';
       }
-      else if(state=="desert account"){
+      else if (state == "desert account") {
         statepadtext_body.text = '弃牌阶段';
         team_result = data.teamList;
         for (var i = 0; i < player_num; i++) {
@@ -784,11 +834,11 @@
     function request(msg, callback) {
       if (debug) {
         var sid = parseInt(sid);
-        var data = {state:""};
+        var data = { state: "" };
         // write your own data
         //--------------------
         state = data.state;
-        callback(data,200);
+        callback(data, 200);
       } else {
         $.ajax({
           url: "/api/game",
@@ -810,7 +860,7 @@
               pedometer = 4;
               refreshcard();
             }
-     
+
           },
 
           error: function (data, status) {
