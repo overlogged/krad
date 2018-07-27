@@ -10,7 +10,7 @@
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
   <style>
     #gamecontainer {
-      height: 480px;
+      height: 470px;
       width: 800px;
       margin: 0px 0px 0px 0px;
       overflow: auto;
@@ -19,23 +19,24 @@
 
     #statuscontainer {
       height: 470px;
-      width: 50px;
+      width: 250px;
       overflow: auto;
+      overflow-x: hidden;
       float: left;
     }
 
     #cardcontainer {
-      height: 200px;
-      width: 800px;
-      margin: 0px 0px 0px 250px;
+      height: 180px;
+      width: 1030px;
+      margin: 0px 0px 0px 200px;
       overflow: auto;
     }
 
-    .element,
+    /* .element, */
     .outer-container {
-      margin: 0px 0px 0px 250px;
+      margin: 0px 0px 0px 200px;
       width: 780px;
-      height: 480px;
+      height: 470px;
       float: left;
     }
 
@@ -52,9 +53,9 @@
       overflow-y: scroll;
     }
 
-    .inner-container::-webkit-scrollbar {
+    /* .inner-container::-webkit-scrollbar {
       display: none;
-    }
+    } */
   </style>
 </head>
 
@@ -192,17 +193,17 @@
         }
       }
     });
-    var statusbox = new Phaser.Game(780, 899, Phaser.CANVAS, 'statuscontainer', {
+    var statusarea = new Phaser.Game(780, 899, Phaser.CANVAS, 'statuscontainer', {
       preload: function () {
-        statusbox.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
+        statusarea.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
 
       },
 
       create: function () {
-        var background = statusbox.add.sprite(0, 0, 'gamebackground');
+        var background = statusarea.add.sprite(0, 0, 'gamebackground');
         background.smoothed = true;
-        background.height = statusbox.height;
-        background.width = statusbox.width;
+        background.height = statusarea.height;
+        background.width = statusarea.width;
       },
     });
     var seencardtext = [];
@@ -495,6 +496,7 @@
             break;
           case 5:
             for (j = 0; j < 4; j++) {
+              if(fire_union[j]!=0)
               p_choose[j].kill();
               p_text[j].alpha = 0;
             };
