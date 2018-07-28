@@ -19,7 +19,7 @@
 
     #statuscontainer {
       height: 470px;
-      width: 250px;
+      width: 270px;
       overflow: auto;
       overflow-x: hidden;
       float: left;
@@ -27,14 +27,15 @@
 
     #cardcontainer {
       height: 180px;
-      width: 1030px;
-      margin: 0px 0px 0px 200px;
+      width: 1050px;
+      margin: 0px 0px 0px 150px;
       overflow: auto;
     }
 
     /* .element, */
+
     .outer-container {
-      margin: 0px 0px 0px 200px;
+      margin: 0px 0px 0px 150px;
       width: 780px;
       height: 470px;
       float: left;
@@ -193,9 +194,14 @@
         }
       }
     });
+
+
+
+    var statusbox;
     var statusarea = new Phaser.Game(780, 899, Phaser.CANVAS, 'statuscontainer', {
       preload: function () {
         statusarea.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
+        statusarea.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
 
       },
 
@@ -204,9 +210,38 @@
         background.smoothed = true;
         background.height = statusarea.height;
         background.width = statusarea.width;
+        statusarea.world = true;
+        // var statusbox = statusarea.add.bitmapText(0, 0, 'chiller', 'Change Profile', 25);
 
+        statusbox = statusarea.add.text(0, 0, "", {
+          font: "15px 微软雅黑",
+          fill: "#ff0044",
+          align: "left",
+        });
+        statusbox.wordWrap = true;
+        // statusbox.setTextBounds(0, 0, 240, 1000);
+        statusbox.wordWrapWidth = 200;
+
+        // statusbox.text += "you are the apple of my eyes,and you are all I want";
+        statusbox.text += "欢迎进入激斗红潮游戏!\n你的玩家编号是"+sid+"，祝你游戏愉快！";
+
+        // statusbox.maxWidth=240;
+        // statusbox.addColor('#ff00ff',4);
       },
+      // update: function () {
+      //   statusbox.text = statusbox.text + "6";
+      //   tesetcount++;
+      //   if (tesetcount == 6) {
+      //     statusbox.text = statusbox.text + "\n";
+      //     tesetcount = 0;
+      //   }
+      // }
     });
+
+
+
+
+
     var seencardtext = [];
     var handcardslot = [];
     var seencardslot = [];
@@ -497,8 +532,8 @@
             break;
           case 5:
             for (j = 0; j < 4; j++) {
-              if(fire_union[j]!=0)
-              p_choose[j].kill();
+              if (fire_union[j] != 0)
+                p_choose[j].kill();
               p_text[j].alpha = 0;
             };
             break;
