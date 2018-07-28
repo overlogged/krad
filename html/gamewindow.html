@@ -19,7 +19,7 @@
 
     #statuscontainer {
       height: 470px;
-      width: 270px;
+      width: 280px;
       overflow: auto;
       overflow-x: hidden;
       float: left;
@@ -27,15 +27,15 @@
 
     #cardcontainer {
       height: 180px;
-      width: 1050px;
-      margin: 0px 0px 0px 150px;
+      width: 1060px;
+      margin: 0px 0px 0px 140px;
       overflow: auto;
     }
 
     /* .element, */
 
     .outer-container {
-      margin: 0px 0px 0px 150px;
+      margin: 0px 0px 0px 140px;
       width: 780px;
       height: 470px;
       float: left;
@@ -223,7 +223,7 @@
         statusbox.wordWrapWidth = 200;
 
         // statusbox.text += "you are the apple of my eyes,and you are all I want";
-        statusbox.text += "欢迎进入激斗红潮游戏!\n你的玩家编号是"+sid+"，祝你游戏愉快！";
+        statusbox.text += "欢迎来到激斗红潮!\n请点击下方按钮正式开始游戏，祝你游\n戏愉快！\n";
 
         // statusbox.maxWidth=240;
         // statusbox.addColor('#ff00ff',4);
@@ -666,45 +666,77 @@
       request(req, do_callback);
     }
 
-    var phase_state = "Main";
-    var player_state = "0.0";
-    var player_index = 0;
+    // var phase_state = "Main";
+    // var player_state = "0.0";
+    // var player_index = 0;
+
+    // function do_init() {
+    //   // init
+    //   request({}, function (data_init0) {
+    //     request({ hero: "hero" }, function (data_init1) {
+    //       request({}, function (data_main_0_0) {
+    //         console.log("data_init0", data_init0);
+    //         console.log("data_init1", data_init1);
+    //         console.log("data_main_0_0", data_main_0_0);
+    //         player_state = "0.1";
+    //         player_index = data_init0.index;
+    //         team_result = data_init1.team_result;
+    //       });
+    //     });
+    //   });
+    // }
+
+
+
     var team_result = [0, 0, 0, 1];
-    function do_init() {
-      // init
-      request({}, function (data_init0) {
-        request({ hero: "hero" }, function (data_init1) {
-          request({}, function (data_main_0_0) {
-            console.log("data_init0", data_init0);
-            console.log("data_init1", data_init1);
-            console.log("data_main_0_0", data_main_0_0);
-            player_state = "0.1";
-            player_index = data_init0.index;
-            team_result = data_init1.team_result;
-          });
-        });
-      });
-    }
-
-
-
-
-
+    var allUserInfo = [];
+    var herolist = [];
+    var heroChoices = [];
+    var myIndex;
+    var decisionChoices = [];
+    var seenCardChoices = [];
+    var gambleChoices = [];
+    var cardNumList = [];
+    var playerWinList = [];
+    var eneregyList = [];
+    var healthPointList=[];
+    var elemList=[];
     function do_callback(data, status) {
       if (state == "choose hero") {
         statepadtext_body.text = '选择英雄阶段';
+        myIndex = data.myIndex;
+        allUserInfo = data.allUserInfo;
+        herolist = data.herolist;
+
+        player_num = allUserInfo.length;
+        statusbox.text += "你的游戏编号为" + myIndex;
+        statusbox.text += "加入游戏的玩家有：\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += allUserInfo[i].nickName + ",玩家编号为" + allUserInfo[i].index + "\n";
+        }
         pedometer = 0;
       }
       else if (state == "start game") {
         team_result = data.teamResult;
-        player_num = team_result.length;
+        heroChoices = data.heroChoices;
+        statusbox.text += "玩家选择的英雄为：\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += "玩家" + i + "：选择了英雄" + heroChoices[i] + "\n";
+        }
+        // player_num = team_result.length;
         do_initplayer(4);
+        statusbox.text += "玩家的身份为：\n";
         start = true;
+
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
             do_poison(i);
             player[i].body.x = map[0].x + i * 20 + (4 - player_num) * 10;
             player[i].body.y = map[0].y;
+            statusbox.text += "玩家" + i + "：身份为感染者\n";
+          }
+          else {
+            statusbox.text += "玩家" + i + "：身份为战术小队\n";
           }
         }
       }
@@ -726,6 +758,7 @@
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
+          statepadtext_body.text = '你必须选择一张明牌';
           req = {
             seenCard: 1
           }
@@ -744,9 +777,8 @@
         else {
           do_gamblecard(empty);
         }
-        //decision_union = data.decisionChoices;
-        //seencard_union = data.seenCardChoices;
-        //state="GAMBLE:choose gamble";
+        decisionChoices = data.decisionChoices;
+        seenCardChoices = data.seenCardChoices;
       }
       else if ((state == "win judge")) {
         statepadtext_body.text = '猜拳结算';
@@ -754,29 +786,24 @@
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-        // state ="win judge";
       }
       else if (state == "ACTION: deposit account") {
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
-        //   每人出牌的选择  = data.gambleChoices;
-        //   每人出了几张牌  = data.cardNumList;
-        //   哪些玩家赢了   =  data.playerWinList;
-        // state="ACTION: deposit account";
+        gambleChoices = data.gambleChoices;
+        cardNumList = data.cardNumList;
+        playerWinList = data.playerWinList;
       }
       else if (state == "skills account") {
         statepadtext_body.text = '蓄能结算';
-        //剩余的能量点数  = data.eneregyList;
-        // state="skills account";
+        eneregyList = data.eneregyList;
       }
       else if (state == "fire account") {
         statepadtext_body.text = '开火结算';
-        // state="fire account";
       }
       else if (state == "move account") {
         statepadtext_body.text = '移动结算';
-        // 剩余的生命值 = data.healthPointList;
-        //state="move account";
+        healthPointList = data.healthPointList;
       }
       else if (state == "element account") {
         statepadtext_body.text = '要素判定';
@@ -786,8 +813,7 @@
       }
       else if (state == "if human wins") {
         statepadtext_body.text = '感染判定';
-        // 所有人的要素情况 = data.elemList;
-        // state="if human wins";
+        elemList = data.elemList;
       }
       else if (state == "Game Over,human wins") {
         statepadtext_body.text = '游戏结束，人类获胜！';
