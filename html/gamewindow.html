@@ -699,8 +699,8 @@
     var cardNumList = [];
     var playerWinList = [];
     var eneregyList = [];
-    var healthPointList=[];
-    var elemList=[];
+    var healthPointList = [];
+    var elemList = [];
     function do_callback(data, status) {
       if (state == "choose hero") {
         statepadtext_body.text = '选择英雄阶段';
@@ -758,7 +758,7 @@
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
-          statepadtext_body.text = '你必须选择一张明牌';
+          statepadtext_body.text = '你必须选择一张明牌\n';
           req = {
             seenCard: 1
           }
@@ -779,6 +779,16 @@
         }
         decisionChoices = data.decisionChoices;
         seenCardChoices = data.seenCardChoices;
+        var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
+        statusbox.text += "玩家选择的明牌情况为：\n";
+        for (var i = 0; i < player_num; i++) {
+          if (seenCardChoices[i] != 0) {
+            statusbox.text += "玩家" + i + "： 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+          }
+          else {
+            statusbox.text += "玩家" + i + ": 未选择明牌\n";
+          }
+        }
       }
       else if ((state == "win judge")) {
         statepadtext_body.text = '猜拳结算';
@@ -788,11 +798,16 @@
         refreshcard();
       }
       else if (state == "ACTION: deposit account") {
+        var lookup_table = ['blank', '布', '剪刀', '石头', 'move', 'shoot', 'skill'];
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
         gambleChoices = data.gambleChoices;
         cardNumList = data.cardNumList;
         playerWinList = data.playerWinList;
+        statusbox.text += "玩家选择的出牌情况为：\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += "玩家" + i + "： 选择了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+        }
       }
       else if (state == "skills account") {
         statepadtext_body.text = '蓄能结算';
@@ -809,7 +824,6 @@
         statepadtext_body.text = '要素判定';
         playerloc_union = data.locationList;
         do_move();
-        //state="element account";
       }
       else if (state == "if human wins") {
         statepadtext_body.text = '感染判定';
