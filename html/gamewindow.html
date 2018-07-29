@@ -846,6 +846,10 @@
             do_poison(i);
           }
         }
+        do_dessert(empty);
+        do_fillcardlist();
+        pedometer = 4;
+        refreshcard();
       }
       else if (state == "card distribute") {
         //玩家能量信息= data.energy;
@@ -932,13 +936,6 @@
             console.log(data.state);
             state = data.state;
             callback(data, status);
-            if (state == "desert account") {
-              do_dessert(empty);
-              do_fillcardlist();
-              pedometer = 4;
-              refreshcard();
-            }
-
           },
 
           error: function (data, status) {

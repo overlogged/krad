@@ -1,5 +1,6 @@
 function request(msg,callback) {
   var sid = $("#sid").val();
+  var sent = JSON.stringify({'sid':parseInt(sid),'msg':JSON.stringify(msg)});
   $.ajax({
     url: "/api/game",
     type: "POST",
