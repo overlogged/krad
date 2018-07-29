@@ -914,6 +914,7 @@
     }
 
     function request(msg, callback) {
+      sid = parseInt(url.split("?sid=")[1]);
       var seent3 = JSON.stringify({
         'sid': parseInt(sid),
         'msg': JSON.stringify(msg)
