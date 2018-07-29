@@ -66,7 +66,7 @@ object SessionController {
   def routine(): Unit = Future {
     while (true) {
       Server.log("routine", "drop sessions")
-      Thread.sleep(100000)
+      Thread.sleep(WaitingTime*20)
       this.synchronized {
         states.dropWhile(item => item._2.timestamp < System.currentTimeMillis() - WaitingTime && item._2.state != StatePlaying)
       }
