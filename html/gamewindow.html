@@ -702,6 +702,7 @@
     var eneregyList = [];
     var healthPointList = [];
     var elemList = [];
+    var scoreList=[];
     function do_callback(data, status) {
       if (state == "choose hero") {
         statepadtext_body.text = '选择英雄阶段';
@@ -796,8 +797,7 @@
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-        for(var i=0;i<6;i++)
-        {
+        for (var i = 0; i < 6; i++) {
           do_checkcard();
         }
       }
@@ -832,15 +832,28 @@
       else if (state == "if human wins") {
         statepadtext_body.text = '感染判定';
         elemList = data.elemList;
+        var elem_string = ["有要素", "无要素"];
+        statusbox += "一轮猜拳后，玩家的状态结算\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox += "玩家" + i + ":能量为" + eneregyList[i] + ",生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]]+"\n";
+        }
       }
-      else if (state == "Game Over,human wins") {
+      else if (state == "Game Over, human wins") {
         statepadtext_body.text = '游戏结束，人类获胜！';
       }
       else if (state == "infection account") {
         statepadtext_body.text = '感染阶段';
       }
-      else if (state == "Game Over,zombie wins") {
+      else if (state == "Game Over, zombie wins") {
         statepadtext_body.text = '游戏结束，感染者获胜！';
+      }
+      else if (state == "END") {
+        statepadtext_body.text = '游戏结束';
+        scoreList = data.scoreList;
+        statusbox+="游戏结束，各个玩家的分数为:\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox += "玩家" + i + ":分数为"+scoreList[i]+"\n";
+        }
       }
       else if (state == "desert account") {
         statepadtext_body.text = '弃牌阶段';
