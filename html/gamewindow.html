@@ -836,7 +836,7 @@
         elemList = data.elemList;                
         statusbox += "一轮猜拳后，玩家的状态结算\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox += "玩家" + i + ":能量为" + eneregyList[i] + ",生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
+          statusbox += "玩家" + i + ":能量为" + eneregyList[i] + ",生命值为" + healthPointList[i] + "，" + elem_string[data.elemList[i]] + "\n";
         }
       }
       else if (state == "Game Over, human wins") {
