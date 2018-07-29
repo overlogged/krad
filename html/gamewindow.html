@@ -914,6 +914,11 @@
     }
 
     function request(msg, callback) {
+      var seent3 = JSON.stringify({
+        'sid': parseInt(sid),
+        'msg': JSON.stringify(msg)
+      })
+      console.log(seent3);
       if (debug) {
         var sid = parseInt(sid);
         var data = { state: "" };
