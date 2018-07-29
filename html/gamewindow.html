@@ -716,6 +716,7 @@
           statusbox.text += allUserInfo[i].nickName + ",玩家编号为" + allUserInfo[i].index + "\n";
         }
         pedometer = 0;
+        do_checkcard();
       }
       else if (state == "start game") {
         team_result = data.teamResult;
