@@ -702,7 +702,7 @@
     var eneregyList = [];
     var healthPointList = [];
     var elemList = [];
-    var scoreList=[];
+    var scoreList = [];
     function do_callback(data, status) {
       if (state == "choose hero") {
         statepadtext_body.text = '选择英雄阶段';
@@ -827,15 +827,16 @@
       else if (state == "element account") {
         statepadtext_body.text = '要素判定';
         playerloc_union = data.locationList;
+        elemList = data.elemList;
         do_move();
       }
       else if (state == "if human wins") {
         statepadtext_body.text = '感染判定';
-        elemList = data.elemList;
         var elem_string = ["有要素", "无要素"];
+        elemList = data.elemList;                
         statusbox += "一轮猜拳后，玩家的状态结算\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox += "玩家" + i + ":能量为" + eneregyList[i] + ",生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]]+"\n";
+          statusbox += "玩家" + i + ":能量为" + eneregyList[i] + ",生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
       }
       else if (state == "Game Over, human wins") {
@@ -850,9 +851,9 @@
       else if (state == "END") {
         statepadtext_body.text = '游戏结束';
         scoreList = data.scoreList;
-        statusbox+="游戏结束，各个玩家的分数为:\n";
+        statusbox += "游戏结束，各个玩家的分数为:\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox += "玩家" + i + ":分数为"+scoreList[i]+"\n";
+          statusbox += "玩家" + i + ":分数为" + scoreList[i] + "\n";
         }
       }
       else if (state == "desert account") {
