@@ -775,7 +775,7 @@
           pedometer = 2;
           refreshcard();
         }
-          do_gamblecard(empty);
+        do_gamblecard(empty);
         decisionChoices = data.decisionChoices;
         seenCardChoices = data.seenCardChoices;
         var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
@@ -795,6 +795,10 @@
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
+        for(var i=0;i<6;i++)
+        {
+          do_checkcard();
+        }
       }
       else if (state == "ACTION: deposit account") {
         var lookup_table = ['blank', '布', '剪刀', '石头', 'move', 'shoot', 'skill'];
