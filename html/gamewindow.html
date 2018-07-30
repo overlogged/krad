@@ -890,7 +890,6 @@
 
     function fix_arrow(button) {
       var temp = ((button.angle) / 45 + 3);
-      // alert(temp);
       do_target(temp, -1);
     }
     function fix_choose(button) {
@@ -902,7 +901,6 @@
     function do_decision(strategy) {
       p_decision = strategy;
       req.decision = p_decision;
-      alert("you choose" + p_decision);
       p_decision = -1;
     }
 
@@ -912,7 +910,6 @@
         moveDirection: direction,
         fireTarget: target
       }
-      alert("choose strategy" + req.decision + "+" + direction + "+" + target);
     }
 
     function do_seencard(rank) {
@@ -922,7 +919,6 @@
       req = {
         seenCard: rank
       }
-      alert("choose card" + req.seenCard);                        //test
     }
 
 
@@ -937,7 +933,6 @@
         desertCardList: cardarray
       }
       var seent2 = JSON.stringify(req);
-      alert(seent2);
     }
 
     function request(msg, callback) {
