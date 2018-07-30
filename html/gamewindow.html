@@ -51,8 +51,11 @@
       overflow-x: hidden;
       overflow-y: scroll;
     }
-    
-    ::-webkit-scrollbar{width:0px;}
+
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+
     /* .inner-container::-webkit-scrollbar {
       display: none;
     } */
@@ -85,8 +88,8 @@
     var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
     var fire_union = [1, 1, 1, 1];
     var playerloc_union = [];
-    var start = true;
-    testplace=24;
+    var start = false;
+    testplace = 24;
     var map = [{
       x: 360,
       y: 850
@@ -158,10 +161,10 @@
     }, {
       x: 625,
       y: 463
-    },{
+    }, {
       x: 625,
       y: 530
-    },{
+    }, {
       x: 525,
       y: 530
     }
@@ -487,6 +490,7 @@
         game.physics.p2.enable(player[i]);
         player[i].body.fixedRotation = true;
       }
+      start = true;
     }
 
     function do_arrowgenerate(arrow_union) {
@@ -735,7 +739,6 @@
         // player_num = team_result.length;
         do_initplayer(4);
         statusbox.text += "玩家的身份为：\n";
-        start = true;
 
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
@@ -839,7 +842,7 @@
       else if (state == "if human wins") {
         statepadtext_body.text = '感染判定';
         var elem_string = ["有要素", "无要素"];
-        elemList = data.locationList;                
+        elemList = data.locationList;
         statusbox.text += "一轮猜拳后，玩家的状态结算:\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
