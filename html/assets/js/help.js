@@ -1,12 +1,18 @@
 var state_help = {
     preload: function() {
-        var background = game.add.image(0, 0, 'userbackground');
+        var background = game.add.image(0, 0, 'userbackground2');
+        var font_1='35px pristina';
+        var font_2='28px pristina';
+        var textFill='#ffffff';
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        game.add.button(665, 525, 'button', go_backloginhelp, this, 1, 0, 2, 0);
-        game.add.bitmapText(690, 530, 'chiller', 'Back', 28);
-        game.add.bitmapText(350, 25, 'chiller', 'Help', 75);
+        game.add.button(665, 550, 'button', go_backloginhelp, this, 1, 0, 2, 0);
+        game.add.bitmapText(690, 555, 'chiller', 'Back', 28);
+        game.add.text(350, 10, 'Help', {
+            font:"60px pristina",
+            fill:"#ffffff"
+        });
 
         var text_1='Prepare for the game:';
         var text_2='Before you started, characters should be chosen, team should be decided and map  ';
@@ -22,20 +28,62 @@ var state_help = {
         var text_12='and use Skills)and Gamble Cards(Rock, Scissors and Paper)'
         var text_13='The game will cycle in three stages before one side wins or the game becomes to ';
         var text_14='to long to continue ---- PREPARE, GAMBLE, ACTION(or ACCOUNT)';
-        game.add.bitmapText(80, 85, 'chiller', text_1, 45);
-        game.add.bitmapText(60, 115, 'chiller', text_2, 34);
-        game.add.bitmapText(10, 145, 'chiller', text_3, 34);
-        game.add.bitmapText(80, 175, 'chiller', text_4, 45);
-        game.add.bitmapText(60, 210, 'chiller', text_5, 34);
-        game.add.bitmapText(60, 245, 'chiller', text_6, 34);
-        game.add.bitmapText(60, 280, 'chiller', text_7, 34);
-        game.add.bitmapText(60, 315, 'chiller', text_8, 34);
-        game.add.bitmapText(60, 350, 'chiller', text_9, 34);
-        game.add.bitmapText(80, 385, 'chiller', text_10, 45);
-        game.add.bitmapText(60, 425, 'chiller', text_11, 34);
-        game.add.bitmapText(10, 465, 'chiller', text_12, 34);
-        game.add.bitmapText(60, 495, 'chiller', text_13, 34);
-        game.add.bitmapText(10, 525, 'chiller', text_14, 34);
+        game.add.text(80, 65, text_1,{
+            font:font_1,
+            fill:"#FFF68F"
+        });
+        game.add.text(60, 105, text_2, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(10, 130, text_3, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(80, 160, text_4, {
+            font:font_1,
+            fill:"#FFF68F"
+        });
+        game.add.text(60, 195, text_5, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 230, text_6, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 265, text_7, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 300, text_8, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 335, text_9, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(80, 370, text_10, {
+            font:font_1,
+            fill:"#FFF68F"
+        });
+        game.add.text(60, 410, text_11, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(10, 445, text_12, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 480, text_13, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(10, 510, text_14, {
+            font:font_2,
+            fill:textFill
+        });
 
         show("help");
     }
