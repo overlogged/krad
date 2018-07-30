@@ -22,12 +22,13 @@ var state_login = {
 
       game.add.button(580, 260, 'button', go_forget, this, 1, 0, 2, 0);
       game.add.bitmapText(600, 265, 'chiller', 'forget', 28);
-
+     
 
 
       show("login");
   }
 }
+
 function go_forget(){
   game.state.start('forget');
 }
