@@ -291,7 +291,7 @@
         card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 105,
           250);
         card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 105, 250);
-        card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png');
+        card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png',35,35);
         card.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
         card.load.spritesheet('seen', 'assets/buttons/button.png', 100, 26);
         card.load.spritesheet('pad', 'assets/img/inputbox1.png', 150, 60);
@@ -299,10 +299,10 @@
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
-        var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
-        statepad = card.add.sprite(610, 50, 'pad');
-        statepadtext_head = card.add.text(620, 55, 'stage');
-        statepadtext_body = card.add.text(620, 80, 'ready');
+        var checkbutton = card.add.button(865, 10, 'checkbutton', do_checkcard, this,1,0,0,1);
+        statepad = card.add.sprite(905, 10, 'pad');
+        statepadtext_head = card.add.text(915, 15, 'stage');
+        statepadtext_body = card.add.text(915, 40, 'ready');
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
         statepadtext_body.text = '开始阶段';
