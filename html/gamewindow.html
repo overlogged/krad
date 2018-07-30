@@ -26,10 +26,10 @@
     }
 
     #cardcontainer {
-      height: 180px;
+      height: 170px;
       width: 1060px;
       margin: 0px 0px 0px 140px;
-      overflow: auto;
+      overflow: hidden;
     }
 
     /* .element, */
@@ -77,7 +77,7 @@
     //sid = 1;
     console.log("sid:", sid);
     var state = "Init";
-    var player_num = 3;
+    var player_num = 4;
     var arrow = [];
     var player = [];
     var p_choose = [];
@@ -86,78 +86,85 @@
     var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
     var fire_union = [1, 1, 1, 1];
     var playerloc_union = [];
-    var start = false;
+    var start = true;
+    testplace=24;
     var map = [{
-      x: 410,
-      y: 10
+      x: 360,
+      y: 850
     }, {
-      x: 410,
-      y: 60
+      x: 210,
+      y: 860
     }, {
-      x: 410,
-      y: 130
+      x: 210,
+      y: 790
     }, {
-      x: 410,
-      y: 180
+      x: 210,
+      y: 720
     }, {
-      x: 410,
+      x: 210,
+      y: 655
+    }, {
+      x: 210,
+      y: 590
+    }, {
+      x: 210,
+      y: 525
+    }, {
+      x: 360,
+      y: 520
+    },
+    {
+      x: 250,
+      y: 450
+    }, {
+      x: 250,
+      y: 385
+    }, {
+      x: 250,
+      y: 310
+    }, {
+      x: 250,
       y: 240
     }, {
-      x: 410,
-      y: 290
+      x: 145,
+      y: 240
     }, {
-      x: 410,
-      y: 345
+      x: 145,
+      y: 175
     }, {
-      x: 340,
-      y: 420
+      x: 145,
+      y: 105
     },
     {
-      x: 435,
-      y: 480
+      x: 260,
+      y: 100
     }, {
-      x: 456,
-      y: 535
+      x: 440,
+      y: 90
     }, {
-      x: 474,
-      y: 595
+      x: 625,
+      y: 110
     }, {
-      x: 490,
-      y: 650
+      x: 625,
+      y: 180
     }, {
-      x: 515,
-      y: 710
+      x: 625,
+      y: 250
     }, {
-      x: 540,
-      y: 765
+      x: 625,
+      y: 320
     }, {
-      x: 568,
-      y: 820
-    },
-    {
-      x: 350,
-      y: 865
+      x: 625,
+      y: 390
     }, {
-      x: 143,
-      y: 820
-    }, {
-      x: 164,
-      y: 765
-    }, {
-      x: 185,
-      y: 710
-    }, {
-      x: 202,
-      y: 650
-    }, {
-      x: 227,
-      y: 595
-    }, {
-      x: 248,
-      y: 535
-    }, {
-      x: 269,
-      y: 480
+      x: 625,
+      y: 463
+    },{
+      x: 625,
+      y: 530
+    },{
+      x: 525,
+      y: 530
     }
     ];
 
@@ -181,18 +188,18 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        //do_initplayer(0);
+        do_initplayer(testplace);
         game.world.setChildIndex(background, 0);
         // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
       },
 
-      // update: function () {
-      //   if (start) {
-      //     for (var i = 0; i < player_num; i++) {
-      //       player[i].body.setZeroVelocity();
-      //     }
-      //   }
-      // }
+      update: function () {
+        if (start) {
+          for (var i = 0; i < player_num; i++) {
+            player[i].body.setZeroVelocity();
+          }
+        }
+      }
     });
 
 
@@ -269,7 +276,7 @@
     //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
     //do_fillcardlist();
 
-    var card = new Phaser.Game(780, 320, Phaser.CANVAS, 'cardcontainer', {
+    var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
       preload: function () {
         card.load.image('gamebackground', 'assets/img/userbackground.png');
         card.load.spritesheet('arrow', 'assets/img/gamewindow/arrow.png', 90, 36);
