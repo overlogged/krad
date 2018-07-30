@@ -712,9 +712,9 @@
 
         player_num = allUserInfo.length;
         statusbox.text += "你的游戏编号为" + myIndex;
-        statusbox.text += ",加入游戏的玩家有：\n";
+        statusbox.text += ", 加入游戏的玩家有：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += allUserInfo[i].nickName + ",玩家编号为" + allUserInfo[i].index + "\n";
+          statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
         }
         pedometer = 0;
         do_checkcard();
@@ -724,7 +724,7 @@
         heroChoices = data.heroChoices;
         statusbox.text += "玩家选择的英雄为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "：选择了英雄" + heroChoices[i] + "\n";
+          statusbox.text += "玩家" + i + ": 选择了英雄" + heroChoices[i] + "\n";
         }
         // player_num = team_result.length;
         do_initplayer(4);
@@ -736,10 +736,10 @@
             do_poison(i);
             player[i].body.x = map[0].x + i * 20 + (4 - player_num) * 10;
             player[i].body.y = map[0].y;
-            statusbox.text += "玩家" + i + "：身份为感染者\n";
+            statusbox.text += "玩家" + i + ": 身份为感染者\n";
           }
           else {
-            statusbox.text += "玩家" + i + "：身份为战术小队\n";
+            statusbox.text += "玩家" + i + ": 身份为战术小队\n";
           }
         }
       }
@@ -784,7 +784,7 @@
         statusbox.text += "玩家选择的明牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           if (seenCardChoices[i] != 0) {
-            statusbox.text += "玩家" + i + "： 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+            statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
           }
           else {
             statusbox.text += "玩家" + i + ": 未选择明牌\n";
@@ -834,9 +834,9 @@
         statepadtext_body.text = '感染判定';
         var elem_string = ["有要素", "无要素"];
         elemList = data.locationList;                
-        statusbox.text += "一轮猜拳后，玩家的状态结算\n";
+        statusbox.text += "一轮猜拳后，玩家的状态结算:\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + ":能量为" + eneregyList[i] + ",生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
+          statusbox.text += "玩家" + i + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
       }
       else if (state == "Game Over, human wins") {
@@ -853,7 +853,7 @@
         scoreList = data.scoreList;
         statusbox.text += "游戏结束，各个玩家的分数为:\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + ":分数为" + scoreList[i] + "\n";
+          statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
         }
       }
       else if (state == "desert account") {
