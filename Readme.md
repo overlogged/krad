@@ -56,3 +56,7 @@ dev ![travis](https://www.travis-ci.org/NiceKingWei/krad.svg?branch=dev)
 | ACTION.0.6  感染及感染者胜利结算          | 空                                                           | 若感染者胜利：字符串”Game Over, zombie wins"+所有人的阵营（数组:0人1感染者），若感染者尚未胜利：字符串“desert account"+所有人的阵营（数组） |
 | ACTION.0.7  弃牌结算                      | 弃牌选择数组                                                 | 字符串”PREPARE: choose decision"+ 玩家能量情况（整型）+玩家剩余手牌（数组） |
 
+
+## License
+
+本仓库采用 MIT License 发布。html/assets/img 下部分图片来自 [teaworlds](https://github.com/teeworlds/teeworlds)，根据需要做了少许改动。html/assets/img 文件夹下的图片采用 CC BY-SA 3.0 协议发布 https://creativecommons.org/licenses/by-sa/3.0/us/。
