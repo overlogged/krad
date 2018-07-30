@@ -48,6 +48,15 @@
         var figurepshow6 = game.add.sprite(480, 260, 'figure6');
         var progressbar1 = game.add.sprite(10,10,'progressbar');
         var progressbar2 = game.add.sprite(20,20,'inprogressbar');
+
+
+        
+        
+        // userfigure.anchor.set(0.5);
+
+        userfigure.inputEnabled = true;
+
+     userfigure.input.pixelPerfectOver = true;
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
@@ -75,8 +84,14 @@
         var userhelp = game.add.button(50, 400, 'help', do_help, this);
 
         
+      },
+
+      update: function(){
+        // userfigure.alpha=0.5;
       }
+
     });
+
 
     function do_help() {
       game.state.start(help);
