@@ -39,13 +39,19 @@ function do_match() {
   var req = {
     'sid': sid
   };
-  alert("开始匹配，请耐心等待");
+  //alert("开始匹配，请耐心等待");
   $.ajax({
     url: "/api/session/match",
     type: "POST",
     contentType: 'application/json',
     data: JSON.stringify(req),
+    beforeSend:function(){ 
+
+      $("body").append('<div id="pload" style="position:fixed;top:30%;z-index:1200;background:url(../gif/loading.gif) top center no-repeat;width:100%;height:140px;margin:auto auto;"></div>'); 
+
+   }, 
     success: function (data, status) {
+      $("#pload").remove();
       console.log(data);
       window.location.href="gamewindow.html?sid="+sid;  
     },
