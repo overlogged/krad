@@ -39,12 +39,17 @@ function do_match() {
   var req = {
     'sid': sid
   };
-  alert("开始匹配，请耐心等待");
+  // alert("开始匹配，请耐心等待");
   $.ajax({
     url: "/api/session/match",
     type: "POST",
     contentType: 'application/json',
     data: JSON.stringify(req),
+    beforeSend:function(){ 
+
+      $("#loading").html("<img src='./assets/gif/loading.gif' />");
+
+   }, 
     success: function (data, status) {
       console.log(data);
       window.location.href="gamewindow.html?sid="+sid;  
