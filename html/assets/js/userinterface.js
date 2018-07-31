@@ -39,7 +39,7 @@ function do_match() {
   var req = {
     'sid': sid
   };
-  alert("开始匹配，请耐心等待");
+  //alert("开始匹配，请耐心等待");
   $.ajax({
     url: "/api/session/match",
     type: "POST",
