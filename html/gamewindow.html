@@ -190,19 +190,20 @@
         background.height = game.height;
         background.width = game.width;
         do_initplayer(0);
+        // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
-        playe[0].body.checkCollision.none = true;
-        alert("sucee");
+        
+        alert(player[0].body.dynamic);
 
         // game.camera.atLimit=true;
         // game.camera.width=780;
         // game.camera.height=470;
         // game.camera.follow(player[0]);
         // game.camera.follow(player[0], Phaser.Camera.FOLLOW_PLATFORMER);
-        document.getElementById('gamecontainer').scrollTop = player[0].y-425;
+        document.getElementById('gamecontainer').scrollTop = player[0].y - 425;
         // game.world.setChildIndex(background, 0);
         // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
-        // cursors = game.input.keyboard.createCursorKeys();
+
       },
       update: function () {
         if (start) {
@@ -210,21 +211,21 @@
             player[i].body.setZeroVelocity();
           }
 
-          // player[0].body.setZeroVelocity();
+          //   player[0].body.setZeroVelocity();
 
-          // if (cursors.up.isDown) {
-          //   player[0].body.moveUp(300)
-          // }
-          // else if (cursors.down.isDown) {
-          //   player[0].body.moveDown(300);
-          // }
+          //   if (cursors.up.isDown) {
+          //     player[0].body.moveUp(300)
+          //   }
+          //   else if (cursors.down.isDown) {
+          //     player[0].body.moveDown(300);
+          //   }
 
-          // if (cursors.left.isDown) {
-          //   player[0].body.velocity.x = -300;
-          // }
-          // else if (cursors.right.isDown) {
-          //   player[0].body.moveRight(300);
-          // }
+          //   if (cursors.left.isDown) {
+          //     player[0].body.velocity.x = -300;
+          //   }
+          //   else if (cursors.right.isDown) {
+          //     player[0].body.moveRight(300);
+          //   }
         }
       }
     });
@@ -267,7 +268,7 @@
         // statusbox.addColor('#ff00ff',4);
       },
       update: function () {
-        if(statusbox.height>(pagecount*460)){
+        if (statusbox.height > (pagecount * 460)) {
           document.getElementById('statuscontainer').scrollTop = statusbox.height;
           pagecount++;
         }
@@ -496,11 +497,11 @@
         player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
         player[people].body.y = map[playerloc_union[people]].y;
       }
-      if(player[sid].y<260||player[sid].y>600){
-      document.getElementById('gamecontainer').scrollTop = player[sid].y-425;
+      if (player[sid].y < 260 || player[sid].y > 600) {
+        document.getElementById('gamecontainer').scrollTop = player[sid].y - 425;
       }
-      else{
-      document.getElementById('gamecontainer').scrollTop = player[sid].y-240;
+      else {
+        document.getElementById('gamecontainer').scrollTop = player[sid].y - 240;
       }
     }
 
@@ -513,16 +514,18 @@
       player[people].anchor.y = 0.5;
       game.physics.p2.enable(player[people]);
       player[people].body.fixedRotation = true;
+      player[0].body.dynamic = false;
     }
 
     function do_initplayer(init_location) {
       for (var i = 0; i < player_num; i++) {
-        player[i] = game.add.sprite(map[init_location].x + i * 20 + (4 - player_num) * 10, map[init_location].y,
+        player[i] = game.add.sprite(map[init_location].x + i * 27 + (4 - player_num) * 10, map[init_location].y,
           'fighter' + (i + 1).toString());
         player[i].anchor.x = 0.5;
         player[i].anchor.y = 0.5;
         game.physics.p2.enable(player[i]);
         player[i].body.fixedRotation = true;
+        player[i].body.dynamic = false;
       }
       start = true;
     }
