@@ -14,7 +14,7 @@ var state_userinterface = {
     game.add.sprite(-150, -100, user.avatar);
 
     game.add.bitmapText(120, 20, 'desyrel', 'nickname:', 36);
-    game.add.bitmapText(290, 20, 'desyrel', user.nickname, 36);
+    game.add.bitmapText(285, 20, 'desyrel', user.nickname, 36);
     game.add.bitmapText(120, 60, 'desyrel', 'grade:', 36);
     game.add.bitmapText(215, 60, 'desyrel', user.stats.score.toString(), 36);
 

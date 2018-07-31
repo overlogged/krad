@@ -1,41 +1,89 @@
 var state_help = {
     preload: function() {
-        var background = game.add.image(0, 0, 'background');
+        var background = game.add.image(0, 0, 'userbackground2');
+        var font_1='35px pristina';
+        var font_2='28px pristina';
+        var textFill='#ffffff';
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        game.add.button(600, 490, 'button', go_backloginhelp, this, 1, 0, 2, 0);
-        game.add.bitmapText(620, 495, 'chiller', 'Back', 28);
-        game.add.bitmapText(350, 30, 'chiller', 'Help', 70);
+        game.add.button(665, 550, 'button', go_backloginhelp, this, 1, 0, 2, 0);
+        game.add.bitmapText(690, 555, 'chiller', 'Back', 28);
+        game.add.text(350, 10, 'Help', {
+            font:"60px pristina",
+            fill:"#ffffff"
+        });
 
-        var text_1='游戏准备：';
-        var text_2='开始游戏前，应当进行角色选定与阵营划分及地图选择，';
-        var text_3='用户决定角色，用随机分配的方式划出感染者阵营。';
-        var text_4='关于角色：';
-        var text_5='机动性：单次运动所能行进的最大距离';
-        var text_6='火力：单次开火所能消耗的最大能量';
-        var text_7='射程：开火能够击中的最远距离';
-        var text_8='生命值：能够储存的能量上限以及手牌上限';
-        var text_9='技能：角色独有的特殊能力';
-        var text_10='卡牌系统：';
-        var text_11='玩家会持有一系列手牌，手牌分为决策牌（包括移动、开火、';
-        var text_12='使用主动技能）和出拳牌（石头、剪刀、布）。'
-        var text_13='回合模式：';
-        var text_14='分为准备阶段、出拳阶段、行动阶段，往复循环';
-        game.add.text(80, 85, text_1);
-        game.add.text(60, 115, text_2);
-        game.add.text(10, 145, text_3);
-        game.add.text(80, 175, text_4);
-        game.add.text(10, 205, text_5);
-        game.add.text(10, 235, text_6);
-        game.add.text(10, 265, text_7);
-        game.add.text(10, 295, text_8);
-        game.add.text(10, 325, text_9);
-        game.add.text(80, 355, text_10);
-        game.add.text(60, 385, text_11);
-        game.add.text(10, 415, text_12);
-        game.add.text(80, 455, text_13);
-        game.add.text(10, 495, text_14);
+        var text_1='Prepare for the game:';
+        var text_2='Before you started, characters should be chosen, team should be decided and map  ';
+        var text_3='ought to be selected.Characters are chosen by players,and team is divided arbitrarily.';
+        var text_4='The properties of characters:';
+        var text_5='MOTILITY represents how much map unit you can cover in one turn';
+        var text_6='FIREPOWER represents how much energy will be used on firing';
+        var text_7='RANGE represents how far you bullet can reach';
+        var text_8='HEALTHPOINT represents you upper limit of energy and hand cards';
+        var text_9='SKILLS represents the unique ability that only your character owns';
+        var text_10='Card System:：';
+        var text_11=' Players will get a set of hand cards, which include Strategy Cards (Move, Fire ';
+        var text_12='and use Skills)and Gamble Cards(Rock, Scissors and Paper)'
+        var text_13='The game will cycle in three stages before one side wins or the game becomes to ';
+        var text_14='to long to continue ---- PREPARE, GAMBLE, ACTION(or ACCOUNT)';
+        game.add.text(80, 65, text_1,{
+            font:font_1,
+            fill:"#FFF68F"
+        });
+        game.add.text(60, 105, text_2, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(10, 130, text_3, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(80, 160, text_4, {
+            font:font_1,
+            fill:"#FFF68F"
+        });
+        game.add.text(60, 195, text_5, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 230, text_6, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 265, text_7, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 300, text_8, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 335, text_9, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(80, 370, text_10, {
+            font:font_1,
+            fill:"#FFF68F"
+        });
+        game.add.text(60, 410, text_11, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(10, 445, text_12, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(60, 480, text_13, {
+            font:font_2,
+            fill:textFill
+        });
+        game.add.text(10, 510, text_14, {
+            font:font_2,
+            fill:textFill
+        });
 
         show("help");
     }
