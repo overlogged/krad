@@ -210,6 +210,12 @@
           for (var i = 0; i < player_num; i++) {
             player[i].body.setZeroVelocity();
           }
+          if(player[0].input.pointerOver()){
+            player[0].alpha=1;
+          }
+          else{
+            player[0].alpha=0.5;
+          }
 
           //   player[0].body.setZeroVelocity();
 
@@ -514,7 +520,8 @@
       player[people].anchor.y = 0.5;
       game.physics.p2.enable(player[people]);
       player[people].body.fixedRotation = true;
-      player[0].body.dynamic = false;
+      player[people].body.dynamic = false;
+      player[people].inputEnabled = true;
     }
 
     function do_initplayer(init_location) {
@@ -526,6 +533,7 @@
         game.physics.p2.enable(player[i]);
         player[i].body.fixedRotation = true;
         player[i].body.dynamic = false;
+        player[i].inputEnabled = true;
       }
       start = true;
     }
