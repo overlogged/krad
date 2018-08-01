@@ -52,9 +52,9 @@
       overflow-y: scroll;
     }
 
-    ::-webkit-scrollbar {
+    /* ::-webkit-scrollbar {
       width: 0px;
-    }
+    } */
 
     /* .inner-container::-webkit-scrollbar {
       display: none;
@@ -89,7 +89,13 @@
     var fire_union = [1, 1, 1, 1];
     var playerloc_union = [];
     var start = false;
-    testplace = 24;
+    var infor = [];
+    var infor_text = [];
+    var is_infor = [false, false, false, false];
+    var fire_distance = [3, 3, 3, 3];
+    var fire_power = [3, 3, 3, 3];
+    var move_power = [4, 4, 4, 4];
+    var identity = ["战术小队", "战术小队", "战术小队", "战术小队"];
     var map = [{
       x: 360,
       y: 850
@@ -181,6 +187,10 @@
         game.load.image('poisoner2', 'assets/img/gamewindow/poisoner2.png');
         game.load.image('poisoner3', 'assets/img/gamewindow/poisoner3.png');
         game.load.image('poisoner4', 'assets/img/gamewindow/poisoner4.png');
+        game.load.image('status1', 'assets/img/gamewindow/status1.png');
+        game.load.image('status2', 'assets/img/gamewindow/status2.png');
+        game.load.image('status3', 'assets/img/gamewindow/status3.png');
+        game.load.image('status4', 'assets/img/gamewindow/status4.png');
       },
 
       create: function () {
@@ -189,18 +199,16 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        do_initplayer(0);
+        // do_initplayer(0);
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
-        
-        alert(player[0].body.dynamic);
+        // alert(player[0].body.dynamic);
 
         // game.camera.atLimit=true;
         // game.camera.width=780;
         // game.camera.height=470;
         // game.camera.follow(player[0]);
         // game.camera.follow(player[0], Phaser.Camera.FOLLOW_PLATFORMER);
-        document.getElementById('gamecontainer').scrollTop = player[0].y - 425;
         // game.world.setChildIndex(background, 0);
         // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
 
@@ -208,14 +216,24 @@
       update: function () {
         if (start) {
           for (var i = 0; i < player_num; i++) {
-            player[i].body.setZeroVelocity();
+            // player[i].body.setZeroVelocity();
+            if (player[i].input.pointerOver()) {
+              if (!is_infor[i]) {
+                show_info(i);
+              }
+            }
+            else if (is_infor[i]) {
+              infor_text[i].kill();
+              infor[i].kill();
+              is_infor[i] = false;
+            }
           }
-          if(player[0].input.pointerOver()){
-            player[0].alpha=1;
-          }
-          else{
-            player[0].alpha=0.5;
-          }
+          // if(player[0].input.pointerOver()){
+          //   player[0].alpha=1;
+          // }
+          // else{
+          //   player[0].alpha=0.5;
+          // }
 
           //   player[0].body.setZeroVelocity();
 
@@ -503,11 +521,11 @@
         player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
         player[people].body.y = map[playerloc_union[people]].y;
       }
-      if (player[sid].y < 260 || player[sid].y > 600) {
-        document.getElementById('gamecontainer').scrollTop = player[sid].y - 425;
+      if (player[myIndex].y < 260 || player[myIndex].y > 600) {
+        document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 425;
       }
       else {
-        document.getElementById('gamecontainer').scrollTop = player[sid].y - 240;
+        document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 240;
       }
     }
 
@@ -522,6 +540,11 @@
       player[people].body.fixedRotation = true;
       player[people].body.dynamic = false;
       player[people].inputEnabled = true;
+      fire_distance[people] = 0;
+      fire_power[people] = 0;
+      move_power[people] = 10;
+      healthPointList[people] = 12;
+      identity[people] = "感染者";
     }
 
     function do_initplayer(init_location) {
@@ -535,6 +558,7 @@
         player[i].body.dynamic = false;
         player[i].inputEnabled = true;
       }
+      document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 425;
       start = true;
     }
 
@@ -722,25 +746,6 @@
       request(req, do_callback);
     }
 
-    // var phase_state = "Main";
-    // var player_state = "0.0";
-    // var player_index = 0;
-
-    // function do_init() {
-    //   // init
-    //   request({}, function (data_init0) {
-    //     request({ hero: "hero" }, function (data_init1) {
-    //       request({}, function (data_main_0_0) {
-    //         console.log("data_init0", data_init0);
-    //         console.log("data_init1", data_init1);
-    //         console.log("data_main_0_0", data_main_0_0);
-    //         player_state = "0.1";
-    //         player_index = data_init0.index;
-    //         team_result = data_init1.team_result;
-    //       });
-    //     });
-    //   });
-    // }
 
 
 
@@ -748,14 +753,14 @@
     var allUserInfo = [];
     var herolist = [];
     var heroChoices = [];
-    var myIndex;
+    var myIndex = 0;
     var decisionChoices = [];
     var seenCardChoices = [];
     var gambleChoices = [];
     var cardNumList = [];
     var playerWinList = [];
-    var eneregyList = [];
-    var healthPointList = [];
+    var eneregyList = [0, 0, 0, 0];
+    var healthPointList = [6, 6, 6, 6];
     var elemList = [];
     var scoreList = [];
     function do_callback(data, status) {
@@ -912,12 +917,23 @@
       }
       else if (state == "desert account") {
         statepadtext_body.text = '弃牌阶段';
-        team_result = data.teamList;
+
         for (var i = 0; i < player_num; i++) {
-          if (team_result[i] == 1) {
+          if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
             do_poison(i);
+            statusbox.text += "玩家" + i + "被感染，成为感染者,战术小队请继续加油\n";
           }
         }
+        statusbox.text += "一轮结束后，各位玩家的身份如下:\n";
+        for (var i = 0; i < player_num; i++) {
+          if (data.teamResult[i] == 1) {
+            statusbox.text += "玩家" + i + ": 身份为感染者\n";
+          }
+          else {
+            statusbox.text += "玩家" + i + ": 身份为战术小队\n";
+          }
+        }
+        team_result = data.teamList;
         do_dessert(empty);
         do_fillcardlist();
         pedometer = 4;
@@ -943,10 +959,60 @@
     }
 
 
-    function do_lengthen() {
-      if (statusbox.height > 4000) {
-        statusarea.add(0, 4400, );
+    function show_info(player_index) {
+      if (player[player_index].y > 250) {
+        infor[player_index] = game.add.sprite(player[player_index].x - 100, player[player_index].y - 180, 'status' + (player_index + 1).toString());
+        infor_text[player_index] = game.add.text(player[player_index].x - 90, player[player_index].y - 155, "", {
+          font: "14px 微软雅黑",
+          fill: "#fffff",
+          align: "left",
+        })
+        infor_text[player_index].text += "身份:  " + identity[player_index];
+        infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
+        infor_text[player_index].text += "\n射程：  ";
+        for (var i = 0; i < fire_distance[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n火力：  ";
+        for (var i = 0; i < fire_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n机动性: ";
+        for (var i = 0; i < move_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n生命值: ";
+        for (var i = 0; i < healthPointList[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
       }
+      else {
+        infor[player_index] = game.add.sprite(player[player_index].x - 100, player[player_index].y + 10, 'status' + (player_index + 1).toString());
+        infor_text[player_index] = game.add.text(player[player_index].x - 90, player[player_index].y + 40, "", {
+          font: "14px 微软雅黑",
+          fill: "#fffff",
+          align: "left",
+        })
+        infor_text[player_index].text += "身份:  " + identity[player_index];
+        infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
+        infor_text[player_index].text += "\n射程：  ";
+        for (var i = 0; i < fire_distance[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n火力：  ";
+        for (var i = 0; i < fire_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n机动性: ";
+        for (var i = 0; i < move_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n生命值: ";
+        for (var i = 0; i < healthPointList[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+      }
+      is_infor[player_index] = true;
     }
     function do_decision(strategy) {
       p_decision = strategy;
