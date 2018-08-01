@@ -41,7 +41,7 @@ object GodHelper extends MyJsonProtocol{
    * gambleCard is the gamble choice that one player chooses to use
    */
   case class ResChooseGamble(state:String,handCards:Array[Int])
-  case class ResWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int])
+  case class ResWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],fireList:Array[Int])
   /*
    * gambleChoices tell what gamble choice players choose
    * cardNumList tell how many card they choose to used
@@ -99,8 +99,8 @@ object GodHelper extends MyJsonProtocol{
     ResChooseGamble(state,handCards).toJson.toString()
   }
 
-  def toWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int]):String = {
-    ResWinJudge(state,gambleChoices,cardNumList,playerWinList).toJson.toString()
+  def toWinJudge(state:String,gambleChoices:Array[Int],cardNumList:Array[Int],playerWinList:Array[Int],fireList:Array[Int]):String = {
+    ResWinJudge(state,gambleChoices,cardNumList,playerWinList,fireList).toJson.toString()
   }
 
   def toDepositAccount(state:String,energyList:Array[Int]):String = {
