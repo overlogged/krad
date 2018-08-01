@@ -1,60 +1,71 @@
 package game;
 
+import akka.stream.impl.MaybeSource;
+
 import static java.lang.Math.abs;
 
 public class MapChecker {
-    public static int outDistance(MapUnit des_location,MapUnit src_location){
+    public static int outDistance(MapUnit des_location, MapUnit src_location) {
         int distance;
-        if (des_location.rank!=src_location.rank){
+        if (des_location.rank != src_location.rank) {
             return -1;
         }
-        if (des_location.mark==src_location.mark)
-        {
+        if (des_location.mark == src_location.mark) {
             return -1;
         }
-        distance=abs(des_location.mark-src_location.mark);
-        return  distance;
+        distance = abs(des_location.mark - src_location.mark);
+        return distance;
     }
 
-    static int distance(MapUnit u1,MapUnit u2){
-        int m1 = u1.mark,m2=u2.mark;
-        if(m1>m2){
-            m1 = u2.mark;
-            m2 = u1.mark;
-        }
-        if(m1<=7 && m2>=15){
-            return (22-m2+8)-m1;
-        }
-        return m2-m1;
-    }
+    public static int tryMove(Map m, int i_current, int i_next, int energy) {
 
-    public static int tryMove(Map m,int i_current,int i_next,int energy){
+        // first step
+        MapUnit back = null;
         MapUnit current = m.units[i_current];
         MapUnit next = m.units[i_next];
-        MapUnit back;
-//        assert abs(next.mark - current.mark) == 1;    // just the next
-        assert energy>=0;
 
-        while(energy>0){
-            if(next.rank>current.rank){
-                energy = 0;
-            } else {
-                energy -= distance(next,current);
+        boolean flag = false;
+        for (MapEdge e : current.edge) {
+            if (e.adjedg == i_next && energy >= e.distance) {
+                energy -= e.distance;
+                if (next.rank > current.rank) {
+                    energy = 0;
+                }
+                flag = true;
+                back = current;
+                current = next;
+                break;
             }
-            back = current;
-            current = next;
-            for (MapEdge e:current.edge) {
-                MapUnit try_next = m.units[e.adjedg];
-                int dis = e.distance;
-                // the same direction
-                if(try_next != back){
-                    if(dis > distance(current,next) && dis<=energy){
-                        next = try_next;
+        }
+        assert flag;
+
+        while (energy > 0) {
+            next = null;
+            int dis = 0;
+
+            // find next
+            for (MapEdge e : current.edge) {
+                if (back.mark != e.adjedg) {
+                    MapUnit try_next = m.units[e.adjedg];
+                    if (energy >= e.distance) {
+                        if (next == null || e.distance > dis) {
+                            next = try_next;
+                            dis = e.distance;
+                        }
                     }
                 }
             }
-            if(current == next) break;     // no dead loop
+
+            // do move
+            assert next!=null;
+            energy -= dis;
+            if(next.rank>current.rank){
+                energy = 0;
+            }
+            back = current;
+            current = next;
         }
+
         return current.mark;
     }
 }
