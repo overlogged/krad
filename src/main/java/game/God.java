@@ -11,7 +11,7 @@ public class God {
     private boolean humanWin;       // whether human team wins
     private boolean zombieWin;      // whether zombie team wins
     private Map map;                // map of the game
-    private String[] heroList = {"0"};
+    private String[] heroList = {"Calculus","Linear Algebra","PDE","Mathematical Analysis"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
     private int[] availableFireTarget;
@@ -30,6 +30,7 @@ public class God {
     private int[] elementList;
     private int[] teamList;
     private int[] scoreList;
+    private int[] fireList;
 
     enum GameState{ INIT,MAINGAME,END }
     private GameState gameState = GameState.INIT;
@@ -126,7 +127,7 @@ public class God {
                             }
                             playerState[playerIndex] = 0;
                             phaseState = PhaseState.ACTION;
-                            result = GodHelper.toWinJudge("ACTION: deposit account",gambleChoices,cardNumList,playerWinList);
+                            result = GodHelper.toWinJudge("ACTION: deposit account",gambleChoices,cardNumList,playerWinList,fireList);
                         }
                         break;
                     case ACTION:
@@ -199,6 +200,7 @@ public class God {
                                 gambleChoices[i] = GambleChecker.PAPER;
                                 cardNumList[i] = 0;
                                 playerWinList[i] = 0;
+                                fireList[i] = -1;
                             }
                         }
                         break;
@@ -341,6 +343,8 @@ public class God {
                 }
             }else {
                 this.notifyAll();
+                for(int i = 0; i < playerNum; i++)
+                    fireList[i] = allPlayers[i].fireTarget;
             }
         }
     }
@@ -392,27 +396,67 @@ public class God {
      * dirty functions
      */
     private void toDirection(int playerIndex){
-        if(allPlayers[playerIndex].preLoc == 7) {
+        if(allPlayers[playerIndex].preLoc == 0) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 1){
             availableMoveDirection[0] = 0;
             availableMoveDirection[1] = 1;
             availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 1;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 1;
-            availableMoveDirection[7] = 0;
-        }
-        else if(allPlayers[playerIndex].preLoc == 15){
-            availableMoveDirection[0] = 1;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 1;
             availableMoveDirection[3] = 0;
             availableMoveDirection[4] = 0;
             availableMoveDirection[5] = 0;
             availableMoveDirection[6] = 0;
             availableMoveDirection[7] = 0;
         }
-        else if(allPlayers[playerIndex].preLoc == 0){
+        else if(allPlayers[playerIndex].preLoc == 6){
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 7) {
+            availableMoveDirection[0] = 1;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 8) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 1;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 23) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 11) {
             availableMoveDirection[0] = 0;
             availableMoveDirection[1] = 0;
             availableMoveDirection[2] = 0;
@@ -420,7 +464,67 @@ public class God {
             availableMoveDirection[4] = 0;
             availableMoveDirection[5] = 1;
             availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 12) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 1;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
             availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 14) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 0;
+        }
+        else if(allPlayers[playerIndex].preLoc == 15) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 16) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 17) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 0;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 1;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
+        }
+        else if(allPlayers[playerIndex].preLoc == 24) {
+            availableMoveDirection[0] = 0;
+            availableMoveDirection[1] = 0;
+            availableMoveDirection[2] = 0;
+            availableMoveDirection[3] = 1;
+            availableMoveDirection[4] = 0;
+            availableMoveDirection[5] = 0;
+            availableMoveDirection[6] = 0;
+            availableMoveDirection[7] = 1;
         }
         else{
             availableMoveDirection[0] = 0;
@@ -435,18 +539,78 @@ public class God {
     }
     private int toLoc(int playerIndex,int direction){
         if(allPlayers[playerIndex].preLoc == 7){
-            if(direction == 5)
+            if(direction == 7)
                 return 6;
             else if(direction == 0)
                 return 8;
             else
+                return 24;
+        }
+        else if(allPlayers[playerIndex].preLoc == 16){
+            if(direction == 7)
+                return 15;
+            else
+                return 17;
+        }
+        else if(allPlayers[playerIndex].preLoc == 24){
+            if(direction == 7)
+                return 7;
+            else
+                return 23;
+        }
+        else if(allPlayers[playerIndex].preLoc == 23){
+            if(direction == 7)
+                return 24;
+            else
                 return 22;
         }
+        else if(allPlayers[playerIndex].preLoc == 8){
+            if(direction == 4)
+                return 7;
+            else
+                return 9;
+        }
+        else if(allPlayers[playerIndex].preLoc == 11){
+            if(direction == 7)
+                return 12;
+            else
+                return 10;
+        }
+        else if(allPlayers[playerIndex].preLoc == 12){
+            if(direction == 1)
+                return 13;
+            else
+                return 11;
+        }
+        else if(allPlayers[playerIndex].preLoc == 14){
+            if(direction == 5)
+                return 13;
+            else
+                return 15;
+        }
         else if(allPlayers[playerIndex].preLoc == 15){
-            if(direction == 6)
+            if(direction == 7)
                 return 14;
             else
                 return 16;
+        }
+        else if(allPlayers[playerIndex].preLoc == 16){
+            if(direction == 7)
+                return 15;
+            else
+                return 17;
+        }
+        else if(allPlayers[playerIndex].preLoc == 17){
+            if(direction == 7)
+                return 16;
+            else
+                return 18;
+        }
+        else if(allPlayers[playerIndex].preLoc == 1){
+            if(direction == 3)
+                return 0;
+            else
+                return 2;
         }
         else if(allPlayers[playerIndex].preLoc == 0){
             return 1;
@@ -575,6 +739,7 @@ public class God {
         availableFireTarget = new int[playerNum];
         scoreList = new int[playerNum];
         availableMoveDirection = new int[8];
+        fireList = new int[playerNum];
 
         for(int i = 0;i < playerNum;i++) {
             allPlayers[i] = new Player();
@@ -585,6 +750,7 @@ public class God {
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             playerState[i] = 0;
             scoreList[i] = 100;
+            fireList[i] = -1;
 
             Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
             if(user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
