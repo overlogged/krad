@@ -336,17 +336,13 @@
         card.load.image('gamebackground', 'assets/img/userbackground.png');
         card.load.spritesheet('arrow', 'assets/img/gamewindow/arrow.png', 90, 36);
         card.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
-        card.load.spritesheet('handcard_move', 'assets/img/gamewindow/handcard_move.png', 105, 100);
-        card.load.spritesheet('handcard_shoot', 'assets/img/gamewindow/handcard_shoot.png', 105,
-          100);
-        card.load.spritesheet('handcard_skill', 'assets/img/gamewindow/handcard_skill.png', 105,
-          100);
-        card.load.spritesheet('handcard_rock', 'assets/img/gamewindow/handcard_rock.png', 105, 100);
-        card.load.spritesheet('handcard_scissors', 'assets/img/gamewindow/handcard_scissors.png',
-          105, 100);
-        card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 105,
-          100);
-        card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 105, 100);
+        card.load.spritesheet('handcard_move', 'assets/img/gamewindow/handcard_move.png', 70, 100);
+        card.load.spritesheet('handcard_shoot', 'assets/img/gamewindow/handcard_shoot.png', 70, 100);
+        card.load.spritesheet('handcard_skill', 'assets/img/gamewindow/handcard_skill.png', 70, 100);
+        card.load.spritesheet('handcard_rock', 'assets/img/gamewindow/handcard_rock.png', 70, 100);
+        card.load.spritesheet('handcard_scissors', 'assets/img/gamewindow/handcard_scissors.png', 70, 100);
+        card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 70, 100);
+        card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 70, 100);
         card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png', 35, 35);
         card.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
         card.load.spritesheet('seen', 'assets/buttons/button.png', 100, 26);
@@ -565,7 +561,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', fix_arrow, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(880, 50, 'arrow', fix_arrow, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
@@ -591,7 +587,8 @@
       }
     }
 
-    function steerTGP(mode, type) { //check which button will be show,steer or TGP?
+      function steerTGP(mode, type) { //check which button will be show,steer or TGP?
+          alert("testTGP");
       var j;
       if (mode) {
         switch (type) {
