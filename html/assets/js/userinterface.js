@@ -14,7 +14,7 @@ var state_userinterface = {
     game.add.sprite(-150, -100, user.avatar);
 
     game.add.bitmapText(120, 20, 'desyrel', 'nickname:', 36);
-    game.add.bitmapText(280, 20, 'desyrel', user.nickname, 36);
+    game.add.bitmapText(285, 20, 'desyrel', user.nickname, 36);
     game.add.bitmapText(120, 60, 'desyrel', 'grade:', 36);
     game.add.bitmapText(215, 60, 'desyrel', user.stats.score.toString(), 36);
 
@@ -39,7 +39,11 @@ function do_match() {
   var req = {
     'sid': sid
   };
+<<<<<<< HEAD
   // alert("开始匹配，请耐心等待");
+=======
+  //alert("开始匹配，请耐心等待");
+>>>>>>> dev
   $.ajax({
     url: "/api/session/match",
     type: "POST",
@@ -47,10 +51,15 @@ function do_match() {
     data: JSON.stringify(req),
     beforeSend:function(){ 
 
+<<<<<<< HEAD
       $("#loading").html("<img src='./assets/gif/loading.gif' />");
+=======
+      $("body").append('<div id="pload" style="position:fixed;top:30%;z-index:1200;background:url(../gif/loading.gif) top center no-repeat;width:100%;height:140px;margin:auto auto;"></div>'); 
+>>>>>>> dev
 
    }, 
     success: function (data, status) {
+      $("#pload").remove();
       console.log(data);
       window.location.href="gamewindow.html?sid="+sid;  
     },

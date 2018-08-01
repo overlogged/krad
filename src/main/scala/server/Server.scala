@@ -103,6 +103,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
 
   // api
   val route: Route =
+  //---------------------------------------------------
+  // route for debug
     path("log") {
       get {
         log("get", "log")
@@ -122,6 +124,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
           complete(HttpResponse(StatusCodes.Accepted))
         }
       } ~
+  //----------------------------------------------------------
       path("session" / "login") {
         post {
           entity(as[RequestLogin]) { req =>
@@ -242,7 +245,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
     }
     Http().bindAndHandle(route, config.web_host, config.web_port)
     SessionController.addGhost()
-    MapGenerator.generate();
+    SessionController.routine()
+    MapGenerator.generate()
     log("bind", s"${config.web_host}:${config.web_port}")
   }
 }
