@@ -47,11 +47,11 @@ function do_match() {
     data: JSON.stringify(req),
     beforeSend:function(){ 
 
-      $("body").append('<div id="pload" style="position:fixed;top:30%;z-index:1200;background:loading top center no-repeat;width:100%;height:140px;margin:auto auto;"></div>'); 
+      $("#loading").html("<img src='loading'>");
 
    }, 
     success: function (data, status) {
-      $("#pload").remove();
+      $("#loading").empty();
       console.log(data);
       window.location.href="gamewindow.html?sid="+sid;  
     },
