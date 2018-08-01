@@ -199,7 +199,7 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        // do_initplayer(0);
+        // do_initplayer(4);
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
         // alert(player[0].body.dynamic);
@@ -278,7 +278,7 @@
         statusarea.add.sprite(0, 4400, 'gamebackground');
         statusbox = statusarea.add.text(15, 0, "", {
           font: "14px 微软雅黑",
-          fill: "#fffff",
+          fill: "#ff0044",
           align: "left",
         });
 
@@ -514,8 +514,8 @@
 
     function do_move() {
       for (var people = 0; people < player_num; people++) {
-        player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
-        player[people].body.y = map[playerloc_union[people]].y;
+        player[people].body.x = map[init_location].x + i * 20+((i+1)%2)*17-5;
+        player[people].body.y = map[init_location].y+(((i+1)%2)*28-15);
       }
       if (player[myIndex].y < 260 || player[myIndex].y > 600) {
         document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 425;
@@ -545,7 +545,7 @@
 
     function do_initplayer(init_location) {
       for (var i = 0; i < player_num; i++) {
-        player[i] = game.add.sprite(map[init_location].x + i * 27 + (4 - player_num) * 10, map[init_location].y,
+        player[i] = game.add.sprite(map[init_location].x + i * 20 +((i+1)%2)*17-5, map[init_location].y+(((i+1)%2)*28-15),
           'fighter' + (i + 1).toString());
         player[i].anchor.x = 0.5;
         player[i].anchor.y = 0.5;
@@ -783,7 +783,6 @@
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 选择了英雄" + heroChoices[i] + "\n";
         }
-        // player_num = team_result.length;
         do_initplayer(4);
         statusbox.text += "玩家的身份为：\n";
 
@@ -866,7 +865,7 @@
         playerWinList = data.playerWinList;
         statusbox.text += "玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "： 选择了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+          statusbox.text += "玩家" + i + "：选择了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
         }
       }
       else if (state == "skills account") {
@@ -918,7 +917,7 @@
         for (var i = 0; i < player_num; i++) {
           if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
             do_poison(i);
-            statusbox.text += "玩家" + i + "被感染，成为感染者,战术小队请继续加油\n";
+            statusbox.text += "玩家" + i + "被感染，成为感染者\n";
           }
         }
         statusbox.text += "一轮结束后，各位玩家的身份如下:\n";
