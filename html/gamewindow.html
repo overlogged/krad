@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <script type="text/javascript" src="assets/js/phaser.min.js"></script>
+  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
   <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
@@ -953,7 +954,7 @@
       else if (state == "if human wins") {
           checkcardunlock(checkbutton);
         statepadtext_body.text = '感染判定';
-        var elem_string = ["有要素", "无要素"];
+        var elem_string = ["无要素", "有要素"];
         elemList = data.locationList;
         statusbox.text += "第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
         for (var i = 0; i < player_num; i++) {
@@ -980,6 +981,7 @@
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
         }
+        window.location.href="krad.html";
       }
       else if (state == "desert account") {
           checkcardunlock(checkbutton);
