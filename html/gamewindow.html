@@ -691,7 +691,7 @@
       }
       else if (state == "choose hero") {
         req = {
-          hero: "fire"
+          hero: herolist[myIndex]
         };
       }
       else if (state == "start game") {
@@ -768,7 +768,7 @@
     var scoreList = [];
     function do_callback(data, status) {
       if (state == "choose hero") {
-        statepadtext_body.text = '选择英雄阶段';
+        statepadtext_body.text = '英雄分配阶段';
         myIndex = data.myIndex;
         allUserInfo = data.allUserInfo;
         herolist = data.herolist;
@@ -780,7 +780,6 @@
           statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
         }
         pedometer = 0;
-        do_checkcard();
       }
       else if (state == "start game") {
         team_result = data.teamResult;
