@@ -900,11 +900,7 @@
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-        autoskip = 1;
-        for (var i = 0; i < 7; i++) {
-          do_checkcard();
-          }
-          autoskip = 0;
+       
       }
       else if (state == "ACTION: deposit account") {
           checkcardunlock(checkbutton);
@@ -928,6 +924,11 @@
             statusbox.text += "玩家" + i + ": 未开火\n";
           }
         }
+        autoskip = 1;
+        for (var i = 0; i < 6; i++) {
+          do_checkcard();
+          }
+          autoskip = 0;
       }
       else if (state == "skills account") {
           checkcardunlock(checkbutton);
