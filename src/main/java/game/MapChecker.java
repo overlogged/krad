@@ -1,21 +1,8 @@
 package game;
 
-import static java.lang.Math.abs;
+class MapChecker {
 
-public class MapChecker {
-    public static int outDistance(MapUnit des_location, MapUnit src_location) {
-        int distance;
-        if (des_location.rank != src_location.rank) {
-            return -1;
-        }
-        if (des_location.mark == src_location.mark) {
-            return -1;
-        }
-        distance = abs(des_location.mark - src_location.mark);
-        return distance;
-    }
-
-    public static int tryMove(Map m, int i_current, int i_next, int energy) {
+    static int tryMove(Map m, int i_current, int i_next, int energy) {
 
         // first step
         MapUnit back = null;
