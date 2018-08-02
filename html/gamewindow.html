@@ -373,7 +373,7 @@
         seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
         seencardtext[j].fontSize = 20;
         }
-        if (skipseencardavaliable==0) seencardslot[3].kill;
+        if (skipseencardavaliable==0) seencardslot[3].kill();
     }
 
     function checkseencard(button) {
@@ -387,7 +387,7 @@
         seencardslot[j].kill();
         seencardtext[j].alpha = 0;
         }
-        if (skipseencardavaliable==1) seencardslot[3].kill;
+        if (skipseencardavaliable==1) seencardslot[3].kill();
     }
 
     function refreshcard() {
