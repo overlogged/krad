@@ -7,12 +7,14 @@ var state_help = {
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        game.add.button(665, 550, 'button', go_backloginhelp, this, 1, 0, 2, 0);
+        backBtn = game.add.button(665, 550, 'button', go_backloginhelp, this, 1, 0, 2, 0);
         game.add.bitmapText(690, 555, 'chiller', 'Back', 28);
         game.add.text(350, 10, 'Help', {
             font:"60px pristina",
             fill:"#ffffff"
         });
+        tooltip8 = game.add.sprite(735, 510, 'tooltip8');
+        tooltip8.inputEnabled = true;
 
         var text_1='Prepare for the game:';
         var text_2='Before you started, characters should be chosen, team should be decided and map  ';
@@ -86,9 +88,24 @@ var state_help = {
         });
 
         show("help");
+        tooltip_help();
+    },
+    update: function(){
+        if(star){
+            if(backBtn.input.pointerOver()){
+                tooltip8.alpha=0.7;
+              }
+              else{
+                tooltip8.alpha=0;
+              }
+        }
     }
   }
 
   function go_backloginhelp(){
       game.state.start('userinterface');
+  }
+
+  function tooltip_help(){
+      star = true;
   }

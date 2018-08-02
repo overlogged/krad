@@ -12,6 +12,15 @@
 <body>
   
   <script>
+    var star =false;
+    var tooltip3;
+    var tooltip5;
+    var tooltip6;
+    var tooltip7;
+    var changepw;
+    var changeprofile;
+    var userhelp;
+    var startgame; 
     var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
       preload: function () {
         game.load.image('background', 'assets/img/userbackground.png');
@@ -28,6 +37,11 @@
         game.load.image('figure4', 'assets/img/figure/figure4.png');
         game.load.image('figure5', 'assets/img/figure/figure5.png');
         game.load.image('figure6', 'assets/img/figure/figure6.png');
+        game.load.image('tooltip3','assets/img/tooltip3.png');
+        game.load.image('tooltip4','assets/img/tooltip4.png');
+        game.load.image('tooltip5','assets/img/tooltip5.png');
+        game.load.image('tooltip6','assets/img/tooltip6.png');
+        game.load.image('tooltip7','assets/img/tooltip7.png');
         
 
         game.load.spritesheet('button','assets/buttons/button1.png',100,34);
@@ -48,10 +62,14 @@
         var figurepshow6 = game.add.sprite(480, 260, 'figure6');
         var progressbar1 = game.add.sprite(10,10,'progressbar');
         var progressbar2 = game.add.sprite(20,20,'inprogressbar');
-
-
-        
-        
+        tooltip3 = game.add.sprite(140, 355, 'tooltip3');
+        tooltip5 = game.add.sprite(430, 170, 'tooltip5');
+        tooltip6 = game.add.sprite(160, 150, 'tooltip6');
+        tooltip7 = game.add.sprite(290, 150, 'tooltip7');
+        tooltip3.inputEnabled = true;
+        tooltip5.inputEnabled = true;
+        tooltip6.inputEnabled = true;
+        tooltip7.inputEnabled = true;
         // userfigure.anchor.set(0.5);
 
         userfigure.inputEnabled = true;
@@ -73,24 +91,54 @@
         var usergrade = game.add.bitmapText(215, 60, 'desyrel', '???', 36);
         
         
-        var changepw = game.add.button(240, 115, 'button', do_changepw, this, 1, 0, 2, 0);
+        changepw = game.add.button(240, 115, 'button', do_changepw, this, 1, 0, 2, 0);
         var changepwText = game.add.bitmapText(255, 115, 'chiller', 'password', 30);
 
-        var changeprofile = game.add.button(120, 115, 'button', do_changeprofile, this, 1, 0, 2, 0);
+        changeprofile = game.add.button(120, 115, 'button', do_changeprofile, this, 1, 0, 2, 0);
         var changeprofileText = game.add.bitmapText(145, 115, 'chiller', 'profile', 30);
 
-        var startgame = game.add.button(250, 210, 'start', do_match, this);
+        startgame = game.add.button(250, 210, 'start', do_match, this);
 
-        var userhelp = game.add.button(50, 400, 'help', do_help, this);
+        userhelp = game.add.button(50, 400, 'help', do_help, this);
 
-        
+        tooltip();
       },
 
       update: function(){
+        if(star){
+      if(changepw.input.pointerOver()){
+        tooltip7.alpha=0.7;
+      }
+      else{
+        tooltip7.alpha=0;
+      }
+      if(changeprofile.input.pointerOver()){
+        tooltip6.alpha=0.7;
+      }
+      else{
+        tooltip6.alpha=0;
+      }
+      if(startgame.input.pointerOver()){
+        tooltip5.alpha=0.7;
+      }
+      else{
+        tooltip5.alpha=0;
+      }
+      if(userhelp.input.pointerOver()){
+        tooltip3.alpha=0.7;
+      }
+      else{
+        tooltip3.alpha=0;
+      }
+    }
         // userfigure.alpha=0.5;
       }
 
     });
+
+function tooltip(){
+   star=true;   
+}
 
 
     function do_help() {

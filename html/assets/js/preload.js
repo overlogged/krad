@@ -19,6 +19,14 @@ var state_preload = {
     game.load.image('help', 'assets/img/helpbutton.png');
     game.load.image('outprogress','assets/img/outprogress.png');
     game.load.image('loading','assets/img/loading.gif');
+    game.load.image('tooltip1','assets/img/tooltip1.png');
+    game.load.image('tooltip2','assets/img/tooltip2.png');
+    game.load.image('tooltip3','assets/img/tooltip3.png');
+    game.load.image('tooltip4','assets/img/tooltip4.png');
+    game.load.image('tooltip5','assets/img/tooltip5.png');
+    game.load.image('tooltip6','assets/img/tooltip6.png');
+    game.load.image('tooltip7','assets/img/tooltip7.png');
+    game.load.image('tooltip8','assets/img/tooltip8.png');
     //game.loda.image('inprogress','assets/img/inprogress.png');
 
 
