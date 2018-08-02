@@ -329,7 +329,7 @@
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
     }
-    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
+    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
     //do_fillcardlist();
 
     var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
@@ -561,7 +561,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(880, 50, 'arrow', fix_arrow, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = -45 * (3 - z);
