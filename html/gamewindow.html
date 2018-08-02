@@ -189,7 +189,7 @@
       ccb.setFrames(1, 0, 0, 1);
       checkcardavaliable = 1;
     }
-    
+
     function loadedcheck() {
       if (loadingcomplete) checkcardunlock(checkbutton);
       else loadingcomplete = 1;
@@ -222,8 +222,8 @@
         //  do_initplayer(12);
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
-          // alert(player[0].body.dynamic);
-          loadedcheck();
+        // alert(player[0].body.dynamic);
+        loadedcheck();
         // game.camera.atLimit=true;
         // game.camera.width=780;
         // game.camera.height=470;
@@ -392,28 +392,28 @@
         seencardslot[j] = card.add.button(100 + 150 * j, 80, 'seen', checkseencard, this, 0, 1, 1, 0);
         seencardtext[j] = card.add.text(130 + 150 * j, 80, lookup_table[j]);
         seencardtext[j].fontSize = 20;
-        }
-        if (state=="must choose seen card") {
-            seencardslot[3].kill();
-            seencardtext[3].kill();
-        }
+      }
+      if (state == "must choose seen card") {
+        seencardslot[3].kill();
+        seencardtext[3].kill();
+      }
     }
 
     function checkseencard(button) {
       var j;
-        var num;
-        checkcardunlock(checkbutton);
+      var num;
+      checkcardunlock(checkbutton);
       num = (button.x - 100) / 150;
       num = 3 - num;
       do_seencard(num);
       for (j = 0; j <= 2; j++) {
         seencardslot[j].kill();
         seencardtext[j].alpha = 0;
-        }
-        if (state=="choose seen card") {
-            seencardslot[3].kill();
-            seencardtext[3].kill();
-        }
+      }
+      if (state == "choose seen card") {
+        seencardslot[3].kill();
+        seencardtext[3].kill();
+      }
     }
 
     function refreshcard() {
@@ -594,12 +594,7 @@
           arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
-          var test=[];
-          for(var i =0 ;i<8;i++){
-            arrow[z].angle = 0-(45 * (3 - i));
-            test[i]=arrow[z].angle;
-          }
-          arrow[z].angle = 0-(45 * (3 - z));
+          arrow[z].angle = 0 - (45 * (3 - z));
         }
       }
     }
@@ -678,110 +673,110 @@
       //alert('sending completed');
       var j;
       var g = [];
-        if (checkcardavaliable == 0) alert("操作受限");
-        else {
-            switch (pedometer) {
-                case 1:
-                    for (j = 0; j <= 17; j++) {
-                        if (cardtargeted[j]) {
-                            do_decision(j);
-                            steerTGP(0, cardlist[j]);
-                        }
-                    }
-                    break;
-                case 2:
-                    var k = 0;
-                    for (j = 0; j <= 17; j++) {
-                        if (cardtargeted[j]) {
-                            san--;
-                            g[k] = j;
-                            k++;
-                            alert(j + " shit");
-                        }
-                        if (san == 0) break;
-                    }
-                    do_gamblecard(g);
-                    break;
-                case 4:
-                    var k = 0;
-                    g[0] = -1;
-                    for (j = 0; j <= 17; j++) {
-                        if (cardtargeted[j]) {
-                            san--;
-                            g[k] = j;
-                            k++;
-                        }
-                        if (san == 0) break;
-                    }
-                    do_dessert(g);
-                    break;
-                default:
-                    //statepadtext_body.text='操作受限';
-                    break;
+      if (checkcardavaliable == 0) alert("操作受限");
+      else {
+        switch (pedometer) {
+          case 1:
+            for (j = 0; j <= 17; j++) {
+              if (cardtargeted[j]) {
+                do_decision(j);
+                steerTGP(0, cardlist[j]);
+              }
             }
-
-            if (state == "Init") {
-                req = {}
+            break;
+          case 2:
+            var k = 0;
+            for (j = 0; j <= 17; j++) {
+              if (cardtargeted[j]) {
+                san--;
+                g[k] = j;
+                k++;
+                alert(j + " shit");
+              }
+              if (san == 0) break;
             }
-            else if (state == "choose hero") {
-                req = {
-                    hero: herolist[myIndex]
-                };
+            do_gamblecard(g);
+            break;
+          case 4:
+            var k = 0;
+            g[0] = -1;
+            for (j = 0; j <= 17; j++) {
+              if (cardtargeted[j]) {
+                san--;
+                g[k] = j;
+                k++;
+              }
+              if (san == 0) break;
             }
-            else if (state == "start game") {
-                req = {}
-            }
-            else if (state == "choose strategy decision") {
-            }
-            else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
-            }
-            else if (state == "must choose seen card") {
-            }
-            else if (state == "GAMBLE:choose gamble") {
-            }
-            else if (state == "GAMBLE: win judge") {
-            }
-            else if (state == "win judge") {
-                req = {}
-            }
-            else if (state == "ACTION: deposit account") {
-                req = {}
-            }
-            else if (state == "skills account") {
-                req = {}
-            }
-            else if (state == "fire account") {
-                req = {}
-            }
-            else if (state == "move account") {
-                req = {}
-            }
-            else if (state == "element account") {
-                req = {}
-            }
-            else if (state == "if human wins") {
-                req = {}
-            }
-            else if (state == "Game Over, human wins") {
-                req = {}
-            }
-            else if (state == "infection account") {
-                req = {}
-            }
-            else if (state == "Game Over,zombie wins") {
-            }
-            else if (state == "desert account") {
-            }
-            else if (state == "card distribute") {
-                req = {}
-            }
-            var seent = JSON.stringify({
-                'sid': parseInt(sid),
-                'msg': JSON.stringify(req)
-            })
-            console.log("give back :" + seent + "while req = " + JSON.stringify(req));
-            request(req, do_callback);
+            do_dessert(g);
+            break;
+          default:
+            //statepadtext_body.text='操作受限';
+            break;
         }
+
+        if (state == "Init") {
+          req = {}
+        }
+        else if (state == "choose hero") {
+          req = {
+            hero: herolist[myIndex]
+          };
+        }
+        else if (state == "start game") {
+          req = {}
+        }
+        else if (state == "choose strategy decision") {
+        }
+        else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
+        }
+        else if (state == "must choose seen card") {
+        }
+        else if (state == "GAMBLE:choose gamble") {
+        }
+        else if (state == "GAMBLE: win judge") {
+        }
+        else if (state == "win judge") {
+          req = {}
+        }
+        else if (state == "ACTION: deposit account") {
+          req = {}
+        }
+        else if (state == "skills account") {
+          req = {}
+        }
+        else if (state == "fire account") {
+          req = {}
+        }
+        else if (state == "move account") {
+          req = {}
+        }
+        else if (state == "element account") {
+          req = {}
+        }
+        else if (state == "if human wins") {
+          req = {}
+        }
+        else if (state == "Game Over, human wins") {
+          req = {}
+        }
+        else if (state == "infection account") {
+          req = {}
+        }
+        else if (state == "Game Over,zombie wins") {
+        }
+        else if (state == "desert account") {
+        }
+        else if (state == "card distribute") {
+          req = {}
+        }
+        var seent = JSON.stringify({
+          'sid': parseInt(sid),
+          'msg': JSON.stringify(req)
+        })
+        console.log("give back :" + seent + "while req = " + JSON.stringify(req));
+        request(req, do_callback);
+      }
     }
 
 
@@ -856,13 +851,13 @@
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
-            statepadtext_body.text = '你必须选择一张明牌\n';
-            checkcardlock(checkbutton);
-              req = {
-                  seenCard: 1
-              }
-          }
+          statepadtext_body.text = '你必须选择一张明牌\n';
           checkcardlock(checkbutton);
+          req = {
+            seenCard: 1
+          }
+        }
+        checkcardlock(checkbutton);
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 5;
@@ -998,14 +993,19 @@
     }
 
     function fix_arrow(button) {
-      var temp = ((button.angle) / 45 + 3);
-        do_target(temp, -1);
-        checkcardunlock(checkbutton);
+      if (button.angle == (-180)) {
+        var temp = 7;
+      }
+      else {
+        var temp = ((button.angle) / 45 + 3);
+      }
+      do_target(temp, -1);
+      checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
       var temp = (button.x - 480) / 70;
-        do_target(-1, temp);
-        checkcardunlock(checkbutton);
+      do_target(-1, temp);
+      checkcardunlock(checkbutton);
     }
 
 
@@ -1069,7 +1069,7 @@
     }
 
     function do_target(direction, target) {
-      alert("movediretion"+direction);
+      alert("movediretion" + direction);
       req = {
         decision: p_decision,
         moveDirection: direction,
