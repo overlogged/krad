@@ -11,17 +11,45 @@ var state_register = {
     game.add.bitmapText(275, 330, 'chiller', 'Confirm', 54);
     game.add.bitmapText(290, 385, 'chiller', 'Avatar', 54);
 
-    game.add.button(320, 440, 'button', do_register, this, 1, 0, 2, 0);
-    game.add.button(500,440, 'button', do_backlogin, this, 1, 0, 2, 0);
+    register = game.add.button(320, 440, 'button', do_register, this, 1, 0, 2, 0);
     game.add.bitmapText(335, 445, 'chiller', 'Confirm', 28);
+    
+    backlogin = game.add.button(500,440, 'button', do_backlogin, this, 1, 0, 2, 0);
     game.add.bitmapText(515, 445, 'chiller', 'Back', 28);
     
+    tooltip8 = game.add.sprite(555, 475, 'tooltip8');
+    tooltip9 = game.add.sprite(370, 475, 'tooltip9');
+
+    tooltip8.inputEnabled = true;
+    tooltip9.inputEnabled = true;    
 
     game.avatar = game.add.sprite(10, 280, 'figure1');
     
     show("register");
+    tooltip_register();
+  },
+  update: function(){
+    if(star){
+      if(register.input.pointerOver()){
+        tooltip9.alpha=0.7;
+      }
+      else{
+        tooltip9.alpha=0;
+      }
+      if(backlogin.input.pointerOver()){
+        tooltip8.alpha=0.7;
+      }
+      else{
+        tooltip8.alpha=0;
+      }
+      
+    }
   }
 }
+function tooltip_register(){
+  star = true;
+}
+
 
 function update_avatar_register() {
   game.avatar.kill();
