@@ -751,6 +751,8 @@ public class God {
             allPlayers[i].healthPoint = 6;
             allPlayers[i].mot = 4;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
+            allPlayers[i].fireTarget = -1;
+            allPlayers[i].moveDirection = -1;
             playerState[i] = 0;
             scoreList[i] = 100;
             fireList[i] = -1;
