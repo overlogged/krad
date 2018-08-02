@@ -995,7 +995,7 @@
         }
         statusbox.text += "第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
         for (var i = 0; i < player_num; i++) {
-          if (data.teamResult[i] == 1) {
+          if (data.teamList[i] == 1) {
             statusbox.text += "玩家" + i + ": 身份为感染者\n";
           }
           else {
