@@ -224,10 +224,10 @@ object UserModel extends MyJsonProtocol{
 
   /**
     * change statistics
-    * @param f update function
+    * @param delta delta
     * @return None if failed
     */
-  def changeStat(email: String, f: Stats => Stats):Option[Unit] = {
+  def changeStat(email: String, delta:Int):Option[Unit] = {
     Some(())
       .guard(email.is_valid_email)
       .flatMap { _ =>
@@ -238,7 +238,7 @@ object UserModel extends MyJsonProtocol{
       .also { old_stats =>
         col_users.update(
           MongoDBObject("email" -> email),
-          $set("stats" -> f(old_stats).toJson.toString())
+          $set("stats" -> Stats(old_stats.score+delta).toJson.toString())
         )
       }
       .succ()
