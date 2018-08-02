@@ -5,16 +5,47 @@ var state_changepw = {
     game.add.bitmapText(205, 195, 'chiller', 'OldPassword', 54);
     game.add.bitmapText(195, 255, 'chiller', 'NewPassword', 54);
     game.add.bitmapText(260, 315, 'chiller', 'Confirm', 54);
-    game.add.button(300, 380, 'button', do_change, this, 1, 0, 2, 0);
+
+    change = game.add.button(300, 380, 'button', do_change, this, 1, 0, 2, 0);
     game.add.bitmapText(310, 385, 'chiller', 'Confirm', 28);
-    game.add.button(420, 380, 'button', go_backlogincp, this, 1, 0, 2, 0);
+
+    backcp = game.add.button(420, 380, 'button', go_backcp, this, 1, 0, 2, 0);
     game.add.bitmapText(440, 385, 'chiller', 'Back', 28);
+
+    tooltip8 = game.add.sprite(470, 415, 'tooltip8');
+    tooltip9 = game.add.sprite(350, 415, 'tooltip9');
+
+    tooltip8.inputEnabled = true;
+    tooltip9.inputEnabled = true;
     show("changepw");
+    tooltip_changepw();
+
+  },
+  update: function(){
+    if(star){
+      if(change.input.pointerOver()){
+        tooltip9.alpha=0.7;
+      }
+      else{
+        tooltip9.alpha=0;
+      }
+      if(backcp.input.pointerOver()){
+        tooltip8.alpha=0.7;
+      }
+      else{
+        tooltip8.alpha=0;
+      }
+      
+    }
   }  
 }
 
-function go_backlogincp(){
-  game.state.start('login');
+function tooltip_changepw(){
+  star = true;
+}
+
+function go_backcp(){
+  game.state.start('userinterface');
 }
 
 function do_change() {

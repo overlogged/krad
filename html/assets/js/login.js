@@ -30,7 +30,7 @@ var state_login = {
       tooltip1.inputEnabled = true;
       tooltip2.inputEnabled = true;
       tooltip4.inputEnabled = true;
-      
+
       show("login");
       tooltip_log();
   },
@@ -58,7 +58,6 @@ var state_login = {
 
   }
 }
-
 function tooltip_log(){
    star=true;   
 }

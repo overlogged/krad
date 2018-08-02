@@ -27,6 +27,7 @@ var state_preload = {
     game.load.image('tooltip6','assets/img/tooltip6.png');
     game.load.image('tooltip7','assets/img/tooltip7.png');
     game.load.image('tooltip8','assets/img/tooltip8.png');
+    game.load.image('tooltip9','assets/img/tooltip9.png');
     //game.loda.image('inprogress','assets/img/inprogress.png');
 
 
