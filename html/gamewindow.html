@@ -178,22 +178,23 @@
     }
     ];
 
-    function checkcardlock() {
-      checkbutton.setFrames(2, 2, 2, 2);
+    var loadingcomplete = 0;
+
+    function checkcardlock(ccb) {
+      ccb.setFrames(2, 2, 2, 2);
       checkcardavaliable = 0;
     }
 
-    function checkcardunclock() {
-      checkbutton.setFrames(1, 0, 0, 1);
+    function checkcardunlock(ccb) {
+      ccb.setFrames(1, 0, 0, 1);
       checkcardavaliable = 1;
     }
     
     function loadedcheck() {
-      if (loadingcomplete) checkcardunclock();
+      if (loadingcomplete) checkcardunlock(checkbutton);
       else loadingcomplete = 1;
     }
 
-    var loadingcomplete = 0;
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
@@ -398,8 +399,8 @@
 
     function checkseencard(button) {
       var j;
-      var num;
-      checkcardunclock();
+        var num;
+        checkcardunlock(checkbutton);
       num = (button.x - 100) / 150;
       num = 3 - num;
       do_seencard(num);
@@ -617,24 +618,24 @@
       if (mode) {
         switch (type) {
           case 4:
-            checkcardlock();
+            checkcardlock(checkbutton);
             do_arrowgenerate(arrow_union);
             break;
           case 5:
-            checkcardlock();
+            checkcardlock(checkbutton);
             do_targetgenerate(fire_union);
             break;
         }
       } else {
         switch (type) {
           case 4:
-            checkcardunclock();
+            checkcardunlock(checkbutton);
             for (j = 0; j < 8; j++) {
               if (arrow_union[j] != 0) arrow[j].kill();
             }
             break;
           case 5:
-            checkcardunclock();
+            checkcardunlock(checkbutton);
             for (j = 0; j < 4; j++) {
               if (fire_union[j] != 0) {
                 p_choose[j].kill();
@@ -847,13 +848,13 @@
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
-              statepadtext_body.text = '你必须选择一张明牌\n';
-              checkcardlock();
+            statepadtext_body.text = '你必须选择一张明牌\n';
+            checkcardlock(checkbutton);
               req = {
                   seenCard: 1
               }
-        }
-        checkcardlock();
+          }
+          checkcardlock(checkbutton);
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 5;
@@ -990,13 +991,13 @@
 
     function fix_arrow(button) {
       var temp = ((button.angle) / 45 + 3);
-      do_target(temp, -1);
-      checkcardunclock();
+        do_target(temp, -1);
+        checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
       var temp = (button.x - 480) / 70;
-      do_target(-1, temp);
-      checkcardlock();
+        do_target(-1, temp);
+        checkcardunlock(checkbutton);
     }
 
 
