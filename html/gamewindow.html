@@ -301,8 +301,7 @@
       }
     });
 
-
-    var skipseencardavaliable;
+      
     var checkbutton;
     var checkcardavaliable = 1;
     var seencardtext = [];
@@ -373,7 +372,7 @@
         seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
         seencardtext[j].fontSize = 20;
         }
-        if (skipseencardavaliable == 0) {
+        if (state=="must choose seen card") {
             seencardslot[3].kill();
             seencardtext[3].kill();
         }
@@ -390,7 +389,7 @@
         seencardslot[j].kill();
         seencardtext[j].alpha = 0;
         }
-        if (skipseencardavaliable == 1) {
+        if (state=="choose seen card") {
             seencardslot[3].kill();
             seencardtext[3].kill();
         }
@@ -841,13 +840,11 @@
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
               statepadtext_body.text = '你必须选择一张明牌\n';
-              skipseencardavaliable = 0;
               checkcardlock();
               req = {
                   seenCard: 1
               }
         }
-        else skipseencardavaliable = 1;
         checkcardlock();
         cardlist = data.handCards;
         do_fillcardlist();
