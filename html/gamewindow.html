@@ -581,7 +581,7 @@
 
     function do_handcardslot() {
       for (slots = 0; slots <= 17; slots++) { //create handcard slots
-         handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
+        handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
       }
     }
 
@@ -639,15 +639,15 @@
       }
     }
 
-      function checkcardlock() {
-          checkbutton.setFrames(2, 2, 2, 2);
-          checkcardavaliable = 0;
-      }
+    function checkcardlock() {
+      checkbutton.setFrames(2, 2, 2, 2);
+      checkcardavaliable = 0;
+    }
 
-      function checkcardunclock() {
-          checkbutton.setFrames(1, 0, 0, 1);
-          checkcardavaliable = 1;
-      }
+    function checkcardunclock() {
+      checkbutton.setFrames(1, 0, 0, 1);
+      checkcardavaliable = 1;
+    }
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
@@ -885,7 +885,7 @@
           if (fireList[i] != -1) {
             statusbox.text += "玩家" + i + ": 向玩家" + fireList[i] + "开火射击，" + fireList[i] + "号玩家生命值下降\n";
           }
-          else{
+          else {
             statusbox.text += "玩家" + i + ": 未开火\n";
           }
         }
@@ -969,13 +969,13 @@
 
     function fix_arrow(button) {
       var temp = ((button.angle) / 45 + 3);
-        do_target(temp, -1);
-        checkcardunclock();
+      do_target(temp, -1);
+      checkcardunclock();
     }
     function fix_choose(button) {
       var temp = (button.x - 480) / 70;
-        do_target(-1, temp);
-        checkcardlock();
+      do_target(-1, temp);
+      checkcardlock();
     }
 
 
