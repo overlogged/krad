@@ -178,6 +178,16 @@
     }
     ];
 
+    function checkcardlock() {
+      checkbutton.setFrames(2, 2, 2, 2);
+      checkcardavaliable = 0;
+    }
+
+    function checkcardunclock() {
+      checkbutton.setFrames(1, 0, 0, 1);
+      checkcardavaliable = 1;
+    }
+
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
         game.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
@@ -204,8 +214,8 @@
         //  do_initplayer(12);
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
-        // alert(player[0].body.dynamic);
-
+          // alert(player[0].body.dynamic);
+        checkcardunclock();
         // game.camera.atLimit=true;
         // game.camera.width=780;
         // game.camera.height=470;
@@ -303,7 +313,7 @@
 
       
     var checkbutton;
-    var checkcardavaliable = 1;
+    var checkcardavaliable = 0;
     var seencardtext = [];
     var handcardslot = [];
     var seencardslot = [];
@@ -352,7 +362,7 @@
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
-        checkbutton = card.add.button(865, 10, 'checkbutton', do_checkcard, this, 1, 0, 0, 1);
+        checkbutton = card.add.button(865, 10, 'checkbutton', do_checkcard, this, 2, 2, 2, 2);
         statepad = card.add.sprite(905, 10, 'pad');
         statepadtext_head = card.add.text(915, 15, 'stage');
         statepadtext_body = card.add.text(915, 40, 'ready');
@@ -645,16 +655,6 @@
             break;
         }
       }
-    }
-
-    function checkcardlock() {
-      checkbutton.setFrames(2, 2, 2, 2);
-      checkcardavaliable = 0;
-    }
-
-    function checkcardunclock() {
-      checkbutton.setFrames(1, 0, 0, 1);
-      checkcardavaliable = 1;
     }
 
 
