@@ -1145,7 +1145,7 @@
         $.ajax({
           url: "/api/game",
           type: "POST",
-          contentType: 'application/json',
+          contentType: 'text/plain',
           data: JSON.stringify({
             'sid': parseInt(sid),
             'msg': JSON.stringify(msg)
@@ -1157,7 +1157,6 @@
             state = data.state;
             callback(data, status);
           },
-
           error: function (data, status) {
             console.log(data);
             alert("非常抱歉，服务器宕机，返回匹配界面");

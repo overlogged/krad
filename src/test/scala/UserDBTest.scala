@@ -8,7 +8,7 @@ object UserDBTest {
     assert(UserModel.login("nicekinasfsf","fassfsaf").isEmpty)
     assert(UserModel.login("nicekingwei@sina.com","mypassword").nonEmpty)
     UserModel.changePassword("nicekingwei@sina.com","mypassword","mynewpassword")
-    UserModel.changeStat("nicekingwei@sina.com", x=>UserModel.Stats(x.score+1))
+    UserModel.changeStat("nicekingwei@sina.com", 1)
     assert(UserModel.login("nicekingwei@sina.com","mynewpassword").nonEmpty)
     UserModel.setNewPassword("nicekingwei@sina.com","mypassword")
     assert(UserModel.login("nicekingwei@sina.com","mypassword").nonEmpty)
