@@ -615,7 +615,7 @@
     }
 
     function steerTGP(mode, type) { //check which button will be show,steer or TGP?
-      alert("testTGP");
+      //alert("testTGP");
       var j;
       if (mode) {
         switch (type) {
@@ -691,7 +691,7 @@
                 san--;
                 g[k] = j;
                 k++;
-                alert(j + " shit");
+                //alert(j + " shit");
               }
               if (san == 0) break;
             }
@@ -1098,7 +1098,7 @@
     }
 
     function do_target(direction, target) {
-      alert("movediretion" + direction);
+      //alert("movediretion" + direction);
       req = {
         decision: p_decision,
         moveDirection: direction,
@@ -1159,7 +1159,6 @@
             state = data.state;
             callback(data, status);
           },
-
           error: function (data, status) {
             console.log(data);
             alert("非常抱歉，服务器宕机，返回匹配界面");
