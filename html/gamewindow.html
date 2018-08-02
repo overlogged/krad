@@ -303,7 +303,7 @@
 
 
 
-
+    var checkcardavaliable = 1;
     var seencardtext = [];
     var handcardslot = [];
     var seencardslot = [];
@@ -590,20 +590,24 @@
       if (mode) {
         switch (type) {
           case 4:
+            checkcardlock();
             do_arrowgenerate(arrow_union);
             break;
           case 5:
+            checkcardlock();
             do_targetgenerate(fire_union);
             break;
         }
       } else {
         switch (type) {
           case 4:
+            checkcardunclock();
             for (j = 0; j < 8; j++) {
               if (arrow_union[j] != 0) arrow[j].kill();
             }
             break;
           case 5:
+            checkcardunclock();
             for (j = 0; j < 4; j++) {
               if (fire_union[j] != 0) {
                 p_choose[j].kill();
@@ -636,17 +640,20 @@
 
       function checkcardlock() {
           checkbutton.setFrames(2, 2, 2, 2);
+          checkcardavaliable = 0;
       }
 
       function checkcardunclock() {
           checkbutton.setFrames(1, 0, 0, 1);
+          checkcardavaliable = 1;
       }
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
       var j;
       var g = [];
-      switch (pedometer) {
+      if (checkcardavaliable == 0) alert("操作受限");
+      else switch (pedometer) {
         case 1:
           for (j = 0; j <= 17; j++) {
             if (cardtargeted[j]) {
@@ -962,11 +969,13 @@
 
     function fix_arrow(button) {
       var temp = ((button.angle) / 45 + 3);
-      do_target(temp, -1);
+        do_target(temp, -1);
+        checkcardunclock();
     }
     function fix_choose(button) {
       var temp = (button.x - 480) / 70;
-      do_target(-1, temp);
+        do_target(-1, temp);
+        checkcardlock();
     }
 
 
