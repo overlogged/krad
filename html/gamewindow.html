@@ -303,7 +303,7 @@
 
 
 
-
+    var checkbutton;
     var checkcardavaliable = 1;
     var seencardtext = [];
     var handcardslot = [];
@@ -314,7 +314,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 1; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -330,7 +330,7 @@
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
     }
-    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
+    cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
     //do_fillcardlist();
 
     var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
@@ -353,7 +353,7 @@
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
-        var checkbutton = card.add.button(865, 10, 'checkbutton', do_checkcard, this, 1, 0, 0, 1);
+        checkbutton = card.add.button(865, 10, 'checkbutton', do_checkcard, this, 1, 0, 0, 1);
         statepad = card.add.sprite(905, 10, 'pad');
         statepadtext_head = card.add.text(915, 15, 'stage');
         statepadtext_body = card.add.text(915, 40, 'ready');
@@ -651,6 +651,7 @@
           checkbutton.setFrames(1, 0, 0, 1);
           checkcardavaliable = 1;
       }
+
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
