@@ -560,8 +560,8 @@
       var y = player[people].body.y;
       player[people].kill();
       player[people] = game.add.sprite(x, y, 'poisoner' + (people + 1).toString());
-      player[people].anchor.x = 0.5;
-      player[people].anchor.y = 0.5;
+      // player[people].anchor.x = 0.5;
+      // player[people].anchor.y = 0.5;
       game.physics.p2.enable(player[people]);
       player[people].body.fixedRotation = true;
       player[people].body.dynamic = false;
@@ -577,8 +577,8 @@
       for (var i = 0; i < player_num; i++) {
         player[i] = game.add.sprite(map[init_location].x + i * 20 + ((i + 1) % 2) * 17 - 5, map[init_location].y + (((i + 1) % 2) * 28 - 15),
           'fighter' + (i + 1).toString());
-        player[i].anchor.x = 0.5;
-        player[i].anchor.y = 0.5;
+        // player[i].anchor.x = 0.5;
+        // player[i].anchor.y = 0.5;
         game.physics.p2.enable(player[i]);
         player[i].body.fixedRotation = true;
         player[i].body.dynamic = false;
