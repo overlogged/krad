@@ -11,4 +11,21 @@ function show(page) {
 // global data
 var sid = 0;
 var user = {};
+var star = false;
+var tooltip1;
+var tooltip2;
+var tooltip3;
+var tooltip4;
+var tooltip5;
+var tooltip6;
+var tooltip7;
+var tooltip8;
+var signUp;
+var logIn;
+var forgetPW;
+var backBtn;
+var changepw;
+var changeprofile;
+var userhelp;
+var startgame; 
 
