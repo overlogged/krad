@@ -372,19 +372,22 @@
         seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0);
         seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
         seencardtext[j].fontSize = 20;
-      }
+        }
+        if (state == "must choose seen card") seencardslot[3].kill;
     }
 
     function checkseencard(button) {
       var j;
       var num;
+      checkcardunclock();
       num = (button.x - 100) / 150;
       num = 3 - num;
       do_seencard(num);
-      for (j = 0; j <= 3; j++) {
+      for (j = 0; j <= 2; j++) {
         seencardslot[j].kill();
         seencardtext[j].alpha = 0;
-      }
+        }
+      if (state != "must choose seen card") seencardslot[3].kill;
     }
 
     function refreshcard() {
@@ -829,6 +832,7 @@
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
           statepadtext_body.text = '你必须选择一张明牌\n';
+          checkcardlock();
           req = {
             seenCard: 1
           }
