@@ -314,7 +314,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 1; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -330,7 +330,7 @@
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
     }
-    cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
+    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
     //do_fillcardlist();
 
     var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
