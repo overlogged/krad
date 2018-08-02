@@ -1012,6 +1012,7 @@
           checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
         statepadtext_body.text = '发牌阶段';
+        p_decision = -1;    //To reset decision 
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 0;
@@ -1102,7 +1103,6 @@
         moveDirection: direction,
         fireTarget: target
       }
-      p_decision = -1;
     }
 
     function do_seencard(rank) {
