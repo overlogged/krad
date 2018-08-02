@@ -67,7 +67,7 @@ public class God {
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             seenCardJudge(playerIndex,playerHandCard);
                             for(int i = 0; i < playerNum;i++){
-                                if(MapChecker.distance(map.units[allPlayers[playerIndex].preLoc],map.units[allPlayers[i].preLoc]) < allPlayers[playerIndex].range)
+                                if(map.distance[allPlayers[playerIndex].preLoc][allPlayers[i].preLoc] < allPlayers[playerIndex].range)
                                     availableFireTarget[i] = 1;
                             }
                             toDirection(playerIndex);
