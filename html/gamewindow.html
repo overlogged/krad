@@ -387,8 +387,8 @@
       var j;
       var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
       for (j = 0; j <= 3; j++) {
-        seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0);
-        seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
+        seencardslot[j] = card.add.button(100 + 150 * j, 80, 'seen', checkseencard, this, 0, 1, 1, 0);
+        seencardtext[j] = card.add.text(130 + 150 * j, 80, lookup_table[j]);
         seencardtext[j].fontSize = 20;
         }
         if (state=="must choose seen card") {
@@ -607,8 +607,8 @@
     }
 
     function do_handcardslot() {
-      for (slots = 0; slots <= 17; slots++) { //create handcard slots
-        handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
+      for (slots = 17; slots >= 0; slots--) { //create handcard slots
+        handcardslot[slots] = card.add.button(10 + 45 * slots, 20, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
       }
     }
 
