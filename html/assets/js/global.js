@@ -20,6 +20,7 @@ var tooltip5;
 var tooltip6;
 var tooltip7;
 var tooltip8;
+var tooltip9;
 var signUp;
 var logIn;
 var forgetPW;
@@ -28,4 +29,8 @@ var changepw;
 var changeprofile;
 var userhelp;
 var startgame; 
+var changepf;
+var backpf;
+var backcp;
+var change;
 
