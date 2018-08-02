@@ -17,6 +17,23 @@ public class MapChecker {
         return distance;
     }
 
+    static int distance(MapUnit u1, MapUnit u2) {
+        int m1 = u1.mark, m2 = u2.mark;
+        if (m1 > m2) {
+            m1 = u2.mark;
+            m2 = u1.mark;
+        }
+        if (m1 <= 7 && m2 > 16) {
+            return (32 - m2 - m1);
+        } else if (m1 > 7 && m1 <= 16 && m2 > 16) {
+            if ((m2 - m1) <= (18 - m2 + m1)) {
+                return m2 - m1;
+            } else return (18 - m2 + m1);
+        } else
+            return m2 - m1;
+
+    }
+
     public static int tryMove(Map m, int i_current, int i_next, int energy) {
 
         // first step
@@ -57,9 +74,9 @@ public class MapChecker {
             }
 
             // do move
-            assert next!=null;
+            assert next != null;
             energy -= dis;
-            if(next.rank>current.rank){
+            if (next.rank > current.rank) {
                 energy = 0;
             }
             back = current;
