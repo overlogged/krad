@@ -5,12 +5,40 @@ var state_forget = {
     game.add.bitmapText(280, 130, 'chiller', 'Forget Password', 70);
     game.add.bitmapText(290, 240, 'chiller', 'Email', 54);
 
-    game.add.button(285, 320, 'button', do_forget, this, 1, 0, 2, 0);
-    game.add.button(465, 320, 'button', do_backloginfp, this, 1, 0, 2, 0);
+    forget = game.add.button(285, 320, 'button', do_forget, this, 1, 0, 2, 0);
     game.add.bitmapText(300, 325, 'chiller', 'Confirm', 28);
+   
+    backloginfp = game.add.button(465, 320, 'button', do_backloginfp, this, 1, 0, 2, 0);
     game.add.bitmapText(490, 325, 'chiller', 'Back', 28);
+
+    tooltip8 = game.add.sprite(515, 355, 'tooltip8');
+    tooltip9 = game.add.sprite(335, 355, 'tooltip9');
+
+    tooltip8.inputEnabled = true;
+    tooltip9.inputEnabled = true;
+
     show("forget");
-  }
+    tooltip_forget()
+  },
+  update: function(){
+    if(star){
+      if(forget.input.pointerOver()){
+        tooltip9.alpha=0.7;
+      }
+      else{
+        tooltip9.alpha=0;
+      }
+      if(backloginfp.input.pointerOver()){
+        tooltip8.alpha=0.7;
+      }
+      else{
+        tooltip8.alpha=0;
+      }
+   }
+ }
+}
+function tooltip_forget(){
+  star = true;
 }
 
 function do_backloginfp (){
