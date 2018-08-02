@@ -893,6 +893,7 @@
         }
       }
       else if ((state == "win judge")) {
+          checkcardunlock(checkbutton);
           statetips.text = ' ';
         statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
@@ -904,6 +905,7 @@
         }
       }
       else if (state == "ACTION: deposit account") {
+          checkcardunlock(checkbutton);
         var lookup_table = ['blank', '布', '剪刀', '石头', 'move', 'shoot', 'skill'];
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
@@ -926,23 +928,28 @@
         }
       }
       else if (state == "skills account") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '蓄能结算';
         eneregyList = data.eneregyList;
       }
       else if (state == "fire account") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '开火结算';
       }
       else if (state == "move account") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '移动结算';
         healthPointList = data.healthPointList;
       }
       else if (state == "element account") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '要素判定';
         playerloc_union = data.locationList;
         elemList = data.elemList;
         do_move();
       }
       else if (state == "if human wins") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '感染判定';
         var elem_string = ["有要素", "无要素"];
         elemList = data.locationList;
@@ -952,15 +959,19 @@
         }
       }
       else if (state == "Game Over, human wins") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束，人类获胜！';
       }
       else if (state == "infection account") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '感染阶段';
       }
       else if (state == "Game Over, zombie wins") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束，感染者获胜！';
       }
       else if (state == "END") {
+          checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束';
         scoreList = data.scoreList;
         statusbox.text += "游戏结束，各个玩家的分数为:\n";
@@ -969,6 +980,7 @@
         }
       }
       else if (state == "desert account") {
+          checkcardunlock(checkbutton);
           statepadtext_body.text = '弃牌阶段';
           statetips.text = '你现在应该丢弃你不需要的牌';
 
@@ -994,6 +1006,7 @@
         refreshcard();
       }
       else if (state == "card distribute") {
+          checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
         statepadtext_body.text = '发牌阶段';
         cardlist = data.handCards;
