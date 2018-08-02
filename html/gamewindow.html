@@ -302,7 +302,7 @@
     });
 
 
-
+    var skipseencardavaliable;
     var checkbutton;
     var checkcardavaliable = 1;
     var seencardtext = [];
@@ -373,7 +373,7 @@
         seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
         seencardtext[j].fontSize = 20;
         }
-        if (state == "must choose seen card") seencardslot[3].kill;
+        if (skipseencardavaliable==0) seencardslot[3].kill;
     }
 
     function checkseencard(button) {
@@ -387,7 +387,7 @@
         seencardslot[j].kill();
         seencardtext[j].alpha = 0;
         }
-      if (state == "choose seen card") seencardslot[3].kill;
+        if (skipseencardavaliable==1) seencardslot[3].kill;
     }
 
     function refreshcard() {
@@ -657,107 +657,109 @@
       //alert('sending completed');
       var j;
       var g = [];
-      if (checkcardavaliable == 0) alert("操作受限");
-      else switch (pedometer) {
-        case 1:
-          for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
-              do_decision(j);
-              steerTGP(0, cardlist[j]);
+        if (checkcardavaliable == 0) alert("操作受限");
+        else {
+            switch (pedometer) {
+                case 1:
+                    for (j = 0; j <= 17; j++) {
+                        if (cardtargeted[j]) {
+                            do_decision(j);
+                            steerTGP(0, cardlist[j]);
+                        }
+                    }
+                    break;
+                case 2:
+                    var k = 0;
+                    for (j = 0; j <= 17; j++) {
+                        if (cardtargeted[j]) {
+                            san--;
+                            g[k] = j;
+                            k++;
+                        }
+                        if (san == 0) break;
+                    }
+                    do_gamblecard(g);
+                    break;
+                case 4:
+                    var k = 0;
+                    g[0] = -1;
+                    for (j = 0; j <= 17; j++) {
+                        if (cardtargeted[j]) {
+                            san--;
+                            g[k] = j;
+                            k++;
+                        }
+                        if (san == 0) break;
+                    }
+                    do_dessert(g);
+                    break;
+                default:
+                    //statepadtext_body.text='操作受限';
+                    break;
             }
-          }
-          break;
-        case 2:
-          var k = 0;
-          for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
-              san--;
-              g[k] = j;
-              k++;
-            }
-            if (san == 0) break;
-          }
-          do_gamblecard(g);
-          break;
-        case 4:
-          var k = 0;
-          g[0] = -1;
-          for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
-              san--;
-              g[k] = j;
-              k++;
-            }
-            if (san == 0) break;
-          }
-          do_dessert(g);
-          break;
-        default:
-          //statepadtext_body.text='操作受限';
-          break;
-      }
 
-      if (state == "Init") {
-        req = {}
-      }
-      else if (state == "choose hero") {
-        req = {
-          hero: herolist[myIndex]
-        };
-      }
-      else if (state == "start game") {
-        req = {}
-      }
-      else if (state == "choose strategy decision") {
-      }
-      else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
-      }
-      else if (state == "must choose seen card") {
-      }
-      else if (state == "GAMBLE:choose gamble") {
-      }
-      else if (state == "GAMBLE: win judge") {
-      }
-      else if (state == "win judge") {
-        req = {}
-      }
-      else if (state == "ACTION: deposit account") {
-        req = {}
-      }
-      else if (state == "skills account") {
-        req = {}
-      }
-      else if (state == "fire account") {
-        req = {}
-      }
-      else if (state == "move account") {
-        req = {}
-      }
-      else if (state == "element account") {
-        req = {}
-      }
-      else if (state == "if human wins") {
-        req = {}
-      }
-      else if (state == "Game Over, human wins") {
-        req = {}
-      }
-      else if (state == "infection account") {
-        req = {}
-      }
-      else if (state == "Game Over,zombie wins") {
-      }
-      else if (state == "desert account") {
-      }
-      else if (state == "card distribute") {
-        req = {}
-      }
-      var seent = JSON.stringify({
-        'sid': parseInt(sid),
-        'msg': JSON.stringify(req)
-      })
-      console.log("give back :" + seent + "while req = " + JSON.stringify(req));
-      request(req, do_callback);
+            if (state == "Init") {
+                req = {}
+            }
+            else if (state == "choose hero") {
+                req = {
+                    hero: herolist[myIndex]
+                };
+            }
+            else if (state == "start game") {
+                req = {}
+            }
+            else if (state == "choose strategy decision") {
+            }
+            else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
+            }
+            else if (state == "must choose seen card") {
+            }
+            else if (state == "GAMBLE:choose gamble") {
+            }
+            else if (state == "GAMBLE: win judge") {
+            }
+            else if (state == "win judge") {
+                req = {}
+            }
+            else if (state == "ACTION: deposit account") {
+                req = {}
+            }
+            else if (state == "skills account") {
+                req = {}
+            }
+            else if (state == "fire account") {
+                req = {}
+            }
+            else if (state == "move account") {
+                req = {}
+            }
+            else if (state == "element account") {
+                req = {}
+            }
+            else if (state == "if human wins") {
+                req = {}
+            }
+            else if (state == "Game Over, human wins") {
+                req = {}
+            }
+            else if (state == "infection account") {
+                req = {}
+            }
+            else if (state == "Game Over,zombie wins") {
+            }
+            else if (state == "desert account") {
+            }
+            else if (state == "card distribute") {
+                req = {}
+            }
+            var seent = JSON.stringify({
+                'sid': parseInt(sid),
+                'msg': JSON.stringify(req)
+            })
+            console.log("give back :" + seent + "while req = " + JSON.stringify(req));
+            request(req, do_callback);
+        }
     }
 
 
@@ -832,12 +834,14 @@
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
         if (state == "must choose seen card") {
-          statepadtext_body.text = '你必须选择一张明牌\n';
-          checkcardlock();
-          req = {
-            seenCard: 1
-          }
+              statepadtext_body.text = '你必须选择一张明牌\n';
+              skipseencardavaliable = 0;
+              checkcardlock();
+              req = {
+                  seenCard: 1
+              }
         }
+        else skipseencardavaliable = 1;
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 5;
