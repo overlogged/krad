@@ -584,7 +584,7 @@
         player[i].body.dynamic = false;
         player[i].inputEnabled = true;
       }
-      document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 425;
+      document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 225;
       start = true;
     }
 
@@ -594,6 +594,11 @@
           arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
+          var test=[];
+          for(var i =0 ;i<8;i++){
+            arrow[z].angle = 0-(45 * (3 - z));
+            test[i]=arrow[z].angle;
+          }
           arrow[z].angle = 0-(45 * (3 - z));
         }
       }
