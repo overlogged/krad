@@ -602,8 +602,8 @@
     function do_targetgenerate(fire_union) {
       for (var z = 0; z < 4; z++) {
         if (fire_union[z] != 0) {
-          p_choose[z] = card.add.button(480 + z * 70, 200, 'button', fix_choose, this, 1, 0, 2, 0);
-          p_text[z] = card.add.bitmapText(490 + z * 70, 200, 'chiller', 'player' + z.toString(), 28);
+          p_choose[z] = card.add.button(z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
+          p_text[z] = card.add.bitmapText(10+ z * 70, 80, 'chiller', 'player' + z.toString(), 28);
         }
       }
     }
@@ -1032,7 +1032,7 @@
       checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
-      var temp = (button.x - 480) / 70;
+      var temp = (button.x) / 70;
       do_target(-1, temp);
       checkcardunlock(checkbutton);
     }
