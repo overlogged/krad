@@ -194,7 +194,10 @@ public class God {
                             // reset all temp variables
                             for(int i = 0;i < playerNum;i++){
                                 allPlayers[i].stratDecision = GambleChecker.DEPOSIT;
-                                availableFireTarget[i] = 0;
+                                allPlayers[i].fireTarget = -1;
+                                allPlayers[i].moveDirection = -1;
+                                availableFireTarget[i] = -1;
+                                availableMoveDirection[i] = -1;
                                 decisionChoices[i] = GambleChecker.DEPOSIT;
                                 seenCardChoices[i] = 0;
                                 gambleChoices[i] = GambleChecker.PAPER;
