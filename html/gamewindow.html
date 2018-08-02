@@ -408,8 +408,7 @@
 
     function targetcard(button) {
       var num;
-      if (button.y == 130) num = (button.x - 10) / 45 + 9; //emmmmmm try to locate the button
-      else num = (button.x - 10) / 45;
+      num = (button.x - 10) / 45;
       if (staticinvalidcard[num]); //is it a locked button?
       else if (cardtargeted[num]) { //a button is about to be untargeted
         cardtargeted[num] = 0;
@@ -581,10 +580,7 @@
 
     function do_handcardslot() {
       for (slots = 0; slots <= 17; slots++) { //create handcard slots
-        if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard,
-          this, 1, 0, 0, 0);
-        if (slots > 8) handcardslot[slots] = card.add.button(10 + 45 * (slots - 9), 130, 'handcard_blank',
-          targetcard, this, 1, 0, 0, 0);
+         handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
       }
     }
 
