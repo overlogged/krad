@@ -1062,8 +1062,6 @@
     }
     function do_decision(strategy) {
       p_decision = strategy;
-      req.decision = p_decision;
-      p_decision = -1;
     }
 
     function do_target(direction, target) {
@@ -1072,6 +1070,7 @@
         moveDirection: direction,
         fireTarget: target
       }
+      p_decision = -1;
     }
 
     function do_seencard(rank) {
