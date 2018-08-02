@@ -1145,7 +1145,7 @@
         $.ajax({
           url: "/api/game",
           type: "POST",
-          contentType: 'text/plain',
+          contentType: 'application/json',
           data: JSON.stringify({
             'sid': parseInt(sid),
             'msg': JSON.stringify(msg)
