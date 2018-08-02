@@ -1,40 +1,8 @@
 package game;
 
-import akka.stream.impl.MaybeSource;
+class MapChecker {
 
-import static java.lang.Math.abs;
-
-public class MapChecker {
-    public static int outDistance(MapUnit des_location, MapUnit src_location) {
-        int distance;
-        if (des_location.rank != src_location.rank) {
-            return -1;
-        }
-        if (des_location.mark == src_location.mark) {
-            return -1;
-        }
-        distance = abs(des_location.mark - src_location.mark);
-        return distance;
-    }
-
-    static int distance(MapUnit u1, MapUnit u2) {
-        int m1 = u1.mark, m2 = u2.mark;
-        if (m1 > m2) {
-            m1 = u2.mark;
-            m2 = u1.mark;
-        }
-        if (m1 <= 7 && m2 > 16) {
-            return (32 - m2 - m1);
-        } else if (m1 > 7 && m1 <= 16 && m2 > 16) {
-            if ((m2 - m1) <= (18 - m2 + m1)) {
-                return m2 - m1;
-            } else return (18 - m2 + m1);
-        } else
-            return m2 - m1;
-
-    }
-
-    public static int tryMove(Map m, int i_current, int i_next, int energy) {
+    static int tryMove(Map m, int i_current, int i_next, int energy) {
 
         // first step
         MapUnit back = null;

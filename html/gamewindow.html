@@ -834,7 +834,8 @@
         }
       }
       else if (state == "choose strategy decision") {
-        statepadtext_body.text = '决策阶段';
+          statepadtext_body.text = '决策阶段';
+          statetips.text = '现在你应当选择一张决策卡，缺省则为蓄能';
         req = {
           decision: -1,
           moveDirection: -1,
@@ -850,13 +851,14 @@
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         statepadtext_body.text = '明牌阶段';
-        if (state == "must choose seen card") {
-          statepadtext_body.text = '你必须选择一张明牌\n';
-          checkcardlock(checkbutton);
-          req = {
-            seenCard: 1
+          if (state == "must choose seen card") {
+              statetips.text = '你手中没有出拳牌,必须选择一张明牌';
+              checkcardlock(checkbutton);
+              req = {
+                  seenCard: 1
+              }
           }
-        }
+          else statetips.text = '如果需要，你可以选择使用明牌而不是出拳牌';
         checkcardlock(checkbutton);
         cardlist = data.handCards;
         do_fillcardlist();
@@ -867,7 +869,8 @@
         statepadtext_body.text = '出拳阶段';
         if (state == "GAMBLE: choose gamble") {
           pedometer = 2;
-          refreshcard();
+            refreshcard();
+            statetips.text = '现在应该使用你的出拳牌了';
         }
         do_gamblecard(empty);
         decisionChoices = data.decisionChoices;
@@ -884,6 +887,7 @@
         }
       }
       else if ((state == "win judge")) {
+          statetips.text = ' ';
         statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
         do_fillcardlist();
@@ -959,7 +963,8 @@
         }
       }
       else if (state == "desert account") {
-        statepadtext_body.text = '弃牌阶段';
+          statepadtext_body.text = '弃牌阶段';
+          statetips.text = '你现在应该丢弃你不需要的牌';
 
         for (var i = 0; i < player_num; i++) {
           if ((data.teamList[i] == 1) && (team_result[i] == 0)) {

@@ -8,8 +8,11 @@ public class Map {
     int poisoner_init;               // Store the first location of poisoner
     int fighter_evacuate;            // Store the evacuate location of fighters
 
+    int[][] distance;
+
     Map(int number) {                 // Create a obj array
         units = new MapUnit[number];
+        distance = new int[number][number];
     }
 
     Map(String filename) {
@@ -28,8 +31,35 @@ public class Map {
                     e.printStackTrace();
                 }
             }
+            distance = new int[number][number];
+            floyd();
         } catch (IOException i) {
             i.printStackTrace();
+        }
+    }
+
+    private void floyd() {
+        int number = units.length;
+        for(int i=0;i<number;i++){
+            for(int j=0;j<number;j++){
+                distance[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        for (MapUnit u : units) {
+            for (MapEdge e : u.edge) {
+                distance[u.mark][e.adjedg] = e.distance;
+            }
+        }
+        for (int k = 0; k < number; k++) {
+            for (int i = 0; i < number; i++) {
+                for (int j = 0; j < number; j++) {
+                    if (i != j && i != k) {
+                        if(distance[i][j] > distance[i][k]+distance[k][j]){
+                            distance[i][j] = distance[i][k] + distance[k][j];
+                        }
+                    }
+                }
+            }
         }
     }
 
