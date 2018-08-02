@@ -39,7 +39,7 @@ function do_match() {
   var req = {
     'sid': sid
   };
-  //alert("开始匹配，请耐心等待");
+  alert("开始匹配，请耐心等待");
   $.ajax({
     url: "/api/session/match",
     type: "POST",
@@ -47,7 +47,7 @@ function do_match() {
     data: JSON.stringify(req),
     beforeSend:function(){ 
 
-      $("#loading").html("<img src='loading'>");
+      $("#loading").html("<img src='./assets/img/loading.gif'>");
 
    }, 
     success: function (data, status) {

@@ -60,6 +60,7 @@
       display: none;
     } */
   </style>
+  <title>激斗红潮</title>
 </head>
 
 <body>
@@ -200,7 +201,7 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        // do_initplayer(4);
+        // do_initplayer(12);
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
         // alert(player[0].body.dynamic);
@@ -697,7 +698,7 @@
       }
       else if (state == "choose hero") {
         req = {
-          hero: "fire"
+          hero: herolist[myIndex]
         };
       }
       else if (state == "start game") {
@@ -774,7 +775,7 @@
     var scoreList = [];
     function do_callback(data, status) {
       if (state == "choose hero") {
-        statepadtext_body.text = '选择英雄阶段';
+        statepadtext_body.text = '英雄分配阶段';
         myIndex = data.myIndex;
         allUserInfo = data.allUserInfo;
         herolist = data.herolist;
@@ -786,7 +787,6 @@
           statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
         }
         pedometer = 0;
-        do_checkcard();
       }
       else if (state == "start game") {
         team_result = data.teamResult;
