@@ -33,4 +33,8 @@ var changepf;
 var backpf;
 var backcp;
 var change;
+var forget;
+var backloginfp;
+var backlogin;
+var register;
 
