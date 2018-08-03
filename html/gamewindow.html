@@ -891,8 +891,10 @@
           }
           else {
               statusbox.text += "玩家" + i + ": 未选择明牌\n";
-              if (i == myIndex) statetips.text = '现在，你应该使用你的出拳牌了'
-              checkcardlock(checkbutton);
+              if (i == myIndex) {
+                  statetips.text = '现在，你应该使用你的出拳牌了'
+                  checkcardlock(checkbutton);
+              }
           }
         }
       }
