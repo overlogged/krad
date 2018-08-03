@@ -107,7 +107,7 @@ function do_login() {
     contentType: 'application/json',
     data: JSON.stringify(req),
     success: function (data, status) {
-      window.location.href="krad.html?sid="+sid;  
+      window.location.href="krad.html?sid="+data.sid;  
     },
     error: function (data, status) {
       alert("用户名或密码错误");
