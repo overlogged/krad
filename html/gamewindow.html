@@ -1181,6 +1181,7 @@
           },
           error: function (data, status) {
               console.log(data);
+              alert(date.statusCode);
               if ((timeout <= 3) && (data.statusCode =='503 Service Unavailable')) {
               timeout++;
               request(msg, callback);
