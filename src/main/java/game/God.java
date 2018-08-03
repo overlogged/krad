@@ -11,6 +11,7 @@ public class God {
     private boolean humanWin;       // whether human team wins
     private boolean zombieWin;      // whether zombie team wins
     private Map map;                // map of the game
+    private int accountNum = 0;
     private String[] heroList = {"Calculus","Linear Algebra","PDE","Mathematical Analysis"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
@@ -138,21 +139,29 @@ public class God {
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 1){
+                            if(accountNum == playerNum)
+                                accountNum = 0;
                             skillsAccount();
                             result = GodHelper.toSkillsAccount("fire account");
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 2){
+                            if(accountNum == playerNum)
+                                accountNum = 0;
                             fireAccount();
                             result = GodHelper.toFireAccount("move account",healthPointList);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 3){
+                            if(accountNum == playerNum)
+                                accountNum = 0;
                             moveAccount();
                             result = GodHelper.toMoveAccount("element account",locationList);
                             playerState[playerIndex] += 1;
                         }
                         else if(playerState[playerIndex] == 4){
+                            if(accountNum == 4)
+                                accountNum = 0;
                             elemAccount();
                             result = GodHelper.toElemAccount("if human wins",elementList);
                             playerState[playerIndex] += 1;
@@ -573,47 +582,58 @@ public class God {
 
     // functions for ACTION stage
     private void depositAccount(){
-        for(int i = 0;i < playerNum;i++) {
-            PlayerChecker.energyConsume(allPlayers[i], allPlayers[i].energyConsume);
-            if (allPlayers[i].isWin)
-                PlayerChecker.energyAcq(allPlayers[i], allPlayers[i].gambleNum);
-            energyList[i] = allPlayers[i].energy;
+        if(accountNum == 0) {
+            for (int i = 0; i < playerNum; i++) {
+                PlayerChecker.energyConsume(allPlayers[i], allPlayers[i].energyConsume);
+                if (allPlayers[i].isWin)
+                    PlayerChecker.energyAcq(allPlayers[i], allPlayers[i].gambleNum);
+                energyList[i] = allPlayers[i].energy;
+            }
         }
+        accountNum += 1;
     }
     private void skillsAccount(){}     //TODO:skills
     private void fireAccount(){
-        for(int i = 0;i < playerNum;i++) {
-            if (allPlayers[i].stratDecision == GambleChecker.FIRE) {
-                if(allPlayers[i].fireTarget == -1)
-                    break;
-                PlayerChecker.fire(map, allPlayers[i], allPlayers[allPlayers[i].fireTarget]);
+        if(accountNum == 0) {
+            for (int i = 0; i < playerNum; i++) {
+                if (allPlayers[i].stratDecision == GambleChecker.FIRE) {
+                    if (allPlayers[i].fireTarget == -1)
+                        break;
+                    PlayerChecker.fire(map, allPlayers[i], allPlayers[allPlayers[i].fireTarget]);
+                }
+                healthPointList[i] = allPlayers[i].healthPoint;
             }
-            healthPointList[i] = allPlayers[i].healthPoint;
         }
+        accountNum += 1;
     }
     private void moveAccount(){
-        for(int i = 0;i < playerNum;i ++) {
-            if (decisionChoices[i] == GambleChecker.MOVE) {
-                if(allPlayers[i].moveDirection == -1)
-                    break;
-                allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
+        if(accountNum == 0) {
+            for (int i = 0; i < playerNum; i++) {
+                if (decisionChoices[i] == GambleChecker.MOVE) {
+                    if (allPlayers[i].moveDirection == -1)
+                        break;
+                    allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
+                }
+                locationList[i] = allPlayers[i].preLoc;
             }
-            locationList[i] = allPlayers[i].preLoc;
         }
+        accountNum += 1;
     }
     private void elemAccount(){
         int elemNum = 0;
-        for(int i = 0;i < playerNum;i++){
-            if (map.units[allPlayers[i].preLoc].status == 2)
-            {
-                allPlayers[i].hasElem = true;
-                elementList[i] = 1;
-                for(int j = 0;j < playerNum;j++){
-                    if(elementList[j] == 1)
-                        elemNum += 1;
+        if(accountNum == 0) {
+            for (int i = 0; i < playerNum; i++) {
+                if (map.units[allPlayers[i].preLoc].status == 2) {
+                    allPlayers[i].hasElem = true;
+                    elementList[i] = 1;
+                    for (int j = 0; j < playerNum; j++) {
+                        if (elementList[j] == 1)
+                            elemNum += 1;
+                    }
                 }
             }
         }
+        accountNum += 1;
     }
     private void humanVictory(){
         for(int i = 0;i < playerNum;i++) {
