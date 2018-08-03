@@ -596,7 +596,6 @@
         player[i].inputEnabled = true;
       }
       document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 225;
-      pointer = game.add.sprite(player[myIndex].body.x - 15, player[myIndex].body.y - 62, 'pointer');
       start = true;
     }
 
@@ -851,6 +850,7 @@
             statusbox.text += "玩家" + i + ": 身份为战术小队\n";
           }
         }
+        pointer = game.add.sprite(player[myIndex].body.x - 15, player[myIndex].body.y - 62, 'pointer');
       }
       else if (state == "choose strategy decision") {
         checkcardunlock(checkbutton);
@@ -924,7 +924,7 @@
       }
       else if (state == "ACTION: deposit account") {
         checkcardunlock(checkbutton);
-        var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能'];
+        var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能','蓄能'];
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
         gambleChoices = data.gambleChoices;
@@ -933,7 +933,7 @@
         fireList = data.fireList;
         statusbox.text += "玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n            使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+          statusbox.text += "玩家" + i + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
         }
         statusbox.text += "玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
