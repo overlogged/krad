@@ -37,4 +37,5 @@ var forget;
 var backloginfp;
 var backlogin;
 var register;
+var setpw;
 
