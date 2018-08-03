@@ -838,12 +838,12 @@
         checkcardunlock(checkbutton);
         team_result = data.teamResult;
         heroChoices = data.heroChoices;
-        statusbox.text += "玩家选择的英雄为：\n";
+        statusbox.text += "\n玩家选择的英雄为：\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 选择了英雄" + heroChoices[i] + "\n";
         }
         do_initplayer(4);
-        statusbox.text += "玩家的身份为：\n";
+        statusbox.text += "\n玩家的身份为：\n";
 
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
@@ -904,7 +904,7 @@
         decisionChoices = data.decisionChoices;
         seenCardChoices = data.seenCardChoices;
         var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
-        statusbox.text += "玩家选择的明牌情况为：\n";
+        statusbox.text += "\n玩家选择的明牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           if (seenCardChoices[i] != 0) {
             statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
@@ -938,11 +938,11 @@
         cardNumList = data.cardNumList;
         playerWinList = data.playerWinList;
         fireList = data.fireList;
-        statusbox.text += "玩家选择的出牌情况为：\n";
+        statusbox.text += "\n玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
         }
-        statusbox.text += "玩家的开火情况为:\n";
+        statusbox.text += "\n玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
           if (fireList[i] != -1) {
             statusbox.text += "玩家" + i + ": 向玩家" + fireList[i] + "开火射击，" + fireList[i] + "号玩家生命\n值下降\n";
@@ -983,7 +983,7 @@
         statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
         elemList = data.locationList;
-        statusbox.text += "第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
+        statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
@@ -1004,7 +1004,7 @@
         checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束';
         scoreList = data.scoreList;
-        statusbox.text += "游戏结束，各个玩家的分数为:\n";
+        statusbox.text += "\n游戏结束，各个玩家的分数为:\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
         }
@@ -1021,7 +1021,7 @@
             statusbox.text += "玩家" + i + "被感染，成为感染者\n";
           }
         }
-        statusbox.text += "第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
+        statusbox.text += "\n第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
         for (var i = 0; i < player_num; i++) {
           if (data.teamList[i] == 1) {
             statusbox.text += "玩家" + i + ": 身份为感染者\n";
@@ -1046,6 +1046,7 @@
         do_fillcardlist();
         pedometer = 0;
         refreshcard();
+        gamerank++;
       }
     }
 
