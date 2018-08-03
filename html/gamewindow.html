@@ -1146,7 +1146,7 @@
       var seent2 = JSON.stringify(req);
     }
 
-    var timeout = 0;
+    //var timeout = 0;
 
     function request(msg, callback) {
       sid = parseInt(url.split("?sid=")[1]);
@@ -1181,12 +1181,11 @@
           },
           error: function (data, status) {
               console.log(data);
-              alert(data.statusCode);
-              if ((timeout <= 3) && (data.statusCode == 503)) {
+              /*if ((timeout <= 3) && (data.statusCode == 503)) {
               timeout++;
               request(msg, callback);
             }
-            else alert("非常抱歉，服务器宕机，返回匹配界面");
+            else*/ alert("非常抱歉，服务器宕机，返回匹配界面");
           }
         });
       }
