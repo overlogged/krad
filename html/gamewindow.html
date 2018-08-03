@@ -1008,7 +1008,7 @@
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
         }
-        window.location.href = "krad.html";
+        window.location.href = "krad.html?sid=" + sid;
       }
       else if (state == "desert account") {
         checkcardunlock(checkbutton);
