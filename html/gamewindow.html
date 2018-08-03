@@ -912,7 +912,7 @@
         fireList = data.fireList;
         statusbox.text += "玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "：选择的策略为"+lookup_table[decisionChoices[i]]+"\n     使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+          statusbox.text += "玩家" + i + "：选择的策略为"+decisionChoices[i]+"\n     使用了" + cardNumList[i] + "张" + gambleChoices[i] + "\n";
         }
         statusbox.text += "玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
