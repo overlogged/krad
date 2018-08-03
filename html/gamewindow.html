@@ -652,8 +652,8 @@
             statetips.text = '请选择你的决策，缺省则为蓄能';
             break;
           case 5:
-            checkcardunlock(checkbutton);
-            for (j = 0; j < 4; j++) {
+              checkcardunlock(checkbutton);
+              for (j = 0; j < player_num; j++) {
               if (fire_union[j] != 0) {
                 p_choose[j].destroy();
                 p_text[j].alpha = 0;
