@@ -186,25 +186,11 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             result = GodHelper.toDesertAccount("card distribute",allPlayers[playerIndex].energy,playerHandCard);
+                            playerState[playerIndex] += 1;
+                        }
+                        else if(playerState[playerIndex] == 8){
+                            waitAllPlayers(playerIndex);
                             phaseState = PhaseState.PREPARE;
-                            playerState[playerIndex] = 0;
-                            seen_card_count = 0;
-                            gamble_count = 0;
-                            desert_count = 0;
-                            // reset all temp variables
-                            for(int i = 0;i < playerNum;i++){
-                                allPlayers[i].stratDecision = GambleChecker.DEPOSIT;
-                                allPlayers[i].fireTarget = -1;
-                                allPlayers[i].moveDirection = -1;
-                                availableFireTarget[i] = -1;
-                                availableMoveDirection[i] = -1;
-                                decisionChoices[i] = GambleChecker.DEPOSIT;
-                                seenCardChoices[i] = 0;
-                                gambleChoices[i] = GambleChecker.PAPER;
-                                cardNumList[i] = 0;
-                                playerWinList[i] = 0;
-                                fireList[i] = -1;
-                            }
                         }
                         break;
                 }
@@ -220,32 +206,6 @@ public class God {
         }
 
         return result;
-    }
-
-    /**
-     * units code
-     * wait all players to send message
-     */
-    private final TreeMap<GameState,Integer> wait_map = new TreeMap<GameState, Integer>();
-    private void waitAllPlayers(){
-        synchronized (wait_map){
-            Integer counter = wait_map.get(gameState);
-            if(counter==null) counter = 0;
-            counter++;
-            wait_map.put(gameState,counter);
-            if(counter < playerNum){
-                do{
-                    try{
-                        wait_map.wait();
-                    }catch (Exception ex){
-                        ex.printStackTrace();
-                    }
-                    counter = wait_map.get(gameState);
-                }while (counter < playerNum);
-            } else {
-                wait_map.notifyAll();
-            }
-        }
     }
 
     // functions for INIT stage
@@ -702,6 +662,41 @@ public class God {
                     }
                 }
             }else{
+                this.notifyAll();
+            }
+        }
+    }
+    private int wait_count = 0;
+    private void waitAllPlayers(int playerIndex){
+        synchronized (this){
+            wait_count += 1;
+            if(wait_count < playerNum){
+                while(wait_count < playerNum){
+                    try{
+                        this.wait();
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            }else{
+                playerState[playerIndex] = 0;
+                seen_card_count = 0;
+                gamble_count = 0;
+                desert_count = 0;
+                // reset all temp variables
+                for(int i = 0;i < playerNum;i++){
+                    allPlayers[i].stratDecision = GambleChecker.DEPOSIT;
+                    allPlayers[i].fireTarget = -1;
+                    allPlayers[i].moveDirection = -1;
+                    availableFireTarget[i] = -1;
+                    availableMoveDirection[i] = -1;
+                    decisionChoices[i] = GambleChecker.DEPOSIT;
+                    seenCardChoices[i] = 0;
+                    gambleChoices[i] = GambleChecker.PAPER;
+                    cardNumList[i] = 0;
+                    playerWinList[i] = 0;
+                    fireList[i] = -1;
+                    }
                 this.notifyAll();
             }
         }

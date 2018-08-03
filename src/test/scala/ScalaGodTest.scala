@@ -49,7 +49,7 @@ object ScalaGodTest extends MyJsonProtocol{
 
   def test1(): Unit ={
     MapGenerator.map1()
-    val sids = 0 to 1
+    val sids = 0 to 3
     val god = new God
     god.initialPlayer(sids.toArray)
     val fs = for(sid<-sids)
