@@ -2,31 +2,31 @@ package game;
 
 import server.Server;
 
-class MapChecker {
+public class MapChecker {
 
-    static int tryMove(Map m, int i_current, int i_next, int energy) {
+    public static int tryMove(Map m, int i_current, int i_next, int energy) {
 
         // first step
-        MapUnit back,current,next;
+        MapUnit current,next;
 
-        int dis = m.distance[i_current][i_next];
-        if(energy>=dis){
-            energy-=dis;
-            back = m.units[i_current];
+        int dis2org = m.distance[i_current][i_next];
+        if(energy>=dis2org){
+            energy-=dis2org;
             current = m.units[i_next];
-            if(current.rank>back.rank) energy = 0;
+            if(current.rank>m.units[i_current].rank) energy = 0;
 
             while (energy > 0) {
                 next = null;
-                dis = 0;
+                int dis = 0;
 
                 // find next
                 for (MapEdge e : current.edge) {
-                    if (back.mark != e.adjedg) {
+                    if (m.distance[i_current][e.adjedg]>dis2org) {
                         if (energy >= e.distance) {
                             if (next == null || e.distance > dis) {
                                 next = m.units[e.adjedg];
                                 dis = e.distance;
+                                dis2org = m.distance[i_current][e.adjedg];
                             }
                         }
                     }
@@ -40,7 +40,6 @@ class MapChecker {
                 if (next.rank > current.rank) {
                     energy = 0;
                 }
-                back = current;
                 current = next;
             }
 
