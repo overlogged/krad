@@ -97,6 +97,7 @@
     var fire_power = [3, 3, 3, 3];
     var move_power = [4, 4, 4, 4];
     var identity = ["战术小队", "战术小队", "战术小队", "战术小队"];
+    var pointer;
     var map = [{
       x: 360,
       y: 850
@@ -210,6 +211,7 @@
         game.load.image('status2', 'assets/img/gamewindow/status2.png');
         game.load.image('status3', 'assets/img/gamewindow/status3.png');
         game.load.image('status4', 'assets/img/gamewindow/status4.png');
+        game.load.image('pointer', 'assets/img/gamewindow/self_pointer.png');
       },
 
       create: function () {
@@ -218,7 +220,8 @@
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        //  do_initplayer(12);
+        do_initplayer(12);
+        pointer = game.add.sprite(player[0].x,player[0].y,'pointer');
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
         // alert(player[0].body.dynamic);
