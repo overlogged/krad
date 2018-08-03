@@ -1056,12 +1056,12 @@
       else {
         var temp = ((button.angle) / 45 + 3);
       }
-      checkcardunlock(checkbutton);
+      //checkcardunlock(checkbutton);
       do_target(temp, -1);
     }
     function fix_choose(button) {
       var temp = (button.x - 740) / 70;
-      checkcardunlock(checkbutton);
+      //checkcardunlock(checkbutton);
       do_target(-1, temp);
     }
 
@@ -1132,6 +1132,7 @@
         moveDirection: direction,
         fireTarget: target
       }
+      checkcardunlock(checkbutton);
       do_checkcard();
     }
 
