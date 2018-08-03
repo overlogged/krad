@@ -221,7 +221,7 @@
         background.height = game.height;
         background.width = game.width;
         do_initplayer(12);
-        pointer = game.add.sprite(player[0].x,player[0].y,'pointer');
+
         // cursors = game.input.keyboard.createCursorKeys();
         game.world.setBounds(0, 0, game.width, game.height);
         // alert(player[0].body.dynamic);
@@ -445,16 +445,16 @@
       else if (cardtargeted[num]) { //a button is about to be untargeted
         cardtargeted[num] = 0;
         button.setFrames(1, 0, 0, 0);
-          san--;
-          if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
+        san--;
+        if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
         if (pedometer == 1) steerTGP(0, cardlist[num]);
       }
       else { //a button is about to be targeted
         cardtargeted[num] = 1;
         button.setFrames(1, 1, 1, 1);
-          san++;
-          if (pedometer == 2) if (san) checkcardunlock(checkbutton);
+        san++;
+        if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
         if (pedometer == 1) steerTGP(1, cardlist[num]);
       }
@@ -558,6 +558,8 @@
       else {
         document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 240;
       }
+      pointer.x = player[myIndex].x - 15;
+      pointer.y = player[myIndex].y - 62;
     }
 
     function do_poison(people) {
@@ -590,6 +592,7 @@
         player[i].inputEnabled = true;
       }
       document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 225;
+      pointer = game.add.sprite(player[myIndex].x - 15, player[myIndex].y - 62, 'pointer');
       start = true;
     }
 
@@ -607,8 +610,8 @@
     function do_targetgenerate(fire_union) {
       for (var z = 0; z < 4; z++) {
         if (fire_union[z] != 0) {
-          p_choose[z] = card.add.button(740+z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
-          p_text[z] = card.add.bitmapText(750+ z * 70, 80, 'chiller', 'player' + z.toString(), 28);
+          p_choose[z] = card.add.button(740 + z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
+          p_text[z] = card.add.bitmapText(750 + z * 70, 80, 'chiller', 'player' + z.toString(), 28);
         }
       }
     }
@@ -682,7 +685,7 @@
       //alert('sending completed');
       var j;
       var g = [];
-      if ((checkcardavaliable == 0)&&(autoskip==0)) alert("操作受限");
+      if ((checkcardavaliable == 0) && (autoskip == 0)) alert("操作受限");
       else {
         switch (pedometer) {
           case 1:
@@ -778,8 +781,8 @@
         }
         else if (state == "card distribute") {
           req = {}
-          }
-          checkcardlock(checkbutton);
+        }
+        checkcardlock(checkbutton);
         var seent = JSON.stringify({
           'sid': parseInt(sid),
           'msg': JSON.stringify(req)
@@ -791,7 +794,7 @@
 
 
 
-      var autoskip = 0;
+    var autoskip = 0;
     var team_result = [0, 0, 0, 1];
     var allUserInfo = [];
     var herolist = [];
@@ -808,7 +811,7 @@
     var scoreList = [];
     function do_callback(data, status) {
       if (state == "choose hero") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
         myIndex = data.myIndex;
         allUserInfo = data.allUserInfo;
@@ -823,7 +826,7 @@
         pedometer = 0;
       }
       else if (state == "start game") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         team_result = data.teamResult;
         heroChoices = data.heroChoices;
         statusbox.text += "玩家选择的英雄为：\n";
@@ -846,9 +849,9 @@
         }
       }
       else if (state == "choose strategy decision") {
-          checkcardunlock(checkbutton);
-          statepadtext_body.text = '决策阶段';
-          statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '决策阶段';
+        statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
         req = {
           decision: -1,
           moveDirection: -1,
@@ -863,16 +866,16 @@
 
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '明牌阶段';
-          if (state == "must choose seen card") {
-              statetips.text = '你手中没有出拳牌,必须选择一张明牌';
-              checkcardlock(checkbutton);
-              req = {
-                  seenCard: 1
-              }
+        if (state == "must choose seen card") {
+          statetips.text = '你手中没有出拳牌,必须选择一张明牌';
+          checkcardlock(checkbutton);
+          req = {
+            seenCard: 1
           }
-          else statetips.text = '如果需要，你可以选择使用明牌而不是出拳牌';
+        }
+        else statetips.text = '如果需要，你可以选择使用明牌而不是出拳牌';
         checkcardlock(checkbutton);
         cardlist = data.handCards;
         do_fillcardlist();
@@ -880,11 +883,11 @@
         refreshcard();
       }
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '出拳阶段';
         if (state == "GAMBLE: choose gamble") {
           pedometer = 2;
-            refreshcard();
+          refreshcard();
         }
         do_gamblecard(empty);
         decisionChoices = data.decisionChoices;
@@ -893,30 +896,30 @@
         statusbox.text += "玩家选择的明牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           if (seenCardChoices[i] != 0) {
-              statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
-              if (i == myIndex) statetips.text='你在之前已经选择过了明牌出拳，现在你无法使用出拳牌，请进入下一阶段'
+            statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+            if (i == myIndex) statetips.text = '你在之前已经选择过了明牌出拳，现在你无法使用出拳牌，请进入下一阶段'
           }
           else {
-              statusbox.text += "玩家" + i + ": 未选择明牌\n";
-              if (i == myIndex) {
-                  statetips.text = '现在，你应该使用你的出拳牌了'
-                  checkcardlock(checkbutton);
-              }
+            statusbox.text += "玩家" + i + ": 未选择明牌\n";
+            if (i == myIndex) {
+              statetips.text = '现在，你应该使用你的出拳牌了'
+              checkcardlock(checkbutton);
+            }
           }
         }
       }
       else if ((state == "win judge")) {
-          checkcardunlock(checkbutton);
-          statetips.text = ' ';
+        checkcardunlock(checkbutton);
+        statetips.text = ' ';
         statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-       
+
       }
       else if (state == "ACTION: deposit account") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能'];
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
@@ -926,7 +929,7 @@
         fireList = data.fireList;
         statusbox.text += "玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "：选择的策略为"+decisionChoices[i]+"\n          使用了" + cardNumList[i] + "张" + gambleChoices[i] + "\n";
+          statusbox.text += "玩家" + i + "：选择的策略为" + decisionChoices[i] + "\n          使用了" + cardNumList[i] + "张" + gambleChoices[i] + "\n";
         }
         statusbox.text += "玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
@@ -940,32 +943,32 @@
         autoskip = 1;
         for (var i = 0; i < 6; i++) {
           do_checkcard();
-          }
-          autoskip = 0;
+        }
+        autoskip = 0;
       }
       else if (state == "skills account") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '蓄能结算';
         eneregyList = data.eneregyList;
       }
       else if (state == "fire account") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '开火结算';
       }
       else if (state == "move account") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '移动结算';
         healthPointList = data.healthPointList;
       }
       else if (state == "element account") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '要素判定';
         playerloc_union = data.locationList;
         elemList = data.elemList;
         do_move();
       }
       else if (state == "if human wins") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
         elemList = data.locationList;
@@ -975,31 +978,31 @@
         }
       }
       else if (state == "Game Over, human wins") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束，人类获胜！';
       }
       else if (state == "infection account") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '感染阶段';
       }
       else if (state == "Game Over, zombie wins") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束，感染者获胜！';
       }
       else if (state == "END") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束';
         scoreList = data.scoreList;
         statusbox.text += "游戏结束，各个玩家的分数为:\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
         }
-        window.location.href="krad.html";
+        window.location.href = "krad.html";
       }
       else if (state == "desert account") {
-          checkcardunlock(checkbutton);
-          statepadtext_body.text = '弃牌阶段';
-          statetips.text = '你现在应该丢弃你不需要的牌';
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '弃牌阶段';
+        statetips.text = '你现在应该丢弃你不需要的牌';
 
         for (var i = 0; i < player_num; i++) {
           if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
@@ -1023,7 +1026,7 @@
         refreshcard();
       }
       else if (state == "card distribute") {
-          checkcardunlock(checkbutton);
+        checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
         statepadtext_body.text = '发牌阶段';
         statetips.text = '请点击按钮进行入新的一回合';
@@ -1046,7 +1049,7 @@
       checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
-      var temp = (button.x-740) / 70;
+      var temp = (button.x - 740) / 70;
       do_target(-1, temp);
       checkcardunlock(checkbutton);
     }
@@ -1177,12 +1180,12 @@
             timeout = 0;
           },
           error: function (data, status) {
-              console.log(data);
-              if (timeout <= 3) {
-                  timeout++;
-                  request(msg, callback);
-              }
-              else alert("非常抱歉，服务器宕机，返回匹配界面");
+            console.log(data);
+            if (timeout <= 3) {
+              timeout++;
+              request(msg, callback);
+            }
+            else alert("非常抱歉，服务器宕机，返回匹配界面");
           }
         });
       }
