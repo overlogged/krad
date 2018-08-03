@@ -452,7 +452,10 @@
         san--;
         if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
-        if (pedometer == 1) steerTGP(0, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(num);
+          steerTGP(0, cardlist[num]);
+        }
       }
       else { //a button is about to be targeted
         cardtargeted[num] = 1;
@@ -460,7 +463,10 @@
         san++;
         if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
-        if (pedometer == 1) steerTGP(1, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(-1);
+          steerTGP(1, cardlist[num]);
+        }
       }
     }
 
@@ -694,7 +700,7 @@
           case 1:
             for (j = 0; j <= 17; j++) {
               if (cardtargeted[j]) {
-                do_decision(j);
+                //do_decision(j);
                 steerTGP(0, cardlist[j]);
               }
             }
@@ -856,6 +862,7 @@
         checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
         statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
+        p_decision = -1;
         req = {
           decision: -1,
           moveDirection: -1,
@@ -1050,12 +1057,12 @@
         var temp = ((button.angle) / 45 + 3);
       }
       do_target(temp, -1);
-      checkcardunlock(checkbutton);
+      //checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
       var temp = (button.x - 740) / 70;
       do_target(-1, temp);
-      checkcardunlock(checkbutton);
+      //checkcardunlock(checkbutton);
     }
 
 
@@ -1125,6 +1132,7 @@
         moveDirection: direction,
         fireTarget: target
       }
+      do_checkcard();
     }
 
     function do_seencard(rank) {
