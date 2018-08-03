@@ -72,7 +72,7 @@ public class Map {
             }
             s.append("\n");
         }
-        Server.log("floyd",s.toString());
+//        Server.log("floyd",s.toString());
     }
 
     public void toFile(String filename) {
