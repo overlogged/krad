@@ -63,6 +63,7 @@ public class God {
                 switch(phaseState){
                     case PREPARE:
                         if(playerState[playerIndex] == 0){
+                            wait_count = 0;
                             GambleChecker.cardDistribute(cardHeap,allPlayers[playerIndex],4);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             seenCardJudge(playerIndex,playerHandCard);
@@ -186,11 +187,7 @@ public class God {
                             for(int i = 0;i < allPlayers[playerIndex].handCardsNum;i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             result = GodHelper.toDesertAccount("card distribute",allPlayers[playerIndex].energy,playerHandCard);
-                            playerState[playerIndex] += 1;
-                        }
-                        else if(playerState[playerIndex] == 8){
                             waitAllPlayers(playerIndex);
-                            phaseState = PhaseState.PREPARE;
                         }
                         break;
                 }
@@ -669,6 +666,7 @@ public class God {
     private int wait_count = 0;
     private void waitAllPlayers(int playerIndex){
         synchronized (this){
+            playerState[playerIndex] = 0;
             wait_count += 1;
             if(wait_count < playerNum){
                 while(wait_count < playerNum){
@@ -679,7 +677,7 @@ public class God {
                     }
                 }
             }else{
-                playerState[playerIndex] = 0;
+                phaseState = PhaseState.PREPARE;
                 seen_card_count = 0;
                 gamble_count = 0;
                 desert_count = 0;
