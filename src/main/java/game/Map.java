@@ -1,5 +1,8 @@
 package game;
 
+import scala.collection.mutable.StringBuilder;
+import server.Server;
+
 import java.io.*;
 
 public class Map {
@@ -42,7 +45,7 @@ public class Map {
         int number = units.length;
         for(int i=0;i<number;i++){
             for(int j=0;j<number;j++){
-                distance[i][j] = Integer.MAX_VALUE;
+                distance[i][j] = 100000;
             }
         }
         for (MapUnit u : units) {
@@ -61,6 +64,15 @@ public class Map {
                 }
             }
         }
+        StringBuffer s = new StringBuffer();
+        for(int i=0;i<number;i++){
+            for(int j=0;j<number;j++){
+                s.append(distance[i][j]);
+                s.append(" ");
+            }
+            s.append("\n");
+        }
+        Server.log("floyd",s.toString());
     }
 
     public void toFile(String filename) {

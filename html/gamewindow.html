@@ -452,7 +452,10 @@
         san--;
         if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
-        if (pedometer == 1) steerTGP(0, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(num);
+          steerTGP(0, cardlist[num]);
+        }
       }
       else { //a button is about to be targeted
         cardtargeted[num] = 1;
@@ -460,7 +463,10 @@
         san++;
         if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
-        if (pedometer == 1) steerTGP(1, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(-1);
+          steerTGP(1, cardlist[num]);
+        }
       }
     }
 
@@ -596,7 +602,6 @@
         player[i].inputEnabled = true;
       }
       document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 225;
-      pointer = game.add.sprite(player[myIndex].x - 15, player[myIndex].y - 62, 'pointer');
       start = true;
     }
 
@@ -612,7 +617,7 @@
     }
 
     function do_targetgenerate(fire_union) {
-      for (var z = 0; z < 4; z++) {
+      for (var z = 0; z < player_num; z++) {
         if (fire_union[z] != 0) {
           p_choose[z] = card.add.button(740 + z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
           p_text[z] = card.add.bitmapText(750 + z * 70, 80, 'chiller', 'player' + z.toString(), 28);
@@ -634,12 +639,12 @@
           case 4:
             checkcardlock(checkbutton);
             do_arrowgenerate(arrow_union);
-            statetips.text = '请在右侧选择你要移动的方向，按确定键提交';
+            statetips.text = '请在右侧选择你要移动的方向';
             break;
           case 5:
             checkcardlock(checkbutton);
             do_targetgenerate(fire_union);
-            statetips.text = '请在右侧选择你开火的目标，按确定键提交';
+            statetips.text = '请在右侧选择你开火的目标';
             break;
         }
       } else {
@@ -649,11 +654,11 @@
             for (j = 0; j < 8; j++) {
               if (arrow_union[j] != 0) arrow[j].destroy();
             }
-            statetips.text = '请选择你的决策，缺省则为蓄能';
+            statetips.text = '请选择你的决策，直接确定则为蓄能';
             break;
           case 5:
-            checkcardunlock(checkbutton);
-            for (j = 0; j < 4; j++) {
+              checkcardunlock(checkbutton);
+              for (j = 0; j < player_num; j++) {
               if (fire_union[j] != 0) {
                 p_choose[j].destroy();
                 p_text[j].alpha = 0;
@@ -695,7 +700,7 @@
           case 1:
             for (j = 0; j <= 17; j++) {
               if (cardtargeted[j]) {
-                do_decision(j);
+                //do_decision(j);
                 steerTGP(0, cardlist[j]);
               }
             }
@@ -851,11 +856,13 @@
             statusbox.text += "玩家" + i + ": 身份为战术小队\n";
           }
         }
+        pointer = game.add.sprite(player[myIndex].body.x - 15, player[myIndex].body.y - 62, 'pointer');
       }
       else if (state == "choose strategy decision") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
         statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
+        p_decision = -1;
         req = {
           decision: -1,
           moveDirection: -1,
@@ -924,7 +931,7 @@
       }
       else if (state == "ACTION: deposit account") {
         checkcardunlock(checkbutton);
-        var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能'];
+        var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能','蓄能'];
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
         gambleChoices = data.gambleChoices;
@@ -933,7 +940,7 @@
         fireList = data.fireList;
         statusbox.text += "玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "：选择的策略为" + decisionChoices[i] + "\n            使用了" + cardNumList[i] + "张" + gambleChoices[i] + "\n";
+          statusbox.text += "玩家" + i + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
         }
         statusbox.text += "玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
@@ -1049,13 +1056,13 @@
       else {
         var temp = ((button.angle) / 45 + 3);
       }
-      do_target(temp, -1);
       checkcardunlock(checkbutton);
+      do_target(temp, -1);
     }
     function fix_choose(button) {
       var temp = (button.x - 740) / 70;
-      do_target(-1, temp);
       checkcardunlock(checkbutton);
+      do_target(-1, temp);
     }
 
 
@@ -1125,6 +1132,7 @@
         moveDirection: direction,
         fireTarget: target
       }
+      do_checkcard();
     }
 
     function do_seencard(rank) {
