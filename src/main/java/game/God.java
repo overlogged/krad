@@ -248,6 +248,7 @@ public class God {
     private void teamDivide(){
         int zombie = (int)( Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
+        allPlayers[zombie].healthPoint = 12;
         allPlayers[zombie].hasElem = false;
         allPlayers[zombie].firePow = 0;
         allPlayers[zombie].range = 0;
