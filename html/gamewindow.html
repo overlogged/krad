@@ -245,8 +245,8 @@
               }
             }
             else if (is_infor[i]) {
-              infor_text[i].kill();
-              infor[i].kill();
+              infor_text[i].destroy();
+              infor[i].destroy();
               is_infor[i] = false;
             }
           }
@@ -396,8 +396,8 @@
         seencardtext[j].fontSize = 20;
       }
       if (state == "must choose seen card") {
-        seencardslot[3].kill();
-        seencardtext[3].kill();
+          seencardslot[3].destroy();
+          seencardtext[3].destroy();
       }
     }
 
@@ -409,12 +409,12 @@
       num = 3 - num;
       do_seencard(num);
       for (j = 0; j <= 2; j++) {
-        seencardslot[j].kill();
+        seencardslot[j].destroy();
         seencardtext[j].alpha = 0;
       }
       if (state == "choose seen card") {
-        seencardslot[3].kill();
-        seencardtext[3].kill();
+        seencardslot[3].destroy();
+        seencardtext[3].destroy();
       }
     }
 
@@ -565,7 +565,7 @@
     function do_poison(people) {
       var x = player[people].body.x;
       var y = player[people].body.y;
-      player[people].kill();
+      player[people].destroy();
       player[people] = game.add.sprite(x, y, 'poisoner' + (people + 1).toString());
       // player[people].anchor.x = 0.5;
       // player[people].anchor.y = 0.5;
@@ -643,7 +643,7 @@
           case 4:
             checkcardunlock(checkbutton);
             for (j = 0; j < 8; j++) {
-              if (arrow_union[j] != 0) arrow[j].kill();
+              if (arrow_union[j] != 0) arrow[j].destroy();
             }
             statetips.text = '请选择你的决策，缺省则为蓄能';
             break;
@@ -651,7 +651,7 @@
             checkcardunlock(checkbutton);
             for (j = 0; j < 4; j++) {
               if (fire_union[j] != 0) {
-                p_choose[j].kill();
+                p_choose[j].destroy();
                 p_text[j].alpha = 0;
               }
             }
