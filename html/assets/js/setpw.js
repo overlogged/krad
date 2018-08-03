@@ -5,15 +5,31 @@ var state_setpw = {
     game.add.bitmapText(275, 195, 'chiller', 'Password', 54);
     game.add.bitmapText(280, 255, 'chiller', 'Confirm', 54);
 
-    game.add.button(440, 320, 'button', do_confirm, this, 1, 0, 2, 0);
+    setpw = game.add.button(440, 320, 'button', do_confirm, this, 1, 0, 2, 0);
     game.add.bitmapText(460, 325, 'chiller', 'Confirm', 28);
 
+    tooltip9 = game.add.sprite(490, 355, 'tooltip9');
+
+    tooltip9.inputEnabled = true;
+
     show("setpw");
+    tooltip_setpw()
+  },
+  update: function(){
+    if(star){
+      if(setpw.input.pointerOver()){
+        tooltip9.alpha=0.7;
+      }
+      else{
+        tooltip9.alpha=0;
+      }
+    }
 
   }
 }
-
-
+function tooltip_setpw(){
+  star = true; 
+}
 
 function do_confirm() {
   var password = $("#setpw_password").val();
