@@ -11,14 +11,13 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
-import com.typesafe.config
 import com.typesafe.config.ConfigFactory
 import common.MyJsonProtocol
 import spray.json._
 import game._
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 /**
@@ -222,13 +221,15 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("game") {
-        post {
-          entity(as[RequestGame]) { req =>
-            log("post", "game")
-            onComplete(SessionController.gameRequest(req)) {
-              case Success(Some(str)) => complete(str)
-              case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+        withRequestTimeout(Duration.create(300, SECONDS)){
+          post {
+            entity(as[RequestGame]) { req =>
+              log("post", "game")
+              onComplete(SessionController.gameRequest(req)) {
+                case Success(Some(str)) => complete(str)
+                case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
+                case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+              }
             }
           }
         }
