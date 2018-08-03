@@ -65,14 +65,14 @@ object SessionController {
 
   def routine(): Unit = Future {
     while (true) {
-      Thread.sleep(WaitingTime*20)
+      Thread.sleep(WaitingTime * 20)
       this.synchronized {
         states.dropWhile(item => item._2.timestamp < System.currentTimeMillis() - WaitingTime && item._2.state != StatePlaying)
       }
     }
   }
 
-  val ghostGroup = Seq(Array(0), Array(1, 2), Array(3, 4, 5, 6),Array(7,8))
+  val ghostGroup = Seq(Array(0), Array(1, 2), Array(3, 4, 5, 6), Array(7, 8, 9), Array(10, 11))
 
   def addGhost(): Unit = {
     for (arr <- ghostGroup) {
@@ -91,7 +91,7 @@ object SessionController {
       try {
         states.remove(sid)
       } catch {
-        case _:Throwable => {}
+        case _: Throwable => {}
       }
     }
   }
