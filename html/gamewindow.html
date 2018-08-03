@@ -333,7 +333,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -720,7 +720,7 @@
               }
               if (san == 0) break;
             }
-            do_dessert(g);
+            do_desert(g);
             break;
           default:
             //statepadtext_body.text='操作受限';
@@ -1020,7 +1020,7 @@
           }
         }
         team_result = data.teamList;
-        do_dessert(empty);
+        do_desert(empty);
         do_fillcardlist();
         pedometer = 4;
         refreshcard();
@@ -1139,7 +1139,7 @@
       }
     }
 
-    function do_dessert(cardarray) {
+    function do_desert(cardarray) {
       req = {
         desertCardList: cardarray
       }
