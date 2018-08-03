@@ -611,9 +611,9 @@ public class God {
     private void moveAccount(){
         if(accountNum == 0) {
             for (int i = 0; i < playerNum; i++) {
+                if (allPlayers[i].moveDirection == -1)
+                    continue;
                 if (decisionChoices[i] == GambleChecker.MOVE) {
-                    if (allPlayers[i].moveDirection == -1)
-                        break;
                     allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
                 }
                 locationList[i] = allPlayers[i].preLoc;
