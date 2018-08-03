@@ -267,6 +267,7 @@ public class God {
                 allPlayers[i].preLoc = map.fighter_init;
             else if(allPlayers[i].team == Player.ZOMBIE)
                 allPlayers[i].preLoc = map.poisoner_init;
+            locationList[i] = allPlayers[i].preLoc;
         }
     }
 
