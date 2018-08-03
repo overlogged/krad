@@ -72,7 +72,7 @@ object SessionController {
     }
   }
 
-  val ghostGroup = Seq(Array(0), Array(1, 2), Array(3, 4, 5, 6))
+  val ghostGroup = Seq(Array(0), Array(1, 2), Array(3, 4, 5, 6),Array(7,8))
 
   def addGhost(): Unit = {
     for (arr <- ghostGroup) {

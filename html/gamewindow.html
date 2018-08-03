@@ -452,7 +452,10 @@
         san--;
         if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
-        if (pedometer == 1) steerTGP(0, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(-1);
+          steerTGP(0, cardlist[num]);
+        }
       }
       else { //a button is about to be targeted
         cardtargeted[num] = 1;
@@ -460,7 +463,10 @@
         san++;
         if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
-        if (pedometer == 1) steerTGP(1, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(num);
+          steerTGP(1, cardlist[num]);
+        }
       }
     }
 
@@ -633,12 +639,12 @@
           case 4:
             checkcardlock(checkbutton);
             do_arrowgenerate(arrow_union);
-            statetips.text = '请在右侧选择你要移动的方向，按确定键提交';
+            statetips.text = '请在右侧选择你要移动的方向';
             break;
           case 5:
             checkcardlock(checkbutton);
             do_targetgenerate(fire_union);
-            statetips.text = '请在右侧选择你开火的目标，按确定键提交';
+            statetips.text = '请在右侧选择你开火的目标';
             break;
         }
       } else {
@@ -648,7 +654,7 @@
             for (j = 0; j < 8; j++) {
               if (arrow_union[j] != 0) arrow[j].destroy();
             }
-            statetips.text = '请选择你的决策，缺省则为蓄能';
+            statetips.text = '请选择你的决策，直接确定则为蓄能';
             break;
           case 5:
               checkcardunlock(checkbutton);
@@ -694,7 +700,7 @@
           case 1:
             for (j = 0; j <= 17; j++) {
               if (cardtargeted[j]) {
-                do_decision(j);
+                //do_decision(j);
                 steerTGP(0, cardlist[j]);
               }
             }
@@ -856,6 +862,7 @@
         checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
         statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
+        p_decision = -1;
         req = {
           decision: -1,
           moveDirection: -1,
@@ -1050,13 +1057,13 @@
       else {
         var temp = ((button.angle) / 45 + 3);
       }
+      //checkcardunlock(checkbutton);
       do_target(temp, -1);
-      checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
       var temp = (button.x - 740) / 70;
+      //checkcardunlock(checkbutton);
       do_target(-1, temp);
-      checkcardunlock(checkbutton);
     }
 
 
@@ -1126,6 +1133,8 @@
         moveDirection: direction,
         fireTarget: target
       }
+      checkcardunlock(checkbutton);
+      do_checkcard();
     }
 
     function do_seencard(rank) {
