@@ -596,7 +596,7 @@
         player[i].inputEnabled = true;
       }
       document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 225;
-      pointer = game.add.sprite(player[myIndex].x - 15, player[myIndex].y - 62, 'pointer');
+      pointer = game.add.sprite(player[myIndex].body.x - 15, player[myIndex].body.y - 62, 'pointer');
       start = true;
     }
 
@@ -612,7 +612,7 @@
     }
 
     function do_targetgenerate(fire_union) {
-      for (var z = 0; z < 4; z++) {
+      for (var z = 0; z < player_num; z++) {
         if (fire_union[z] != 0) {
           p_choose[z] = card.add.button(740 + z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
           p_text[z] = card.add.bitmapText(750 + z * 70, 80, 'chiller', 'player' + z.toString(), 28);
@@ -652,8 +652,8 @@
             statetips.text = '请选择你的决策，缺省则为蓄能';
             break;
           case 5:
-            checkcardunlock(checkbutton);
-            for (j = 0; j < 4; j++) {
+              checkcardunlock(checkbutton);
+              for (j = 0; j < player_num; j++) {
               if (fire_union[j] != 0) {
                 p_choose[j].destroy();
                 p_text[j].alpha = 0;
@@ -933,7 +933,7 @@
         fireList = data.fireList;
         statusbox.text += "玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += "玩家" + i + "：选择的策略为" + decisionChoices[i] + "\n            使用了" + cardNumList[i] + "张" + gambleChoices[i] + "\n";
+          statusbox.text += "玩家" + i + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n            使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
         }
         statusbox.text += "玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
