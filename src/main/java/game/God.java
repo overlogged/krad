@@ -540,9 +540,9 @@ public class God {
                 return 23;
         } else {
             if (direction == 1)
-                return allPlayers[playerIndex].preLoc++;
+                return allPlayers[playerIndex].preLoc+1;
             else
-                return allPlayers[playerIndex].preLoc--;
+                return allPlayers[playerIndex].preLoc-1;
         }
     }
 
