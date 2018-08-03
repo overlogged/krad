@@ -597,13 +597,14 @@ public class God {
     private void fireAccount(){
         if(accountNum == 0) {
             for (int i = 0; i < playerNum; i++) {
+                if (allPlayers[i].fireTarget == -1)
+                    continue;
                 if (allPlayers[i].stratDecision == GambleChecker.FIRE) {
-                    if (allPlayers[i].fireTarget == -1)
-                        break;
                     PlayerChecker.fire(map, allPlayers[i], allPlayers[allPlayers[i].fireTarget]);
                 }
-                healthPointList[i] = allPlayers[i].healthPoint;
             }
+            for(int i = 0; i < playerNum; i++)
+                healthPointList[i] = allPlayers[i].healthPoint;
         }
         accountNum += 1;
     }
