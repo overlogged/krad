@@ -443,12 +443,15 @@
         cardtargeted[num] = 0;
         button.setFrames(1, 0, 0, 0);
         san--;
+        if (pedometer==2) if (san == 0) checkcardlock();
         if (san == 0) dynamicunlock(num);
         if (pedometer == 1) steerTGP(0, cardlist[num]);
-      } else { //a button is about to be targeted
+      }
+      else { //a button is about to be targeted
         cardtargeted[num] = 1;
         button.setFrames(1, 1, 1, 1);
         san++;
+        if (pedometer==2) if (san) checkcardunlock();
         dynamiclock(num);
         if (pedometer == 1) steerTGP(1, cardlist[num]);
       }
@@ -875,7 +878,6 @@
         if (state == "GAMBLE: choose gamble") {
           pedometer = 2;
             refreshcard();
-            statetips.text = '现在应该使用你的出拳牌了';
         }
         do_gamblecard(empty);
         decisionChoices = data.decisionChoices;
@@ -884,10 +886,13 @@
         statusbox.text += "玩家选择的明牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           if (seenCardChoices[i] != 0) {
-            statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+              statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+              if (i == myIndex) statetips.text='你在之前已经选择过了明牌出拳，现在你无法使用出拳牌，请进入下一阶段'
           }
           else {
-            statusbox.text += "玩家" + i + ": 未选择明牌\n";
+              statusbox.text += "玩家" + i + ": 未选择明牌\n";
+              if (i == myIndex) statetips.text = '现在，你应该使用你的出拳牌了'
+              checkcardlock();
           }
         }
       }
