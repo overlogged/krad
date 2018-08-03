@@ -385,12 +385,6 @@ public class God {
                 }
             }else{
                 GambleChecker.winJudge(playerNum,allPlayers);
-                for(int i = 0;i < playerNum;i++){
-                    if(allPlayers[i].isWin)
-                        scoreList[i] += 5;
-                    else
-                        scoreList[i] -= 5;
-                }
                 this.notifyAll();
             }
         }
@@ -632,8 +626,11 @@ public class God {
     private void skillsAccount(){}     //TODO:skills
     private void fireAccount(){
         for(int i = 0;i < playerNum;i++) {
-            if (allPlayers[i].stratDecision == GambleChecker.FIRE)
+            if (allPlayers[i].stratDecision == GambleChecker.FIRE) {
+                if(allPlayers[i].fireTarget == -1)
+                    break;
                 PlayerChecker.fire(map, allPlayers[i], allPlayers[allPlayers[i].fireTarget]);
+            }
             healthPointList[i] = allPlayers[i].healthPoint;
         }
     }
@@ -655,16 +652,13 @@ public class God {
                     if(elementList[j] == 1)
                         elemNum += 1;
                 }
-                scoreList[i] += elemNum * 25;
             }
-            //TODO: a player got element, he should obtain scores
         }
     }
     private void humanVictory(){
         for(int i = 0;i < playerNum;i++) {
             if ((allPlayers[i].preLoc == map.fighter_evacuate)&(allPlayers[i].hasElem)) {
                 humanWin = true;
-                //TODO: a player arrived at evacuate spot, he should obtain scores
             }
         }
     }
@@ -672,8 +666,6 @@ public class God {
         for(int i = 0;i < playerNum;i++) {
             for(int j = 0;j < playerNum;j++) {
                 PlayerChecker.infection(map,allPlayers[i],allPlayers[j]);
-                if(PlayerChecker.infection(map, allPlayers[i], allPlayers[j]))
-                    scoreList[i] += 25;
             }
         }
         for(int i = 0;i < playerNum;i++)
@@ -744,6 +736,7 @@ public class God {
             allPlayers[i].handCardsNum = 0;
             allPlayers[i].healthPoint = 6;
             allPlayers[i].mot = 4;
+            allPlayers[i].energy = 0;
             allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             allPlayers[i].fireTarget = -1;
             allPlayers[i].moveDirection = -1;
