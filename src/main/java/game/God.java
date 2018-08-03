@@ -588,8 +588,9 @@ public class God {
             if (decisionChoices[i] == GambleChecker.MOVE) {
                 allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
             }
-            locationList[i] = allPlayers[i].preLoc;
         }
+        for(int i = 0; i < playerNum; i++)
+            locationList[i] = allPlayers[i].preLoc;
     }
 
     private void elemAccount() {
