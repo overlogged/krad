@@ -636,8 +636,11 @@ public class God {
     }
     private void moveAccount(){
         for(int i = 0;i < playerNum;i ++) {
-            if (decisionChoices[i] == GambleChecker.MOVE)
+            if (decisionChoices[i] == GambleChecker.MOVE) {
+                if(allPlayers[i].moveDirection == -1)
+                    break;
                 allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
+            }
             locationList[i] = allPlayers[i].preLoc;
         }
     }
