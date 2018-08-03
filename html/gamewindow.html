@@ -1180,7 +1180,8 @@
             timeout = 0;
           },
           error: function (data, status) {
-            console.log(data);
+              console.log(data);
+              alert(" -- " + status);
             if (timeout <= 3) {
               timeout++;
               request(msg, callback);
