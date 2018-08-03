@@ -347,7 +347,7 @@
     var seencard_flag = false;
     var empty = [-1];
     var gamerank = 1;
-    var turn_web =0;
+    var turn_web = 0;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
@@ -1011,7 +1011,7 @@
           statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
         }
         turn_web++;
-        if(turn_web==2){
+        if (turn_web == 2) {
           window.location.href = "krad.html?sid=" + sid;
         }
       }
@@ -1080,7 +1080,7 @@
           fill: "#fffff",
           align: "left",
         })
-        infor_text[player_index].text += "身份:  " + identity[player_index];
+        infor_text[player_index].text += "身份:  " + identity[player_index] + ",编号为" + player_index;
         infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
         infor_text[player_index].text += "\n射程：  ";
         for (var i = 0; i < fire_distance[player_index]; i++) {
@@ -1106,7 +1106,7 @@
           fill: "#fffff",
           align: "left",
         })
-        infor_text[player_index].text += "身份:  " + identity[player_index];
+        infor_text[player_index].text += "身份:  " + identity[player_index]+ ",编号为" + player_index;
         infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
         infor_text[player_index].text += "\n射程：  ";
         for (var i = 0; i < fire_distance[player_index]; i++) {
