@@ -604,8 +604,8 @@
     function do_targetgenerate(fire_union) {
       for (var z = 0; z < 4; z++) {
         if (fire_union[z] != 0) {
-          p_choose[z] = card.add.button(810+z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
-          p_text[z] = card.add.bitmapText(820+ z * 70, 80, 'chiller', 'player' + z.toString(), 28);
+          p_choose[z] = card.add.button(740+z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
+          p_text[z] = card.add.bitmapText(750+ z * 70, 80, 'chiller', 'player' + z.toString(), 28);
         }
       }
     }
@@ -624,10 +624,12 @@
           case 4:
             checkcardlock(checkbutton);
             do_arrowgenerate(arrow_union);
+            statetips.text = '请在右侧选择你要移动的方向，按确定键提交';
             break;
           case 5:
             checkcardlock(checkbutton);
             do_targetgenerate(fire_union);
+            statetips.text = '请在右侧选择你开火的目标，按确定键提交';
             break;
         }
       } else {
@@ -637,6 +639,7 @@
             for (j = 0; j < 8; j++) {
               if (arrow_union[j] != 0) arrow[j].kill();
             }
+            statetips.text = '请选择你的决策，缺省则为蓄能';
             break;
           case 5:
             checkcardunlock(checkbutton);
@@ -645,7 +648,8 @@
                 p_choose[j].kill();
                 p_text[j].alpha = 0;
               }
-            };
+            }
+            statetips.text = '请选择你的决策，缺省则为蓄能';
             break;
         }
       }
@@ -841,7 +845,7 @@
       else if (state == "choose strategy decision") {
           checkcardunlock(checkbutton);
           statepadtext_body.text = '决策阶段';
-          statetips.text = '现在你应当选择一张决策卡，缺省则为蓄能';
+          statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
         req = {
           decision: -1,
           moveDirection: -1,
@@ -1019,6 +1023,7 @@
           checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
         statepadtext_body.text = '发牌阶段';
+        statetips.text = '请点击按钮进行入新的一回合';
         p_decision = -1;    //To reset decision 
         cardlist = data.handCards;
         do_fillcardlist();
@@ -1038,7 +1043,7 @@
       checkcardunlock(checkbutton);
     }
     function fix_choose(button) {
-      var temp = (button.x-810) / 70;
+      var temp = (button.x-740) / 70;
       do_target(-1, temp);
       checkcardunlock(checkbutton);
     }
