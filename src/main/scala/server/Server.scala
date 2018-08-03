@@ -207,8 +207,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("session" / "match") {
-        withRequestTimeout(Duration.Inf) { // todo: 2 min
-          post {
+        withRequestTimeout(Duration.create(2, MINUTES)){
+            post {
             entity(as[RequestMatch]) { req =>
               log("post", "session/match")
               onComplete(SessionController.matchPlayers(req)) {
@@ -221,7 +221,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("game") {
-        withRequestTimeout(Duration.create(300, SECONDS)){
+        withRequestTimeout(Duration.create(5, MINUTES)){
           post {
             entity(as[RequestGame]) { req =>
               log("post", "game")
