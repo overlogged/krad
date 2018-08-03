@@ -1,6 +1,9 @@
 var state_preload = {
   preload: function () {
     game.load.image('background', 'assets/img/background1.png');
+    game.load.image('background2', 'assets/img/background2.png');
+    game.load.image('userbackground', 'assets/img/userbackground.png');
+    game.load.image('userbackground2', 'assets/img/userbackground2.png');
     game.load.image('input', 'assets/img/inputbox1.png', 20, 20);
     game.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
     game.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
@@ -15,6 +18,16 @@ var state_preload = {
     game.load.image('start', 'assets/img/startbutton.png');
     game.load.image('help', 'assets/img/helpbutton.png');
     game.load.image('outprogress','assets/img/outprogress.png');
+    game.load.image('loading','assets/img/loading.gif');
+    game.load.image('tooltip1','assets/img/tooltip1.png');
+    game.load.image('tooltip2','assets/img/tooltip2.png');
+    game.load.image('tooltip3','assets/img/tooltip3.png');
+    game.load.image('tooltip4','assets/img/tooltip4.png');
+    game.load.image('tooltip5','assets/img/tooltip5.png');
+    game.load.image('tooltip6','assets/img/tooltip6.png');
+    game.load.image('tooltip7','assets/img/tooltip7.png');
+    game.load.image('tooltip8','assets/img/tooltip8.png');
+    game.load.image('tooltip9','assets/img/tooltip9.png');
     //game.loda.image('inprogress','assets/img/inprogress.png');
 
 

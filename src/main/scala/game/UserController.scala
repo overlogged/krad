@@ -18,7 +18,7 @@ object UserController {
     UserModel.checkUser(uid).map { _ =>
       val sid = createSession(uid)
       val title = "[Krad] 重置密码"
-      val text = s"请点击以下链接以重置密码： ${config.web_url}krad.html?sid=$sid"
+      val text = s"请点击以下链接以重置密码： ${config.web_url}krad.html?tmpsid=$sid"
       Mail.send(req.email, title, text)
     }
   }

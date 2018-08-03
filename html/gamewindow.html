@@ -4,124 +4,200 @@
 <head>
   <meta charset="utf-8">
   <script type="text/javascript" src="assets/js/phaser.min.js"></script>
-  <script type="text/javascript" src="assets/js/CanvasInput.min.js"></script>
   <link href="assets/css/global.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
   <style>
     #gamecontainer {
-      height: 400px;
+      height: 470px;
       width: 800px;
-      margin: 0px 0px;
-      outline: 0px solid rgb(11, 206, 212);
+      margin: 0px 0px 0px 0px;
       overflow: auto;
+      float: left;
+    }
+
+    #statuscontainer {
+      height: 470px;
+      width: 280px;
+      overflow: auto;
+      overflow-x: hidden;
+      float: left;
     }
 
     #cardcontainer {
-      height: 300px;
-      width: 800px;
-      margin: 0px 0px;
-      outline: 0px solid rgb(11, 206, 212);
-      overflow: auto;
+      height: 170px;
+      width: 1060px;
+      margin: 0px 0px 0px 140px;
+      overflow: hidden;
     }
+
+    .outer-container {
+      margin: 0px 0px 0px 140px;
+      width: 780px;
+      height: 470px;
+      float: left;
+    }
+
+    .outer-container {
+      border: 0px solid purple;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .inner-container {
+      position: absolute;
+      left: 0;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    /* ::-webkit-scrollbar {
+      width: 0px;
+    } */
+
+    /* .inner-container::-webkit-scrollbar {
+      display: none;
+    } */
   </style>
+  <title>激斗红潮</title>
 </head>
 
 <body>
-  <div id="gamecontainer"></div>
+  <audio src="assets/audio/bgm1.wav" type="audio/wav" autoplay loop></audio>
+  <div class="outer-container">
+    <div class="inner-container">
+      <div id="gamecontainer"></div>
+    </div>
+  </div>
+  <div id="statuscontainer"></div>
   <div id="cardcontainer"></div>
   <script>
     // get sid
     var url = window.location.href;
     var sid = parseInt(url.split("?sid=")[1]);
+    var debug = 0;
+
     //sid = 1;
     console.log("sid:", sid);
-    var state="Init";
-    var player_num = 3;
+    var state = "Init";
+    var player_num = 4;
     var arrow = [];
     var player = [];
     var p_choose = [];
     var p_text = [];
     var req = {};
     var arrow_union = [1, 1, 1, 0, 1, 1, 1, 0];
-    var fire_union = [1,1,1,1];
+    var fire_union = [1, 1, 1, 1];
+    var fireList = [];
     var playerloc_union = [];
     var start = false;
+    var infor = [];
+    var infor_text = [];
+    var is_infor = [false, false, false, false];
+    var fire_distance = [3, 3, 3, 3];
+    var fire_power = [3, 3, 3, 3];
+    var move_power = [4, 4, 4, 4];
+    var identity = ["战术小队", "战术小队", "战术小队", "战术小队"];
+    var pointer;
     var map = [{
-      x: 410,
-      y: 10
+      x: 360,
+      y: 850
     }, {
-      x: 410,
-      y: 60
+      x: 210,
+      y: 860
     }, {
-      x: 410,
-      y: 130
+      x: 210,
+      y: 790
     }, {
-      x: 410,
-      y: 180
+      x: 210,
+      y: 720
     }, {
-      x: 410,
+      x: 210,
+      y: 655
+    }, {
+      x: 210,
+      y: 590
+    }, {
+      x: 210,
+      y: 525
+    }, {
+      x: 360,
+      y: 520
+    },
+    {
+      x: 250,
+      y: 450
+    }, {
+      x: 250,
+      y: 385
+    }, {
+      x: 250,
+      y: 310
+    }, {
+      x: 250,
       y: 240
     }, {
-      x: 410,
-      y: 290
+      x: 145,
+      y: 240
     }, {
-      x: 410,
-      y: 345
+      x: 145,
+      y: 175
     }, {
-      x: 340,
-      y: 420
+      x: 145,
+      y: 105
     },
     {
-      x: 435,
-      y: 480
+      x: 260,
+      y: 100
     }, {
-      x: 456,
-      y: 535
+      x: 440,
+      y: 90
     }, {
-      x: 474,
-      y: 595
+      x: 625,
+      y: 110
     }, {
-      x: 490,
-      y: 650
+      x: 625,
+      y: 180
     }, {
-      x: 515,
-      y: 710
+      x: 625,
+      y: 250
     }, {
-      x: 540,
-      y: 765
+      x: 625,
+      y: 320
     }, {
-      x: 568,
-      y: 820
-    },
-    {
-      x: 350,
-      y: 865
+      x: 625,
+      y: 390
     }, {
-      x: 143,
-      y: 820
+      x: 625,
+      y: 463
     }, {
-      x: 164,
-      y: 765
+      x: 625,
+      y: 530
     }, {
-      x: 185,
-      y: 710
-    }, {
-      x: 202,
-      y: 650
-    }, {
-      x: 227,
-      y: 595
-    }, {
-      x: 248,
-      y: 535
-    }, {
-      x: 269,
-      y: 480
+      x: 525,
+      y: 530
     }
     ];
 
-    var game = new Phaser.Game(780, 899, Phaser.CANVAS, 'gamecontainer', {
+    var loadingcomplete = 0;
+
+    function checkcardlock(ccb) {
+      ccb.setFrames(2, 2, 2, 2);
+      checkcardavaliable = 0;
+    }
+
+    function checkcardunlock(ccb) {
+      ccb.setFrames(1, 0, 0, 1);
+      checkcardavaliable = 1;
+    }
+
+    function loadedcheck() {
+      if (loadingcomplete) checkcardunlock(checkbutton);
+      else loadingcomplete = 1;
+    }
+
+
+    var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
         game.load.image('gamebackground', 'assets/img/gamewindow/gamebackground.png');
         game.load.image('fighter1', 'assets/img/gamewindow/fighter1.png');
@@ -132,29 +208,126 @@
         game.load.image('poisoner2', 'assets/img/gamewindow/poisoner2.png');
         game.load.image('poisoner3', 'assets/img/gamewindow/poisoner3.png');
         game.load.image('poisoner4', 'assets/img/gamewindow/poisoner4.png');
+        game.load.image('status1', 'assets/img/gamewindow/status1.png');
+        game.load.image('status2', 'assets/img/gamewindow/status2.png');
+        game.load.image('status3', 'assets/img/gamewindow/status3.png');
+        game.load.image('status4', 'assets/img/gamewindow/status4.png');
+        game.load.image('pointer', 'assets/img/gamewindow/self_pointer.png');
       },
 
       create: function () {
         game.physics.startSystem(Phaser.Physics.P2JS);
-        game.world.setBounds(0, 0, game.width, game.height);
         var background = game.add.sprite(0, 0, 'gamebackground');
         background.smoothed = true;
         background.height = game.height;
         background.width = game.width;
-        //do_initplayer(0);
-        game.world.setChildIndex(background, 0);
-       // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
-      },
+        // do_initplayer(12);
+        // playerloc_union = [1, 2, 3, 4];
+        // do_move();
 
+
+        // cursors = game.input.keyboard.createCursorKeys();
+        game.world.setBounds(0, 0, game.width, game.height);
+        // alert(player[0].body.dynamic);
+        loadedcheck();
+        // game.camera.atLimit=true;
+        // game.camera.width=780;
+        // game.camera.height=470;
+        // game.camera.follow(player[0]);
+        // game.camera.follow(player[0], Phaser.Camera.FOLLOW_PLATFORMER);
+        // game.world.setChildIndex(background, 0);
+        // var test = game.add.sprite(map[8].x,map[8].y,'fighter1');
+
+      },
       update: function () {
-        if(start){
-        for (var i = 0; i < player_num; i++) {
-          player[i].body.setZeroVelocity();
+        if (start) {
+          for (var i = 0; i < player_num; i++) {
+            // player[i].body.setZeroVelocity();
+            if (player[i].input.pointerOver()) {
+              if (!is_infor[i]) {
+                show_info(i);
+              }
+            }
+            else if (is_infor[i]) {
+              infor_text[i].destroy();
+              infor[i].destroy();
+              is_infor[i] = false;
+            }
+          }
+          // if(player[0].input.pointerOver()){
+          //   player[0].alpha=1;
+          // }
+          // else{
+          //   player[0].alpha=0.5;
+          // }
+
+          //   player[0].body.setZeroVelocity();
+
+          //   if (cursors.up.isDown) {
+          //     player[0].body.moveUp(300)
+          //   }
+          //   else if (cursors.down.isDown) {
+          //     player[0].body.moveDown(300);
+          //   }
+
+          //   if (cursors.left.isDown) {
+          //     player[0].body.velocity.x = -300;
+          //   }
+          //   else if (cursors.right.isDown) {
+          //     player[0].body.moveRight(300);
+          //   }
         }
-      }
       }
     });
 
+
+
+    var statusbox;
+    var pagecount = 1;    //To control changing statusarea page
+    var statusarea = new Phaser.Game(280, 8800, Phaser.CANVAS, 'statuscontainer', {
+      preload: function () {
+        statusarea.load.image('gamebackground', 'assets/img/gamewindow/statusground.png');
+        statusarea.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
+
+      },
+
+      create: function () {
+        var background = statusarea.add.sprite(0, 0, 'gamebackground');
+        background.smoothed = true;
+        // background.height = statusarea.height;
+        background.width = statusarea.width;
+        // statusarea.world = true;
+        // statusarea.camera.follow(statusbox);
+        // statusarea.world.setBounds(0, 0, 280, 8800);
+        // alert(statusarea.height);
+        // var statusbox = statusarea.add.bitmapText(0, 0, 'chiller', 'Change Profile', 25)；
+        statusarea.add.sprite(0, 4400, 'gamebackground');
+        statusbox = statusarea.add.text(15, 0, "", {
+          font: "14px 微软雅黑",
+          fill: "#ff0044",
+          align: "left",
+        });
+
+        // statusbox.wordWrap = true;
+        // statusbox.setTextBounds(0, 0, 240, 1000);
+        // statusbox.wordWrapWidth = 200;
+
+        // statusbox.text += "you are the apple of my eyes,and you are all I want";
+        statusbox.text += "欢迎来到激斗红潮!\n请点击下方按钮正式开始游戏，祝你游\n戏愉快！\n";
+        // statusbox.maxWidth=240;
+        // statusbox.addColor('#ff00ff',4);
+      },
+      update: function () {
+        if (statusbox.height > (pagecount * 460)) {
+          document.getElementById('statuscontainer').scrollTop = statusbox.height;
+          pagecount++;
+        }
+      }
+    });
+
+    var statetips;
+    var checkbutton;
+    var checkcardavaliable = 0;
     var seencardtext = [];
     var handcardslot = [];
     var seencardslot = [];
@@ -164,41 +337,39 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - abadon stage
+    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
     var slots;
     var statepad;
     var statepadtext_head;
     var statepadtext_body;
-    var p_decision= -1;
+    var p_decision = -1;
     var is_must = false;
-    var seencard_flag =false;
+    var seencard_flag = false;
     var empty = [-1];
+    var gamerank = 1;
+    var turn_web = 0;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
       staticinvalidcard[act] = 1;
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
-      }
-      //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
-      //do_fillcardlist();
+    }
+    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
+    //do_fillcardlist();
 
-    var card = new Phaser.Game(780, 320, Phaser.CANVAS, 'cardcontainer', {
+    var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
       preload: function () {
         card.load.image('gamebackground', 'assets/img/userbackground.png');
-        card.load.spritesheet('arrow', 'assets/img/gamewindow/arrow.png', 90, 36);
+        card.load.spritesheet('arrow', 'assets/img/gamewindow/arrow.png', 45, 18);
         card.load.spritesheet('button', 'assets/buttons/button1.png', 100, 34);
-        card.load.spritesheet('handcard_move', 'assets/img/gamewindow/handcard_move.png', 105, 250);
-        card.load.spritesheet('handcard_shoot', 'assets/img/gamewindow/handcard_shoot.png', 105,
-          250);
-        card.load.spritesheet('handcard_skill', 'assets/img/gamewindow/handcard_skill.png', 105,
-          250);
-        card.load.spritesheet('handcard_rock', 'assets/img/gamewindow/handcard_rock.png', 105, 250);
-        card.load.spritesheet('handcard_scissors', 'assets/img/gamewindow/handcard_scissors.png',
-          105, 250);
-        card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 105,
-          250);
-        card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 105, 250);
-        card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png');
+        card.load.spritesheet('handcard_move', 'assets/img/gamewindow/handcard_move.png', 70, 100);
+        card.load.spritesheet('handcard_shoot', 'assets/img/gamewindow/handcard_shoot.png', 70, 100);
+        card.load.spritesheet('handcard_skill', 'assets/img/gamewindow/handcard_skill.png', 70, 100);
+        card.load.spritesheet('handcard_rock', 'assets/img/gamewindow/handcard_rock.png', 70, 100);
+        card.load.spritesheet('handcard_scissors', 'assets/img/gamewindow/handcard_scissors.png', 70, 100);
+        card.load.spritesheet('handcard_paper', 'assets/img/gamewindow/handcard_paper.png', 70, 100);
+        card.load.spritesheet('handcard_blank', 'assets/img/gamewindow/handcard_test.png', 70, 100);
+        card.load.spritesheet('checkbutton', 'assets/img/gamewindow/button_check.png', 35, 35);
         card.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
         card.load.spritesheet('seen', 'assets/buttons/button.png', 100, 26);
         card.load.spritesheet('pad', 'assets/img/inputbox1.png', 150, 60);
@@ -206,37 +377,49 @@
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
-        var checkbutton = card.add.button(480, 47.5, 'checkbutton', do_checkcard, this);
-        statepad = card.add.sprite(610, 50, 'pad');
-        statepadtext_head = card.add.text(620, 55, 'stage');
-        statepadtext_body = card.add.text(620, 80,'ready');
+        checkbutton = card.add.button(865, 10, 'checkbutton', do_checkcard, this, 2, 2, 2, 2);
+        loadedcheck();
+        statetips = card.add.text(10, 0, '请关注此处的提示');
+        statetips.fontSize = 18;
+        statepad = card.add.sprite(905, 10, 'pad');
+        statepadtext_head = card.add.text(915, 15, 'stage');
+        statepadtext_body = card.add.text(915, 40, 'ready');
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
-        //var seenbutton = card.add.button();
+        statepadtext_body.text = '开始阶段';
         do_handcardslot();
         refreshcard();
       }
     });
 
     function do_seencardslot() {
-        var j;
+      var j;
       var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
       for (j = 0; j <= 3; j++) {
-        seencardslot[j] = card.add.button(100 + 150 * j, 150, 'seen', checkseencard, this, 0, 1, 1, 0);
-        seencardtext[j] = card.add.text(130 + 150 * j, 150, lookup_table[j]);
+        seencardslot[j] = card.add.button(100 + 150 * j, 80, 'seen', checkseencard, this, 0, 1, 1, 0);
+        seencardtext[j] = card.add.text(130 + 150 * j, 80, lookup_table[j]);
         seencardtext[j].fontSize = 20;
+      }
+      if (state == "must choose seen card") {
+        seencardslot[3].destroy();
+        seencardtext[3].destroy();
       }
     }
 
     function checkseencard(button) {
       var j;
       var num;
+      checkcardunlock(checkbutton);
       num = (button.x - 100) / 150;
       num = 3 - num;
       do_seencard(num);
-      for (j = 0; j <= 3; j++) {
-        seencardslot[j].kill();
-        seencardtext[j].alpha=0;
+      for (j = 0; j <= 2; j++) {
+        seencardslot[j].destroy();
+        seencardtext[j].alpha = 0;
+      }
+      if (state == "choose seen card") {
+        seencardslot[3].destroy();
+        seencardtext[3].destroy();
       }
     }
 
@@ -245,9 +428,9 @@
       var j;
       san = 0;
       for (i = 0; i <= 17; i++) {
-        cardtargeted[j] = 0;
-        staticinvalidcard[j] = 0;
-        dynamicinvalidcard[j] = 0;
+        cardtargeted[i] = 0;
+        staticinvalidcard[i] = 0;
+        dynamicinvalidcard[i] = 0;
       }
       staticlock();
       for (i = 0; i <= 17; i++) {
@@ -262,21 +445,29 @@
 
     function targetcard(button) {
       var num;
-      if (button.y == 130) num = (button.x - 10) / 45 + 9; //emmmmmm try to locate the button
-      else num = (button.x - 10) / 45;
+      num = (button.x - 10) / 45;
       if (staticinvalidcard[num]); //is it a locked button?
       else if (cardtargeted[num]) { //a button is about to be untargeted
         cardtargeted[num] = 0;
         button.setFrames(1, 0, 0, 0);
         san--;
+        if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
-        if (pedometer == 1) steerTGP(0, cardlist[num]);
-      } else { //a button is about to be targeted
+        if (pedometer == 1) {
+          do_decision(-1);
+          steerTGP(0, cardlist[num]);
+        }
+      }
+      else { //a button is about to be targeted
         cardtargeted[num] = 1;
         button.setFrames(1, 1, 1, 1);
         san++;
+        if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
-        if (pedometer == 1) steerTGP(1, cardlist[num]);
+        if (pedometer == 1) {
+          do_decision(num);
+          steerTGP(1, cardlist[num]);
+        }
       }
     }
 
@@ -284,7 +475,7 @@
       var i;
       switch (pedometer) {
         case 0:
-          for (i =0; i <= 17; i++)staticinvalidcard[i] = 1;
+          for (i = 0; i <= 17; i++)staticinvalidcard[i] = 1;
           break;
         case 1:
           for (i = 0; i <= 17; i++) {
@@ -368,86 +559,113 @@
     }
 
     function do_move() {
-      for (var people = 0;people<player_num;people++){
-      player[people].body.x = map[playerloc_union[people]].x + people * 20 + (4 - player_num) * 10;
-      player[people].body.y = map[playerloc_union[people]].y;
+      for (var people = 0; people < player_num; people++) {
+        player[people].body.x = map[playerloc_union[people]].x + people * 20 + ((people + 1) % 2) * 17 - 5;
+        player[people].body.y = map[playerloc_union[people]].y + (((people + 1) % 2) * 28 - 15);
       }
+      if (player[myIndex].y < 260 || player[myIndex].y > 600) {
+        document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 425;
+      }
+      else {
+        document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 240;
+      }
+      pointer.x = player[myIndex].body.x - 15;
+      pointer.y = player[myIndex].body.y - 63;
     }
 
     function do_poison(people) {
       var x = player[people].body.x;
       var y = player[people].body.y;
-      player[people].kill();
+      player[people].destroy();
       player[people] = game.add.sprite(x, y, 'poisoner' + (people + 1).toString());
-      player[people].anchor.x = 0.5;
-      player[people].anchor.y = 0.5;
+      // player[people].anchor.x = 0.5;
+      // player[people].anchor.y = 0.5;
       game.physics.p2.enable(player[people]);
       player[people].body.fixedRotation = true;
+      player[people].body.dynamic = false;
+      player[people].inputEnabled = true;
+      fire_distance[people] = 0;
+      fire_power[people] = 0;
+      move_power[people] = 10;
+      healthPointList[people] = 12;
+      identity[people] = "感染者";
     }
 
     function do_initplayer(init_location) {
       for (var i = 0; i < player_num; i++) {
-        player[i] = game.add.sprite(map[init_location].x + i * 20 + (4 - player_num) * 10, map[init_location].y,
+        player[i] = game.add.sprite(map[init_location].x + i * 20 + ((i + 1) % 2) * 17 - 5, map[init_location].y + (((i + 1) % 2) * 28 - 15),
           'fighter' + (i + 1).toString());
-        player[i].anchor.x = 0.5;
-        player[i].anchor.y = 0.5;
+        // player[i].anchor.x = 0.5;
+        // player[i].anchor.y = 0.5;
         game.physics.p2.enable(player[i]);
         player[i].body.fixedRotation = true;
+        player[i].body.dynamic = false;
+        player[i].inputEnabled = true;
       }
+      document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 225;
+      start = true;
     }
 
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(630, 250, 'arrow', fix_arrow, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 1, 2, 0, 2);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
-          arrow[z].angle = -45 * (3 - z);
+          arrow[z].angle = 0 - (45 * (3 - z));
         }
       }
     }
 
     function do_targetgenerate(fire_union) {
-      for (var z = 0; z < 4; z++) {
-        if(fire_union[z]!=0){
-        p_choose[z] = card.add.button(480 + z * 70, 200, 'button', fix_choose, this, 1, 0, 2, 0);
-        p_text[z] = card.add.bitmapText(490 + z * 70, 200, 'chiller', 'player' + z.toString(), 28);
+      for (var z = 0; z < player_num; z++) {
+        if (fire_union[z] != 0) {
+          p_choose[z] = card.add.button(740 + z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
+          p_text[z] = card.add.bitmapText(750 + z * 70, 80, 'chiller', 'player' + z.toString(), 28);
         }
       }
     }
 
     function do_handcardslot() {
-      for (slots = 0; slots <= 17; slots++) { //create handcard slots
-        if (slots <= 8) handcardslot[slots] = card.add.button(10 + 45 * slots, 0, 'handcard_blank', targetcard,
-          this, 1, 0, 0, 0);
-        if (slots > 8) handcardslot[slots] = card.add.button(10 + 45 * (slots - 9), 130, 'handcard_blank',
-        targetcard, this, 1, 0, 0, 0);
+      for (slots = 17; slots >= 0; slots--) { //create handcard slots
+        handcardslot[slots] = card.add.button(10 + 45 * slots, 20, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
       }
     }
 
     function steerTGP(mode, type) { //check which button will be show,steer or TGP?
+      //alert("testTGP");
       var j;
       if (mode) {
         switch (type) {
           case 4:
+            checkcardlock(checkbutton);
             do_arrowgenerate(arrow_union);
+            statetips.text = '请在右侧选择你要移动的方向';
             break;
           case 5:
+            checkcardlock(checkbutton);
             do_targetgenerate(fire_union);
+            statetips.text = '请在右侧选择你开火的目标';
             break;
         }
       } else {
         switch (type) {
           case 4:
+            checkcardunlock(checkbutton);
             for (j = 0; j < 8; j++) {
-              if (arrow_union[j] != 0) arrow[j].kill();
+              if (arrow_union[j] != 0) arrow[j].destroy();
             }
+            statetips.text = '请选择你的决策，直接确定则为蓄能';
             break;
           case 5:
-            for (j = 0; j < 4; j++) {
-              p_choose[j].kill();
-              p_text[j].alpha = 0;
-            };
+            checkcardunlock(checkbutton);
+            for (j = 0; j < player_num; j++) {
+              if (fire_union[j] != 0) {
+                p_choose[j].destroy();
+                p_text[j].alpha = 0;
+              }
+            }
+            statetips.text = '请选择你的决策，缺省则为蓄能';
             break;
         }
       }
@@ -472,355 +690,526 @@
       }
     }
 
+
     function do_checkcard() { // function for checkbutton
-                              //alert('sending completed');
+      //alert('sending completed');
       var j;
       var g = [];
-      switch (pedometer) {
-        case 1:
-          for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
-              do_decision(j);
-              steerTGP(0, cardlist[j]);
+      if ((checkcardavaliable == 0) && (autoskip == 0)) alert("操作受限");
+      else {
+        switch (pedometer) {
+          case 1:
+            for (j = 0; j <= 17; j++) {
+              if (cardtargeted[j]) {
+                //do_decision(j);
+                steerTGP(0, cardlist[j]);
+              }
             }
-          }
-          break;
-        case 2:
-          var k=0;
-          for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
+            break;
+          case 2:
+            var k = 0;
+            for (j = 0; j <= 17; j++) {
+              if (cardtargeted[j]) {
                 san--;
                 g[k] = j;
-                  k++;
+                k++;
+                //alert(j + " shit");
               }
-            if (san == 0) break;
-          }
-          do_gamblecard(g);
-          break;
-        case 4:
-          var k =0 ;
-          g[0]=-1;
-          for (j = 0; j <= 17; j++) {
-            if (cardtargeted[j]) {
-              san--;
-              g[k] = j;
-              k++;
+              if (san == 0) break;
             }
-            if (san == 0) break;
-          }
-          do_dessert(g);
-          break;
-        default:
-          statepadtext_body.text='操作受限';
-          break;
-      }
+            do_gamblecard(g);
+            break;
+          case 4:
+            var k = 0;
+            g[0] = -1;
+            for (j = 0; j <= 17; j++) {
+              if (cardtargeted[j]) {
+                san--;
+                g[k] = j;
+                k++;
+              }
+              if (san == 0) break;
+            }
+            do_desert(g);
+            break;
+          default:
+            //statepadtext_body.text='操作受限';
+            break;
+        }
 
-      if (state == "Init") {
-        req = {}
-     }
-     else if (state == "choose hero") {
-       req = {
-         hero: "fire"
-       };
-     }
-     else if (state == "start game") {
-      req = {}
-     }
-     else if (state == "choose strategy decision") {
-     }            
-     else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
-     }
-     else if (state == "must choose seen card"){
-     }
-     else if (state=="GAMBLE:choose gamble"){
-     }
-     else if(state == "GAMBLE: win judge"){
-     }
-     else if (state =="win judge"){
-      req = {}
-     }
-     else if(state=="ACTION: deposit account"){
-      req = {}
-     }
-     else if(state=="skills account"){
-      req = {}
-     }
-     else if(state=="fire account"){
-      req = {}
-     }
-     else if(state=="move account"){
-      req = {}
-     }
-     else if(state=="element account"){
-      req = {}
-     }
-     else if(state=="if human wins"){
-       req={}
-     }
-     else if(state=="Game Over, human wins"){
-       req={}
-     }
-     else if(state=="infection account"){
-       req={}
-     }
-     else if(state=="Game Over,zombie wins"){
-     }
-     else if(state=="desert account"){
-     }
-     else if(state=="card distribute")
-     {
-       req={}
-     }
-    var seent = JSON.stringify({
+        if (state == "Init") {
+          req = {}
+        }
+        else if (state == "choose hero") {
+          req = {
+            hero: herolist[myIndex]
+          };
+        }
+        else if (state == "start game") {
+          req = {}
+        }
+        else if (state == "choose strategy decision") {
+        }
+        else if (state == "choose seen card") {   //if choose a seen card ,next state is win juedge
+        }
+        else if (state == "must choose seen card") {
+        }
+        else if (state == "GAMBLE:choose gamble") {
+        }
+        else if (state == "GAMBLE: win judge") {
+        }
+        else if (state == "win judge") {
+          req = {}
+        }
+        else if (state == "ACTION: deposit account") {
+          req = {}
+        }
+        else if (state == "skills account") {
+          req = {}
+        }
+        else if (state == "fire account") {
+          req = {}
+        }
+        else if (state == "move account") {
+          req = {}
+        }
+        else if (state == "element account") {
+          req = {}
+        }
+        else if (state == "if human wins") {
+          req = {}
+        }
+        else if (state == "Game Over, human wins") {
+          req = {}
+        }
+        else if (state == "infection account") {
+          req = {}
+        }
+        else if (state == "Game Over,zombie wins") {
+        }
+        else if (state == "desert account") {
+        }
+        else if (state == "card distribute") {
+          req = {}
+        }
+        checkcardlock(checkbutton);
+        var seent = JSON.stringify({
           'sid': parseInt(sid),
           'msg': JSON.stringify(req)
         })
-      console.log("give back :"+seent+"while req = "+ JSON.stringify(req));
-      request(req,do_callback);
-    }
-
-    var phase_state = "Main";
-    var player_state = "0.0";
-    var player_index = 0;
-    var team_result = [0,0,0,1];
-    function do_init() {
-      // init
-      request({}, function (data_init0) {
-        request({ hero: "hero" }, function (data_init1) {
-          request({}, function (data_main_0_0) {
-            console.log("data_init0", data_init0);
-            console.log("data_init1", data_init1);
-            console.log("data_main_0_0", data_main_0_0);
-            player_state = "0.1";
-            player_index = data_init0.index;
-            team_result = data_init1.team_result;
-          });
-        });
-      });
-    }
-
-
-
-    
-
-    function do_callback(data, status) {
-      if (state == "Init") {
-        pedometer = 0;
-        //state="choose hero";
+        console.log("give back :" + seent + "while req = " + JSON.stringify(req));
+        request(req, do_callback);
       }
-      else if (state == "choose hero") {
+    }
+
+
+
+    var autoskip = 0;
+    var team_result = [0, 0, 0, 1];
+    var allUserInfo = [];
+    var herolist = [];
+    var heroChoices = [];
+    var myIndex = 0;
+    var decisionChoices = [];
+    var seenCardChoices = [];
+    var gambleChoices = [];
+    var cardNumList = [];
+    var playerWinList = [];
+    var eneregyList = [0, 0, 0, 0];
+    var healthPointList = [6, 6, 6, 6];
+    var elemList = [];
+    var scoreList = [];
+    function do_callback(data, status) {
+      if (state == "choose hero") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '英雄分配阶段';
+        myIndex = data.myIndex;
+        allUserInfo = data.allUserInfo;
+        herolist = data.heroList;
+
+        player_num = allUserInfo.length;
+        statusbox.text += "你的游戏编号为" + myIndex;
+        statusbox.text += ", 加入游戏的玩家有：\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
+        }
+        pedometer = 0;
+      }
+      else if (state == "start game") {
+        checkcardunlock(checkbutton);
         team_result = data.teamResult;
-        player_num = team_result.length;
+        heroChoices = data.heroChoices;
+        statusbox.text += "\n玩家选择的英雄为：\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += "玩家" + i + ": 选择了英雄" + heroChoices[i] + "\n";
+        }
         do_initplayer(4);
-        start = true;
+        statusbox.text += "\n玩家的身份为：\n";
+
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
             do_poison(i);
             player[i].body.x = map[0].x + i * 20 + (4 - player_num) * 10;
             player[i].body.y = map[0].y;
+            statusbox.text += "玩家" + i + ": 身份为感染者\n";
+          }
+          else {
+            statusbox.text += "玩家" + i + ": 身份为战术小队\n";
           }
         }
+        pointer = game.add.sprite(player[myIndex].body.x - 15, player[myIndex].body.y - 62, 'pointer');
       }
-      else if (state == "start game") {
+      else if (state == "choose strategy decision") {
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
+        statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
+        p_decision = -1;
+        req = {
+          decision: -1,
+          moveDirection: -1,
+          fireTarget: -1
+        }
         arrow_union = data.availableMoveDirection;
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 1;
         fire_union = data.availableFireTarget;
         refreshcard();
-       // state = "choose strategy decision"; 
+
       }
-      else if (state == "choose strategy decision") {
-       //state = "choose seen card";
-       statepadtext_body.text = '明牌阶段';
-            cardlist = data.handCards;
-            do_fillcardlist();
-            pedometer = 5;
-            refreshcard();
-      }            
-      else if ((state == "choose seen card")||(state =="must choose seen card")) {
+      else if ((state == "choose seen card") || (state == "must choose seen card")) {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '明牌阶段';
+        if (state == "must choose seen card") {
+          statetips.text = '你手中没有出拳牌,必须选择一张明牌';
+          checkcardlock(checkbutton);
+          req = {
+            seenCard: 1
+          }
+        }
+        else statetips.text = '如果需要，你可以选择使用明牌而不是出拳牌';
+        checkcardlock(checkbutton);
+        cardlist = data.handCards;
+        do_fillcardlist();
+        pedometer = 5;
+        refreshcard();
+      }
+      else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '出拳阶段';
+        if (state == "GAMBLE: choose gamble") {
+          pedometer = 2;
+          refreshcard();
+        }
         do_gamblecard(empty);
-        //decision_union = data.decisionChoices;
-        //seencard_union = data.seenCardChoices;
-        //state="GAMBLE:choose gamble";
+        decisionChoices = data.decisionChoices;
+        seenCardChoices = data.seenCardChoices;
+        var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
+        statusbox.text += "\n玩家选择的明牌情况为：\n";
+        for (var i = 0; i < player_num; i++) {
+          if (seenCardChoices[i] != 0) {
+            statusbox.text += "玩家" + i + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+            if (i == myIndex) statetips.text = '你在之前已经选择过了明牌出拳，现在你无法使用出拳牌，请进入下一阶段'
+          }
+          else {
+            statusbox.text += "玩家" + i + ": 未选择明牌\n";
+            if (i == myIndex) {
+              statetips.text = '现在，你应该使用你的出拳牌了'
+              checkcardlock(checkbutton);
+            }
+          }
+        }
       }
-      else if ((state == "GAMBLE: choose gamble")||(state == "GAMBLE:win judge")) {
-        statepadtext_body.text = '结算阶段';
+      else if ((state == "win judge")) {
+        checkcardunlock(checkbutton);
+        statetips.text = ' ';
+        statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-       // state ="win judge";
+
       }
-      else if ((state == "win judge")) {
+      else if (state == "ACTION: deposit account") {
+        checkcardunlock(checkbutton);
+        var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能', '蓄能'];
+        statepadtext_body.text = '猜拳结算';
         pedometer = 0;
-        //   每人出牌的选择  = data.gambleChoices;
-        //   每人出了几张牌  = data.cardNumList;
-        //   哪些玩家赢了   =  data.playerWinList;
-       // state="ACTION: deposit account";
-      }
-      else if(state=="ACTION: deposit account"){
-        //剩余的能量点数  = data.eneregyList;
-       // state="skills account";
-      }
-      else if(state=="skills account"){
-       // state="fire account";
-      }
-      else if(state=="fire account"){
-        // 剩余的生命值 = data.healthPointList;
-        //state="move account";
-      }
-      else if(state=="move account"){
-         playerloc_union = data.locationList;
-         do_move();
-         //state="element account";
-      }
-      else if(state=="element account"){
-        // 所有人的要素情况 = data.elemList;
-       // state="if human wins";
-      }
-      else if(state=="if human wins"){
-      //  state="Game Over, human wins";
-      }
-      else if(state=="Game Over, human wins"){
-        // 游戏结束
-      }
-      else if(state=="infection account"){
-        team_result = data.teamList;
+        gambleChoices = data.gambleChoices;
+        cardNumList = data.cardNumList;
+        playerWinList = data.playerWinList;
+        fireList = data.fireList;
+        statusbox.text += "\n玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          if (team_result[i] == 1) {
-            do_poison(i);
+          statusbox.text += "玩家" + i + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+        }
+        statusbox.text += "\n玩家的开火情况为:\n";
+        for (var i = 0; i < player_num; i++) {
+          if (fireList[i] != -1) {
+            statusbox.text += "玩家" + i + ": 向玩家" + fireList[i] + "开火射击，" + fireList[i] + "号玩家生命\n值下降\n";
+          }
+          else {
+            statusbox.text += "玩家" + i + ": 未开火\n";
           }
         }
+        autoskip = 1;
+        for (var i = 0; i < 6; i++) {
+          do_checkcard();
+        }
+        autoskip = 0;
       }
-      else if (state == "Game Over,zombie wins") {
+      else if (state == "skills account") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '蓄能结算';
+        eneregyList = data.eneregyList;
+      }
+      else if (state == "fire account") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '开火结算';
+      }
+      else if (state == "move account") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '移动结算';
+        healthPointList = data.healthPointList;
+      }
+      else if (state == "element account") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '要素判定';
+        playerloc_union = data.locationList;
+        elemList = data.elemList;
+        do_move();
+      }
+      else if (state == "if human wins") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '感染判定';
+        var elem_string = ["无要素", "有要素"];
+        elemList = data.locationList;
+        statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += "玩家" + i + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
+        }
+      }
+      else if (state == "Game Over, human wins") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '游戏结束，人类获胜！';
+      }
+      else if (state == "infection account") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '感染阶段';
+      }
+      else if (state == "Game Over, zombie wins") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '游戏结束，感染者获胜！';
+      }
+      else if (state == "END") {
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '游戏结束';
+        statetips.text = '游戏结束，再点击一次按钮返回匹配界面';
+        scoreList = data.scoreList;
+        statusbox.text += "\n游戏结束，各个玩家的分数为:\n";
+        for (var i = 0; i < player_num; i++) {
+          statusbox.text += "玩家" + i + ": 分数为" + scoreList[i] + "\n";
+        }
+        turn_web++;
+        if (turn_web == 2) {
+          window.location.href = "krad.html?sid=" + sid;
+        }
+      }
+      else if (state == "desert account") {
+        checkcardunlock(checkbutton);
         statepadtext_body.text = '弃牌阶段';
+        statetips.text = '你现在应该丢弃你不需要的牌';
+
+        for (var i = 0; i < player_num; i++) {
+          if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
+            do_poison(i);
+            statusbox.text += "玩家" + i + "被感染，成为感染者\n";
+          }
+        }
+        statusbox.text += "\n第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
+        for (var i = 0; i < player_num; i++) {
+          if (data.teamList[i] == 1) {
+            statusbox.text += "玩家" + i + ": 身份为感染者\n";
+          }
+          else {
+            statusbox.text += "玩家" + i + ": 身份为战术小队\n";
+          }
+        }
+        team_result = data.teamList;
+        do_desert(empty);
+        do_fillcardlist();
+        pedometer = 4;
+        refreshcard();
       }
-      else if(state=="desert account"){
+      else if (state == "card distribute") {
+        checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
         statepadtext_body.text = '发牌阶段';
+        statetips.text = '请点击按钮进行入新的一回合';
+        p_decision = -1;    //To reset decision 
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 0;
         refreshcard();
-      }
-      else if(state=="card distribute")
-      {
-        statepadtext_body.text = '决策阶段';
-        arrow_union = data.availableMoveDirection;
-        cardlist = data.handCards;
-        do_fillcardlist();
-        pedometer = 1;
-        fire_union = data.availableFireTarget;
-        refreshcard();
-        cardtargeted = [];
+        gamerank++;
       }
     }
 
-    function fix_arrow(button){
-      var temp = ((button.angle)/45 +3);
-     // alert(temp);
-      do_target(temp,-1);
+    function fix_arrow(button) {
+      if (button.angle == (-180)) {
+        var temp = 7;
+      }
+      else {
+        var temp = ((button.angle) / 45 + 3);
+      }
+      //checkcardunlock(checkbutton);
+      do_target(temp, -1);
     }
-    function fix_choose(button){
-      var temp= (button.x-480)/70 ;
-      do_target(-1,temp);
+    function fix_choose(button) {
+      var temp = (button.x - 740) / 70;
+      //checkcardunlock(checkbutton);
+      do_target(-1, temp);
     }
 
 
+    function show_info(player_index) {
+      if (player[player_index].y > 250) {
+        infor[player_index] = game.add.sprite(player[player_index].x - 100, player[player_index].y - 180, 'status' + (player_index + 1).toString());
+        infor_text[player_index] = game.add.text(player[player_index].x - 90, player[player_index].y - 155, "", {
+          font: "14px 微软雅黑",
+          fill: "#fffff",
+          align: "left",
+        })
+        infor_text[player_index].text += "身份:  " + identity[player_index] + ",编号为" + player_index;
+        infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
+        infor_text[player_index].text += "\n射程：  ";
+        for (var i = 0; i < fire_distance[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n火力：  ";
+        for (var i = 0; i < fire_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n机动性: ";
+        for (var i = 0; i < move_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n生命值: ";
+        for (var i = 0; i < healthPointList[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+      }
+      else {
+        infor[player_index] = game.add.sprite(player[player_index].x - 100, player[player_index].y + 10, 'status' + (player_index + 1).toString());
+        infor_text[player_index] = game.add.text(player[player_index].x - 90, player[player_index].y + 40, "", {
+          font: "14px 微软雅黑",
+          fill: "#fffff",
+          align: "left",
+        })
+        infor_text[player_index].text += "身份:  " + identity[player_index]+ ",编号为" + player_index;
+        infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
+        infor_text[player_index].text += "\n射程：  ";
+        for (var i = 0; i < fire_distance[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n火力：  ";
+        for (var i = 0; i < fire_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n机动性: ";
+        for (var i = 0; i < move_power[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+        infor_text[player_index].text += "\n生命值: ";
+        for (var i = 0; i < healthPointList[player_index]; i++) {
+          infor_text[player_index].text += "○";
+        }
+      }
+      is_infor[player_index] = true;
+    }
     function do_decision(strategy) {
       p_decision = strategy;
-      req.decision = p_decision;
-      alert("you choose"+p_decision);
-      p_decision = -1;
     }
 
     function do_target(direction, target) {
+      //alert("movediretion" + direction);
       req = {
-        decision: p_decision,       
+        decision: p_decision,
         moveDirection: direction,
         fireTarget: target
       }
-      alert("choose strategy"+req.decision+"+"+direction+"+"+target);
+      checkcardunlock(checkbutton);
+      do_checkcard();
     }
 
     function do_seencard(rank) {
-      if(rank !=0){
+      if (rank != 0) {
         seencard_flag = true;
       }
       req = {
         seenCard: rank
       }
-      alert("choose card"+req.seenCard);                        //test
     }
 
 
     function do_gamblecard(cardarray) {
-          req = {
-          gambleCard : cardarray
-        }
+      req = {
+        gambleCard: cardarray
+      }
     }
 
-    function do_dessert(cardarray) {
-      req={
+    function do_desert(cardarray) {
+      req = {
         desertCardList: cardarray
       }
       var seent2 = JSON.stringify(req);
-      alert(seent2);
     }
 
-    function request(msg, callback) {
-      $.ajax({
-        url: "/api/game",
-        type: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify({
-          'sid': parseInt(sid),
-          'msg': JSON.stringify(msg)
-        }),
-        success: function (str, status) {
-          console.log(str);
-          var data = JSON.parse(str);
-          console.log(data.state);
-          callback(data, status);
-          state = data.state;
-          if(state =="desert account"){
-            do_dessert(empty);
-            do_fillcardlist();
-             pedometer = 4;
-             refreshcard();
-          }
-          else if(state =="choose strategy decision"){
-            req = {
-             decision: -1,       
-             moveDirection: -1,
-             fireTarget: -1
-           }
-          }
-          else if(state == "GAMBLE: choose gamble"){
-            pedometer = 2;
-            refreshcard();
-          }
-          else if(state == "must choose seen card"){
-            req={
-              seenCard: 1
-            }
-          }
-          else if(state == "Game Over,human wins"){
-            statepadtext_body.text = '游戏结束，人类获胜！';
-          }
-          else if(state == "Game Over,zombie wins")
-          {
-            statepadtext_body.text = '游戏结束，感染者获胜！';
-          }
-        },
+    //var timeout = 0;
 
-        error: function (data, status) {
-          console.log(data);
-        }
-      });
+    function request(msg, callback) {
+      sid = parseInt(url.split("?sid=")[1]);
+      var seent3 = JSON.stringify({
+        'sid': parseInt(sid),
+        'msg': JSON.stringify(msg)
+      })
+      console.log(seent3);
+      if (debug) {
+        var sid = parseInt(sid);
+        var data = { state: "" };
+        // write your own data
+        //--------------------
+        state = data.state;
+        callback(data, 200);
+      } else {
+        $.ajax({
+          url: "/api/game",
+          type: "POST",
+          contentType: 'application/json',
+          data: JSON.stringify({
+            'sid': parseInt(sid),
+            'msg': JSON.stringify(msg)
+          }),
+          success: function (str, status) {
+            console.log(str);
+            var data = JSON.parse(str);
+            console.log(data.state);
+            state = data.state;
+            callback(data, status);
+            timeout = 0;
+          },
+          error: function (data, status) {
+            console.log(data);
+              /*if ((timeout <= 3) && (data.statusCode == 503)) {
+              timeout++;
+              request(msg, callback);
+            }
+            else*/ alert("非常抱歉，服务器宕机，返回匹配界面");
+            window.location.href = "krad.html?sid=" + sid;
+
+          }
+        });
+      }
     }
 
   </script>

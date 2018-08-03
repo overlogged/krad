@@ -48,7 +48,8 @@ object ScalaGodTest extends MyJsonProtocol{
   }
 
   def test1(): Unit ={
-    val sids = 0 to 1
+    MapGenerator.map1()
+    val sids = 0 to 3
     val god = new God
     god.initialPlayer(sids.toArray)
     val fs = for(sid<-sids)
@@ -59,7 +60,7 @@ object ScalaGodTest extends MyJsonProtocol{
         ))
         println(sid,god.request(sid,"{}"))
         println(sid,god.request(sid,
-          """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          """{"decision":0,"moveDirection":-1,"fireTarget":-1}"""
         ))
 
         println(sid, god.request(sid,
@@ -89,6 +90,7 @@ object ScalaGodTest extends MyJsonProtocol{
         println(sid,god.request(sid,
           """{"desertCardList":[-1]}"""
         ))
+
       }
     for(f<-fs) {
       f onComplete println

@@ -9,26 +9,67 @@ var state_userinterface = {
     game.add.sprite(480, 140, 'figure5');
     game.add.sprite(480, 260, 'figure6');
 
+    tooltip3 = game.add.sprite(140, 355, 'tooltip3');
+    tooltip5 = game.add.sprite(430, 170, 'tooltip5');
+    tooltip6 = game.add.sprite(160, 150, 'tooltip6');
+    tooltip7 = game.add.sprite(290, 150, 'tooltip7');
+    tooltip3.inputEnabled = true;
+    tooltip5.inputEnabled = true;
+    tooltip6.inputEnabled = true;
+    tooltip7.inputEnabled = true;
+
     game.add.bitmapText(500, 80, 'chiller', 'infected', 54);
     game.add.bitmapText(650, 80, 'chiller', 'tactical', 54);
     game.add.sprite(-150, -100, user.avatar);
 
     game.add.bitmapText(120, 20, 'desyrel', 'nickname:', 36);
-    game.add.bitmapText(290, 20, 'desyrel', user.nickname, 36);
+    game.add.bitmapText(285, 20, 'desyrel', user.nickname, 36);
     game.add.bitmapText(120, 60, 'desyrel', 'grade:', 36);
     game.add.bitmapText(215, 60, 'desyrel', user.stats.score.toString(), 36);
 
 
-    game.add.button(240, 115, 'button', go_changepw, this, 1, 0, 2, 0);
+    changepw = game.add.button(240, 115, 'button', go_changepw, this, 1, 0, 2, 0);
     game.add.bitmapText(255, 115, 'chiller', 'password', 28);
 
-    game.add.button(120, 115, 'button', go_changeprofile, this, 1, 0, 2, 0);
+    changeprofile = game.add.button(120, 115, 'button', go_changeprofile, this, 1, 0, 2, 0);
     game.add.bitmapText(145, 115, 'chiller', 'profile', 28);
 
-    game.add.button(250, 210, 'start', do_match, this);
-    game.add.button(50, 400, 'help', go_help, this);
+    startgame = game.add.button(250, 210, 'start', do_match, this);
+    userhelp = game.add.button(50, 400, 'help', go_help, this);
     show("userinterface");
+    tooltip_user();
+  },
+  update: function(){
+    if(star){
+      if(changepw.input.pointerOver()){
+        tooltip7.alpha=0.7;
+      }
+      else{
+        tooltip7.alpha=0;
+      }
+      if(changeprofile.input.pointerOver()){
+        tooltip6.alpha=0.7;
+      }
+      else{
+        tooltip6.alpha=0;
+      }
+      if(startgame.input.pointerOver()){
+        tooltip5.alpha=0.7;
+      }
+      else{
+        tooltip5.alpha=0;
+      }
+      if(userhelp.input.pointerOver()){
+        tooltip3.alpha=0.7;
+      }
+      else{
+        tooltip3.alpha=0;
+      }
+    }
   }
+}
+function tooltip_user(){
+  star = true;   
 }
 
 function go_help() {
@@ -45,11 +86,18 @@ function do_match() {
     type: "POST",
     contentType: 'application/json',
     data: JSON.stringify(req),
+    beforeSend:function(){ 
+
+      $("#loading").html("<img src='./assets/img/loading.gif'>");
+
+   }, 
     success: function (data, status) {
+      $("#loading").empty();
       console.log(data);
       window.location.href="gamewindow.html?sid="+sid;  
     },
     error: function (data, status) {
+      $("#loading").empty();
       alert("匹配失败");
       console.log(data);
     }

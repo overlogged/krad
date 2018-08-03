@@ -27,15 +27,15 @@ object SessionController {
   val StateReady = 2
   val StatePlaying = 3
 
-  final case class SessionState(state: Int, god: God)
+  final case class SessionState(state: Int, timestamp: Long, god: God)
 
   object SessionState {
-    def apply(state: Int, god: God): SessionState = new SessionState(state, god)
+    def apply(state: Int, god: God): SessionState = new SessionState(state, System.currentTimeMillis(), god)
 
-    def apply(): SessionState = new SessionState(0, null)
+    def apply(): SessionState = new SessionState(0, System.currentTimeMillis(), null)
   }
 
-  val WaitingTime = 10000
+  val WaitingTime: Long = 1000 * 60 * 30
 
   // map: sid - uid
   val map = new Bimap[Int, String]()
@@ -63,25 +63,35 @@ object SessionController {
     }
   }
 
-  val ghostGroup = Seq(Array(0),Array(1,2),Array(3,4,5,6))
+  def routine(): Unit = Future {
+    while (true) {
+      Thread.sleep(WaitingTime * 20)
+      this.synchronized {
+        states.dropWhile(item => item._2.timestamp < System.currentTimeMillis() - WaitingTime && item._2.state != StatePlaying)
+      }
+    }
+  }
+
+  val ghostGroup = Seq(Array(0), Array(1, 2), Array(3, 4, 5, 6), Array(7, 8, 9), Array(10, 11))
+
   def addGhost(): Unit = {
-    for(arr<-ghostGroup){
+    for (arr <- ghostGroup) {
       val god = new God
       god.initialPlayer(arr)
-      for(x<-arr){
-        states += (x->SessionState(StatePlaying,god))
-        map.set(x,"ghost@ghost.com")
+      for (x <- arr) {
+        states += (x -> SessionState(StatePlaying, god))
+        map.set(x, "ghost@ghost.com")
       }
     }
   }
 
   def removeGhost(): Unit = {
-    for(arr<-ghostGroup;
-        sid<-arr) {
-      try{
+    for (arr <- ghostGroup;
+         sid <- arr) {
+      try {
         states.remove(sid)
-      }catch {
-        case _ => {}
+      } catch {
+        case _: Throwable => {}
       }
     }
   }
@@ -116,20 +126,22 @@ object SessionController {
   /**
     * matchPlayers
     */
-  var matching_count = 0
+  var fake_matching_count = 0
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
-    val player_count = 3
+    val player_count = 4
+
     def ready() = states.get(req.sid).exists(_.state == StateReady)
+
     states.get(req.sid).map { state =>
       this.synchronized {
-        matching_count += 1
-        // start a game
-        if (matching_count >= player_count) {
+        fake_matching_count += 1
+
+        // try to start a game
+        if (fake_matching_count >= player_count) {
+
           // todo: random
-          matching_count -= player_count
           val choosed_players = new Array[Int](player_count)
-          val god = new God()
 
           var i = 1
           choosed_players(0) = req.sid
@@ -137,14 +149,24 @@ object SessionController {
             choosed_players(i) = player._1
             i += 1
           }
-          god.initialPlayer(choosed_players)
-          for (player_sid<-choosed_players){
-            states(player_sid) = SessionState(StateReady,god)   // todo: maybe copy from the initial one
+
+          if (i == player_count) {
+            val god = new God()
+            fake_matching_count -= player_count
+            god.initialPlayer(choosed_players)
+            for (player_sid <- choosed_players) {
+              states(player_sid) = SessionState(StateReady, god) // todo: maybe copy from the initial one
+            }
+            this.notifyAll()
+          } else {
+            states(req.sid) = state.copy(state = StateMatching)
+            while (!ready()) {
+              this.wait()
+            }
           }
-          this.notifyAll()
         } else {
           states(req.sid) = state.copy(state = StateMatching)
-          while(!ready()){
+          while (!ready()) {
             this.wait()
           }
         }
@@ -154,20 +176,20 @@ object SessionController {
   }
 
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
-    Server.log("game",req)
+    Server.log("game", req)
     states.get(req.sid) map { states =>
-      Server.log("verbose game in",req.toString)
+      Server.log("verbose game in", req.toString)
       val god = states.god
       val result =
-        try{
+        try {
           god.request(req.sid, req.msg)
-        }catch{
-          case ex:Exception => {
+        } catch {
+          case ex: Exception => {
             ex.printStackTrace(new PrintWriter(Server.log_file))
             "Internal Error"
           }
         }
-      Server.log("verbose game out",result)
+      Server.log("verbose game out", result)
       result
     }
   }

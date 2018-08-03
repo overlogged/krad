@@ -1,59 +1,50 @@
 package game;
 
-import static java.lang.Math.abs;
+import server.Server;
 
 public class MapChecker {
-    public static int outDistance(MapUnit des_location,MapUnit src_location){
-        int distance;
-        if (des_location.rank!=src_location.rank){
-            return -1;
-        }
-        if (des_location.mark==src_location.mark)
-        {
-            return -1;
-        }
-        distance=abs(des_location.mark-src_location.mark);
-        return  distance;
-    }
 
-    static int distance(MapUnit u1,MapUnit u2){
-        int m1 = u1.mark,m2=u2.mark;
-        if(m1>m2){
-            m1 = u2.mark;
-            m2 = u1.mark;
-        }
-        if(m1<=7 && m2>=15){
-            return (22-m2+8)-m1;
-        }
-        return m2-m1;
-    }
+    public static int tryMove(Map m, int i_current, int i_next, int energy) {
 
-    public static int tryMove(Map m,int i_current,int i_next,int energy){
-        MapUnit current = m.units[i_current];
-        MapUnit next = m.units[i_next];
-        MapUnit back;
-//        assert abs(next.mark - current.mark) == 1;    // just the next
-        assert energy>=0;
+        // first step
+        MapUnit current,next;
 
-        while(energy>0){
-            if(next.rank>current.rank){
-                energy = 0;
-            } else {
-                energy -= distance(next,current);
-            }
-            back = current;
-            current = next;
-            for (MapEdge e:current.edge) {
-                MapUnit try_next = m.units[e.adjedg];
-                int dis = e.distance;
-                // the same direction
-                if(try_next != back){
-                    if(dis > distance(current,next) && dis<=energy){
-                        next = try_next;
+        int dis2org = m.distance[i_current][i_next];
+        if(energy>=dis2org){
+            energy-=dis2org;
+            current = m.units[i_next];
+            if(current.rank>m.units[i_current].rank) energy = 0;
+
+            while (energy > 0) {
+                next = null;
+                int dis = 0;
+
+                // find next
+                for (MapEdge e : current.edge) {
+                    if (m.distance[i_current][e.adjedg]>dis2org) {
+                        if (energy >= e.distance) {
+                            if (next == null || e.distance > dis) {
+                                next = m.units[e.adjedg];
+                                dis = e.distance;
+                                dis2org = m.distance[i_current][e.adjedg];
+                            }
+                        }
                     }
                 }
+
+                // do move
+                // assert next != null;
+                if(next==null) Server.log("error","tryMove 38");
+
+                energy -= dis;
+                if (next.rank > current.rank) {
+                    energy = 0;
+                }
+                current = next;
             }
-            if(current == next) break;     // no dead loop
+
+        }else{
+            current = m.units[i_current];
         }
         return current.mark;
     }

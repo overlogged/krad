@@ -11,14 +11,13 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
-import com.typesafe.config
 import com.typesafe.config.ConfigFactory
 import common.MyJsonProtocol
 import spray.json._
 import game._
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 /**
@@ -103,6 +102,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
 
   // api
   val route: Route =
+  //---------------------------------------------------
+  // route for debug
     path("log") {
       get {
         log("get", "log")
@@ -122,6 +123,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
           complete(HttpResponse(StatusCodes.Accepted))
         }
       } ~
+  //----------------------------------------------------------
       path("session" / "login") {
         post {
           entity(as[RequestLogin]) { req =>
@@ -205,8 +207,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("session" / "match") {
-        withRequestTimeout(Duration.Inf) { // todo: 2 min
-          post {
+        withRequestTimeout(Duration.create(2, MINUTES)){
+            post {
             entity(as[RequestMatch]) { req =>
               log("post", "session/match")
               onComplete(SessionController.matchPlayers(req)) {
@@ -219,13 +221,15 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("game") {
-        post {
-          entity(as[RequestGame]) { req =>
-            log("post", "game")
-            onComplete(SessionController.gameRequest(req)) {
-              case Success(Some(str)) => complete(str)
-              case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
-              case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+        withRequestTimeout(Duration.create(5, MINUTES)){
+          post {
+            entity(as[RequestGame]) { req =>
+              log("post", "game")
+              onComplete(SessionController.gameRequest(req)) {
+                case Success(Some(str)) => complete(str)
+                case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
+                case Failure(_) => complete(HttpResponse(StatusCodes.InternalServerError))
+              }
             }
           }
         }
@@ -242,7 +246,8 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
     }
     Http().bindAndHandle(route, config.web_host, config.web_port)
     SessionController.addGhost()
-    MapGenerator.generate();
+    SessionController.routine()
+    MapGenerator.generate()
     log("bind", s"${config.web_host}:${config.web_port}")
   }
 }
