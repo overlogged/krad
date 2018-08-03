@@ -1135,6 +1135,8 @@
       var seent2 = JSON.stringify(req);
     }
 
+    var timeout = 0;
+
     function request(msg, callback) {
       sid = parseInt(url.split("?sid=")[1]);
       var seent3 = JSON.stringify({
@@ -1164,10 +1166,15 @@
             console.log(data.state);
             state = data.state;
             callback(data, status);
+            timeout = 0;
           },
           error: function (data, status) {
-            console.log(data);
-            alert("非常抱歉，服务器宕机，返回匹配界面");
+              console.log(data);
+              if (timeout <= 3) {
+                  timeout++;
+                  request(msg, callback);
+              }
+              else alert("非常抱歉，服务器宕机，返回匹配界面");
           }
         });
       }
