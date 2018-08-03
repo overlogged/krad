@@ -453,7 +453,7 @@
         if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
         if (pedometer == 1) {
-          do_decision(num);
+          do_decision(-1);
           steerTGP(0, cardlist[num]);
         }
       }
@@ -464,7 +464,7 @@
         if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
         if (pedometer == 1) {
-          do_decision(-1);
+          do_decision(num);
           steerTGP(1, cardlist[num]);
         }
       }
