@@ -612,7 +612,7 @@
     }
 
     function do_targetgenerate(fire_union) {
-      for (var z = 0; z < 4; z++) {
+      for (var z = 0; z < player_num; z++) {
         if (fire_union[z] != 0) {
           p_choose[z] = card.add.button(740 + z * 70, 80, 'button', fix_choose, this, 1, 0, 2, 0);
           p_text[z] = card.add.bitmapText(750 + z * 70, 80, 'chiller', 'player' + z.toString(), 28);
