@@ -1,9 +1,27 @@
 var state_login = {
   preload: function() {
       var url = window.location.href;
-      console.log(url);
-      if(url.indexOf("?")!=-1){
-        game.state.start('setpw');
+      
+      // parse url
+      var arr = url.split('?');
+      if(arr.length==2){
+        var s = arr[1].split('=');
+        sid = parseInt(s[1]);
+        if(s[0]=='tmpsid'){
+          game.state.start('setpw');
+        }else{
+          $.ajax({
+            url: "/api/user?sid=" + sid,
+            type: "GET",
+            success: function (data, status) {
+              user = data;
+              game.state.start('userinterface');
+            },
+            error: function (data, status) {
+              alert("未知错误，请刷新页面重试。");
+            }
+          });
+        }
       }
       var background = game.add.image(0, 0, 'background');
       background.smoothed = true;
@@ -89,10 +107,7 @@ function do_login() {
     contentType: 'application/json',
     data: JSON.stringify(req),
     success: function (data, status) {
-      // alert("登录成功");
-      sid = data.sid;
-      user = data.user;
-      game.state.start('userinterface');
+      window.location.href="krad.html?sid="+sid;  
     },
     error: function (data, status) {
       alert("用户名或密码错误");

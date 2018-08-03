@@ -38,14 +38,9 @@ function do_confirm() {
       alert("两次密码填写不一样");
       return;
   }
-  var url = window.location.href;
-  var str = url.split("?")[1];
-  var sid = parseInt(str.split("=")[1]); 
   var req = {
-
     'sid':sid,
     'new_password':password
-
   };
   console.log(req);
   var v_password = /[a-zA-Z0-9]{6,18}/.test(password);
