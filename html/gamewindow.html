@@ -442,16 +442,16 @@
       else if (cardtargeted[num]) { //a button is about to be untargeted
         cardtargeted[num] = 0;
         button.setFrames(1, 0, 0, 0);
-        san--;
-        if (pedometer==2) if (san == 0) checkcardlock();
+          san--;
+          if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
         if (pedometer == 1) steerTGP(0, cardlist[num]);
       }
       else { //a button is about to be targeted
         cardtargeted[num] = 1;
         button.setFrames(1, 1, 1, 1);
-        san++;
-        if (pedometer==2) if (san) checkcardunlock();
+          san++;
+          if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
         if (pedometer == 1) steerTGP(1, cardlist[num]);
       }
@@ -892,7 +892,7 @@
           else {
               statusbox.text += "玩家" + i + ": 未选择明牌\n";
               if (i == myIndex) statetips.text = '现在，你应该使用你的出拳牌了'
-              checkcardlock();
+              checkcardlock(checkbutton);
           }
         }
       }
