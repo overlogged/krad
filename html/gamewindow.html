@@ -181,7 +181,7 @@
 
       var loadingcomplete = 0;
       var counter;
-
+      var dont_force_me = 0;
     function skiper() {
       autoskip = 1;
       do_checkcard();
@@ -203,8 +203,12 @@
       else loadingcomplete = 1;
     }
 
-      function countdown(npf, apf, ppf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
-          if (npf == 0) {
+      function counting(npf, apf, ppf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
+          if (dont_force_me == 1) {
+              dont_force_me = 0;
+              if(apf!=1)counter.destroy();
+          }
+          else if (npf == 0) {
               counter.destroy();
               checkcardunlock(checkbutton);
               do_checkcard();
@@ -218,6 +222,11 @@
               counter.text = '倒计时：' + npf;
               setTimeout(" countdown("+npf+" - 1, 0,"+ppf+") ", 1000);
           }
+      }
+
+      function countdown(sec, step) {
+          dont_force_me = 0;
+          counting(sec, 1, step);
       }
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
@@ -720,6 +729,7 @@
       var g = [];
       if ((checkcardavaliable == 0) && (autoskip == 0)) ;
       else {
+        dont_force_me = 1;
         checkcardlock(checkbutton);
         switch (pedometer) {
           case 1:
@@ -848,7 +858,8 @@
       if (state == "choose hero") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
-        statetips.text = "按确定键分配英雄";
+          statetips.text = "按确定键分配英雄";
+          countdown(5,0 );
         myIndex = data.myIndex;
         player_lookup[myIndex] = '☛→你';
         allUserInfo = data.allUserInfo;
@@ -1072,16 +1083,17 @@
         refreshcard();
       }
       else if (state == "card distribute") {
-        checkcardunlock(checkbutton);
+        //checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
-        statepadtext_body.text = '发牌阶段';
-        statetips.text = '请点击按钮进行入新的一回合';
+        //statepadtext_body.text = '发牌阶段';
+        //statetips.text = '请点击按钮进行入新的一回合';
         p_decision = -1;    //To reset decision 
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 0;
         refreshcard();
         gamerank++;
+        skiper();
       }
     }
 
