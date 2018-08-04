@@ -137,39 +137,22 @@ public class God {
                         break;
                     case ACTION:
                         if (playerState[playerIndex] == 0) {
-                            result = GodHelper.toDepositAccount("skills account", energyList);
+                            String state;
+                            if(humanWin){
+                                state="Game Over, human wins";
+                                playerState[playerIndex] = 0;
+                                gameState = GameState.END;
+                            }else if(zombieWin){
+                                state="Game Over, zombie wins";
+                                playerState[playerIndex] = 0;
+                                gameState = GameState.END;
+                            }else{
+                                state="Account";
+                                playerState[playerIndex] += 1;
+                            }
+                            result = GodHelper.toAccount(state,energyList,healthPointList,locationList,elementList,teamList);
                             playerState[playerIndex] += 1;
                         } else if (playerState[playerIndex] == 1) {
-                            result = GodHelper.toSkillsAccount("fire account");
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 2) {
-                            result = GodHelper.toFireAccount("move account", healthPointList);
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 3) {
-                            result = GodHelper.toMoveAccount("element account", locationList);
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 4) {
-                            result = GodHelper.toElemAccount("if human wins", elementList);
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 5) {
-                            if (humanWin) {
-                                result = GodHelper.toHumanVictory("Game Over, human wins");
-                                playerState[playerIndex] = 0;
-                                gameState = GameState.END;
-                            } else {
-                                result = GodHelper.toHumanVictory("infection account");
-                                playerState[playerIndex] += 1;
-                            }
-                        } else if (playerState[playerIndex] == 6) {
-                            if (zombieWin) {
-                                result = GodHelper.toInfectionAccount("Game Over, zombie wins", teamList);
-                                playerState[playerIndex] = 0;
-                                gameState = GameState.END;
-                            } else {
-                                result = GodHelper.toInfectionAccount("desert account", teamList);
-                                playerState[playerIndex] += 1;
-                            }
-                        } else if (playerState[playerIndex] == 7) {
                             desertAccount(playerIndex, msg);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++)

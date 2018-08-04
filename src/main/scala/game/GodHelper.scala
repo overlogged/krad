@@ -48,6 +48,14 @@ object GodHelper extends MyJsonProtocol{
    * playerWinList tells which players win and which lose
    * after gamble handcards should be refreshed
    */
+  case class ResAccount(state:String,
+                     eneregyList:Array[Int],
+                     healthPointList:Array[Int],
+                     locationList:Array[Int],
+                     elemList:Array[Int],
+                     teamList:Array[Int]
+                    )
+
   case class ResDepositAccount(state:String,eneregyList:Array[Int])
   case class ResSkillsAccount(state:String)
   case class ResFireAccount(state:String,healthPointList:Array[Int])
@@ -55,6 +63,7 @@ object GodHelper extends MyJsonProtocol{
   case class ResElemAccount(state:String,elemList:Array[Int])
   case class ResHumanVictory(state:String)
   case class ResInfectionAccount(state:String,teamList:Array[Int])
+
   case class MsgDesertAccount(desertCardList:Array[Int])
   case class ResDesertAccount(state:String,energy:Int,handCards:Array[Int])
   case class ResGameOver(state:String,scoreList:Array[Int])
@@ -125,6 +134,10 @@ object GodHelper extends MyJsonProtocol{
 
   def toHumanVictory(state:String):String = {
     ResHumanVictory(state).toJson.toString()
+  }
+
+  def toAccount(state:String,eneregyList:Array[Int], healthPointList:Array[Int], locationList:Array[Int], elemList:Array[Int], teamList:Array[Int]): String ={
+    ResAccount(state,eneregyList,healthPointList,locationList,elemList,teamList).toJson.toString()
   }
 
   def toInfectionAccount(state:String,teamList:Array[Int]):String = {
