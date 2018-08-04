@@ -922,7 +922,7 @@
       }
       else if ((state == "win judge")) {
         checkcardunlock(checkbutton);
-        statetips.text = ' ';
+        statetips.text = '按下确定按键，进入结算等待，等待所有人都出拳完毕';
         statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
         do_fillcardlist();
@@ -981,6 +981,7 @@
       }
       else if (state == "if human wins") {
         checkcardunlock(checkbutton);
+        statetips.text = '请按确定键'; 
         statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
         elemList = data.locationList;
@@ -995,6 +996,7 @@
       }
       else if (state == "infection account") {
         checkcardunlock(checkbutton);
+        statetips.text = '请按确定键'; 
         statepadtext_body.text = '感染阶段';
       }
       else if (state == "Game Over, zombie wins") {
