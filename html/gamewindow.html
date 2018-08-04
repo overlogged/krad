@@ -438,7 +438,7 @@
         j = 'handcard_' + lookup_table[cardlist[i]];
         handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
         if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-        else handcardslot[i].setFrames(1, 0, 0, 0);
+        else handcardslot[i].setFrames(0, 0, 0, 0);
       }
       if (pedometer == 5) do_seencardslot();
     }
@@ -449,7 +449,7 @@
       if (staticinvalidcard[num]); //is it a locked button?
       else if (cardtargeted[num]) { //a button is about to be untargeted
         cardtargeted[num] = 0;
-        button.setFrames(1, 0, 0, 0);
+        button.setFrames(0, 0, 0, 0);
         san--;
         if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
@@ -553,7 +553,7 @@
         if (dynamicinvalidcard[j] == 1) {
           staticinvalidcard[j] = 0;
           dynamicinvalidcard[j] = 0;
-          handcardslot[j].setFrames(1, 0, 0, 0);
+          handcardslot[j].setFrames(0, 0, 0, 0);
         }
       }
     }
@@ -628,7 +628,7 @@
 
     function do_handcardslot() {
       for (slots = 17; slots >= 0; slots--) { //create handcard slots
-        handcardslot[slots] = card.add.button(10 + 45 * slots, 20, 'handcard_blank', targetcard, this, 1, 0, 0, 0);
+        handcardslot[slots] = card.add.button(10 + 45 * slots, 20, 'handcard_blank', targetcard, this, 0, 0, 0, 0);
       }
     }
 
