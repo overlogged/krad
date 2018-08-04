@@ -979,31 +979,46 @@
 
 
         
-        statepadtext_body.text = '蓄能结算';
+   
+
+        
+      }
+      else if (state=="Account")
+      {
+        statepadtext_body.text = '行动结算';
         eneregyList = data.eneregyList;
 
-        
-        statepadtext_body.text = '开火结算';
-
-       
-        statepadtext_body.text = '移动结算';
         healthPointList = data.healthPointList;
-
         
-        statepadtext_body.text = '要素判定';
+        
+    
         playerloc_union = data.locationList;
         elemList = data.elemList;
         do_move();
 
-       
         statetips.text = '请按确定键'; 
-        statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
-        elemList = data.locationList;
         statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
         for (var i = 0; i < player_num; i++) {
             statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
           }
+          for (var i = 0; i < player_num; i++) {
+          if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
+            do_poison(i);
+              statusbox.text += player_lookup[i] + "被感染，成为感染者\n";
+          }
+        }
+        statusbox.text += "\n第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
+        for (var i = 0; i < player_num; i++) {
+          if (data.teamList[i] == 1) {
+              statusbox.text += player_lookup[i] + ": 身份为感染者\n";
+          }
+          else {
+              statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
+          }
+        }
+        team_result = data.teamList;
+
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
@@ -1032,22 +1047,6 @@
         statepadtext_body.text = '弃牌阶段';
         statetips.text = '你现在应该丢弃你不需要的牌';
 
-        for (var i = 0; i < player_num; i++) {
-          if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
-            do_poison(i);
-              statusbox.text += player_lookup[i] + "被感染，成为感染者\n";
-          }
-        }
-        statusbox.text += "\n第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
-        for (var i = 0; i < player_num; i++) {
-          if (data.teamList[i] == 1) {
-              statusbox.text += player_lookup[i] + ": 身份为感染者\n";
-          }
-          else {
-              statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
-          }
-        }
-        team_result = data.teamList;
         do_desert(empty);
         do_fillcardlist();
         pedometer = 4;
