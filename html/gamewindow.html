@@ -1198,11 +1198,13 @@
           error: function (data, status) {
             console.log(data);
               if (timeout <= 3) {
-              timeout++;
-              request(msg, callback);
-            }
-            else alert("非常抱歉，服务器宕机，返回匹配界面");
-            window.location.href = "krad.html?sid=" + sid;
+                  timeout++;
+                  request(msg, callback);
+              }
+              else {
+                  alert("非常抱歉，服务器宕机，返回匹配界面");
+                  window.location.href = "krad.html?sid=" + sid;
+              }
 
           }
         });
