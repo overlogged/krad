@@ -714,6 +714,7 @@
       var g = [];
       if ((checkcardavaliable == 0) && (autoskip == 0)) ;
       else {
+        checkcardlock(checkbutton);
         switch (pedometer) {
           case 1:
             for (j = 0; j <= 17; j++) {
@@ -810,7 +811,6 @@
           req = {}
         }
         statetips.text = "请等待其他玩家操作完成";
-        checkcardlock(checkbutton);
         var seent = JSON.stringify({
           'sid': parseInt(sid),
           'msg': JSON.stringify(req)
@@ -943,14 +943,16 @@
         }
       }
       else if ((state == "win judge")) {
-        checkcardunlock(checkbutton);
+        //checkcardunlock(checkbutton);
         statetips.text = '按下确定按键，进入结算等待，等待所有人都出拳完毕';
         statepadtext_body.text = '猜拳结算';
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
+        autoskip = 1;
         do_checkcard();
+        autoskip = 0;
       }
       else if (state == "ACTION: deposit account") {
         checkcardunlock(checkbutton);
