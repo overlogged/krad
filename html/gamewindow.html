@@ -207,11 +207,7 @@
     }
 
       function counting(npf, apf, ppf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
-          if (dont_force_me == 1) {
-              dont_force_me = 0;
-             if(apf!=1)counter.destroy();
-          }
-          else if (npf == 0) {
+          if (npf == 0) {
               counter.destroy();
               checkcardunlock(checkbutton);
               switch (ppf) {
@@ -241,16 +237,15 @@
           else if (apf == 1) {
               counter = card.add.text(850, 100, '倒计时：'+npf);
               counter.fontSize = 40;
-              setTimeout("counting("+npf+" - 1, 0,"+ppf+")", 1000);
+              dont_force_me=setTimeout("counting("+npf+" - 1, 0,"+ppf+")", 1000);
           }
           else {
               counter.text = '倒计时：' + npf;
-              setTimeout(" counting("+npf+" - 1, 0,"+ppf+") ", 1000);
+              dont_force_me=setTimeout(" counting("+npf+" - 1, 0,"+ppf+") ", 1000);
           }
       }
 
       function countdown(sec, step) {
-          dont_force_me = 0;
           counting(sec, 1, step);
       }
       
@@ -758,8 +753,12 @@
       var g = [];
       if ((checkcardavaliable == 0) && (autoskip == 0)) ;
       else {
-          dont_force_me = 1;
-          setTimeout("checkcardlock(checkbutton)",1000);
+          if (dont_force_me != 0) {
+              clearTimeout(dont_force_me);
+              counter.destroy();
+          }
+        dont_force_me = 0;
+        checkcardlock(checkbutton)
         switch (pedometer) {
           case 1:
             for (j = 0; j <= 17; j++) {
