@@ -28,6 +28,7 @@ var state_preload = {
     game.load.image('tooltip7','assets/img/tooltip7.png');
     game.load.image('tooltip8','assets/img/tooltip8.png');
     game.load.image('tooltip9','assets/img/tooltip9.png');
+    game.load.image('tooltip10','assets/img/tooltip10.png');
     //game.loda.image('inprogress','assets/img/inprogress.png');
 
 
@@ -40,6 +41,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'container');
 
 game.state.add('preload', state_preload);
 game.state.add('help', state_help);
+game.state.add('help2', state_help2);
 game.state.add('login', state_login);
 game.state.add('register', state_register);
 game.state.add('forget', state_forget);
