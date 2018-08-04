@@ -209,7 +209,7 @@
       function counting(npf, apf, ppf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
           if (dont_force_me == 1) {
               dont_force_me = 0;
-              if(apf!=1)counter.destroy();
+             if(apf!=1)counter.destroy();
           }
           else if (npf == 0) {
               counter.destroy();
@@ -757,8 +757,9 @@
       var g = [];
       if ((checkcardavaliable == 0) && (autoskip == 0)) ;
       else {
-        dont_force_me = 1;
-        checkcardlock(checkbutton);
+          dont_force_me = 1;
+          checkcardlock(checkbutton);
+          setTimeout(alert("test"), 1000);
         switch (pedometer) {
           case 1:
             for (j = 0; j <= 17; j++) {
