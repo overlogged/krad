@@ -64,14 +64,14 @@ public class Map {
                 }
             }
         }
-        StringBuffer s = new StringBuffer();
-        for(int i=0;i<number;i++){
-            for(int j=0;j<number;j++){
-                s.append(distance[i][j]);
-                s.append(" ");
-            }
-            s.append("\n");
-        }
+//        StringBuffer s = new StringBuffer();
+//        for(int i=0;i<number;i++){
+//            for(int j=0;j<number;j++){
+//                s.append(distance[i][j]);
+//                s.append(" ");
+//            }
+//            s.append("\n");
+//        }
 //        Server.log("floyd",s.toString());
     }
 

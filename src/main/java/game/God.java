@@ -86,7 +86,7 @@ public class God {
                                 allPlayers[playerIndex].stratDecision = GambleChecker.DEPOSIT;
                             else {
                                 allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
-                                GambleChecker.cardToHeap(cardHeap, dec.decision());
+                                GambleChecker.cardToHeap(cardHeap, allPlayers[playerIndex].handCards[dec.decision()]);
                                 allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
                                 GambleChecker.cardSort(allPlayers[playerIndex].handCards);
                                 allPlayers[playerIndex].handCardsNum -= 1;
@@ -361,7 +361,7 @@ public class God {
             availableMoveDirection[0] = 0;
             availableMoveDirection[1] = 1;
             availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
+            availableMoveDirection[3] = 1;
             availableMoveDirection[4] = 0;
             availableMoveDirection[5] = 0;
             availableMoveDirection[6] = 0;
