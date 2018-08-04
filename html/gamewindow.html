@@ -976,35 +976,26 @@
               statusbox.text += player_lookup[i] + ": 未开火\n";
           }
         }
-        autoskip = 1;
-        for (var i = 0; i < 6; i++) {
-          do_checkcard();
-        }
-        autoskip = 0;
-      }
-      else if (state == "skills account") {
-        checkcardunlock(checkbutton);
+
+
+        
         statepadtext_body.text = '蓄能结算';
         eneregyList = data.eneregyList;
-      }
-      else if (state == "fire account") {
-        checkcardunlock(checkbutton);
+
+        
         statepadtext_body.text = '开火结算';
-      }
-      else if (state == "move account") {
-        checkcardunlock(checkbutton);
+
+       
         statepadtext_body.text = '移动结算';
         healthPointList = data.healthPointList;
-      }
-      else if (state == "element account") {
-        checkcardunlock(checkbutton);
+
+        
         statepadtext_body.text = '要素判定';
         playerloc_union = data.locationList;
         elemList = data.elemList;
         do_move();
-      }
-      else if (state == "if human wins") {
-        checkcardunlock(checkbutton);
+
+       
         statetips.text = '请按确定键'; 
         statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
@@ -1017,12 +1008,6 @@
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束，人类获胜！';
-      }
-      else if (state == "infection account") {
-        checkcardunlock(checkbutton);
-        statetips.text = '请按确定键'; 
-          statepadtext_body.text = '感染阶段';
-          //skiper();
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
