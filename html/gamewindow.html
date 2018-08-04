@@ -197,18 +197,6 @@
       else loadingcomplete = 1;
     }
 
-    function countdown(npf, apf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
-        if (npf == 0) counter.destroy;
-        else if (apf == 1) {
-            counter = card.add.text(10, 10, '倒计时：' + npf);
-            counter.fontSize = 40;
-            setTimeout(countdown(npf - 1, 0),1000);
-        }
-        else {
-            counter.text = '倒计时：' + npf;
-            setTimeout(countdown(npf - 1, 0), 1000);
-        }
-    }
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
@@ -293,6 +281,18 @@
       }
     });
 
+      function countdown(npf, apf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
+          if (npf == 0) counter.destroy;
+          else if (apf == 1) {
+              counter = card.add.text(10, 10, '倒计时：' + npf);
+              counter.fontSize = 40;
+              setTimeout(countdown(npf - 1, 0), 1000);
+          }
+          else {
+              counter.text = '倒计时：' + npf;
+              setTimeout(countdown(npf - 1, 0), 1000);
+          }
+      }
       setTimeout(countdown(40, 1),30000);
 
     var statusbox;
