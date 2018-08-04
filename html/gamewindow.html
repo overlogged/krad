@@ -825,6 +825,7 @@
       if (state == "choose hero") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
+        statetips.text = "按确定键分配英雄";
         myIndex = data.myIndex;
         player_lookup[myIndex] = '☛→你';
         allUserInfo = data.allUserInfo;
@@ -843,6 +844,7 @@
         team_result = data.teamResult;
         heroChoices = data.heroChoices;
         statusbox.text += "\n玩家选择的英雄为：\n";
+        statetips.text = "按确定键开始第一个回合";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += player_lookup[i] + ": 选择了英雄" + heroChoices[i] + "\n";
         }
