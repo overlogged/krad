@@ -9,5 +9,6 @@ object ScalaMapCheckerTest {
     println(MapChecker.tryMove(new game.Map("map/1.map"),3,4,0))
     println(MapChecker.tryMove(new game.Map("map/1.map"),6,7,0))
     println(MapChecker.tryMove(new game.Map("map/1.map"),8,9,0))
+    println(MapChecker.tryMove(new game.Map("map/1.map"),6,7,3))
   }
 }
