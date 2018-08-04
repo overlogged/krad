@@ -200,11 +200,11 @@
       function countdown(npf, apf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
           if (npf == 0) {
               counter.destroy();
-              checkcardunlock(checkbutton);
-              do_checkcard();
+             // checkcardunlock(checkbutton);
+              //do_checkcard();
           }
           else if (apf == 1) {
-              counter = card.add.text(10, 10, '倒计时：'+npf);
+              counter = card.add.text(850, 100, '倒计时：'+npf);
               counter.fontSize = 40;
               setTimeout("countdown("+npf+" - 1, 0)", 1000);
           }
@@ -401,8 +401,8 @@
         statepadtext_body = card.add.text(915, 40, 'ready');
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
-          statepadtext_body.text = '开始阶段';
-          //setTimeout("countdown(10, 1)", 5000);
+        statepadtext_body.text = '开始阶段';
+         // setTimeout("countdown(30, 1)", 3000);
         do_handcardslot();
         refreshcard();
       }
