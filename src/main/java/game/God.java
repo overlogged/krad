@@ -472,7 +472,13 @@ public class God {
             else
                 return 2;
         }
-        if (allPlayers[playerIndex].preLoc == 7) {
+        else if (allPlayers[playerIndex].preLoc==6){
+            if(direction==3)
+                return 7;
+            else
+                return 5;
+        }
+        else if (allPlayers[playerIndex].preLoc == 7) {
             if (direction == 7)
                 return 6;
             else if (direction == 0)
