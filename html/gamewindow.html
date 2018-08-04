@@ -819,11 +819,13 @@
     var healthPointList = [6, 6, 6, 6];
     var elemList = [];
     var scoreList = [];
+    var APFSDS_lookup = ['玩家0', '玩家1', '玩家2', '玩家3', '玩家4', '玩家5', '玩家6', '玩家7'];
     function do_callback(data, status) {
       if (state == "choose hero") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
         myIndex = data.myIndex;
+        APFSDS_lookup[myIndex] = '☛→你';
         allUserInfo = data.allUserInfo;
         herolist = data.heroList;
 
@@ -1084,16 +1086,17 @@
         })
         infor_text[player_index].text += "身份:  " + identity[player_index] + ",编号为" + player_index;
         infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
-        infor_text[player_index].text += "\n射程：  ";
-        infor_text[player_index].text += fire_distance;
-        infor_text[player_index].text += "\n火力：  ";
-        infor_text[player_index].text += fire_power;
-        infor_text[player_index].text += "\n机动性: ";
-        infor_text[player_index].text += move_power;
-        infor_text[player_index].text += "\n生命值: ";
-        for (var i = 0; i < healthPointList[player_index]; i++) {
+          infor_text[player_index].text += "\n射程：  ";
+          infor_text[player_index].text += fire_distance[player_index];
+          infor_text[player_index].text += "\n火力：  ";
+          infor_text[player_index].text += fire_power[player_index];
+          infor_text[player_index].text += "\n机动性: ";
+          infor_text[player_index].text += move_power[player_index];
+          infor_text[player_index].text += "\n生命值: ";
+          if (healthPointList[player_index] > 8) infor_text[player_index].text += healthPointList[player_index];
+          else for (var i = 0; i < healthPointList[player_index]; i++) {
             infor_text[player_index].text += "❤";
-        }
+          }
       }
       else {
         infor[player_index] = game.add.sprite(player[player_index].x - 100, player[player_index].y + 10, 'status' + (player_index + 1).toString());
@@ -1104,16 +1107,17 @@
         })
         infor_text[player_index].text += "身份:  " + identity[player_index]+ ",编号为" + player_index;
         infor_text[player_index].text += "\n英雄:  " + heroChoices[player_index];
-        infor_text[player_index].text += "\n射程：  ";
-        infor_text[player_index].text += fire_distance;
-        infor_text[player_index].text += "\n火力：  ";
-        infor_text[player_index].text += fire_power;
-        infor_text[player_index].text += "\n机动性: ";
-        infor_text[player_index].text += move_power;
-        infor_text[player_index].text += "\n生命值: ";
-        for (var i = 0; i < healthPointList[player_index]; i++) {
+          infor_text[player_index].text += "\n射程：  ";
+          infor_text[player_index].text += fire_distance[player_index];
+          infor_text[player_index].text += "\n火力：  ";
+          infor_text[player_index].text += fire_power[player_index];
+          infor_text[player_index].text += "\n机动性: ";
+          infor_text[player_index].text += move_power[player_index];
+          infor_text[player_index].text += "\n生命值: ";
+          if (healthPointList[player_index] > 8) infor_text[player_index].text += healthPointList[player_index];
+          else for (var i = 0; i < healthPointList[player_index]; i++) {
             infor_text[player_index].text += "❤";
-        }
+          }
       }
       is_infor[player_index] = true;
     }
