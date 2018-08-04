@@ -178,7 +178,7 @@
       y: 530
     }
     ];
-
+      var gamblecount;
       var loadingcomplete = 0;
       var counter;
       var dont_force_me = 0;
@@ -199,7 +199,10 @@
     }
 
     function loadedcheck() {
-      if (loadingcomplete) checkcardunlock(checkbutton);
+        if (loadingcomplete) {
+            checkcardunlock(checkbutton);
+            countdown(15, 0);
+        }
       else loadingcomplete = 1;
     }
 
@@ -211,7 +214,29 @@
           else if (npf == 0) {
               counter.destroy();
               checkcardunlock(checkbutton);
-              do_checkcard();
+              switch (ppf) {
+                  case 0:
+                      do_checkcard();
+                      break;
+                  case 1:
+                      req = {
+                          decision: -1,
+                          moveDirection: -1,
+                          fireTarget: -1
+                      }
+                      do_checkcard();
+                      break;
+                  case 2:
+                      do_gamblecard([gamblecount]);
+                      do_checkcard();
+                      break;
+                  case 4:
+                      do_checkcard();
+                      break;
+                  case 5:
+                      checkseencard(seencardslot[1]);
+                      break;
+              }
           }
           else if (apf == 1) {
               counter = card.add.text(850, 100, '倒计时：'+npf);
@@ -453,6 +478,7 @@
         seencardslot[3].destroy();
         seencardtext[3].destroy();
       }
+      do_checkcard();
     }
 
     function refreshcard() {
@@ -708,9 +734,11 @@
       for (j = 0; j <= 17; j++) {
         switch (cardlist[j]) {
           case 0:
+            break;
           case 1:
           case 2:
           case 3:
+            gamblecount = j;
           case 4:
           case 5:
           case 6:
@@ -878,7 +906,7 @@
         team_result = data.teamResult;
         heroChoices = data.heroChoices;
         statusbox.text += "\n玩家选择的英雄为：\n";
-        statetips.text = "按确定键开始第一个回合";
+        //statetips.text = "按确定键开始第一个回合";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += player_lookup[i] + ": 选择了英雄" + heroChoices[i] + "\n";
         }
@@ -897,6 +925,7 @@
           }
         }
         pointer = game.add.sprite(player[myIndex].body.x - 15, player[myIndex].body.y - 62, 'pointer');
+        skiper();
       }
       else if (state == "choose strategy decision") {
         checkcardunlock(checkbutton);
@@ -914,7 +943,7 @@
         pedometer = 1;
         fire_union = data.availableFireTarget;
         refreshcard();
-
+          countdown(25, pedometer);
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         checkcardunlock(checkbutton);
@@ -931,7 +960,8 @@
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 5;
-        refreshcard();
+          refreshcard();
+          countdown(10, pedometer);
       }
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
           //checkcardunlock(checkbutton);
@@ -953,6 +983,7 @@
                       statusbox.text += player_lookup[i] + ": 未选择明牌\n";
                       if (i == myIndex) {
                           statetips.text = '现在，你应该使用你的出拳牌了'
+                          countdown(20, pedometer);
                           // checkcardlock(checkbutton);
                       }
                   }
@@ -1019,24 +1050,26 @@
         do_move();
       }
       else if (state == "if human wins") {
-        checkcardunlock(checkbutton);
-        statetips.text = '请按确定键'; 
-        statepadtext_body.text = '感染判定';
+        //checkcardunlock(checkbutton);
+        //statetips.text = '请按确定键'; 
+        //statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
         elemList = data.locationList;
         statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
         for (var i = 0; i < player_num; i++) {
             statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
-        }
+          }
+          skiper();
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '游戏结束，人类获胜！';
       }
       else if (state == "infection account") {
-        checkcardunlock(checkbutton);
-        statetips.text = '请按确定键'; 
-        statepadtext_body.text = '感染阶段';
+        //checkcardunlock(checkbutton);
+        //statetips.text = '请按确定键'; 
+          //statepadtext_body.text = '感染阶段';
+          skiper();
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
@@ -1081,6 +1114,7 @@
         do_fillcardlist();
         pedometer = 4;
         refreshcard();
+        countdown(10, pedometer);
       }
       else if (state == "card distribute") {
         //checkcardunlock(checkbutton);
