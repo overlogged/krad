@@ -68,6 +68,7 @@ public class God {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
                             wait_count = 0;
+                            GambleChecker.cardHeapStir(cardHeap);
                             if(allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
                                 GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
                             else

@@ -132,6 +132,7 @@ public class GambleChecker {
             playerMain.handCardsNum--;
         }
         cardSort(playerMain.handCards);
+        cardHeapStir(cardHeap);
     }
 
     /*
