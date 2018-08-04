@@ -253,26 +253,7 @@
           dont_force_me = 0;
           counting(sec, 1, step);
       }
-
-      function sleep(millis) {
-          var njf1 = njen(this, arguments, "millis");
-          nj: while (1) {
-              try {
-                  switch (njf1.cp) {
-                      case 0: njf1._notifier = NjsRuntime.createNotifier();
-                          setTimeout(njf1._notifier, njf1._millis);
-                          njf1.cp = 1;
-                          njf1._notifier.wait(njf1);
-                          return;
-                      case 1: break nj;
-                  }
-              } catch (ex) {
-                  if (!njf1.except(ex, 1))
-                      return;
-              }
-          }
-          njf1.pf();
-      }
+      
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
@@ -778,8 +759,7 @@
       if ((checkcardavaliable == 0) && (autoskip == 0)) ;
       else {
           dont_force_me = 1;
-          checkcardlock(checkbutton);
-          sleep(1000);
+          setTimeout("checkcardlock(checkbutton)",1000);
         switch (pedometer) {
           case 1:
             for (j = 0; j <= 17; j++) {
