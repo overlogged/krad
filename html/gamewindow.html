@@ -1017,7 +1017,14 @@
           }
         }
         team_result = data.teamList;
-        skiper();
+        checkcardunlock(checkbutton);
+        statepadtext_body.text = '弃牌阶段';
+        statetips.text = '你现在应该丢弃你不需要的牌';
+
+        do_desert(empty);
+        do_fillcardlist();
+        pedometer = 4;
+        refreshcard();
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
@@ -1040,17 +1047,9 @@
         if (turn_web == 2) {
           window.location.href = "krad.html?sid=" + sid;
         }
-      }
-      else if (state == "desert account") {
-        checkcardunlock(checkbutton);
-        statepadtext_body.text = '弃牌阶段';
-        statetips.text = '你现在应该丢弃你不需要的牌';
-
-        do_desert(empty);
-        do_fillcardlist();
-        pedometer = 4;
-        refreshcard();
-      }
+      } 
+      // else if (state == "desert account") {
+      // }
       else if (state == "card distribute") {
         //checkcardunlock(checkbutton);
         //玩家能量信息= data.energy;
