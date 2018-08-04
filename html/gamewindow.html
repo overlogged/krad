@@ -710,12 +710,20 @@
         checkcardlock(checkbutton)
         switch (pedometer) {
           case 1:
-            for (j = 0; j <= 17; j++) {
-              if (cardtargeted[j]) {
-                //do_decision(j);
-                steerTGP(0, cardlist[j]);
-              }
-            }
+                for (j = 0; j <= 17; j++) {
+                    if (cardtargeted[j]) {
+                        //do_decision(j);
+                        steerTGP(0, cardlist[j]);
+                    }
+                }
+                if (ifcharge) {
+                    req = {
+                        decision: -1,
+                        moveDirection: -1,
+                        fireTarget: -1
+                    };
+                }
+                else ifcharge = 1;
             break;
           case 2:
             var k = 0;
@@ -814,7 +822,7 @@
     }
 
 
-
+    var ifcharge = 1;
     var autoskip = 0;
     var team_result = [0, 0, 0, 1];
     var allUserInfo = [];
@@ -1143,6 +1151,7 @@
 
     function do_target(direction, target) {
       //alert("movediretion" + direction);
+      ifcharge = 0;
       req = {
         decision: p_decision,
         moveDirection: direction,
