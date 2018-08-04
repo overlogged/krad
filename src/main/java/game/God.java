@@ -68,11 +68,10 @@ public class God {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
                             wait_count = 0;
-                            GambleChecker.cardHeapStir(cardHeap);
-                            if(allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
+                            if (allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
                                 GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
                             else
-                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint-allPlayers[playerIndex].handCardsNum);
+                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             seenCardJudge(playerIndex, playerHandCard);
                             for (int i = 0; i < playerNum; i++) {
@@ -139,19 +138,19 @@ public class God {
                     case ACTION:
                         if (playerState[playerIndex] == 0) {
                             String state;
-                            if(humanWin){
-                                state="Game Over, human wins";
+                            if (humanWin) {
+                                state = "Game Over, human wins";
                                 playerState[playerIndex] = 0;
                                 gameState = GameState.END;
-                            }else if(zombieWin){
-                                state="Game Over, zombie wins";
+                            } else if (zombieWin) {
+                                state = "Game Over, zombie wins";
                                 playerState[playerIndex] = 0;
                                 gameState = GameState.END;
-                            }else{
-                                state="Account";
+                            } else {
+                                state = "Account";
                                 playerState[playerIndex] += 1;
                             }
-                            result = GodHelper.toAccount(state,energyList,healthPointList,locationList,elementList,teamList);
+                            result = GodHelper.toAccount(state, energyList, healthPointList, locationList, elementList, teamList);
                         } else if (playerState[playerIndex] == 1) {
                             desertAccount(playerIndex, msg);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
@@ -306,7 +305,6 @@ public class God {
         gambleChoices[playerIndex] = playerMain.gamble;
         cardNumList[playerIndex] = playerMain.gambleNum;
     }
-
 
 
     private Integer gamble_count = 0;
@@ -472,14 +470,12 @@ public class God {
                 return 0;
             else
                 return 2;
-        }
-        else if (allPlayers[playerIndex].preLoc==6){
-            if(direction==3)
+        } else if (allPlayers[playerIndex].preLoc == 6) {
+            if (direction == 3)
                 return 7;
             else
                 return 5;
-        }
-        else if (allPlayers[playerIndex].preLoc == 7) {
+        } else if (allPlayers[playerIndex].preLoc == 7) {
             if (direction == 7)
                 return 6;
             else if (direction == 0)
@@ -531,16 +527,21 @@ public class God {
                 return 7;
             else
                 return 23;
+        } else if (allPlayers[playerIndex].preLoc > 16) {
+            if (direction == 1)
+                return allPlayers[playerIndex].preLoc + 1;
+            else
+                return allPlayers[playerIndex].preLoc - 1;
         } else {
             if (direction == 1)
-                return allPlayers[playerIndex].preLoc+1;
+                return allPlayers[playerIndex].preLoc - 1;
             else
-                return allPlayers[playerIndex].preLoc-1;
+                return allPlayers[playerIndex].preLoc + 1;
         }
     }
 
     // functions for ACTION stage
-    void doAction(){
+    void doAction() {
         depositAccount();
         skillsAccount();
         fireAccount();
@@ -582,7 +583,7 @@ public class God {
                 allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
             }
         }
-        for(int i = 0; i < playerNum; i++)
+        for (int i = 0; i < playerNum; i++)
             locationList[i] = allPlayers[i].preLoc;
     }
 
@@ -626,7 +627,6 @@ public class God {
     }
 
 
-
     private int desert_count = 0;
 
     private void desertAccount(int playerIndex, String msg) {
@@ -653,7 +653,6 @@ public class God {
             }
         }
     }
-
 
 
     private int wait_count = 0;
@@ -746,8 +745,8 @@ public class God {
         for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++) {
             playerHandCard[i] = allPlayers[playerIndex].handCards[i];
             if ((allPlayers[playerIndex].handCards[i] == 1)
-                    ||(allPlayers[playerIndex].handCards[i] == 2)
-                    ||(allPlayers[playerIndex].handCards[i] == 3))
+                    || (allPlayers[playerIndex].handCards[i] == 2)
+                    || (allPlayers[playerIndex].handCards[i] == 3))
                 isSeenCard = false;
         }
         if (isSeenCard)
