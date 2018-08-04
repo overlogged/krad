@@ -216,11 +216,11 @@
           else if (apf == 1) {
               counter = card.add.text(850, 100, '倒计时：'+npf);
               counter.fontSize = 40;
-              setTimeout("countdown("+npf+" - 1, 0,"+ppf+")", 1000);
+              setTimeout("counting("+npf+" - 1, 0,"+ppf+")", 1000);
           }
           else {
               counter.text = '倒计时：' + npf;
-              setTimeout(" countdown("+npf+" - 1, 0,"+ppf+") ", 1000);
+              setTimeout(" counting("+npf+" - 1, 0,"+ppf+") ", 1000);
           }
       }
 
@@ -859,7 +859,7 @@
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
           statetips.text = "按确定键分配英雄";
-          countdown(5,0 );
+          countdown(5,0);
         myIndex = data.myIndex;
         player_lookup[myIndex] = '☛→你';
         allUserInfo = data.allUserInfo;
