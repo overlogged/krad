@@ -197,6 +197,22 @@
       else loadingcomplete = 1;
     }
 
+      function countdown(npf, apf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
+          if (npf == 0) {
+              counter.destroy();
+              checkcardunlock(checkbutton);
+              do_checkcard();
+          }
+          else if (apf == 1) {
+              counter = card.add.text(10, 10, '倒计时：'+npf);
+              counter.fontSize = 40;
+              setTimeout("countdown("+npf+" - 1, 0)", 1000);
+          }
+          else {
+              counter.text = '倒计时：' + npf;
+              setTimeout(" countdown("+npf+" - 1, 0) ", 1000);
+          }
+      }
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
@@ -280,21 +296,7 @@
         }
       }
     });
-
-      function countdown(npf, apf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
-          if (npf == 0) counter.destroy;
-          else if (apf == 1) {
-              counter = card.add.text(10, 10, '倒计时：' + npf);
-              counter.fontSize = 40;
-              setTimeout(countdown(npf - 1, 0), 1000);
-          }
-          else {
-              counter.text = '倒计时：' + npf;
-              setTimeout(countdown(npf - 1, 0), 1000);
-          }
-      }
-      setTimeout(countdown(40, 1),30000);
-
+      
     var statusbox;
     var pagecount = 1;    //To control changing statusarea page
     var statusarea = new Phaser.Game(280, 8800, Phaser.CANVAS, 'statuscontainer', {
@@ -318,7 +320,8 @@
         statusbox = statusarea.add.text(15, 0, "", {
           font: "14px 微软雅黑",
           fill: "#ff0044",
-          align: "left",
+            align: "left",
+            
         });
 
         // statusbox.wordWrap = true;
@@ -337,7 +340,6 @@
         }
       }
     });
-
     var statetips;
     var checkbutton;
     var checkcardavaliable = 0;
@@ -399,7 +401,8 @@
         statepadtext_body = card.add.text(915, 40, 'ready');
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
-        statepadtext_body.text = '开始阶段';
+          statepadtext_body.text = '开始阶段';
+          //setTimeout("countdown(10, 1)", 5000);
         do_handcardslot();
         refreshcard();
       }
@@ -418,6 +421,7 @@
         seencardtext[3].destroy();
       }
     }
+
 
     function checkseencard(button) {
       var j;
