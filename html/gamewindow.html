@@ -197,20 +197,20 @@
       else loadingcomplete = 1;
     }
 
-      function countdown(npf, apf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
+      function countdown(npf, apf, ppf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
           if (npf == 0) {
               counter.destroy();
-             // checkcardunlock(checkbutton);
-              //do_checkcard();
+              checkcardunlock(checkbutton);
+              do_checkcard();
           }
           else if (apf == 1) {
               counter = card.add.text(850, 100, '倒计时：'+npf);
               counter.fontSize = 40;
-              setTimeout("countdown("+npf+" - 1, 0)", 1000);
+              setTimeout("countdown("+npf+" - 1, 0,"+ppf+")", 1000);
           }
           else {
               counter.text = '倒计时：' + npf;
-              setTimeout(" countdown("+npf+" - 1, 0) ", 1000);
+              setTimeout(" countdown("+npf+" - 1, 0,"+ppf+") ", 1000);
           }
       }
 
@@ -950,7 +950,7 @@
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-
+        do_checkcard();
       }
       else if (state == "ACTION: deposit account") {
         checkcardunlock(checkbutton);
