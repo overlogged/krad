@@ -996,9 +996,9 @@
         do_move();
       }
       else if (state == "if human wins") {
-        //checkcardunlock(checkbutton);
-        //statetips.text = '请按确定键'; 
-        //statepadtext_body.text = '感染判定';
+        checkcardunlock(checkbutton);
+        statetips.text = '请按确定键'; 
+        statepadtext_body.text = '感染判定';
         var elem_string = ["无要素", "有要素"];
         elemList = data.locationList;
         statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
@@ -1011,10 +1011,10 @@
         statepadtext_body.text = '游戏结束，人类获胜！';
       }
       else if (state == "infection account") {
-        //checkcardunlock(checkbutton);
-        //statetips.text = '请按确定键'; 
-          //statepadtext_body.text = '感染阶段';
-          skiper();
+        checkcardunlock(checkbutton);
+        statetips.text = '请按确定键'; 
+          statepadtext_body.text = '感染阶段';
+          //skiper();
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
