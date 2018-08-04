@@ -182,6 +182,12 @@
       var loadingcomplete = 0;
       var counter;
 
+    function skiper() {
+      autoskip = 1;
+      do_checkcard();
+      autoskip = 0;
+    }
+
     function checkcardlock(ccb) {
       ccb.setFrames(2, 2, 2, 2);
       checkcardavaliable = 0;
@@ -917,30 +923,30 @@
         refreshcard();
       }
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
-        checkcardunlock(checkbutton);
-        statepadtext_body.text = '出拳阶段';
-        if (state == "GAMBLE: choose gamble") {
-          pedometer = 2;
-          refreshcard();
-        }
-        do_gamblecard(empty);
-        decisionChoices = data.decisionChoices;
-        seenCardChoices = data.seenCardChoices;
-        var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
-        statusbox.text += "\n玩家选择的明牌情况为：\n";
-        for (var i = 0; i < player_num; i++) {
-          if (seenCardChoices[i] != 0) {
-              statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
-            if (i == myIndex) statetips.text = '你在之前已经选择过了明牌出拳，现在你无法使用出拳牌，请进入下一阶段'
+          //checkcardunlock(checkbutton);
+          statepadtext_body.text = '出拳阶段';
+          if (state == "GAMBLE: choose gamble") {
+              pedometer = 2;
+              refreshcard();
           }
-          else {
-              statusbox.text += player_lookup[i] + ": 未选择明牌\n";
-            if (i == myIndex) {
-              statetips.text = '现在，你应该使用你的出拳牌了'
-              checkcardlock(checkbutton);
-            }
+          do_gamblecard(empty);
+          decisionChoices = data.decisionChoices;
+          seenCardChoices = data.seenCardChoices;
+          var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
+          statusbox.text += "\n玩家选择的明牌情况为：\n";
+          for (var i = 0; i < player_num; i++) {
+              if (seenCardChoices[i] != 0) {
+                  statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+                  if (i == myIndex) skiper();
+                  else {
+                      statusbox.text += player_lookup[i] + ": 未选择明牌\n";
+                      if (i == myIndex) {
+                          statetips.text = '现在，你应该使用你的出拳牌了'
+                          // checkcardlock(checkbutton);
+                      }
+                  }
+              }
           }
-        }
       }
       else if ((state == "win judge")) {
         //checkcardunlock(checkbutton);
@@ -950,9 +956,7 @@
         do_fillcardlist();
         pedometer = 3;
         refreshcard();
-        autoskip = 1;
-        do_checkcard();
-        autoskip = 0;
+        skiper();
       }
       else if (state == "ACTION: deposit account") {
         checkcardunlock(checkbutton);
