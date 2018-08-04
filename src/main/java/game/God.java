@@ -151,7 +151,6 @@ public class God {
                                 playerState[playerIndex] += 1;
                             }
                             result = GodHelper.toAccount(state,energyList,healthPointList,locationList,elementList,teamList);
-                            playerState[playerIndex] += 1;
                         } else if (playerState[playerIndex] == 1) {
                             desertAccount(playerIndex, msg);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
