@@ -792,6 +792,7 @@
         else if (state == "card distribute") {
           req = {}
         }
+        statetips.text = "请等待其他玩家操作完成";
         checkcardlock(checkbutton);
         var seent = JSON.stringify({
           'sid': parseInt(sid),
