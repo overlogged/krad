@@ -181,7 +181,6 @@
       var gamblecount;
       var loadingcomplete = 0;
       var counter;
-      var dont_force_me = 0;
     function skiper() {
       autoskip = 1;
       do_checkcard();
@@ -201,54 +200,10 @@
     function loadedcheck() {
         if (loadingcomplete) {
             checkcardunlock(checkbutton);
-            countdown(15, 0);
         }
       else loadingcomplete = 1;
     }
 
-      function counting(npf, apf, ppf) {//apf==1 create countdown;==0 counting;npf means howmany time left;
-          if (npf == 0) {
-              counter.destroy();
-              checkcardunlock(checkbutton);
-              switch (ppf) {
-                  case 0:
-                      do_checkcard();
-                      break;
-                  case 1:
-                      req = {
-                          decision: -1,
-                          moveDirection: -1,
-                          fireTarget: -1
-                      }
-                      do_checkcard();
-                      break;
-                  case 2:
-                      do_gamblecard([gamblecount]);
-                      do_checkcard();
-                      break;
-                  case 4:
-                      do_checkcard();
-                      break;
-                  case 5:
-                      checkseencard(seencardslot[1]);
-                      break;
-              }
-          }
-          else if (apf == 1) {
-              counter = card.add.text(850, 100, '倒计时：'+npf);
-              counter.fontSize = 40;
-              dont_force_me=setTimeout("counting("+npf+" - 1, 0,"+ppf+")", 1000);
-          }
-          else {
-              counter.text = '倒计时：' + npf;
-              dont_force_me=setTimeout(" counting("+npf+" - 1, 0,"+ppf+") ", 1000);
-          }
-      }
-
-      function countdown(sec, step) {
-          counting(sec, 1, step);
-      }
-      
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
@@ -438,7 +393,6 @@
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
         statepadtext_body.text = '开始阶段';
-         // setTimeout("countdown(30, 1)", 3000);
         do_handcardslot();
         refreshcard();
       }
@@ -753,11 +707,6 @@
       var g = [];
       if ((checkcardavaliable == 0) && (autoskip == 0)) ;
       else {
-          if (dont_force_me != 0) {
-              clearTimeout(dont_force_me);
-              counter.destroy();
-          }
-        dont_force_me = 0;
         checkcardlock(checkbutton)
         switch (pedometer) {
           case 1:
@@ -887,7 +836,6 @@
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
           statetips.text = "按确定键分配英雄";
-          countdown(5,0);
         myIndex = data.myIndex;
         player_lookup[myIndex] = '☛→你';
         allUserInfo = data.allUserInfo;
@@ -943,7 +891,6 @@
         pedometer = 1;
         fire_union = data.availableFireTarget;
         refreshcard();
-          countdown(25, pedometer);
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         checkcardunlock(checkbutton);
@@ -961,7 +908,6 @@
         do_fillcardlist();
         pedometer = 5;
           refreshcard();
-          countdown(10, pedometer);
       }
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
           //checkcardunlock(checkbutton);
@@ -984,7 +930,6 @@
                       statusbox.text += player_lookup[i] + ": 未选择明牌\n";
                       if (i == myIndex) {
                           statetips.text = '现在，你应该使用你的出拳牌了'
-                          countdown(20, pedometer);
                           // checkcardlock(checkbutton);
                       }
                   }
@@ -1060,6 +1005,7 @@
         for (var i = 0; i < player_num; i++) {
             statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
           }
+          s
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
@@ -1114,7 +1060,6 @@
         do_fillcardlist();
         pedometer = 4;
         refreshcard();
-        countdown(10, pedometer);
       }
       else if (state == "card distribute") {
         //checkcardunlock(checkbutton);
