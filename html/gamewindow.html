@@ -955,7 +955,7 @@
         skiper();
       }
       else if (state == "ACTION: deposit account") {
-        checkcardunlock(checkbutton);
+        //checkcardunlock(checkbutton);
         var lookup_table = ['blank', '布', '剪刀', '石头', '移动', '开火', '技能', '蓄能'];
         statepadtext_body.text = '猜拳结算';
         pedometer = 0;
@@ -976,7 +976,7 @@
             statusbox.text += player_lookup[i] + ": 未开火\n";
           }
         }
-
+        skiper();
 
 
 
