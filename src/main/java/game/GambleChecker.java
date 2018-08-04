@@ -19,27 +19,28 @@ public class GambleChecker {
         //count variable i
         int i,j;
         //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 8:12:8:4:4:4
-        for (i = 0; i < 8 * playerNum; i++) {
+        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 0:16:0:8:8:8
+        for (i = 0; i < 0 * playerNum; i++) {
             cardHeap[i] = FIRE;
         }
         j = i;
-        for (; i < j + 12 * playerNum; i++) {
+        for (; i < j + 16 * playerNum; i++) {
             cardHeap[i] = MOVE;
         }
         j = i;
-        for (; i < j + 8 * playerNum; i++) {
+        for (; i < j + 0 * playerNum; i++) {
             cardHeap[i] = SKILLS;
         }
         j = i;
-        for (; i < j + 4 * playerNum; i++) {
+        for (; i < j + 8 * playerNum; i++) {
             cardHeap[i] = PAPER;
         }
         j = i;
-        for (; i < j + 4 * playerNum; i++) {
+        for (; i < j + 8 * playerNum; i++) {
             cardHeap[i] = SCISSORS;
         }
         j = i;
-        for (; i < j + 4 * playerNum; i++) {
+        for (; i < j + 8 * playerNum; i++) {
             cardHeap[i] = ROCK;
         }
         return cardHeap;
