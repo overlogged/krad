@@ -68,7 +68,10 @@ public class God {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
                             wait_count = 0;
-                            GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
+                            if(allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
+                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
+                            else
+                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint-allPlayers[playerIndex].handCardsNum);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             seenCardJudge(playerIndex, playerHandCard);
                             for (int i = 0; i < playerNum; i++) {
@@ -227,6 +230,7 @@ public class God {
         int zombie = (int) (Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
         allPlayers[zombie].healthPoint = 12;
+        allPlayers[zombie].mot = 10;
         allPlayers[zombie].hasElem = false;
         allPlayers[zombie].firePow = 0;
         allPlayers[zombie].range = 0;
