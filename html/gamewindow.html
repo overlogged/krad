@@ -979,17 +979,18 @@
               if (seenCardChoices[i] != 0) {
                   statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
                   if (i == myIndex) skiper();
+              }
                   else {
                       statusbox.text += player_lookup[i] + ": 未选择明牌\n";
                       if (i == myIndex) {
                           statetips.text = '现在，你应该使用你的出拳牌了'
-                          //countdown(20, pedometer);
+                          countdown(20, pedometer);
                           // checkcardlock(checkbutton);
                       }
                   }
               }
           }
-      }
+      
       else if ((state == "win judge")) {
         //checkcardunlock(checkbutton);
         //statetips.text = '等待所有人都出拳完毕';
