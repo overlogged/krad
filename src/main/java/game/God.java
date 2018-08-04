@@ -261,7 +261,7 @@ public class God {
         int decision = playerMain.stratDecision;
         int direction = toLoc(playerIndex, decisionFeature.moveDirection());
 
-        if ((decision < 4) | (decision > 7))
+        if ((decision < 4) || (decision > 7))
             decision = GambleChecker.DEPOSIT;
 
         if (decision == GambleChecker.MOVE) {
@@ -281,7 +281,7 @@ public class God {
         MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
         synchronized (this) {
             seen_card_count += 1;
-            if ((playerMain.isSeenCard) | (msgSeenCard.seenCard() != 0)) {
+            if ((playerMain.isSeenCard) || (msgSeenCard.seenCard() != 0)) {
                 playerMain.gamble = msgSeenCard.seenCard();
                 playerMain.gambleNum = 1;
                 playerMain.isSeenCard = true;
@@ -309,7 +309,7 @@ public class God {
         for (int i = 0; i < msgChooseGamble.gambleCard().length; i++)
             gambleChoose[i] = msgChooseGamble.gambleCard()[i];
         if (!playerMain.isSeenCard) {
-            if ((msgChooseGamble.gambleCard() == null) | (msgChooseGamble.gambleCard()[0] == -1))
+            if ((msgChooseGamble.gambleCard() == null) || (msgChooseGamble.gambleCard()[0] == -1))
                 playerMain.gamble = 1;
             playerMain.gamble = playerMain.handCards[gambleChoose[0]];
             playerMain.gambleNum = gambleChoose.length;
@@ -613,7 +613,7 @@ public class God {
 
     private void humanVictory() {
         for (int i = 0; i < playerNum; i++) {
-            if ((allPlayers[i].preLoc == map.fighter_evacuate) & (allPlayers[i].hasElem)) {
+            if ((allPlayers[i].preLoc == map.fighter_evacuate) && (allPlayers[i].hasElem)) {
                 humanWin = true;
             }
         }
@@ -647,7 +647,7 @@ public class God {
             cardList[i] = msgDesertAccount.desertCardList()[i];
         synchronized (this) {
             desert_count += 1;
-            if ((cardList[0] != -1) & (msgDesertAccount.desertCardList() != null))
+            if ((cardList[0] != -1) && (msgDesertAccount.desertCardList() != null))
                 GambleChecker.cardDesert(allPlayers[playerIndex], cardHeap, cardList);
             if (allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
                 allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
@@ -757,8 +757,8 @@ public class God {
         for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++) {
             playerHandCard[i] = allPlayers[playerIndex].handCards[i];
             if ((allPlayers[playerIndex].handCards[i] == 1)
-                    | (allPlayers[playerIndex].handCards[i] == 2)
-                    | (allPlayers[playerIndex].handCards[i] == 3))
+                    ||(allPlayers[playerIndex].handCards[i] == 2)
+                    ||(allPlayers[playerIndex].handCards[i] == 3))
                 isSeenCard = false;
         }
         if (isSeenCard)
