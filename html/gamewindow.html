@@ -898,11 +898,11 @@
         if (state == "must choose seen card") {
           statetips.text = '你手中没有出拳牌,必须选择一张明牌';
           checkcardlock(checkbutton);
-          req = {
-            seenCard: 1
-          }
         }
         else statetips.text = '如果需要，你可以选择使用明牌而不是出拳牌';
+        req = {
+          seenCard: 1
+        }
         checkcardlock(checkbutton);
         cardlist = data.handCards;
         do_fillcardlist();
