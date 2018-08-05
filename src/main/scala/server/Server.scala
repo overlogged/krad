@@ -10,6 +10,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.{Directives, Route}
+import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
 import com.typesafe.config.ConfigFactory
 import common.MyJsonProtocol
@@ -208,8 +209,13 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       } ~
       path("session" / "match") {
         withRequestTimeout(
-          Duration.create(2, MINUTES),{req=>
-            SessionController.unmatchPlayers(req)
+          Duration.create(2, MINUTES),{ req=>
+            Unmarshal(req.entity).to[RequestMatch].onComplete{
+              case Success(data)=>{
+                Server.log("unmarshal","succeed")
+                SessionController.unmatchPlayers(data)
+              }
+            }
             HttpResponse(StatusCodes.RequestTimeout)
           }
         ){
