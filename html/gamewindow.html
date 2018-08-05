@@ -638,7 +638,7 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 2, 1, 0, 1);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = 0 - (45 * (3 - z));
