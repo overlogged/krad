@@ -201,7 +201,7 @@
     function loadedcheck() {
       if (loadingcomplete) {
         checkcardunlock(checkbutton);
-        countdown(10);
+        settimeout("countdown(10)",10000);
       }
       else loadingcomplete = 1;
     }
