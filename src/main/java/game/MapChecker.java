@@ -34,7 +34,16 @@ public class MapChecker {
 
                 // do move
                 // assert next != null;
-                if(next==null) Server.log("error","tryMove 38");
+                StringBuffer bf = new StringBuffer();
+                bf.append("tryMove ");
+                bf.append(i_current);
+                bf.append(" ");
+                bf.append(i_next);
+                bf.append(" ");
+                bf.append(energy);
+                bf.append("\n");
+
+                if(next==null) Server.log("error",bf.toString());
 
                 energy -= dis;
                 if (next.rank > current.rank) {

@@ -145,7 +145,7 @@ object SessionController {
 
           var i = 1
           choosed_players(0) = req.sid
-          for (player <- states) if (i < player_count && player._2.state == StateMatching) {
+          for (player <- states) if (i < player_count && player._2.state == StateMatching && player._1 != req.sid) {
             choosed_players(i) = player._1
             i += 1
           }
