@@ -211,14 +211,14 @@
       function counting() {
           if (timeleft) {
               timeleft--;
-              counter.text = '倒计时：' + counter;
+              counter.text = '倒计时：' + timeleft;
               setTimeout("counting()", 1000);
           }
           else do_checkcard();
       }
 
       function countdown(sec) {
-          counter = sec;
+          timeleft = sec;
           counting();
       }
 
