@@ -39,6 +39,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                           log_verbose: Boolean)
 
   val log_file = new FileWriter(new File("log.txt"), true)
+  val game_log_file = new FileWriter(new File("game-log.txt"), true)
   val config: Config = Source.fromFile("config.txt")(io.Codec("UTF-8")).mkString.parseJson.convertTo[Config]
 
   /**
@@ -56,6 +57,11 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
       log_file.write(s)
       log_file.flush()
     }
+  }
+
+  def gamelog(req:RequestGame): Unit ={
+    game_log_file.write(s"""SessionController.gameRequest(RequestGame(${req.sid},"${req.msg}")) // ${new Date()}\n""")
+    game_log_file.flush()
   }
 
   // request
@@ -112,6 +118,13 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
       }
     } ~
+    path("gamelog"){
+      get{
+        log("get", "gamelog")
+        val content = "<html><body>" + Source.fromFile("game-log.txt", "utf8").mkString.split("\n").fold("")(_ + "<br></br>" + _) + "</body></html>"
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
+      }
+    }~
       path("restart") {
         post {
           SessionController.addGhost()
@@ -240,7 +253,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }){
           post {
             entity(as[RequestGame]) { req =>
-              log("post", "game")
+              log("post", "session/match")
               onComplete(SessionController.gameRequest(req)) {
                 case Success(Some(str)) => complete(str)
                 case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))

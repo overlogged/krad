@@ -203,7 +203,7 @@ object SessionController {
   }
 
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
-    Server.log("game", req)
+    Server.gamelog(req)
     states.get(req.sid) map { states =>
       Server.log("verbose game in", req.toString)
       val god = states.god

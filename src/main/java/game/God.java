@@ -525,9 +525,14 @@ public class God {
             scoreList[i] = 100;
             fireList[i] = -1;
 
-            Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
-            if (user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
-            else allPlayers[i].user_info = user.get();
+            // ghost sid
+            if(allPlayers[i].SID<12){
+                allPlayers[i].user_info = GodHelper.ghostUser();
+            }else{
+                Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
+                if (user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
+                else allPlayers[i].user_info = user.get();
+            }
             allUserInfo[i] = new UserInfo(i, allPlayers[i].user_info.nickname());
         }
     }

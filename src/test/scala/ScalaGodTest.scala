@@ -111,7 +111,13 @@ object ScalaGodTest extends MyJsonProtocol{
     }
   }
 
+  def test3(): Unit = {
+    SessionController.addGhost()
+    SessionController.gameRequest(RequestGame(2,"{}"))
+    SessionController.gameRequest(RequestGame(1,"{}"))
+  }
+
   def main(args: Array[String]): Unit = {
-    test1()
+    test3()
   }
 }
