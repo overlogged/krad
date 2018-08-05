@@ -441,20 +441,11 @@
 
 
     function checkseencard(button) {
-      var j;
       var num;
       checkcardunlock(checkbutton);
       num = (button.x - 100) / 150;
       num = 3 - num;
       do_seencard(num);
-      for (j = 0; j <= 2; j++) {
-        seencardslot[j].destroy();
-        seencardtext[j].alpha = 0;
-      }
-      if (state == "choose seen card") {
-        seencardslot[3].destroy();
-        seencardtext[3].destroy();
-      }
       do_checkcard();
     }
 
@@ -778,6 +769,15 @@
             }
             do_desert(g);
             break;
+          case 5:
+            for (j = 0; j <= 2; j++) {
+                    seencardslot[j].destroy();
+                    seencardtext[j].alpha = 0;
+            }
+            if (state == "choose seen card") {
+                    seencardslot[3].destroy();
+                    seencardtext[3].destroy();
+            }
           default:
             //statepadtext_body.text='操作受限';
             break;
@@ -1059,11 +1059,13 @@
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
-        statepadtext_body.text = '游戏结束，人类获胜！';
+          statepadtext_body.text = '游戏结束，人类获胜！';
+          countdown(10);
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
-        statepadtext_body.text = '游戏结束，感染者获胜！';
+          statepadtext_body.text = '游戏结束，感染者获胜！';
+          countdown(10);
       }
       else if (state == "END") {
         checkcardunlock(checkbutton);
@@ -1076,7 +1078,8 @@
         }
         turn_web++;
         if (turn_web == 2) {
-          window.location.href = "krad.html?sid=" + sid;
+            window.location.href = "krad.html?sid=" + sid;
+            countdown(15);
         }
       } 
       // else if (state == "desert account") {
