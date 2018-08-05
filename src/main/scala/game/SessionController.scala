@@ -9,6 +9,7 @@ import server.Server
 import server.Server.{RequestGame, RequestLogin, RequestMatch, RequestRegister, executionContext}
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 
 object SessionController {
@@ -126,66 +127,73 @@ object SessionController {
   /**
     * matchPlayers
     */
-  var fake_matching_count = 0
+
+  val match_pool: mutable.TreeMap[Int, ListBuffer[Int]] = {
+    val map = new mutable.TreeMap[Int, ListBuffer[Int]]()
+    map(2) = new ListBuffer[Int]()
+    map(4) = new ListBuffer[Int]()
+    map
+  }
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
     val player_count = req.player_count
-    if (player_count > 8) {
-      None
-    } else {
+    assert(player_count == 2 || player_count == 4)
 
-      def ready() = states.get(req.sid).exists(_.state == StateReady)
+    def ready() = states.get(req.sid).exists(_.state == StateReady)
 
-      states.get(req.sid).map { state =>
-        this.synchronized {
-          fake_matching_count += 1
+    def clearMatchPool(n: Int): Int = {
+      match_pool(n).dropWhile(sid => {
+        states.get(sid).forall { state =>
+          state.state != StateMatching
+        }
+      }).size
+    }
 
-          // try to start a game
-          if (fake_matching_count >= player_count) {
+    states.get(req.sid).map { state =>
+      this.synchronized {
+        // try to start a game
+        if (match_pool(player_count).size >= player_count - 1 && clearMatchPool(player_count) >= player_count - 1) {
 
-            // todo: random
-            val choosed_players = new Array[Int](player_count)
+          // pick players
+          val choosed_players = new Array[Int](player_count)
+          var i = 1
+          choosed_players(0) = req.sid
+          for (player <- match_pool(player_count)) if (i < player_count && player != req.sid) {
+            choosed_players(i) = player
+            i += 1
+          }
+          assert(i == player_count)
 
-            var i = 1
-            choosed_players(0) = req.sid
-            for (player <- states) if (i < player_count && player._2.state == StateMatching && player._1 != req.sid) {
-              choosed_players(i) = player._1
-              i += 1
-            }
-
-            if (i == player_count) {
-              val god = new God()
-              fake_matching_count -= player_count
-              god.initialPlayer(choosed_players)
-              for (player_sid <- choosed_players) {
-                states(player_sid) = SessionState(StateReady, god) // todo: maybe copy from the initial one
-              }
-              this.notifyAll()
-            } else {
-              states(req.sid) = state.copy(state = StateMatching)
-              while (!ready()) {
-                this.wait()
-              }
-            }
-          } else {
-            states(req.sid) = state.copy(state = StateMatching)
-            while (!ready()) {
-              this.wait()
-            }
+          // init
+          val god = new God()
+          match_pool(player_count).dropWhile(choosed_players contains _)
+          god.initialPlayer(choosed_players)
+          for (player_sid <- choosed_players) {
+            states(player_sid) = SessionState(StateReady, god) // todo: maybe copy from the initial one
+          }
+          this.notifyAll()
+        } else {
+          states(req.sid) = state.copy(state = StateMatching)
+          while (!ready()) {
+            this.wait()
           }
         }
-        player_count
       }
+      player_count
     }
   }
 
   def unmatchPlayers(req: RequestMatch): Unit = {
-    states.transform { (sid, state) =>
-      if (sid == req.sid) {
-        fake_matching_count -= 1
-        state.copy(state = StateReady)
-      } else {
-        state
+    this.synchronized {
+      states.transform { (sid, state) =>
+        if (sid == req.sid) {
+          match_pool.foreach(map =>
+            map._2.dropWhile(_ == sid)
+          )
+          state.copy(state = StateReady)
+        } else {
+          state
+        }
       }
     }
   }
