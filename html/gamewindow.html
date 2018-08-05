@@ -178,6 +178,8 @@
       y: 530
     }
     ];
+   
+    var counter;
     var gamblecount;
     var loadingcomplete = 0;
     function skiper() {
@@ -199,16 +201,34 @@
     function loadedcheck() {
       if (loadingcomplete) {
         checkcardunlock(checkbutton);
+        countdown(10);
       }
       else loadingcomplete = 1;
     }
 
       var timeleft = 0;
 
-      function countdown() {
-
+      function counting() {
+          if (timeleft) {
+              timeleft--;
+              counter.text = '倒计时：' + counter;
+              setTimeout("counting()", 1000);
+          }
+          else do_checkcard();
       }
 
+      function countdown(sec) {
+          counter = sec;
+          counting();
+      }
+
+      function handle_checkcard() {
+          if ((checkcardavaliable == 0) && (autoskip == 0));
+          else {
+              checkcardlock(checkbutton);
+              timeleft = 0;
+          }
+      }
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
       preload: function () {
@@ -388,7 +408,7 @@
       },
       create: function () {
         var background = card.add.sprite(0, 0, 'gamebackground');
-        checkbutton = card.add.button(850, 10, 'checkbutton', do_checkcard, this, 2, 2, 2, 2);
+        checkbutton = card.add.button(850, 10, 'checkbutton', handle_checkcard, this, 2, 2, 2, 2);
         loadedcheck();
         statetips = card.add.text(10, 0, '请关注此处的提示');
         statetips.fontSize = 18;
@@ -398,6 +418,8 @@
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
         statepadtext_body.text = '开始阶段';
+        counter = card.add.text(850, 100, '倒计时：10');
+        counter.fontSize = 40;
         do_handcardslot();
         refreshcard();
       }
@@ -710,8 +732,6 @@
       //alert('sending completed');
       var j;
       var g = [];
-      if ((checkcardavaliable == 0) && (autoskip == 0));
-      else {
         checkcardlock(checkbutton)
         switch (pedometer) {
           case 1:
@@ -732,6 +752,8 @@
             break;
           case 2:
             var k = 0;
+            g[0] = gamblecount;
+            gamblecount = 0;
             for (j = 0; j <= 17; j++) {
               if (cardtargeted[j]) {
                 san--;
@@ -823,7 +845,6 @@
         })
         console.log("give back :" + seent + "while req = " + JSON.stringify(req));
         request(req, do_callback);
-      }
     }
 
 
@@ -853,14 +874,14 @@
         player_lookup[myIndex] = '☛→你';
         allUserInfo = data.allUserInfo;
         herolist = data.heroList;
-
         player_num = allUserInfo.length;
         statusbox.text += "你的游戏编号为" + myIndex;
         statusbox.text += ", 加入游戏的玩家有：\n";
         for (var i = 0; i < player_num; i++) {
           statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
         }
-        pedometer = 0;
+          pedometer = 0;
+          countdown(10);
       }
       else if (state == "start game") {
         checkcardunlock(checkbutton);
@@ -903,7 +924,8 @@
         do_fillcardlist();
         pedometer = 1;
         fire_union = data.availableFireTarget;
-        refreshcard();
+          refreshcard();
+          countdown(30);
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         checkcardunlock(checkbutton);
@@ -920,16 +942,18 @@
         cardlist = data.handCards;
         do_fillcardlist();
         pedometer = 5;
-        refreshcard();
+          refreshcard();
+          countdown(15);
       }
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
         //checkcardunlock(checkbutton);
         statepadtext_body.text = '出拳阶段';
         if (state == "GAMBLE: choose gamble") {
-          pedometer = 2;
+            pedometer = 2;
+            do_fillcardlist();
           refreshcard();
-        }
-        do_gamblecard(empty);
+          }
+          do_gamblecard(empty);
         decisionChoices = data.decisionChoices;
         seenCardChoices = data.seenCardChoices;
         var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
@@ -942,7 +966,8 @@
           else {
             statusbox.text += player_lookup[i] + ": 未选择明牌\n";
             if (i == myIndex) {
-              statetips.text = '现在，你应该使用你的出拳牌了'
+                statetips.text = '现在，你应该使用你的出拳牌了'
+                countdown(20);
               // checkcardlock(checkbutton);
             }
           }
@@ -1029,7 +1054,8 @@
         do_desert(empty);
         do_fillcardlist();
         pedometer = 4;
-        refreshcard();
+          refreshcard();
+          countdown(15);
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
