@@ -212,7 +212,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
           Duration.create(2, MINUTES),{ req=>
             Unmarshal(req.entity).to[RequestMatch].onComplete{
               case Success(data)=>{
-                Server.log("unmarshal","succeed")
+                Server.log("unmarshal",s"succeed ${data.sid}")
                 SessionController.unmatchPlayers(data)
               }
             }
