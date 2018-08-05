@@ -724,7 +724,7 @@
       function do_cardlimit(hp, mode) {
           var i;
           if (mode) for (i = 0; i <= 17; i++) {
-              cardlimiter[i] = card.add.text(28 + 45 * i, 115, '');
+              cardlimiter[i] = card.add.text(35 + 45 * i, 80, '');
               cardlimiter[i].fontSize = 30;
           }
           else {
@@ -1069,17 +1069,19 @@
         do_desert(empty);
         do_fillcardlist();
         pedometer = 4;
-          refreshcard();
-          countdown(10);
+        refreshcard();
+        countdown(10);
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
-          statepadtext_body.text = '游戏结束，人类获胜！';
+          statepadtext_body.text = '人类获胜！';
+          statusbox.text += "游戏结束，人类获得胜利";
           countdown(10);
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
-          statepadtext_body.text = '游戏结束，感染者获胜！';
+          statepadtext_body.text = '感染者获胜';
+          statusbox.text += "游戏结束，感染者获得胜利";
           countdown(10);
       }
       else if (state == "END") {
