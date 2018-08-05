@@ -215,6 +215,9 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                 Server.log("unmarshal",s"succeed ${data.sid}")
                 SessionController.unmatchPlayers(data)
               }
+              case Failure(_)=>{
+                Server.log("unmarshal",s"failed")
+              }
             }
             HttpResponse(StatusCodes.RequestTimeout)
           }
