@@ -56,6 +56,22 @@ dev ![travis](https://www.travis-ci.org/NiceKingWei/krad.svg?branch=dev)
 | ACTION.0.6  感染及感染者胜利结算          | 空                                                           | 若感染者胜利：字符串”Game Over, zombie wins"+所有人的阵营（数组:0人1感染者），若感染者尚未胜利：字符串“desert account"+所有人的阵营（数组） |
 | ACTION.0.7  弃牌结算                      | 弃牌选择数组                                                 | 字符串”PREPARE: choose decision"+ 玩家能量情况（整型）+玩家剩余手牌（数组） |
 
+## Config
+
+```json
+{
+    "db_user":"user",
+    "db_password":"password",
+    "db_host":"localhost",
+    "web_host":"localhost",
+    "web_port":8080,
+    "web_url":"http://krad.com",
+    "email_host":"smtp.sina.com",
+    "email_username":"test@sina.com",
+    "email_password":"test",
+    "log_verbose":true
+}
+```
 
 ## License
 

@@ -6,6 +6,7 @@ public class MapChecker {
 
     public static int tryMove(Map m, int i_current, int i_next, int energy) {
 
+        int initial_energy = energy;
         // first step
         MapUnit current,next;
 
@@ -21,7 +22,7 @@ public class MapChecker {
 
                 // find next
                 for (MapEdge e : current.edge) {
-                    if (m.distance[i_current][e.adjedg]>dis2org) {
+                    if (i_current!=e.adjedg && m.distance[i_current][e.adjedg]>dis2org) {
                         if (energy >= e.distance) {
                             if (next == null || e.distance > dis) {
                                 next = m.units[e.adjedg];
@@ -40,10 +41,11 @@ public class MapChecker {
                 bf.append(" ");
                 bf.append(i_next);
                 bf.append(" ");
-                bf.append(energy);
-                bf.append("\n");
+                bf.append(initial_energy);
 
-                if(next==null) Server.log("error",bf.toString());
+                if(next==null) {
+                    Server.log("error",bf.toString());
+                }
 
                 energy -= dis;
                 if (next.rank > current.rank) {

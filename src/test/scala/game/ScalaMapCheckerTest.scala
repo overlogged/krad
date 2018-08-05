@@ -1,22 +1,21 @@
 package game
 
 object ScalaMapCheckerTest {
+
+
   def main(args: Array[String]): Unit = {
     val map = new game.Map("map/1.map")
-    println(MapChecker.tryMove(map,0,1,3))
-    println(MapChecker.tryMove(map,6,7,7))
-    println(MapChecker.tryMove(map,24,6,4))
-    println(MapChecker.tryMove(map,24,23,0))
-    println(MapChecker.tryMove(map,18,19,1))
-    println(MapChecker.tryMove(map,19,20,3))
-    println(MapChecker.tryMove(map,23,24,2))
-    println(MapChecker.tryMove(map,24,7,4))
-    println(MapChecker.tryMove(map,3,4,0))
-    println(MapChecker.tryMove(map,6,7,0))
-    println(MapChecker.tryMove(map,8,9,0))
-    println(MapChecker.tryMove(map,6,7,3))
-    println(MapChecker.tryMove(map,4,map.units(4).neighbors(1),2))
-    println(MapChecker.tryMove(map,4,map.units(4).neighbors(1),1))
-    println(MapChecker.tryMove(map,4,map.units(4).neighbors(5),1))
+
+    val LEFT = 7
+    val RIGHT = 3
+    val UP = 1
+    val DOWN = 5
+
+    def jump(start: Int, dir: Int, energy: Int) = MapChecker.tryMove(map, start, map.units(start).neighbors(dir), energy)
+
+    assert(jump(17, DOWN, 2) == 19)
+    assert(jump(16, RIGHT, 3) == 19)
+    assert(jump(22, UP, 6) == 16)
+    assert(jump(22, DOWN, 5) == 5)
   }
 }
