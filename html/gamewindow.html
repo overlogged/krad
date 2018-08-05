@@ -354,7 +354,8 @@
           pagecount++;
         }
       }
-    });
+      });
+    var cardlimiter = [];
     var statetips;
     var checkbutton;
     var checkcardavaliable = 0;
@@ -422,6 +423,8 @@
         counter.fontSize = 40;
         do_handcardslot();
         refreshcard();
+        do_cardlimit(0, 1);
+        //do_cardlimit(12, 0);
       }
     });
 
@@ -718,14 +721,17 @@
       }
     }
 
-      /*function do_cardlimit(hp, mode) {
-          if (mode) {
-
+      function do_cardlimit(hp, mode) {
+          var i;
+          if (mode) for (i = 0; i <= 17; i++) {
+              cardlimiter[i] = card.add.text(10 + 45 * i, 115, '');
+              cardlimiter[i].fontSize = 30;
           }
           else {
-
+              for (i = 0; i < hp; i++) cardlimiter[i].text = '★';
+              for (i = hp; i <= 17; i++)cardlimiter[i].text = '☆';
           }
-      }*/
+      }
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
@@ -1036,7 +1042,7 @@
         statetips.text = '请按确定键';
         var elem_string = ["无要素", "有要素"];
         statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
-       // do_cardlimit(healthPointList[myIndex], 0);
+        do_cardlimit(healthPointList[myIndex], 0);
         for (var i = 0; i < player_num; i++) {
           statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
