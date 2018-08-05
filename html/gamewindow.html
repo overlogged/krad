@@ -377,6 +377,7 @@
     var seencard_flag = false;
     var empty = [-1];
     var gamerank = 1;
+    var deleteloop = 1;
     var turn_web = 0;
     for (act = 0; act <= 17; act++) {
       cardtargeted[act] = 0;
@@ -1103,7 +1104,11 @@
         pedometer = 0;
         refreshcard();
         gamerank++;
-        if (gamerank == 16 || gamerank == 32 || gamerank==48||gamerank==64) statusbox.text = '';
+        deleteloop++;
+        if (deleteloop == 16) {
+          statusbox.text = '';
+          deleteloop = 1;
+        }
         skiper();
       }
     }
