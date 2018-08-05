@@ -180,7 +180,6 @@
     ];
     var gamblecount;
     var loadingcomplete = 0;
-    var counter;
     function skiper() {
       autoskip = 1;
       do_checkcard();
@@ -203,6 +202,12 @@
       }
       else loadingcomplete = 1;
     }
+
+      var timeleft = 0;
+
+      function countdown() {
+
+      }
 
 
     var game = new Phaser.Game(780, 899, Phaser.AUTO, 'gamecontainer', {
