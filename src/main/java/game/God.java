@@ -12,7 +12,6 @@ public class God {
     private boolean humanWin;       // whether human team wins
     private boolean zombieWin;      // whether zombie team wins
     private Map map;                // map of the game
-    private int[] playerSID;
     private String[] heroList = {"Calculus", "Linear Algebra", "PDE", "Mathematical Analysis"};
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
@@ -163,6 +162,7 @@ public class God {
                 }
                 break;
             case END:
+                int[] playerSID = new int[playerNum];
                 for(int i = 0;i < playerNum; i++)
                     playerSID[i] = allPlayers[i].SID;
                 SessionController.endGame(playerSID,scoreList);
@@ -509,7 +509,6 @@ public class God {
         availableFireTarget = new int[playerNum];
         scoreList = new int[playerNum];
         fireList = new int[playerNum];
-        playerSID = new int[playerNum];
 
         for (int i = 0; i < playerNum; i++) {
             allPlayers[i] = new Player();
