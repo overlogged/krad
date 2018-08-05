@@ -200,8 +200,7 @@
 
     function loadedcheck() {
       if (loadingcomplete) {
-        checkcardunlock(checkbutton);
-        setTimeout("countdown(10)",10000);
+          setTimeout("{countdown(10);checkcardunlock(checkbutton);}",10000);
       }
       else loadingcomplete = 1;
     }
@@ -718,6 +717,14 @@
       }
     }
 
+      /*function do_cardlimit(hp, mode) {
+          if (mode) {
+
+          }
+          else {
+
+          }
+      }*/
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
@@ -1028,6 +1035,7 @@
         statetips.text = '请按确定键';
         var elem_string = ["无要素", "有要素"];
         statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
+       // do_cardlimit(healthPointList[myIndex], 0);
         for (var i = 0; i < player_num; i++) {
           statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
@@ -1095,7 +1103,7 @@
         pedometer = 0;
         refreshcard();
         gamerank++;
-        if (gamerank == 16) statusbox.text = '';
+        if (gamerank == 16 || gamerank == 32 || gamerank==48||gamerank==64) statusbox.text = '';
         skiper();
       }
     }
