@@ -187,6 +187,19 @@ object SessionController {
   }
 
 
+  def endGame(players:Array[Int],deltaScore:Array[Int]): Unit ={
+    states.transform{(sid,state)=>
+      if(players contains sid){
+        state.copy(god = null,timestamp = System.currentTimeMillis(),state=StateReady)
+      }else{
+        state
+      }
+    }
+    for (elem <- players zip deltaScore) {
+      map.getB(elem._1).map{UserModel.changeStat(_,elem._2)
+    }
+  }
+
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
     Server.log("game", req)
     states.get(req.sid) map { states =>
