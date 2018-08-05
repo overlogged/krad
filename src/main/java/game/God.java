@@ -240,7 +240,8 @@ public class God {
     private void featureChoose(String msg, Player playerMain, int playerIndex) {
         MsgChooseDecision decisionFeature = GodHelper.getChooseDecision(msg);
         int decision = playerMain.stratDecision;
-        int direction =  map.units[allPlayers[playerIndex].preLoc].neighbors[decisionFeature.moveDirection()];
+		int direction = -1;
+		if(decisionFeature.moveDirection()!=-1) direction =  map.units[allPlayers[playerIndex].preLoc].neighbors[decisionFeature.moveDirection()];
 
         if ((decision < 4) || (decision > 7))
             decision = GambleChecker.DEPOSIT;
