@@ -207,7 +207,12 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("session" / "match") {
-        withRequestTimeout(Duration.create(2, MINUTES)){
+        withRequestTimeout(
+          Duration.create(2, MINUTES),{req=>
+            SessionController.unmatchPlayers(req)
+            HttpResponse(StatusCodes.RequestTimeout)
+          }
+        ){
             post {
             entity(as[RequestMatch]) { req =>
               log("post", "session/match")
@@ -221,7 +226,9 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         }
       } ~
       path("game") {
-        withRequestTimeout(Duration.create(5, MINUTES)){
+        withRequestTimeout(Duration.create(5, MINUTES),{req=>
+          HttpResponse(StatusCodes.RequestTimeout)
+        }){
           post {
             entity(as[RequestGame]) { req =>
               log("post", "game")

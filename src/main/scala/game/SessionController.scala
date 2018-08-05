@@ -175,6 +175,18 @@ object SessionController {
     }
   }
 
+  def unmatchPlayers(req: RequestMatch): Unit = {
+    states.transform { (sid, state) =>
+      if (sid == req.sid) {
+        fake_matching_count-=1
+        state.copy(state = StateReady)
+      } else {
+        state
+      }
+    }
+  }
+
+
   def gameRequest(req: RequestGame): Future[Option[String]] = Future {
     Server.log("game", req)
     states.get(req.sid) map { states =>
