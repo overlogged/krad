@@ -178,7 +178,7 @@ object SessionController {
   def unmatchPlayers(req: RequestMatch): Unit = {
     states.transform { (sid, state) =>
       if (sid == req.sid) {
-        fake_matching_count-=1
+        fake_matching_count -= 1
         state.copy(state = StateReady)
       } else {
         state
@@ -187,16 +187,18 @@ object SessionController {
   }
 
 
-  def endGame(players:Array[Int],deltaScore:Array[Int]): Unit ={
-    states.transform{(sid,state)=>
-      if(players contains sid){
-        state.copy(god = null,timestamp = System.currentTimeMillis(),state=StateReady)
-      }else{
+  def endGame(players: Array[Int], deltaScore: Array[Int]): Unit = {
+    states.transform { (sid, state) =>
+      if (players contains sid) {
+        state.copy(god = null, timestamp = System.currentTimeMillis(), state = StateReady)
+      } else {
         state
       }
     }
     for (elem <- players zip deltaScore) {
-      map.getB(elem._1).map{UserModel.changeStat(_,elem._2)
+      map.getB(elem._1).map {
+        UserModel.changeStat(_, elem._2)
+      }
     }
   }
 
