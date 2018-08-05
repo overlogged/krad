@@ -19,7 +19,7 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val RequestSetNewFormat = jsonFormat2(RequestSetNewPassword)
   implicit val RequestChangePasswordFormat = jsonFormat3(RequestChangePassword)
   implicit val RequestChangeProfileFormat = jsonFormat4(RequestChangeProfile)
-  implicit val RequestMatchFormat = jsonFormat1(RequestMatch)
+  implicit val RequestMatchFormat = jsonFormat2(RequestMatch)
   implicit val SessionFormat = jsonFormat3(Session)
   implicit val MsgChooseHeroFormat = jsonFormat1(MsgChooseHero)
   implicit val RequestGameFormat = jsonFormat2(RequestGame)

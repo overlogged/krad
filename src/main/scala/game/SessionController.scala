@@ -129,49 +129,53 @@ object SessionController {
   var fake_matching_count = 0
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
-    val player_count = 4
+    val player_count = req.player_count
+    if (player_count > 8) {
+      None
+    } else {
 
-    def ready() = states.get(req.sid).exists(_.state == StateReady)
+      def ready() = states.get(req.sid).exists(_.state == StateReady)
 
-    states.get(req.sid).map { state =>
-      this.synchronized {
-        fake_matching_count += 1
+      states.get(req.sid).map { state =>
+        this.synchronized {
+          fake_matching_count += 1
 
-        // try to start a game
-        if (fake_matching_count >= player_count) {
+          // try to start a game
+          if (fake_matching_count >= player_count) {
 
-          // todo: random
-          val choosed_players = new Array[Int](player_count)
+            // todo: random
+            val choosed_players = new Array[Int](player_count)
 
-          var i = 1
-          choosed_players(0) = req.sid
-          for (player <- states) if (i < player_count && player._2.state == StateMatching && player._1 != req.sid) {
-            choosed_players(i) = player._1
-            i += 1
-          }
-
-          if (i == player_count) {
-            val god = new God()
-            fake_matching_count -= player_count
-            god.initialPlayer(choosed_players)
-            for (player_sid <- choosed_players) {
-              states(player_sid) = SessionState(StateReady, god) // todo: maybe copy from the initial one
+            var i = 1
+            choosed_players(0) = req.sid
+            for (player <- states) if (i < player_count && player._2.state == StateMatching && player._1 != req.sid) {
+              choosed_players(i) = player._1
+              i += 1
             }
-            this.notifyAll()
+
+            if (i == player_count) {
+              val god = new God()
+              fake_matching_count -= player_count
+              god.initialPlayer(choosed_players)
+              for (player_sid <- choosed_players) {
+                states(player_sid) = SessionState(StateReady, god) // todo: maybe copy from the initial one
+              }
+              this.notifyAll()
+            } else {
+              states(req.sid) = state.copy(state = StateMatching)
+              while (!ready()) {
+                this.wait()
+              }
+            }
           } else {
             states(req.sid) = state.copy(state = StateMatching)
             while (!ready()) {
               this.wait()
             }
           }
-        } else {
-          states(req.sid) = state.copy(state = StateMatching)
-          while (!ready()) {
-            this.wait()
-          }
         }
+        player_count
       }
-      player_count
     }
   }
 
