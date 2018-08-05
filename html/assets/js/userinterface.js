@@ -78,7 +78,8 @@ function go_help() {
 
 function do_match() {
   var req = {
-    'sid': sid
+    'sid': sid,
+    'player_count':2
   };
   alert("开始匹配，请耐心等待");
   $.ajax({
