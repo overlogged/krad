@@ -84,7 +84,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
                                         avatar: String,
                                         gender: Int)
 
-  final case class RequestMatch(sid: Int)
+  final case class RequestMatch(sid: Int,player_count:Int)
 
   final case class RequestGame(sid: Int, msg: String)
 
