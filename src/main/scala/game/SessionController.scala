@@ -33,7 +33,7 @@ object SessionController {
   object SessionState {
     def apply(state: Int, god: God): SessionState = new SessionState(state, System.currentTimeMillis(), god)
 
-    def apply(): SessionState = new SessionState(0, System.currentTimeMillis(), null)
+    def apply(): SessionState = new SessionState(StateWaiting, System.currentTimeMillis(), null)
   }
 
   val WaitingTime: Long = 1000 * 60 * 30
@@ -188,12 +188,12 @@ object SessionController {
 
   def unmatchPlayers(req: RequestMatch): Unit = {
     this.synchronized {
+      match_pool.foreach(map =>
+        map._2.dropWhile(_ == req.sid)
+      )
       states.transform { (sid, state) =>
         if (sid == req.sid) {
-          match_pool.foreach(map =>
-            map._2.dropWhile(_ == sid)
-          )
-          state.copy(state = StateReady)
+          state.copy(state = StateWaiting)
         } else {
           state
         }
