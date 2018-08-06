@@ -357,6 +357,7 @@
         }
       }
       });
+    var hp=6;
     var cardlimiter = [];
     var statetips;
     var checkbutton;
@@ -370,7 +371,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
+    var pedometer = 1; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -388,7 +389,7 @@
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
     }
-    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
+    //cardlist = [1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0];
     //do_fillcardlist();
 
     var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
@@ -423,10 +424,8 @@
         statepadtext_body.text = '开始阶段';
           counter = card.add.text(925, 70, '倒计时：10', { fill: "#ff0044" });
         counter.fontSize = 25;
-        do_handcardslot();
+          do_handcardslot();
         refreshcard();
-        do_cardlimit(0, 1);
-        //do_cardlimit(12, 0);
       }
     });
 
@@ -455,6 +454,7 @@
     }
 
     function refreshcard() {
+      var howmany=17;
       var i;
       var j;
       san = 0;
@@ -467,11 +467,15 @@
       for (i = 0; i <= 17; i++) {
         var lookup_table = ['blank', 'paper', 'scissors', 'rock', 'move', 'shoot', 'skill'];
         j = 'handcard_' + lookup_table[cardlist[i]];
+        if ((cardlist[i] == 0)&&(howmany==17)) howmany = i;
         handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
         if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
         else handcardslot[i].setFrames(0, 0, 0, 0);
-      }
-      if (pedometer == 5) do_seencardslot();
+        }
+        alert(howmany);
+        if (pedometer == 5) do_seencardslot();
+        for (i = howmany; i < hp; i++) handcardslot[i].setFrames(0, 0, 0, 0);
+        for (i = hp; i <= 17; i++)handcardslot[i].setFrames(2, 2, 2, 2);
     }
 
     function targetcard(button) {
@@ -722,18 +726,9 @@
         }
       }
     }
-
-      function do_cardlimit(hp, mode) {
-          var i;
-          if (mode) for (i = 0; i <= 17; i++) {
-              cardlimiter[i] = card.add.text(50 + 45 * i, 80, '');
-              cardlimiter[i].fontSize = 30;
-          }
-          else {
-              for (i = 0; i < hp; i++) cardlimiter[i].text = '★';
-              for (i = hp; i <= 17; i++)cardlimiter[i].text = '☆';
-          }
-      }
+      
+         
+          
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
@@ -1043,8 +1038,8 @@
 
         statetips.text = '请按确定键';
         var elem_string = ["无要素", "有要素"];
-        statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
-        do_cardlimit(healthPointList[myIndex], 0);
+          statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
+          hp = healthPointList[myIndex];
         for (var i = 0; i < player_num; i++) {
           statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
