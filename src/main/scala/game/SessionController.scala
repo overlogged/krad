@@ -136,6 +136,7 @@ object SessionController {
   }
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
+    Server.log("verbose match",req)
     val player_count = req.player_count
     assert(player_count == 2 || player_count == 4)
 
@@ -146,7 +147,8 @@ object SessionController {
         states.get(sid).forall { state =>
           state.state != StateMatching
         }
-      }).size
+      })
+      match_pool(n).size
     }
 
     states.get(req.sid).map { state =>
@@ -174,6 +176,7 @@ object SessionController {
           this.notifyAll()
         } else {
           states(req.sid) = state.copy(state = StateMatching)
+          match_pool(player_count).append(req.sid)
           while (!ready()) {
             this.wait()
           }
@@ -200,11 +203,13 @@ object SessionController {
 
 
   def endGame(players: Array[Int], deltaScore: Array[Int]): Unit = {
-    states.transform { (sid, state) =>
-      if (players contains sid) {
-        state.copy(god = null, timestamp = System.currentTimeMillis(), state = StateReady)
-      } else {
-        state
+    this.synchronized{
+      states.transform { (sid, state) =>
+        if (players contains sid) {
+          state.copy(god = null, timestamp = System.currentTimeMillis(), state = StateReady)
+        } else {
+          state
+        }
       }
     }
     for (elem <- players zip deltaScore) {
