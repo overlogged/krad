@@ -32,7 +32,7 @@ public class God {
     private int[] scoreList;
     private int[] fireList;
 
-    enum GameState {INIT, MAINGAME, END}
+    enum GameState {INIT, MAINGAME}
 
     private GameState gameState = GameState.INIT;
     private int[] playerState;
@@ -137,17 +137,15 @@ public class God {
                     case ACTION:
                         if (playerState[playerIndex] == 0) {
                             String state;
-                            if (humanWin) {
-                                state = "Game Over, human wins";
-                                playerState[playerIndex] = 0;
-                                gameState = GameState.END;
-                            } else if (zombieWin) {
-                                state = "Game Over, zombie wins";
-                                playerState[playerIndex] = 0;
-                                gameState = GameState.END;
+                            if (humanWin || zombieWin) {
+                                if (humanWin)
+                                    state = "Game Over, human wins";
+                                else
+                                    state = "Game Over, zombie wins";
+                                playerState[playerIndex] = 2;
                             } else {
                                 state = "Account";
-                                playerState[playerIndex] += 1;
+                                playerState[playerIndex] = 1;
                             }
                             result = GodHelper.toAccount(state, energyList, healthPointList, locationList, elementList, teamList);
                         } else if (playerState[playerIndex] == 1) {
@@ -157,16 +155,17 @@ public class God {
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             result = GodHelper.toDesertAccount("card distribute", allPlayers[playerIndex].energy, playerHandCard);
                             waitAllPlayers(playerIndex);
+                            playerState[playerIndex] = 0;
+                        } else if(playerState[playerIndex]==2){
+                            // end
+                            int[] playerSID = new int[playerNum];
+                            for (int i = 0; i < playerNum; i++)
+                                playerSID[i] = allPlayers[i].SID;
+                            SessionController.endGame(playerSID, scoreList);
+                            result = GodHelper.toGameOver("END", scoreList);
                         }
                         break;
                 }
-                break;
-            case END:
-                int[] playerSID = new int[playerNum];
-                for(int i = 0;i < playerNum; i++)
-                    playerSID[i] = allPlayers[i].SID;
-                SessionController.endGame(playerSID,scoreList);
-                result = GodHelper.toGameOver("END", scoreList);
                 break;
         }
 
@@ -244,8 +243,9 @@ public class God {
     private void featureChoose(String msg, Player playerMain, int playerIndex) {
         MsgChooseDecision decisionFeature = GodHelper.getChooseDecision(msg);
         int decision = playerMain.stratDecision;
-		int direction = -1;
-		if(decisionFeature.moveDirection()!=-1) direction =  map.units[allPlayers[playerIndex].preLoc].neighbors[decisionFeature.moveDirection()];
+        int direction = -1;
+        if (decisionFeature.moveDirection() != -1)
+            direction = map.units[allPlayers[playerIndex].preLoc].neighbors[decisionFeature.moveDirection()];
 
         if ((decision < 4) || (decision > 7))
             decision = GambleChecker.DEPOSIT;
@@ -452,7 +452,6 @@ public class God {
 
     private void waitAllPlayers(int playerIndex) {
         synchronized (this) {
-            playerState[playerIndex] = 0;
             wait_count += 1;
             if (wait_count < playerNum) {
                 while (wait_count < playerNum) {
@@ -525,9 +524,9 @@ public class God {
             fireList[i] = -1;
 
             // ghost sid
-            if(allPlayers[i].SID<12){
+            if (allPlayers[i].SID < 12) {
                 allPlayers[i].user_info = GodHelper.ghostUser();
-            }else{
+            } else {
                 Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
                 if (user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
                 else allPlayers[i].user_info = user.get();
