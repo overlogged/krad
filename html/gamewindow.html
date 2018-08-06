@@ -247,10 +247,10 @@
         game.load.image('status3', 'assets/img/gamewindow/status3.png');
         game.load.image('status4', 'assets/img/gamewindow/status4.png');
         game.load.image('pointer', 'assets/img/gamewindow/self_pointer.png');
+        game.load.image('pointer0', 'assets/img/gamewindow/pointer0.png');
         game.load.image('pointer1', 'assets/img/gamewindow/pointer1.png');
         game.load.image('pointer2', 'assets/img/gamewindow/pointer2.png');
         game.load.image('pointer3', 'assets/img/gamewindow/pointer3.png');
-        game.load.image('pointer4', 'assets/img/gamewindow/pointer4.png');
       },
 
       create: function () {
@@ -925,7 +925,7 @@
             pointer[i] = game.add.sprite(player[i].body.x - 15, player[i].body.y - 62, 'pointer');
           }
           else{
-          pointer[i] = game.add.sprite(player[i].body.x - 15, player[i].body.y - 62, 'pointer' + (i + 1).toString());
+          pointer[i] = game.add.sprite(player[i].body.x - 15, player[i].body.y - 62, 'pointer' + (i).toString());
           }
         }
         skiper();
