@@ -136,7 +136,7 @@ object SessionController {
   }
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
-    Server.log("match",req)
+    Server.log("verbose match",req)
     val player_count = req.player_count
     assert(player_count == 2 || player_count == 4)
 
