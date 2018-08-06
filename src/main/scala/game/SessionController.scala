@@ -25,15 +25,12 @@ object SessionController {
 
   val StateWaiting = 0
   val StateMatching = 1
-  val StateReady = 2
-  val StatePlaying = 3
+  val StatePlaying = 2
 
   final case class SessionState(state: Int, timestamp: Long, god: God)
 
   object SessionState {
-    def apply(state: Int, god: God): SessionState = new SessionState(state, System.currentTimeMillis(), god)
-
-    def apply(): SessionState = new SessionState(StateWaiting, System.currentTimeMillis(), null)
+    def apply(state: Int = StateWaiting, god: God = null): SessionState = new SessionState(state, System.currentTimeMillis(), god)
   }
 
   val WaitingTime: Long = 1000 * 60 * 30
@@ -128,19 +125,17 @@ object SessionController {
     * matchPlayers
     */
 
-  val match_pool: mutable.TreeMap[Int, ListBuffer[Int]] = {
-    val map = new mutable.TreeMap[Int, ListBuffer[Int]]()
-    map(2) = new ListBuffer[Int]()
-    map(4) = new ListBuffer[Int]()
+  val match_pool: mutable.TreeMap[Int, mutable.TreeSet[Int]] = {
+    val map = new mutable.TreeMap[Int, mutable.TreeSet[Int]]()
+    map(2) = new mutable.TreeSet[Int]()
+    map(4) = new mutable.TreeSet[Int]()
     map
   }
 
   def matchPlayers(req: RequestMatch): Future[Option[Int]] = Future {
-    Server.log("verbose match",req)
+    Server.log("verbose match", req)
     val player_count = req.player_count
     assert(player_count == 2 || player_count == 4)
-
-    def ready() = states.get(req.sid).exists(_.state == StateReady)
 
     def clearMatchPool(n: Int): Int = {
       match_pool(n).dropWhile(sid => {
@@ -151,10 +146,12 @@ object SessionController {
       match_pool(n).size
     }
 
-    states.get(req.sid).map { state =>
+    states.get(req.sid).map { _ =>
       this.synchronized {
         // try to start a game
-        if (match_pool(player_count).size >= player_count - 1 && clearMatchPool(player_count) >= player_count - 1) {
+        if (match_pool(player_count).size >= player_count - 1 &&
+          clearMatchPool(player_count) >= player_count - 1 &&
+          !(match_pool(player_count) contains req.sid)) {
 
           // pick players
           val choosed_players = new Array[Int](player_count)
@@ -170,16 +167,34 @@ object SessionController {
           val god = new God()
           match_pool(player_count).dropWhile(choosed_players contains _)
           god.initialPlayer(choosed_players)
-          for (player_sid <- choosed_players) {
-            states(player_sid) = SessionState(StateReady, god) // todo: maybe copy from the initial one
+          states.transform { (sid, state) =>
+            if (choosed_players contains sid) {
+              state.copy(state = StatePlaying, god = god)
+            } else {
+              state
+            }
           }
           this.notifyAll()
         } else {
-          states(req.sid) = state.copy(state = StateMatching)
-          match_pool(player_count).append(req.sid)
-          while (!ready()) {
+          val s = SessionState(StateMatching)
+          states(req.sid) = s
+          val timestamp = s.timestamp
+          match_pool(player_count) += req.sid
+
+          // get ready and not be occupied
+          var quit = false
+          do {
             this.wait()
-          }
+            quit = states.get(req.sid).forall { s =>
+              if (s.timestamp != timestamp) {
+                true
+              } else if (s.state == StatePlaying) {
+                true
+              } else {
+                false
+              }
+            }
+          } while (!quit)
         }
       }
       player_count
@@ -187,13 +202,14 @@ object SessionController {
   }
 
   def unmatchPlayers(req: RequestMatch): Unit = {
+    Server.log("verbose unmatch", req)
     this.synchronized {
       match_pool.foreach(map =>
         map._2.dropWhile(_ == req.sid)
       )
       states.transform { (sid, state) =>
         if (sid == req.sid) {
-          state.copy(state = StateWaiting)
+          SessionState(StateWaiting)
         } else {
           state
         }
@@ -203,10 +219,10 @@ object SessionController {
 
 
   def endGame(players: Array[Int], deltaScore: Array[Int]): Unit = {
-    this.synchronized{
+    this.synchronized {
       states.transform { (sid, state) =>
         if (players contains sid) {
-          state.copy(god = null, timestamp = System.currentTimeMillis(), state = StateReady)
+          SessionState(StateWaiting)
         } else {
           state
         }
