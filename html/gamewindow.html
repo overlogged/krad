@@ -63,7 +63,7 @@
 </head>
 
 <body>
-  <audio src="assets/audio/bgm1.wav" type="audio/wav" autoplay loop></audio>
+  <audio src="assets/audio/bgm1.mp3" type="audio/wav" autoplay loop></audio>
   <div class="outer-container">
     <div class="inner-container">
       <div id="gamecontainer"></div>
@@ -200,14 +200,16 @@
 
     function loadedcheck() {
       if (loadingcomplete) {
-          setTimeout("{countdown(10);checkcardunlock(checkbutton);}",10000);
+          setTimeout("{countdown(10);checkcardunlock(checkbutton);}",5000);
       }
       else loadingcomplete = 1;
     }
 
       var timeleft = 0;
+      var sbai = 0;
 
       function counting() {
+          if (sbai) timeleft = 0;
           if (timeleft) {
               timeleft--;
               counter.text = '倒计时：' + timeleft;
@@ -355,6 +357,7 @@
         }
       }
       });
+    var hp=6;
     var cardlimiter = [];
     var statetips;
     var checkbutton;
@@ -368,7 +371,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
+    var pedometer = 1; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -386,7 +389,7 @@
       dynamicinvalidcard[act] = 0;
       cardlist[act] = 0;
     }
-    //cardlist = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,0,0,0,0,0,0];
+    //cardlist = [1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0];
     //do_fillcardlist();
 
     var card = new Phaser.Game(1060, 170, Phaser.CANVAS, 'cardcontainer', {
@@ -419,12 +422,10 @@
         statepadtext_head.fontSize = 20;
         statepadtext_body.fontSize = 20;
         statepadtext_body.text = '开始阶段';
-        counter = card.add.text(850, 100, '倒计时：10');
-        counter.fontSize = 40;
-        do_handcardslot();
+          counter = card.add.text(925, 70, '倒计时：10', { fill: "#ff0044" });
+        counter.fontSize = 25;
+          do_handcardslot();
         refreshcard();
-        do_cardlimit(0, 1);
-        //do_cardlimit(12, 0);
       }
     });
 
@@ -453,6 +454,7 @@
     }
 
     function refreshcard() {
+      var howmany=17;
       var i;
       var j;
       san = 0;
@@ -465,11 +467,15 @@
       for (i = 0; i <= 17; i++) {
         var lookup_table = ['blank', 'paper', 'scissors', 'rock', 'move', 'shoot', 'skill'];
         j = 'handcard_' + lookup_table[cardlist[i]];
+        if ((cardlist[i] == 0)&&(howmany==17)) howmany = i;
         handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
         if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
         else handcardslot[i].setFrames(0, 0, 0, 0);
-      }
-      if (pedometer == 5) do_seencardslot();
+        }
+        //alert(howmany);
+        if (pedometer == 5) do_seencardslot();
+        for (i = howmany; i < hp; i++) handcardslot[i].setFrames(0, 0, 0, 0);
+        for (i = hp; i <= 17; i++)handcardslot[i].setFrames(2, 2, 2, 2);
     }
 
     function targetcard(button) {
@@ -638,14 +644,14 @@
     function do_arrowgenerate(arrow_union) {
       for (var z = 0; z < 8; z++) {
         if (arrow_union[z] != 0) {
-          arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 1, 2, 0, 2);
+          arrow[z] = card.add.button(880, 100, 'arrow', fix_arrow, this, 2, 1, 0, 1);
           arrow[z].anchor.x = 0;
           arrow[z].anchor.y = 0.5;
           arrow[z].angle = 0 - (45 * (3 - z));
         }
       }
     }
-
+      //test
     function do_targetgenerate(fire_union) {
       for (var z = 0; z < player_num; z++) {
         if (fire_union[z] != 0) {
@@ -720,18 +726,9 @@
         }
       }
     }
-
-      function do_cardlimit(hp, mode) {
-          var i;
-          if (mode) for (i = 0; i <= 17; i++) {
-              cardlimiter[i] = card.add.text(10 + 45 * i, 115, '');
-              cardlimiter[i].fontSize = 30;
-          }
-          else {
-              for (i = 0; i < hp; i++) cardlimiter[i].text = '★';
-              for (i = hp; i <= 17; i++)cardlimiter[i].text = '☆';
-          }
-      }
+      
+         
+          
 
     function do_checkcard() { // function for checkbutton
       //alert('sending completed');
@@ -895,7 +892,7 @@
           statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
         }
           pedometer = 0;
-          countdown(10);
+          countdown(5);
       }
       else if (state == "start game") {
         checkcardunlock(checkbutton);
@@ -939,7 +936,7 @@
         pedometer = 1;
         fire_union = data.availableFireTarget;
           refreshcard();
-          countdown(15);
+          countdown(10);
       }
       else if ((state == "choose seen card") || (state == "must choose seen card")) {
         checkcardunlock(checkbutton);
@@ -957,7 +954,7 @@
         do_fillcardlist();
         pedometer = 5;
           refreshcard();
-          countdown(10);
+          countdown(8);
       }
       else if ((state == "GAMBLE: choose gamble") || (state == "GAMBLE: win judge")) {
         //checkcardunlock(checkbutton);
@@ -981,7 +978,7 @@
             statusbox.text += player_lookup[i] + ": 未选择明牌\n";
             if (i == myIndex) {
                 statetips.text = '现在，你应该使用你的出拳牌了'
-                countdown(20);
+                countdown(10);
               // checkcardlock(checkbutton);
             }
           }
@@ -1041,8 +1038,8 @@
 
         statetips.text = '请按确定键';
         var elem_string = ["无要素", "有要素"];
-        statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
-        do_cardlimit(healthPointList[myIndex], 0);
+          statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
+          hp = healthPointList[myIndex];
         for (var i = 0; i < player_num; i++) {
           statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
@@ -1069,17 +1066,19 @@
         do_desert(empty);
         do_fillcardlist();
         pedometer = 4;
-          refreshcard();
-          countdown(15);
+        refreshcard();
+        countdown(10);
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
-          statepadtext_body.text = '游戏结束，人类获胜！';
+          statepadtext_body.text = '人类获胜！';
+          statusbox.text += "游戏结束，人类获得胜利";
           countdown(10);
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
-          statepadtext_body.text = '游戏结束，感染者获胜！';
+          statepadtext_body.text = '感染者获胜';
+          statusbox.text += "游戏结束，感染者获得胜利";
           countdown(10);
       }
       else if (state == "END") {

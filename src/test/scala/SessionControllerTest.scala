@@ -5,16 +5,14 @@ import server.Server.executionContext
 
 object SessionControllerTest {
   def main(args: Array[String]): Unit = {
-    val players = (0 to 4).map { i =>
-      val uid = i.toString
-      val sid = SessionController.createSession(uid)
-      (uid,sid)
-    }
-    players.foreach { p =>
+    SessionController.addGhost()
+    Seq(0,1,2).foreach { p =>
       println(p)
-      val f = SessionController.matchPlayers(RequestMatch(p._2))
+      val f = if(p<2) SessionController.matchPlayers(RequestMatch(0,2)) else  SessionController.matchPlayers(RequestMatch(1,2))
       f.onComplete(x=>println(p,x))
-      Thread.sleep(100)
+      if(p==0){
+        SessionController.unmatchPlayers(RequestMatch(0,2))
+      }
     }
   }
 }
