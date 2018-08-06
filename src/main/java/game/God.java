@@ -524,7 +524,7 @@ public class God {
             fireList[i] = -1;
 
             // ghost sid
-            if (allPlayers[i].SID < 12) {
+            if (allPlayers[i].SID < 12 && allPlayers[i].SID>=0) {
                 allPlayers[i].user_info = GodHelper.ghostUser();
             } else {
                 Option<UserModel.User> user = UserController.getProfile(playerSID[i]);

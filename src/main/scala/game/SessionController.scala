@@ -203,11 +203,13 @@ object SessionController {
 
 
   def endGame(players: Array[Int], deltaScore: Array[Int]): Unit = {
-    states.transform { (sid, state) =>
-      if (players contains sid) {
-        state.copy(god = null, timestamp = System.currentTimeMillis(), state = StateReady)
-      } else {
-        state
+    this.synchronized{
+      states.transform { (sid, state) =>
+        if (players contains sid) {
+          state.copy(god = null, timestamp = System.currentTimeMillis(), state = StateReady)
+        } else {
+          state
+        }
       }
     }
     for (elem <- players zip deltaScore) {
