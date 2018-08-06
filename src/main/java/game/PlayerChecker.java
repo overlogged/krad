@@ -16,7 +16,7 @@ public class PlayerChecker{
 
     //energy acquiring and consuming
     static void energyAcq(Player playerMain,int energyVal){
-        playerMain.energy = Math.max(playerMain.energy+energyVal,playerMain.healthPoint);
+        playerMain.energy = Math.min(playerMain.energy+energyVal,playerMain.healthPoint);
     }
     static void energyConsume(Player playerMain,int energyVal) {
         if(playerMain.energy>=energyVal)
