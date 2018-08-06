@@ -174,6 +174,7 @@ object SessionController {
           this.notifyAll()
         } else {
           states(req.sid) = state.copy(state = StateMatching)
+          match_pool(player_count).append(req.sid)
           while (!ready()) {
             this.wait()
           }
