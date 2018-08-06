@@ -129,7 +129,7 @@ object GodHelper extends MyJsonProtocol{
   }
 
   def toElemAccount(state:String,elemList:Array[Int]):String = {
-    ResMoveAccount(state,elemList).toJson.toString()
+    ResElemAccount(state,elemList).toJson.toString()
   }
 
   def toHumanVictory(state:String):String = {
