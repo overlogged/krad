@@ -77,7 +77,9 @@ function go_help() {
 }
 
 function do_match() {
-  var req = {
+  if(canMatch==true){
+    canMatch=false;
+    var req = {
     'sid': sid,
     'player_count':2
   };
@@ -99,10 +101,12 @@ function do_match() {
     },
     error: function (data, status) {
       $("#loading").empty();
+      canMatch=true;
       alert("匹配失败");
       console.log(data);
     }
   });
+  }
 }
 
 
