@@ -6,7 +6,7 @@ public class PlayerChecker{
 
     //element acquiring and losing
     static void elemAcq(Player playerMain){
-        if((!playerMain.hasElem)&(playerMain.team==Player.HUMAN))
+        if((!playerMain.hasElem)&&(playerMain.team==Player.HUMAN))
             playerMain.hasElem=true;
     }
     static void elemLose(Player playerMain){
@@ -16,7 +16,7 @@ public class PlayerChecker{
 
     //energy acquiring and consuming
     static void energyAcq(Player playerMain,int energyVal){
-        playerMain.energy+=energyVal;
+        playerMain.energy = Math.min(playerMain.energy+energyVal,playerMain.healthPoint);
     }
     static void energyConsume(Player playerMain,int energyVal) {
         if(playerMain.energy>=energyVal)
@@ -55,7 +55,7 @@ public class PlayerChecker{
     static Boolean infection(Map map, Player playerPos, Player playerPas){
         if(playerPos.preLoc == playerPas.preLoc) {
             if(map.units[playerPos.preLoc].status != 2) {
-                if (playerPos.team == Player.ZOMBIE & playerPas.team == Player.HUMAN ) {
+                if (playerPos.team == Player.ZOMBIE && playerPas.team == Player.HUMAN ) {
                     playerPas.team = Player.ZOMBIE;
                     playerPas.energy = 0;
                     playerPas.hasElem = false;

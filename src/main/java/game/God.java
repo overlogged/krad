@@ -16,7 +16,6 @@ public class God {
     private UserInfo[] allUserInfo;
     private int[] cardHeap;
     private int[] availableFireTarget;
-    private int[] availableMoveDirection;
 
     private String[] heroChoices;
     private int[] teamResult;
@@ -33,7 +32,7 @@ public class God {
     private int[] scoreList;
     private int[] fireList;
 
-    enum GameState {INIT, MAINGAME, END}
+    enum GameState {INIT, MAINGAME}
 
     private GameState gameState = GameState.INIT;
     private int[] playerState;
@@ -68,14 +67,17 @@ public class God {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
                             wait_count = 0;
-                            GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
+                            if (allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
+                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
+                            else
+                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             seenCardJudge(playerIndex, playerHandCard);
                             for (int i = 0; i < playerNum; i++) {
                                 if (map.distance[allPlayers[playerIndex].preLoc][allPlayers[i].preLoc] < allPlayers[playerIndex].range)
                                     availableFireTarget[i] = 1;
                             }
-                            toDirection(playerIndex);
+                            int[] availableMoveDirection = map.units[allPlayers[playerIndex].preLoc].availableDir();
                             result = GodHelper.toCardDistribute("choose strategy decision", playerHandCard, availableFireTarget, availableMoveDirection);
                             playerState[playerIndex] += 1;
                         } else if (playerState[playerIndex] == 1) {
@@ -86,7 +88,7 @@ public class God {
                                 allPlayers[playerIndex].stratDecision = GambleChecker.DEPOSIT;
                             else {
                                 allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
-                                GambleChecker.cardToHeap(cardHeap, dec.decision());
+                                GambleChecker.cardToHeap(cardHeap, allPlayers[playerIndex].handCards[dec.decision()]);
                                 allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
                                 GambleChecker.cardSort(allPlayers[playerIndex].handCards);
                                 allPlayers[playerIndex].handCardsNum -= 1;
@@ -134,51 +136,36 @@ public class God {
                         break;
                     case ACTION:
                         if (playerState[playerIndex] == 0) {
-                            result = GodHelper.toDepositAccount("skills account", energyList);
-                            playerState[playerIndex] += 1;
+                            String state;
+                            if (humanWin || zombieWin) {
+                                if (humanWin)
+                                    state = "Game Over, human wins";
+                                else
+                                    state = "Game Over, zombie wins";
+                                playerState[playerIndex] = 2;
+                            } else {
+                                state = "Account";
+                                playerState[playerIndex] = 1;
+                            }
+                            result = GodHelper.toAccount(state, energyList, healthPointList, locationList, elementList, teamList);
                         } else if (playerState[playerIndex] == 1) {
-                            result = GodHelper.toSkillsAccount("fire account");
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 2) {
-                            result = GodHelper.toFireAccount("move account", healthPointList);
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 3) {
-                            result = GodHelper.toMoveAccount("element account", locationList);
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 4) {
-                            result = GodHelper.toElemAccount("if human wins", elementList);
-                            playerState[playerIndex] += 1;
-                        } else if (playerState[playerIndex] == 5) {
-                            if (humanWin) {
-                                result = GodHelper.toHumanVictory("Game Over, human wins");
-                                playerState[playerIndex] = 0;
-                                gameState = GameState.END;
-                            } else {
-                                result = GodHelper.toHumanVictory("infection account");
-                                playerState[playerIndex] += 1;
-                            }
-                        } else if (playerState[playerIndex] == 6) {
-                            if (zombieWin) {
-                                result = GodHelper.toInfectionAccount("Game Over, zombie wins", teamList);
-                                playerState[playerIndex] = 0;
-                                gameState = GameState.END;
-                            } else {
-                                result = GodHelper.toInfectionAccount("desert account", teamList);
-                                playerState[playerIndex] += 1;
-                            }
-                        } else if (playerState[playerIndex] == 7) {
                             desertAccount(playerIndex, msg);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
                             result = GodHelper.toDesertAccount("card distribute", allPlayers[playerIndex].energy, playerHandCard);
                             waitAllPlayers(playerIndex);
+                            playerState[playerIndex] = 0;
+                        } else if(playerState[playerIndex]==2){
+                            // end
+                            int[] playerSID = new int[playerNum];
+                            for (int i = 0; i < playerNum; i++)
+                                playerSID[i] = allPlayers[i].SID;
+                            SessionController.endGame(playerSID, scoreList);
+                            result = GodHelper.toGameOver("END", scoreList);
                         }
                         break;
                 }
-                break;
-            case END:
-                result = GodHelper.toGameOver("END", scoreList);
                 break;
         }
 
@@ -227,6 +214,7 @@ public class God {
         int zombie = (int) (Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
         allPlayers[zombie].healthPoint = 12;
+        allPlayers[zombie].mot = 10;
         allPlayers[zombie].hasElem = false;
         allPlayers[zombie].firePow = 0;
         allPlayers[zombie].range = 0;
@@ -255,9 +243,11 @@ public class God {
     private void featureChoose(String msg, Player playerMain, int playerIndex) {
         MsgChooseDecision decisionFeature = GodHelper.getChooseDecision(msg);
         int decision = playerMain.stratDecision;
-        int direction = toLoc(playerIndex, decisionFeature.moveDirection());
+        int direction = -1;
+        if (decisionFeature.moveDirection() != -1)
+            direction = map.units[allPlayers[playerIndex].preLoc].neighbors[decisionFeature.moveDirection()];
 
-        if ((decision < 4) | (decision > 7))
+        if ((decision < 4) || (decision > 7))
             decision = GambleChecker.DEPOSIT;
 
         if (decision == GambleChecker.MOVE) {
@@ -277,7 +267,7 @@ public class God {
         MsgSeenCard msgSeenCard = GodHelper.getSeenCard(msg);
         synchronized (this) {
             seen_card_count += 1;
-            if ((playerMain.isSeenCard) | (msgSeenCard.seenCard() != 0)) {
+            if ((playerMain.isSeenCard) || (msgSeenCard.seenCard() != 0)) {
                 playerMain.gamble = msgSeenCard.seenCard();
                 playerMain.gambleNum = 1;
                 playerMain.isSeenCard = true;
@@ -305,7 +295,7 @@ public class God {
         for (int i = 0; i < msgChooseGamble.gambleCard().length; i++)
             gambleChoose[i] = msgChooseGamble.gambleCard()[i];
         if (!playerMain.isSeenCard) {
-            if ((msgChooseGamble.gambleCard() == null) | (msgChooseGamble.gambleCard()[0] == -1))
+            if ((msgChooseGamble.gambleCard() == null) || (msgChooseGamble.gambleCard()[0] == -1))
                 playerMain.gamble = 1;
             playerMain.gamble = playerMain.handCards[gambleChoose[0]];
             playerMain.gambleNum = gambleChoose.length;
@@ -319,7 +309,6 @@ public class God {
         gambleChoices[playerIndex] = playerMain.gamble;
         cardNumList[playerIndex] = playerMain.gambleNum;
     }
-
 
 
     private Integer gamble_count = 0;
@@ -344,210 +333,8 @@ public class God {
         }
     }
 
-    /* transform between direction and location
-     * dirty functions
-     */
-    private void toDirection(int playerIndex) {
-        if (allPlayers[playerIndex].preLoc == 0) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 1) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 1;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        } else if (allPlayers[playerIndex].preLoc == 6) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 1;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        } else if (allPlayers[playerIndex].preLoc == 7) {
-            availableMoveDirection[0] = 1;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 8) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 1;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 1;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        } else if (allPlayers[playerIndex].preLoc == 11) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 1;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 12) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 1;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        } else if (allPlayers[playerIndex].preLoc == 14) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 1;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        } else if (allPlayers[playerIndex].preLoc == 15) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 16) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 17) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 1;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 23) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 1;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else if (allPlayers[playerIndex].preLoc == 24) {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 0;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 1;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 0;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 1;
-        } else {
-            availableMoveDirection[0] = 0;
-            availableMoveDirection[1] = 1;
-            availableMoveDirection[2] = 0;
-            availableMoveDirection[3] = 0;
-            availableMoveDirection[4] = 0;
-            availableMoveDirection[5] = 1;
-            availableMoveDirection[6] = 0;
-            availableMoveDirection[7] = 0;
-        }
-    }
-
-    private int toLoc(int playerIndex, int direction) {
-        if (allPlayers[playerIndex].preLoc == 0) {
-            return 1;
-        } else if (allPlayers[playerIndex].preLoc == 1) {
-            if (direction == 3)
-                return 0;
-            else
-                return 2;
-        }
-        if (allPlayers[playerIndex].preLoc == 7) {
-            if (direction == 7)
-                return 6;
-            else if (direction == 0)
-                return 8;
-            else
-                return 24;
-        } else if (allPlayers[playerIndex].preLoc == 8) {
-            if (direction == 4)
-                return 7;
-            else
-                return 9;
-        } else if (allPlayers[playerIndex].preLoc == 11) {
-            if (direction == 7)
-                return 12;
-            else
-                return 10;
-        } else if (allPlayers[playerIndex].preLoc == 12) {
-            if (direction == 1)
-                return 13;
-            else
-                return 11;
-        } else if (allPlayers[playerIndex].preLoc == 14) {
-            if (direction == 5)
-                return 13;
-            else
-                return 15;
-        } else if (allPlayers[playerIndex].preLoc == 15) {
-            if (direction == 7)
-                return 14;
-            else
-                return 16;
-        } else if (allPlayers[playerIndex].preLoc == 16) {
-            if (direction == 7)
-                return 15;
-            else
-                return 17;
-        } else if (allPlayers[playerIndex].preLoc == 17) {
-            if (direction == 7)
-                return 16;
-            else
-                return 18;
-        } else if (allPlayers[playerIndex].preLoc == 23) {
-            if (direction == 7)
-                return 24;
-            else
-                return 22;
-        } else if (allPlayers[playerIndex].preLoc == 24) {
-            if (direction == 7)
-                return 7;
-            else
-                return 23;
-        } else {
-            if (direction == 1)
-                return allPlayers[playerIndex].preLoc+1;
-            else
-                return allPlayers[playerIndex].preLoc-1;
-        }
-    }
-
     // functions for ACTION stage
-    void doAction(){
+    void doAction() {
         depositAccount();
         skillsAccount();
         fireAccount();
@@ -589,7 +376,7 @@ public class God {
                 allPlayers[i].preLoc = MapChecker.tryMove(map, allPlayers[i].preLoc, allPlayers[i].moveDirection, allPlayers[i].energyConsume);
             }
         }
-        for(int i = 0; i < playerNum; i++)
+        for (int i = 0; i < playerNum; i++)
             locationList[i] = allPlayers[i].preLoc;
     }
 
@@ -609,7 +396,7 @@ public class God {
 
     private void humanVictory() {
         for (int i = 0; i < playerNum; i++) {
-            if ((allPlayers[i].preLoc == map.fighter_evacuate) & (allPlayers[i].hasElem)) {
+            if ((allPlayers[i].preLoc == map.fighter_evacuate) && (allPlayers[i].hasElem)) {
                 humanWin = true;
             }
         }
@@ -633,7 +420,6 @@ public class God {
     }
 
 
-
     private int desert_count = 0;
 
     private void desertAccount(int playerIndex, String msg) {
@@ -643,7 +429,7 @@ public class God {
             cardList[i] = msgDesertAccount.desertCardList()[i];
         synchronized (this) {
             desert_count += 1;
-            if ((cardList[0] != -1) & (msgDesertAccount.desertCardList() != null))
+            if ((cardList[0] != -1) && (msgDesertAccount.desertCardList() != null))
                 GambleChecker.cardDesert(allPlayers[playerIndex], cardHeap, cardList);
             if (allPlayers[playerIndex].energy > allPlayers[playerIndex].healthPoint)
                 allPlayers[playerIndex].energy = allPlayers[playerIndex].healthPoint;
@@ -662,12 +448,10 @@ public class God {
     }
 
 
-
     private int wait_count = 0;
 
     private void waitAllPlayers(int playerIndex) {
         synchronized (this) {
-            playerState[playerIndex] = 0;
             wait_count += 1;
             if (wait_count < playerNum) {
                 while (wait_count < playerNum) {
@@ -688,7 +472,6 @@ public class God {
                     allPlayers[i].fireTarget = -1;
                     allPlayers[i].moveDirection = -1;
                     availableFireTarget[i] = -1;
-                    availableMoveDirection[i] = -1;
                     decisionChoices[i] = GambleChecker.DEPOSIT;
                     seenCardChoices[i] = 0;
                     gambleChoices[i] = GambleChecker.PAPER;
@@ -724,7 +507,6 @@ public class God {
         teamList = new int[playerNum];
         availableFireTarget = new int[playerNum];
         scoreList = new int[playerNum];
-        availableMoveDirection = new int[8];
         fireList = new int[playerNum];
 
         for (int i = 0; i < playerNum; i++) {
@@ -741,9 +523,14 @@ public class God {
             scoreList[i] = 100;
             fireList[i] = -1;
 
-            Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
-            if (user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
-            else allPlayers[i].user_info = user.get();
+            // ghost sid
+            if (allPlayers[i].SID < 12 && allPlayers[i].SID>=0) {
+                allPlayers[i].user_info = GodHelper.ghostUser();
+            } else {
+                Option<UserModel.User> user = UserController.getProfile(playerSID[i]);
+                if (user.isEmpty()) allPlayers[i].user_info = GodHelper.ghostUser();
+                else allPlayers[i].user_info = user.get();
+            }
             allUserInfo[i] = new UserInfo(i, allPlayers[i].user_info.nickname());
         }
     }
@@ -753,8 +540,8 @@ public class God {
         for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++) {
             playerHandCard[i] = allPlayers[playerIndex].handCards[i];
             if ((allPlayers[playerIndex].handCards[i] == 1)
-                    | (allPlayers[playerIndex].handCards[i] == 2)
-                    | (allPlayers[playerIndex].handCards[i] == 3))
+                    || (allPlayers[playerIndex].handCards[i] == 2)
+                    || (allPlayers[playerIndex].handCards[i] == 3))
                 isSeenCard = false;
         }
         if (isSeenCard)

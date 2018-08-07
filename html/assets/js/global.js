@@ -21,6 +21,7 @@ var tooltip6;
 var tooltip7;
 var tooltip8;
 var tooltip9;
+var tooltip10;
 var signUp;
 var logIn;
 var forgetPW;

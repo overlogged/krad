@@ -1,6 +1,6 @@
 package common
 
-import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDesertAccount, MsgSeenCard, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResGameOver, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
+import game.GodHelper.{MsgChooseDecision, MsgChooseGamble, MsgChooseHero, MsgDesertAccount, MsgSeenCard, ResAccount, ResCardDistribute, ResChooseDecision, ResChooseGamble, ResChooseHero, ResDepositAccount, ResDesertAccount, ResElemAccount, ResFireAccount, ResGameOver, ResHumanVictory, ResInfectionAccount, ResInit, ResMoveAccount, ResSeenCard, ResSkillsAccount, ResWinJudge, UserInfo}
 import game.SessionController.Session
 import game.UserModel.{Stats, User}
 import server.Server.{Config, RequestChangePassword, RequestChangeProfile, RequestForgetPassword, RequestGame, RequestLogin, RequestMatch, RequestRegister, RequestSetNewPassword}
@@ -19,7 +19,7 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val RequestSetNewFormat = jsonFormat2(RequestSetNewPassword)
   implicit val RequestChangePasswordFormat = jsonFormat3(RequestChangePassword)
   implicit val RequestChangeProfileFormat = jsonFormat4(RequestChangeProfile)
-  implicit val RequestMatchFormat = jsonFormat1(RequestMatch)
+  implicit val RequestMatchFormat = jsonFormat2(RequestMatch)
   implicit val SessionFormat = jsonFormat3(Session)
   implicit val MsgChooseHeroFormat = jsonFormat1(MsgChooseHero)
   implicit val RequestGameFormat = jsonFormat2(RequestGame)
@@ -44,4 +44,5 @@ trait MyJsonProtocol extends DefaultJsonProtocol {
   implicit val MsgDesertAccountFormat = jsonFormat1(MsgDesertAccount)
   implicit val ResDesertAccountFormat = jsonFormat3(ResDesertAccount)
   implicit val ResGameOverFormat = jsonFormat2(ResGameOver)
+  implicit val ResAccountFormat = jsonFormat6(ResAccount)
 }

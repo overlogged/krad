@@ -44,7 +44,7 @@ var state_login = {
 
       forgetPW = game.add.button(580, 260, 'button', go_forget, this, 1, 0, 2, 0);
       game.add.bitmapText(600, 265, 'chiller', 'forget', 28);
- 
+
       tooltip1.inputEnabled = true;
       tooltip2.inputEnabled = true;
       tooltip4.inputEnabled = true;

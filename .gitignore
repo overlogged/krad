@@ -4,6 +4,7 @@ target/
 *.iml
 config.txt
 log.txt
+game-log.txt
 deploy/
 .DS_Store
 .vs/
