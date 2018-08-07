@@ -979,6 +979,8 @@
         skiper();
       }
       else if (state == "choose strategy decision") {
+          gamk = [0, 0, 0, 0];
+          do_gamblebox;
         checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
         statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
