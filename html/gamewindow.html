@@ -1102,13 +1102,13 @@
         team_result = data.teamList;
         checkcardunlock(checkbutton);
         statepadtext_body.text = '弃牌阶段';
-        statetips.text = '你现在应该丢弃你不需要的牌';
+        statetips.text = '你现在应该丢弃你不需要的牌，并谨慎决定下一回合的行动';
 
         do_desert(empty);
         do_fillcardlist();
         pedometer = 4;
         refreshcard();
-        countdown(10);
+        countdown(25);
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
