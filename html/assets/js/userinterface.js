@@ -107,6 +107,9 @@ function do_match() {
     }
   });
   }
+  else{
+    alert("正在匹配请稍后！");
+  }
 }
 
 
