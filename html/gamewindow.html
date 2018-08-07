@@ -324,7 +324,9 @@
       var status_energybox;
       var status_energytext;
       var status_decisionbox=[];
-      var status_gamblebox=[];
+      var status_gamblebox;
+      var status_gambletext;
+      var status_gambleslot = [];
     var statusbox;
     var pagecount = 1;    //To control changing statusarea page
     var statusarea = new Phaser.Game(280, 470, Phaser.CANVAS, 'statuscontainer', {
@@ -332,7 +334,8 @@
         statusarea.load.image('gamebackground', 'assets/img/gamewindow/statusground.png');
         statusarea.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
           statusarea.load.image('status_energy', 'assets/img/gamewindow/status_energy.png');
-          statusarea.load.spritesheet('status_gamble', 'assets/img/gamewindow/img_RPS.png');
+          statusarea.load.image('status_gamble', 'assets/img/gamewindow/status_gamble.png');
+          statusarea.load.spritesheet('img_gamble', 'assets/img/gamewindow/img_RPS.png',25,25);
       },
 
       create: function () {
@@ -365,6 +368,13 @@
           status_energytext = statusarea.add.text(20, 40, 'P0:\nP1:\nP2:\nP3:');
           status_energytext.fontSize = 20;
           do_energybox();
+          status_gamblebox = statusarea.add.sprite(10, 170, 'status_gamble');
+          status_gambletext = statusarea.add.text(20, 205, 'P0:\t\t\t\t\t\t\t\t\t\t\tP2:\n\nP1:\t\t\t\t\t\t\t\t\t\t\tP3:');
+          status_gambletext.fontSize = 25;
+          status_gambleslot[0] = statusarea.add.button(60, 207, 'img_gamble', 0, 0, 0, 0);
+          status_gambleslot[1] = statusarea.add.button(60, 277, 'img_gamble', 0, 0, 0, 0);
+          status_gambleslot[2] = statusarea.add.button(180, 207, 'img_gamble', 0, 0, 0, 0);
+          status_gambleslot[3] = statusarea.add.button(180, 277, 'img_gamble', 0, 0, 0, 0);
       },
       update: function () {
         // if (statusbox.height > (pagecount * 460)) {
@@ -447,6 +457,13 @@
         refreshcard();
       }
     });
+
+      function do_gamblebox(gambiu) {
+          var i
+          for (i = 0; i <= 4; i++) {
+              status_gambleslot[i].setFrames(gambiu[i], gambiu[i], gambiu[i], gambiu[i]);
+          }
+      }
 
       function do_energybox() {
           var i;
@@ -910,6 +927,7 @@
     var scoreList = [];
     var player_lookup = ['P0', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7'];
     function do_callback(data, status) {
+      var gamk = [];
       if (state == "choose hero") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
@@ -1010,17 +1028,20 @@
         // statusbox.text += "\n玩家选择的明牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           if (seenCardChoices[i] != 0) {
-            // statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+              // statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+              gamk[i] = 4 - seenCardChoices[i];
             if (i == myIndex) skiper();
           }
           else {
-            // statusbox.text += player_lookup[i] + ": 未选择明牌\n";
+              // statusbox.text += player_lookup[i] + ": 未选择明牌\n";
+              gamk[i] = 0;
             if (i == myIndex) {
               statetips.text = '现在，你应该使用你的出拳牌了'
               countdown(10);
               // checkcardlock(checkbutton);
             }
-          }
+            }
+            do_gamblebox(gamk);
         }
       }
 
@@ -1045,8 +1066,10 @@
         fireList = data.fireList;
         // statusbox.text += "\n玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          // statusbox.text += player_lookup[i] + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
-        }
+            // statusbox.text += player_lookup[i] + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+            gamk[i] = 4 - gambleChoices[i];
+          }
+          do_gamblebox(gamk);
         // statusbox.text += "\n玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
           if (fireList[i] != -1) {
