@@ -318,13 +318,18 @@
       }
     });
 
+
+      var status_energybox;
+      var status_energytext;
+      var status_decisionbox=[];
+      var status_gamblebox=[];
     var statusbox;
     var pagecount = 1;    //To control changing statusarea page
-    var statusarea = new Phaser.Game(280, 899, Phaser.CANVAS, 'statuscontainer', {
+    var statusarea = new Phaser.Game(280, 470, Phaser.CANVAS, 'statuscontainer', {
       preload: function () {
         statusarea.load.image('gamebackground', 'assets/img/gamewindow/statusground.png');
         statusarea.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
-
+          statusarea.load.image('status_energy', 'assets/img/gamewindow/status_energy.png');
       },
 
       create: function () {
@@ -353,6 +358,10 @@
         // statusbox.text += "欢迎来到激斗红潮!\n请点击下方按钮正式开始游戏，祝你游\n戏愉快！\n";
         // statusbox.maxWidth=240;
         // statusbox.addColor('#ff00ff',4);
+          status_energybox = statusarea.add.sprite(10, 10, 'status_energy');
+          status_energytext = statusarea.add.text(20, 40, 'P0:\nP1:\nP2:\nP3:');
+          status_energytext.fontSize = 20;
+          do_energybox;
       },
       update: function () {
         // if (statusbox.height > (pagecount * 460)) {
@@ -360,7 +369,12 @@
         //   pagecount++;
         // }
       }
-    });
+      });
+
+      
+
+      var mp_union = [0, 0, 0, 0];
+      var hp_union = [6, 6, 6, 6];
     var hp = 6;
     var cardlimiter = [];
     var statetips;
@@ -432,6 +446,20 @@
         refreshcard();
       }
     });
+
+      function do_energybox() {
+          var i;
+          var j;
+          var texter='';
+          var hexter;
+          for (i = 0; i <= 3; i++) {
+              hexter = '';
+              for (j = 0; j < mp_union[i]; j++)hexter += '★';
+              for (j = mp_union[i]; j < hp_union[i]; j++)hexter += '☆';
+              texter += player_lookup[i] + ':' + hexter;
+          }
+          status_energytext.text = texter;
+      }
 
     function do_seencardslot() {
       var j;
@@ -879,14 +907,14 @@
     var healthPointList = [6, 6, 6, 6];
     var elemList = [];
     var scoreList = [];
-    var player_lookup = ['玩家0', '玩家1', '玩家2', '玩家3', '玩家4', '玩家5', '玩家6', '玩家7'];
+    var player_lookup = ['P0', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7'];
     function do_callback(data, status) {
       if (state == "choose hero") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
         statetips.text = "按确定键分配英雄";
         myIndex = data.myIndex;
-        player_lookup[myIndex] = '☛→你';
+        player_lookup[myIndex] = '你';
         allUserInfo = data.allUserInfo;
         herolist = data.heroList;
         player_num = allUserInfo.length;
@@ -1049,7 +1077,10 @@
         statetips.text = '请按确定键';
         var elem_string = ["无要素", "有要素"];
         // statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
-        hp = healthPointList[myIndex];
+          hp = healthPointList[myIndex];
+          hp_union = healthPointList;
+          mp_union = eneregyList;
+          do_energybox;
         for (var i = 0; i < player_num; i++) {
           // statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
