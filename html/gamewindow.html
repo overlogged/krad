@@ -179,6 +179,8 @@
     }
     ];
 
+      var mp_union = [0, 0, 0, 0];
+      var hp_union = [6, 6, 6, 6];
     var counter;
     var gamblecount;
     var loadingcomplete = 0;
@@ -361,7 +363,7 @@
           status_energybox = statusarea.add.sprite(10, 10, 'status_energy');
           status_energytext = statusarea.add.text(20, 40, 'P0:\nP1:\nP2:\nP3:');
           status_energytext.fontSize = 20;
-          do_energybox;
+          do_energybox();
       },
       update: function () {
         // if (statusbox.height > (pagecount * 460)) {
@@ -373,8 +375,6 @@
 
       
 
-      var mp_union = [0, 0, 0, 0];
-      var hp_union = [6, 6, 6, 6];
     var hp = 6;
     var cardlimiter = [];
     var statetips;
@@ -456,7 +456,7 @@
               hexter = '';
               for (j = 0; j < mp_union[i]; j++)hexter += '★';
               for (j = mp_union[i]; j < hp_union[i]; j++)hexter += '☆';
-              texter += player_lookup[i] + ':' + hexter;
+              texter += player_lookup[i] + ':' + hexter + '\n';
           }
           status_energytext.text = texter;
       }
@@ -1080,7 +1080,7 @@
           hp = healthPointList[myIndex];
           hp_union = healthPointList;
           mp_union = eneregyList;
-          do_energybox;
+          do_energybox();
         for (var i = 0; i < player_num; i++) {
           // statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
