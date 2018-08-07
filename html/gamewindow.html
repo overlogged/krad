@@ -19,8 +19,8 @@
     #statuscontainer {
       height: 470px;
       width: 280px;
-      overflow: auto;
-      overflow-x: hidden;
+      overflow: hidden;
+      /* overflow-x: hidden; */
       float: left;
     }
 
@@ -337,28 +337,28 @@
         // statusarea.world.setBounds(0, 0, 280, 8800);
         // alert(statusarea.height);
         // var statusbox = statusarea.add.bitmapText(0, 0, 'chiller', 'Change Profile', 25)；
-        statusarea.add.sprite(0, 4400, 'gamebackground');
-        statusbox = statusarea.add.text(15, 0, "", {
-          font: "14px 微软雅黑",
-          fill: "#ff0044",
-          align: "left",
+        // statusarea.add.sprite(0, 4400, 'gamebackground');
+        // statusbox = statusarea.add.text(15, 0, "", {
+        //   font: "14px 微软雅黑",
+        //   fill: "#ff0044",
+        //   align: "left",
 
-        });
+        // });
 
         // statusbox.wordWrap = true;
         // statusbox.setTextBounds(0, 0, 240, 1000);
         // statusbox.wordWrapWidth = 200;
 
         // statusbox.text += "you are the apple of my eyes,and you are all I want";
-        statusbox.text += "欢迎来到激斗红潮!\n请点击下方按钮正式开始游戏，祝你游\n戏愉快！\n";
+        // statusbox.text += "欢迎来到激斗红潮!\n请点击下方按钮正式开始游戏，祝你游\n戏愉快！\n";
         // statusbox.maxWidth=240;
         // statusbox.addColor('#ff00ff',4);
       },
       update: function () {
-        if (statusbox.height > (pagecount * 460)) {
-          document.getElementById('statuscontainer').scrollTop = statusbox.height;
-          pagecount++;
-        }
+        // if (statusbox.height > (pagecount * 460)) {
+        //   document.getElementById('statuscontainer').scrollTop = statusbox.height;
+        //   pagecount++;
+        // }
       }
     });
     var hp = 6;
@@ -890,11 +890,11 @@
         allUserInfo = data.allUserInfo;
         herolist = data.heroList;
         player_num = allUserInfo.length;
-        statusbox.text += "你的游戏编号为" + myIndex;
-        statusbox.text += ", 加入游戏的玩家有：\n";
-        for (var i = 0; i < player_num; i++) {
-          statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
-        }
+        // statusbox.text += "你的游戏编号为" + myIndex;
+        // statusbox.text += ", 加入游戏的玩家有：\n";
+        // for (var i = 0; i < player_num; i++) {
+        //   statusbox.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
+        // }
         pedometer = 0;
         countdown(5);
       }
@@ -902,23 +902,23 @@
         checkcardunlock(checkbutton);
         team_result = data.teamResult;
         heroChoices = data.heroChoices;
-        statusbox.text += "\n玩家选择的英雄为：\n";
+        // statusbox.text += "\n玩家选择的英雄为：\n";
         //statetips.text = "按确定键开始第一个回合";
-        for (var i = 0; i < player_num; i++) {
-          statusbox.text += player_lookup[i] + ": 选择了英雄" + heroChoices[i] + "\n";
-        }
+        // for (var i = 0; i < player_num; i++) {
+        //   statusbox.text += player_lookup[i] + ": 选择了英雄" + heroChoices[i] + "\n";
+        // }
         do_initplayer(4);
-        statusbox.text += "\n玩家的身份为：\n";
+        // statusbox.text += "\n玩家的身份为：\n";
 
         for (var i = 0; i < player_num; i++) {
           if (team_result[i] == 1) {
             do_poison(i);
             player[i].body.x = map[0].x + i * 20 + (4 - player_num) * 10;
             player[i].body.y = map[0].y;
-            statusbox.text += player_lookup[i] + ": 身份为感染者\n";
+            // statusbox.text += player_lookup[i] + ": 身份为感染者\n";
           }
           else {
-            statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
+            // statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
           }
           if(i==myIndex)
           {
@@ -978,14 +978,14 @@
         decisionChoices = data.decisionChoices;
         seenCardChoices = data.seenCardChoices;
         var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
-        statusbox.text += "\n玩家选择的明牌情况为：\n";
+        // statusbox.text += "\n玩家选择的明牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
           if (seenCardChoices[i] != 0) {
-            statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
+            // statusbox.text += player_lookup[i] + ": 选择了明牌" + lookup_table[3 - seenCardChoices[i]] + "\n";
             if (i == myIndex) skiper();
           }
           else {
-            statusbox.text += player_lookup[i] + ": 未选择明牌\n";
+            // statusbox.text += player_lookup[i] + ": 未选择明牌\n";
             if (i == myIndex) {
               statetips.text = '现在，你应该使用你的出拳牌了'
               countdown(10);
@@ -1014,17 +1014,17 @@
         cardNumList = data.cardNumList;
         playerWinList = data.playerWinList;
         fireList = data.fireList;
-        statusbox.text += "\n玩家选择的出牌情况为：\n";
+        // statusbox.text += "\n玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += player_lookup[i] + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+          // statusbox.text += player_lookup[i] + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
         }
-        statusbox.text += "\n玩家的开火情况为:\n";
+        // statusbox.text += "\n玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
           if (fireList[i] != -1) {
-            statusbox.text += player_lookup[i] + ": 向玩家" + fireList[i] + "开火射击，" + fireList[i] + "号玩家生命\n值下降\n";
+            // statusbox.text += player_lookup[i] + ": 向玩家" + fireList[i] + "开火射击，" + fireList[i] + "号玩家生命\n值下降\n";
           }
           else {
-            statusbox.text += player_lookup[i] + ": 未开火\n";
+            // statusbox.text += player_lookup[i] + ": 未开火\n";
           }
         }
         skiper();
@@ -1048,24 +1048,24 @@
 
         statetips.text = '请按确定键';
         var elem_string = ["无要素", "有要素"];
-        statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
+        // statusbox.text += "\n第" + gamerank + "轮回合结束后，玩家的状态结算:\n";
         hp = healthPointList[myIndex];
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
+          // statusbox.text += player_lookup[i] + ": 能量为" + eneregyList[i] + ", 生命值为" + healthPointList[i] + "，" + elem_string[elemList[i]] + "\n";
         }
         for (var i = 0; i < player_num; i++) {
           if ((data.teamList[i] == 1) && (team_result[i] == 0)) {
             do_poison(i);
-            statusbox.text += player_lookup[i] + "被感染，成为感染者\n";
+            // statusbox.text += player_lookup[i] + "被感染，成为感染者\n";
           }
         }
-        statusbox.text += "\n第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
+        // statusbox.text += "\n第" + gamerank + "轮回合结束后，各位玩家的身份如下:\n";
         for (var i = 0; i < player_num; i++) {
           if (data.teamList[i] == 1) {
-            statusbox.text += player_lookup[i] + ": 身份为感染者\n";
+            // statusbox.text += player_lookup[i] + ": 身份为感染者\n";
           }
           else {
-            statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
+            // statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
           }
         }
         team_result = data.teamList;
@@ -1082,13 +1082,13 @@
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '人类获胜！';
-        statusbox.text += "游戏结束，人类获得胜利";
+        // statusbox.text += "游戏结束，人类获得胜利";
         countdown(10);
       }
       else if (state == "Game Over, zombie wins") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '感染者获胜';
-        statusbox.text += "游戏结束，感染者获得胜利";
+        // statusbox.text += "游戏结束，感染者获得胜利";
         countdown(10);
       }
       else if (state == "END") {
@@ -1096,9 +1096,9 @@
         statepadtext_body.text = '游戏结束';
         statetips.text = '游戏结束，再点击一次按钮返回匹配界面';
         scoreList = data.scoreList;
-        statusbox.text += "\n游戏结束，各个玩家的分数为:\n";
+        // statusbox.text += "\n游戏结束，各个玩家的分数为:\n";
         for (var i = 0; i < player_num; i++) {
-          statusbox.text += player_lookup[i] + ": 分数为" + scoreList[i] + "\n";
+          // statusbox.text += player_lookup[i] + ": 分数为" + scoreList[i] + "\n";
         }
         turn_web++;
         if (turn_web == 2) {
@@ -1121,7 +1121,7 @@
         gamerank++;
         deleteloop++;
         if (deleteloop == 16) {
-          statusbox.text = '';
+          // statusbox.text = '';
           deleteloop = 1;
         }
         skiper();
