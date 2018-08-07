@@ -326,6 +326,7 @@
       var status_decisionbox=[];
       var status_gamblebox;
       var status_gambletext;
+      var status_gamblenumtext=[];
       var status_gambleslot = [];
     var statusbox;
     var pagecount = 1;    //To control changing statusarea page
@@ -371,10 +372,18 @@
           status_gamblebox = statusarea.add.sprite(10, 170, 'status_gamble');
           status_gambletext = statusarea.add.text(20, 205, 'P0:\t\t\t\t\t\t\t\t\t\t\tP2:\n\nP1:\t\t\t\t\t\t\t\t\t\t\tP3:');
           status_gambletext.fontSize = 25;
-          status_gambleslot[0] = statusarea.add.button(60, 207, 'img_gamble', 0, 0, 0, 0);
-          status_gambleslot[1] = statusarea.add.button(60, 277, 'img_gamble', 0, 0, 0, 0);
-          status_gambleslot[2] = statusarea.add.button(180, 207, 'img_gamble', 0, 0, 0, 0);
-          status_gambleslot[3] = statusarea.add.button(180, 277, 'img_gamble', 0, 0, 0, 0);
+          status_gambleslot[0] = statusarea.add.button(60, 207, 'img_gamble', '', this, 0, 0, 0, 0);
+          status_gambleslot[1] = statusarea.add.button(60, 277, 'img_gamble', '', this, 0, 0, 0, 0);
+          status_gambleslot[2] = statusarea.add.button(180, 207, 'img_gamble', '', this, 0, 0, 0, 0);
+          status_gambleslot[3] = statusarea.add.button(180, 277, 'img_gamble', '', this, 0, 0, 0, 0);
+          status_gamblenumtext[0] = statusarea.add.text(85, 207, '');
+          status_gamblenumtext[0].fontSize = 20;
+          status_gamblenumtext[1] = statusarea.add.text(85, 277, '');
+          status_gamblenumtext[1].fontSize = 20;
+          status_gamblenumtext[2] = statusarea.add.text(205, 207, '');
+          status_gamblenumtext[2].fontSize = 20;
+          status_gamblenumtext[3] = statusarea.add.text(205, 277, '');
+          status_gamblenumtext[3].fontSize = 20;
       },
       update: function () {
         // if (statusbox.height > (pagecount * 460)) {
@@ -458,10 +467,12 @@
       }
     });
 
-      function do_gamblebox(gambiu) {
+      function do_gamblebox(gambiu,numbiu) {
           var i;
           for (i = 0; i <= 3; i++) {
               status_gambleslot[i].setFrames(gambiu[i], gambiu[i], gambiu[i], gambiu[i]);
+              if ((numbiu[i] == 0) || (numbiu[i] == 1)) status_gamblenumtext[i].text = '';
+              else status_gamblenumtext[i] = '*' + numbiu[i];
           }
           status_gambletext.text = player_lookup[0] + ':\t\t\t\t\t\t\t\t\t\t\t' + player_lookup[2] + ':\n\n' + player_lookup[1] + ':\t\t\t\t\t\t\t\t\t\t\t' + player_lookup[3] + ':';
       }
@@ -928,7 +939,8 @@
     var scoreList = [];
     var player_lookup = ['P0', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7'];
     function do_callback(data, status) {
-      var gamk = [];
+        var gamk = [];
+        var numk = [];
       if (state == "choose hero") {
         checkcardunlock(checkbutton);
         statepadtext_body.text = '英雄分配阶段';
@@ -980,7 +992,8 @@
       }
       else if (state == "choose strategy decision") {
           gamk = [0, 0, 0, 0];
-          do_gamblebox;
+          numk = [0, 0, 0, 0];
+          do_gamblebox(gamk,numk);
         checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
         statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
@@ -1044,7 +1057,7 @@
               // checkcardlock(checkbutton);
             }
             }
-            do_gamblebox(gamk);
+            do_gamblebox(gamk,[0,0,0,0]);
         }
       }
 
@@ -1071,8 +1084,9 @@
         for (var i = 0; i < player_num; i++) {
             // statusbox.text += player_lookup[i] + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
             gamk[i] = 4 - gambleChoices[i];
+            numk[i] = cardNumList[i];
           }
-          do_gamblebox(gamk);
+          do_gamblebox(gamk,numk);
         // statusbox.text += "\n玩家的开火情况为:\n";
         for (var i = 0; i < player_num; i++) {
           if (fireList[i] != -1) {
