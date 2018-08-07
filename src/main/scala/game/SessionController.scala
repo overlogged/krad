@@ -212,7 +212,7 @@ object SessionController {
         map._2.remove(req.sid)
       )
       states.transform { (sid, state) =>
-        if (sid == req.sid) {
+        if (sid == req.sid && state.state!=StatePlaying) {
           SessionState(StateWaiting)
         } else {
           state
