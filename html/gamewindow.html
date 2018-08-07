@@ -460,9 +460,10 @@
 
       function do_gamblebox(gambiu) {
           var i
-          for (i = 0; i <= 4; i++) {
+          for (i = 0; i <= 3; i++) {
               status_gambleslot[i].setFrames(gambiu[i], gambiu[i], gambiu[i], gambiu[i]);
           }
+          status_gambletext.text = player_lookup[0] + ':\t\t\t\t\t\t\t\t\t\t\t' + player_lookup[2] + ':\n\n' + player_lookup[1] + ':\t\t\t\t\t\t\t\t\t\t\t' + player_lookup[3] + ':';
       }
 
       function do_energybox() {
