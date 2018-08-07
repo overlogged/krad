@@ -178,7 +178,7 @@
       y: 530
     }
     ];
-
+      var playerpad;
     var mp_union = [0, 0, 0, 0];
     var hp_union = [6, 6, 6, 6];
     var counter;
@@ -270,6 +270,7 @@
         game.world.setBounds(0, 0, game.width, game.height);
         // alert(player[0].body.dynamic);
         loadedcheck();
+          playerpad = game.add.text(10, 10, 'test');
         // game.camera.atLimit=true;
         // game.camera.width=780;
         // game.camera.height=470;
