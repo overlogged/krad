@@ -2,7 +2,7 @@ package game;
 
 public class CardHeapTest {
     public void cardDis(Player playerMain, int[] cardHeap){
-        if(playerMain.handCardsNum + 4 < playerMain.healthPoint)
+        if(playerMain.handCardsNum + 4 <= playerMain.healthPoint)
             GambleChecker.cardDistribute(cardHeap,playerMain,4);
         else
             GambleChecker.cardDistribute(cardHeap,playerMain, playerMain.healthPoint - playerMain.handCardsNum);
@@ -62,12 +62,11 @@ public class CardHeapTest {
         cardDesertList[2] = 2;
         GambleChecker.cardHeapInit(cardHeap,playerNum);
         GambleChecker.cardHeapStir(cardHeap);
-        for(int i = 0; i < 20; i++) {
+        for(int i = 0; i < 100; i++) {
             ct.cycleDis(playerMain, cardHeap, ct, cardDesertList);
-            ct.cyclePrint(cardHeap);
         }
-        ct.cyclePrint(cardHeap);
+        ct.cardDis(playerMain,cardHeap);
         System.out.println(playerMain.handCardsNum);
-        ct.cardTypeDetec(cardHeap);
+        ct.cyclePrint(playerMain.handCards);
     }
 }
