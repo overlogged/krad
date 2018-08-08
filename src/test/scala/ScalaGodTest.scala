@@ -49,48 +49,103 @@ object ScalaGodTest extends MyJsonProtocol{
 
   def test1(): Unit ={
     MapGenerator.map1()
-    val sids = 0 to 3
+    val sids = 0 to 1
     val god = new God
+    var i = 0
     god.initialPlayer(sids.toArray)
     val fs = for(sid<-sids)
       yield Future{
-        println(sid,god.request(sid,"{}"))
-        println(sid,god.request(sid,
-          """{"hero":"hero1"}"""
-        ))
-        println(sid,god.request(sid,"{}"))
-        println(sid,god.request(sid,
-          """{"decision":0,"moveDirection":-1,"fireTarget":-1}"""
-        ))
+        for(i<-1 to 20) {
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"hero":"hero1"}"""
+          ))
 
-        println(sid, god.request(sid,
-          """{"seenCard":0}"""
-        ))
 
-        println(sid,god.request(sid,
-          """{"gambleCard":[3]}"""
-        ))
-        // win judge
-        println(sid,god.request(sid,""))
-        // deposit
-        println(sid,god.request(sid,""))
-        // skills
-        println(sid,god.request(sid,""))
-        // fire
-        println(sid,god.request(sid,""))
-        // move
-        println(sid,god.request(sid,""))
-        // element
-        println(sid,god.request(sid,""))
-        //human victory
-        println(sid,god.request(sid,""))
-        //infection
-        println(sid,god.request(sid,""))
-        // desert
-        println(sid,god.request(sid,
-          """{"desertCardList":[-1]}"""
-        ))
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
 
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
+          ))
+
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
+          ))
+
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
+          ))
+
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
+          ))
+        }
       }
     for(f<-fs) {
       f onComplete println
@@ -118,6 +173,6 @@ object ScalaGodTest extends MyJsonProtocol{
   }
 
   def main(args: Array[String]): Unit = {
-    test3()
+    test1()
   }
 }

@@ -72,7 +72,9 @@ public class God {
                             else
                                 GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
-                            seenCardJudge(playerIndex, playerHandCard);
+                            for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++)
+                                playerHandCard[i] = allPlayers[playerIndex].handCards[i];
+                            seenCardJudge(playerIndex);
                             for (int i = 0; i < playerNum; i++) {
                                 if (map.distance[allPlayers[playerIndex].preLoc][allPlayers[i].preLoc] < allPlayers[playerIndex].range)
                                     availableFireTarget[i] = 1;
@@ -214,6 +216,7 @@ public class God {
         int zombie = (int) (Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
         allPlayers[zombie].healthPoint = 12;
+        allPlayers[zombie].handCards = new int[allPlayers[zombie].healthPoint];
         allPlayers[zombie].mot = 10;
         allPlayers[zombie].hasElem = false;
         allPlayers[zombie].firePow = 0;
@@ -535,10 +538,9 @@ public class God {
         }
     }
 
-    public void seenCardJudge(int playerIndex, int[] playerHandCard) {
+    public void seenCardJudge(int playerIndex) {
         boolean isSeenCard = true;
         for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++) {
-            playerHandCard[i] = allPlayers[playerIndex].handCards[i];
             if ((allPlayers[playerIndex].handCards[i] == 1)
                     || (allPlayers[playerIndex].handCards[i] == 2)
                     || (allPlayers[playerIndex].handCards[i] == 3))

@@ -19,12 +19,12 @@ public class GambleChecker {
         //count variable i
         int i,j;
         //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 8:12:8:4:4:4
-        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 0:16:0:8:8:8
+        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 0:10:0:10:10:10
         for (i = 0; i < 0 * playerNum; i++) {
             cardHeap[i] = FIRE;
         }
         j = i;
-        for (; i < j + 16 * playerNum; i++) {
+        for (; i < j + 10 * playerNum; i++) {
             cardHeap[i] = MOVE;
         }
         j = i;
@@ -32,15 +32,15 @@ public class GambleChecker {
             cardHeap[i] = SKILLS;
         }
         j = i;
-        for (; i < j + 8 * playerNum; i++) {
+        for (; i < j + 10 * playerNum; i++) {
             cardHeap[i] = PAPER;
         }
         j = i;
-        for (; i < j + 8 * playerNum; i++) {
+        for (; i < j + 10 * playerNum; i++) {
             cardHeap[i] = SCISSORS;
         }
         j = i;
-        for (; i < j + 8 * playerNum; i++) {
+        for (; i < j + 10 * playerNum; i++) {
             cardHeap[i] = ROCK;
         }
         return cardHeap;
@@ -84,7 +84,7 @@ public class GambleChecker {
 
     static void cardToPlayer(int card, Player playerMain) {
         for(int i = 0;i < playerMain.handCards.length;i++) {
-           if(playerMain.handCards[i] == NOTHING) {
+           if((playerMain.handCards[i] == NOTHING)||(playerMain.handCards[i] == 7)) {
                playerMain.handCards[i] = card;
                playerMain.handCardsNum++;
                break;
@@ -106,10 +106,8 @@ public class GambleChecker {
         int distributedCardNum = 0;
         for (int i = 0; i < cardHeap.length; i++) {
             // dirty hack
-            if(cardHeap[i]==7){
+            if(cardHeap[i]==7)
                 cardHeap[i] = NOTHING;
-                distributedCardNum++;
-            }
 
             if (cardHeap[i] != NOTHING) {
                 cardToPlayer(cardHeap[i], playerMain);
