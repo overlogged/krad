@@ -60,6 +60,8 @@ object ScalaGodTest extends MyJsonProtocol{
           println(sid, god.request(sid,
             """{"hero":"hero1"}"""
           ))
+
+
           println(sid, god.request(sid, "{}"))
           println(sid, god.request(sid,
             """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
@@ -72,25 +74,76 @@ object ScalaGodTest extends MyJsonProtocol{
           println(sid, god.request(sid,
             """{"gambleCard":[0]}"""
           ))
-          // win judge
+          // Account
           println(sid, god.request(sid, ""))
-          // deposit
+          // Account
           println(sid, god.request(sid, ""))
-          // skills
-          println(sid, god.request(sid, ""))
-          // fire
-          println(sid, god.request(sid, ""))
-          // move
-          println(sid, god.request(sid, ""))
-          // element
-          println(sid, god.request(sid, ""))
-          //human victory
-          println(sid, god.request(sid, ""))
-          //infection
-          println(sid, god.request(sid, ""))
-          // desert
+          // cardDesert
           println(sid, god.request(sid,
-            """{"desertCardList":[0,1,2]}"""
+            """{"desertCardList":[0]}"""
+          ))
+
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
+          ))
+
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
+          ))
+
+          println(sid, god.request(sid, "{}"))
+          println(sid, god.request(sid,
+            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"seenCard":3}"""
+          ))
+
+          println(sid, god.request(sid,
+            """{"gambleCard":[0]}"""
+          ))
+          // Account
+          println(sid, god.request(sid, ""))
+          // Account
+          println(sid, god.request(sid, ""))
+          // cardDesert
+          println(sid, god.request(sid,
+            """{"desertCardList":[0]}"""
           ))
         }
       }

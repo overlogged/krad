@@ -216,6 +216,7 @@ public class God {
         int zombie = (int) (Math.random() * playerNum);
         allPlayers[zombie].team = Player.ZOMBIE;
         allPlayers[zombie].healthPoint = 12;
+        allPlayers[zombie].handCards = new int[allPlayers[zombie].healthPoint];
         allPlayers[zombie].mot = 10;
         allPlayers[zombie].hasElem = false;
         allPlayers[zombie].firePow = 0;
