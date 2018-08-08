@@ -65,7 +65,10 @@ object SessionController {
     while (true) {
       Thread.sleep(WaitingTime * 20)
       this.synchronized {
-        states.dropWhile(item => item._2.timestamp < System.currentTimeMillis() - WaitingTime && item._2.state != StatePlaying)
+        states.retain{(_,item)=>
+          item.state == StatePlaying ||
+          item.timestamp >= System.currentTimeMillis() - WaitingTime
+        }
       }
     }
   }
@@ -138,11 +141,11 @@ object SessionController {
     assert(player_count == 2 || player_count == 4)
 
     def clearMatchPool(n: Int): Int = {
-      match_pool(n).dropWhile(sid => {
-        states.get(sid).forall { state =>
-          state.state != StateMatching
+      match_pool(n).retain{sid=>
+        states.get(sid).exists { state =>
+          state.state == StateMatching
         }
-      })
+      }
       match_pool(n).size
     }
 
@@ -165,7 +168,7 @@ object SessionController {
 
           // init
           val god = new God()
-          match_pool(player_count).dropWhile(choosed_players contains _)
+          choosed_players.foreach(match_pool(player_count).remove)
           god.initialPlayer(choosed_players)
           states.transform { (sid, state) =>
             if (choosed_players contains sid) {
@@ -197,6 +200,7 @@ object SessionController {
           } while (!quit)
         }
       }
+      Server.log("verbose match pool",match_pool(player_count).toSeq)
       player_count
     }
   }
@@ -205,10 +209,10 @@ object SessionController {
     Server.log("verbose unmatch", req)
     this.synchronized {
       match_pool.foreach(map =>
-        map._2.dropWhile(_ == req.sid)
+        map._2.remove(req.sid)
       )
       states.transform { (sid, state) =>
-        if (sid == req.sid) {
+        if (sid == req.sid && state.state!=StatePlaying) {
           SessionState(StateWaiting)
         } else {
           state

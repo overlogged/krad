@@ -39,4 +39,4 @@ var backloginfp;
 var backlogin;
 var register;
 var setpw;
-
+var canMatch = true;

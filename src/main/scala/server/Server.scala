@@ -237,7 +237,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
         ){
             post {
             entity(as[RequestMatch]) { req =>
-              log("post", s"session/match ${req}")
+              if(req.toString != "") log("post", s"session/match ${req}")
               onComplete(SessionController.matchPlayers(req)) {
                 case Success(Some(_)) => complete(HttpResponse(StatusCodes.Accepted))
                 case Success(None) => complete(HttpResponse(StatusCodes.BadRequest))
