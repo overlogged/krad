@@ -84,7 +84,7 @@ public class GambleChecker {
 
     static void cardToPlayer(int card, Player playerMain) {
         for(int i = 0;i < playerMain.handCards.length;i++) {
-           if(playerMain.handCards[i] == NOTHING) {
+           if((playerMain.handCards[i] == NOTHING)||(playerMain.handCards[i] == 7)) {
                playerMain.handCards[i] = card;
                playerMain.handCardsNum++;
                break;

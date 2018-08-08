@@ -49,7 +49,7 @@ object ScalaGodTest extends MyJsonProtocol{
 
   def test1(): Unit ={
     MapGenerator.map1()
-    val sids = 0 to 3
+    val sids = 0 to 1
     val god = new God
     var i = 0
     god.initialPlayer(sids.toArray)
@@ -120,6 +120,6 @@ object ScalaGodTest extends MyJsonProtocol{
   }
 
   def main(args: Array[String]): Unit = {
-    test3()
+    test1()
   }
 }
