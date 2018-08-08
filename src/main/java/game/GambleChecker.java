@@ -106,10 +106,8 @@ public class GambleChecker {
         int distributedCardNum = 0;
         for (int i = 0; i < cardHeap.length; i++) {
             // dirty hack
-            if(cardHeap[i]==7){
+            if(cardHeap[i]==7)
                 cardHeap[i] = NOTHING;
-                distributedCardNum++;
-            }
 
             if (cardHeap[i] != NOTHING) {
                 cardToPlayer(cardHeap[i], playerMain);

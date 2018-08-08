@@ -68,5 +68,6 @@ public class CardHeapTest {
         ct.cardDis(playerMain,cardHeap);
         System.out.println(playerMain.handCardsNum);
         ct.cyclePrint(playerMain.handCards);
+        ct.cyclePrint(cardHeap);
     }
 }
