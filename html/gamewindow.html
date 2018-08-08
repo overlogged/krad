@@ -479,7 +479,7 @@
           var i;
           var texter = '';
           var seeup_tablet = ['','','','','','开火', '技能', '蓄能'];
-          for (i = 0; i <= player_num; i++) {
+          for (i = 0; i < player_num; i++) {
               texter += player_lookup[i] + ':' + seeup_tablet[dec[i]];
           }
           status_decisiontext.text = texter;
@@ -500,7 +500,7 @@
           var j;
           var texter='';
           var hexter;
-          for (i = 0; i <= player_num; i++) {
+          for (i = 0; i < player_num; i++) {
               hexter = '';
               for (j = 0; j < mp_union[i]; j++)hexter += '★';
               for (j = mp_union[i]; j < hp_union[i]; j++)hexter += '☆';
