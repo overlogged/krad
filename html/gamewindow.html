@@ -325,7 +325,8 @@
 
       var status_energybox;
       var status_energytext;
-      var status_decisionbox=[];
+      var status_decisionbox;
+      var status_decisiontext;
       var status_gamblebox;
       var status_gambletext;
       var status_gamblenumtext=[];
@@ -338,6 +339,7 @@
         statusarea.load.bitmapFont('chiller', 'assets/fonts/chiller.png', 'assets/fonts/chiller.xml');
           statusarea.load.image('status_energy', 'assets/img/gamewindow/status_energy.png');
           statusarea.load.image('status_gamble', 'assets/img/gamewindow/status_gamble.png');
+          statusarea.load.image('status_decision', 'assets/img/gamewindow/status_decision.png');
           statusarea.load.spritesheet('img_gamble', 'assets/img/gamewindow/img_RPS.png',25,25);
       },
 
@@ -386,6 +388,9 @@
           status_gamblenumtext[2].fontSize = 20;
           status_gamblenumtext[3] = statusarea.add.text(205, 277, '');
           status_gamblenumtext[3].fontSize = 20;
+          status_decisionbox = statusarea.add.sprite(10, 330, 'status_decision');
+          status_decisiontext = statusarea.add.text(20, 358, 'P0:\nP1:\nP2:\nP3:');
+          status_decisiontext.fontSize = 15;
       },
       update: function () {
         // if (statusbox.height > (pagecount * 460)) {
@@ -469,6 +474,17 @@
       }
     });
 
+
+      function do_decisionbox(dec) {
+          var i;
+          var texter = '';
+          var seeup_tablet = ['','','','','','开火', '技能', '蓄能'];
+          for (i = 0; i <= player_num; i++) {
+              texter += player_lookup[i] + ':' + seeup_tablet[dec[i]];
+          }
+          status_decisiontext.text = texter;
+      }
+
       function do_gamblebox(gambiu,numbiu) {
           var i;
           for (i = 0; i <= 3; i++) {
@@ -484,7 +500,7 @@
           var j;
           var texter='';
           var hexter;
-          for (i = 0; i <= 3; i++) {
+          for (i = 0; i <= player_num; i++) {
               hexter = '';
               for (j = 0; j < mp_union[i]; j++)hexter += '★';
               for (j = mp_union[i]; j < hp_union[i]; j++)hexter += '☆';
@@ -995,7 +1011,8 @@
       else if (state == "choose strategy decision") {
           gamk = [0, 0, 0, 0];
           numk = [0, 0, 0, 0];
-          do_gamblebox(gamk,numk);
+          do_gamblebox(gamk, numk);
+          do_decisionbox([0, 0, 0, 0]);
         checkcardunlock(checkbutton);
         statepadtext_body.text = '决策阶段';
         statetips.text = '现在你可以选择一张决策卡，缺省则为蓄能';
@@ -1085,6 +1102,7 @@
         // statusbox.text += "\n玩家选择的出牌情况为：\n";
         for (var i = 0; i < player_num; i++) {
             // statusbox.text += player_lookup[i] + "：选择的策略为" + lookup_table[decisionChoices[i]] + "\n             使用了" + cardNumList[i] + "张" + lookup_table[gambleChoices[i]] + "\n";
+            do_decisionbox(decisionChoices);
             gamk[i] = 4 - gambleChoices[i];
             numk[i] = cardNumList[i];
           }
