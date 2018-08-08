@@ -270,7 +270,8 @@
         game.world.setBounds(0, 0, game.width, game.height);
         // alert(player[0].body.dynamic);
         loadedcheck();
-          playerpad = game.add.text(10, 10, '');
+          playerpad = game.add.text(10, 10, 'test\ntest\ntest\ntest');
+          playerpad.fontSize = 20;
         // game.camera.atLimit=true;
         // game.camera.width=780;
         // game.camera.height=470;
@@ -954,7 +955,7 @@
         // statusbox.text += "你的游戏编号为" + myIndex;
         // statusbox.text += ", 加入游戏的玩家有：\n";
         for (var i = 0; i < player_num; i++) {
-           playerpad.text += allUserInfo[i].nickName + ", 玩家编号为" + allUserInfo[i].index + "\n";
+            playerpad.text += 'P' + allUserInfo[i].index + ':' + allUserInfo[i].nickName + "\n";
         }
         pedometer = 0;
         countdown(5);
