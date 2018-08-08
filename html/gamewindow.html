@@ -480,7 +480,7 @@
           var texter = '';
           var seeup_tablet = ['','','','','','开火', '技能', '蓄能'];
           for (i = 0; i < player_num; i++) {
-              texter += player_lookup[i] + ':' + seeup_tablet[dec[i]];
+              texter += player_lookup[i] + ':' + seeup_tablet[dec[i]]+'\n';
           }
           status_decisiontext.text = texter;
       }
