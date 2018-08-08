@@ -68,11 +68,11 @@ object ScalaGodTest extends MyJsonProtocol{
           ))
 
           println(sid, god.request(sid,
-            """{"seenCard":3}"""
+            """{"seenCard":2}"""
           ))
 
           println(sid, god.request(sid,
-            """{"gambleCard":[0]}"""
+            """{"gambleCard":[-1]}"""
           ))
           // Account
           println(sid, god.request(sid, ""))
@@ -80,7 +80,7 @@ object ScalaGodTest extends MyJsonProtocol{
           println(sid, god.request(sid, ""))
           // cardDesert
           println(sid, god.request(sid,
-            """{"desertCardList":[0]}"""
+            """{"desertCardList":[-1]}"""
           ))
 
           println(sid, god.request(sid, "{}"))
@@ -89,11 +89,11 @@ object ScalaGodTest extends MyJsonProtocol{
           ))
 
           println(sid, god.request(sid,
-            """{"seenCard":3}"""
+            """{"seenCard":0}"""
           ))
 
           println(sid, god.request(sid,
-            """{"gambleCard":[0]}"""
+            """{"gambleCard":[1]}"""
           ))
           // Account
           println(sid, god.request(sid, ""))
@@ -101,49 +101,7 @@ object ScalaGodTest extends MyJsonProtocol{
           println(sid, god.request(sid, ""))
           // cardDesert
           println(sid, god.request(sid,
-            """{"desertCardList":[0]}"""
-          ))
-
-          println(sid, god.request(sid, "{}"))
-          println(sid, god.request(sid,
-            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
-          ))
-
-          println(sid, god.request(sid,
-            """{"seenCard":3}"""
-          ))
-
-          println(sid, god.request(sid,
-            """{"gambleCard":[0]}"""
-          ))
-          // Account
-          println(sid, god.request(sid, ""))
-          // Account
-          println(sid, god.request(sid, ""))
-          // cardDesert
-          println(sid, god.request(sid,
-            """{"desertCardList":[0]}"""
-          ))
-
-          println(sid, god.request(sid, "{}"))
-          println(sid, god.request(sid,
-            """{"decision":-1,"moveDirection":-1,"fireTarget":-1}"""
-          ))
-
-          println(sid, god.request(sid,
-            """{"seenCard":3}"""
-          ))
-
-          println(sid, god.request(sid,
-            """{"gambleCard":[0]}"""
-          ))
-          // Account
-          println(sid, god.request(sid, ""))
-          // Account
-          println(sid, god.request(sid, ""))
-          // cardDesert
-          println(sid, god.request(sid,
-            """{"desertCardList":[0]}"""
+            """{"desertCardList":[0,1,2,3,4]}"""
           ))
         }
       }

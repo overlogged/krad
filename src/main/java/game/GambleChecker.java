@@ -84,7 +84,7 @@ public class GambleChecker {
 
     static void cardToPlayer(int card, Player playerMain) {
         for(int i = 0;i < playerMain.handCards.length;i++) {
-           if((playerMain.handCards[i] == NOTHING)||(playerMain.handCards[i] == 7)) {
+           if(playerMain.handCards[i] == NOTHING) {
                playerMain.handCards[i] = card;
                playerMain.handCardsNum++;
                break;
@@ -106,7 +106,7 @@ public class GambleChecker {
         int distributedCardNum = 0;
         for (int i = 0; i < cardHeap.length; i++) {
             // dirty hack
-            if(cardHeap[i]==7)
+            if((cardHeap[i]==7)||(cardHeap[i]==-1))
                 cardHeap[i] = NOTHING;
 
             if (cardHeap[i] != NOTHING) {
