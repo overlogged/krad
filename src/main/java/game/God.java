@@ -67,10 +67,14 @@ public class God {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
                             wait_count = 0;
-                            if (allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
-                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
-                            else
-                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
+
+                            synchronized (this) {
+                                if (allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
+                                    GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
+                                else
+                                    GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
+                            }
+
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
                             for (int i = 0; i < allPlayers[playerIndex].handCardsNum; i++)
                                 playerHandCard[i] = allPlayers[playerIndex].handCards[i];
@@ -89,11 +93,13 @@ public class God {
                             if (dec.decision() == -1)
                                 allPlayers[playerIndex].stratDecision = GambleChecker.DEPOSIT;
                             else {
-                                allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
-                                GambleChecker.cardToHeap(cardHeap, allPlayers[playerIndex].handCards[dec.decision()]);
-                                allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
-                                GambleChecker.cardSort(allPlayers[playerIndex].handCards);
-                                allPlayers[playerIndex].handCardsNum -= 1;
+                                synchronized (this) {
+                                    allPlayers[playerIndex].stratDecision = allPlayers[playerIndex].handCards[dec.decision()];
+                                    GambleChecker.cardToHeap(cardHeap, allPlayers[playerIndex].handCards[dec.decision()]);
+                                    allPlayers[playerIndex].handCards[dec.decision()] = GambleChecker.NOTHING;
+                                    GambleChecker.cardSort(allPlayers[playerIndex].handCards);
+                                    allPlayers[playerIndex].handCardsNum -= 1;
+                                }
                             }
                             decisionChoices[playerIndex] = allPlayers[playerIndex].stratDecision;
                             featureChoose(msg, allPlayers[playerIndex], playerIndex);
@@ -305,10 +311,12 @@ public class God {
             playerMain.gamble = playerMain.handCards[gambleChoose[0]];
             playerMain.gambleNum = gambleChoose.length;
             for (int i = 0; i < playerMain.gambleNum; i++) {
-                GambleChecker.cardToHeap(cardHeap, playerMain.handCards[playerMain.handCards[gambleChoose[i]]]);
-                playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
-                GambleChecker.cardSort(playerMain.handCards);
-                playerMain.handCardsNum -= 1;
+                synchronized (this) {
+                    GambleChecker.cardToHeap(cardHeap, playerMain.handCards[playerMain.handCards[gambleChoose[i]]]);
+                    playerMain.handCards[gambleChoose[i]] = GambleChecker.NOTHING;
+                    GambleChecker.cardSort(playerMain.handCards);
+                    playerMain.handCardsNum -= 1;
+                }
             }
         }
         gambleChoices[playerIndex] = playerMain.gamble;
