@@ -57,6 +57,8 @@ public class PlayerChecker{
             if(map.units[playerPos.preLoc].status != 2) {
                 if (playerPos.team == Player.ZOMBIE && playerPas.team == Player.HUMAN ) {
                     playerPas.team = Player.ZOMBIE;
+                    playerPas.healthPoint = 12;
+                    playerPas.handCards = new int[playerPas.healthPoint];
                     playerPas.energy = 0;
                     playerPas.hasElem = false;
                     playerPas.firePow = 0;
