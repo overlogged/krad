@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class GambleChecker {
     //constant about gamble cards
-    public static final int NOTHING = 0;
+    public static final int NOTHING = 8;
     public static final int PAPER = 1;
     public static final int SCISSORS = 2;
     public static final int ROCK = 3;
