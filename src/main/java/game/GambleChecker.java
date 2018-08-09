@@ -13,11 +13,11 @@ public class GambleChecker {
     public static final int FIRE = 5;
     public static final int SKILLS = 6;
     public static final int DEPOSIT = 7;
-    
+
     // generate an ordered card heap
     static int[] cardHeapInit(int[] cardHeap, int playerNum) {
         //count variable i
-        int i,j;
+        int i, j;
         //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 8:12:8:4:4:4
         //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 0:10:0:10:10:10
         for (i = 0; i < 0 * playerNum; i++) {
@@ -47,15 +47,15 @@ public class GambleChecker {
     }
 
     //mix the card heap up using random number
-    static int[] cardHeapStir(int[] cardHeap) {
+    static void cardHeapStir(int[] cardHeap) {
         int len = cardHeap.length;
         Double[] aid_arr = new Double[len];
-        for(int i=0;i<len;i++){
+        for (int i = 0; i < len; i++) {
             aid_arr[i] = Math.random();
         }
-        for(int i=0;i<len;i++){
-            for(int j=i+1;j<len;j++){
-                if(aid_arr[i]>aid_arr[j]){
+        for (int i = 0; i < len; i++) {
+            for (int j = i + 1; j < len; j++) {
+                if (aid_arr[i] > aid_arr[j]) {
                     double minv = aid_arr[j];
                     aid_arr[j] = aid_arr[i];
                     aid_arr[i] = minv;
@@ -66,14 +66,13 @@ public class GambleChecker {
                 }
             }
         }
-        return cardHeap;
     }
 
     //cards operation
-    static void cardSort(int[] cardHeap){
-        for(int i = 0;i < cardHeap.length;i++){
-            for(int j = i;j < cardHeap.length;j++){
-                if(cardHeap[i] < cardHeap[j]){
+    static void cardSort(int[] cardHeap) {
+        for (int i = 0; i < cardHeap.length; i++) {
+            for (int j = i + 1; j < cardHeap.length; j++) {
+                if (cardHeap[i] < cardHeap[j]) {
                     int tmp = cardHeap[i];
                     cardHeap[i] = cardHeap[j];
                     cardHeap[j] = tmp;
@@ -83,22 +82,22 @@ public class GambleChecker {
     }
 
     static void cardToPlayer(int card, Player playerMain) {
-        for(int i = 0;i < playerMain.handCards.length;i++) {
-           if(playerMain.handCards[i] == NOTHING) {
-               playerMain.handCards[i] = card;
-               playerMain.handCardsNum++;
-               break;
-           }
+        for (int i = 0; i < playerMain.handCards.length; i++) {
+            if (playerMain.handCards[i] == NOTHING) {
+                playerMain.handCards[i] = card;
+                playerMain.handCardsNum++;
+                break;
+            }
         }
     }
 
     static void cardToHeap(int[] cardHeap, int card) {
         // dirty hack
-        if(card==7) return;
+        if (card == 7) return;
 
-        int i = (int) (Math.random() * cardHeap.length);
-        while (cardHeap[i] != NOTHING)
-            i = (i + 1) % cardHeap.length;
+        int i = (int) (Math.random() * cardHeap.length) % cardHeap.length;
+        while (cardHeap[i] != NOTHING) i = (i + 1) % cardHeap.length;
+
         cardHeap[i] = card;
     }
 
@@ -106,7 +105,7 @@ public class GambleChecker {
         int distributedCardNum = 0;
         for (int i = 0; i < cardHeap.length; i++) {
             // dirty hack
-            if((cardHeap[i]==7)||(cardHeap[i]==-1))
+            if ((cardHeap[i] == 7) || (cardHeap[i] == -1))
                 cardHeap[i] = NOTHING;
 
             if (cardHeap[i] != NOTHING) {
@@ -121,9 +120,9 @@ public class GambleChecker {
         }
     }
 
-    static void cardDesert(Player playerMain, int[] cardHeap,int[] desertList) {
+    static void cardDesert(Player playerMain, int[] cardHeap, int[] desertList) {
         for (int i = 0; i < desertList.length; i++) {
-            if(desertList[i] == -1)
+            if (desertList[i] == -1)
                 break;
             cardToHeap(cardHeap, playerMain.handCards[desertList[i]]);
             playerMain.handCards[desertList[i]] = NOTHING;
@@ -159,7 +158,7 @@ public class GambleChecker {
                 if (players[i].team == players[j].team)
                     continue;
                 players[i].isWin = win(players[i], players[j]);
-                if(players[i].isWin)
+                if (players[i].isWin)
                     break;
             }
         }
