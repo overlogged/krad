@@ -53,9 +53,9 @@ public class MapGenerator {
             } else if (i == 7) {
                 map.units[i].rank = 2;
             } else if (i == 16) {
-                map.units[i].rank = 4;
-            } else {
                 map.units[i].rank = 3;
+            } else {
+                map.units[i].rank = 2;
             }
 
 

@@ -132,75 +132,81 @@ object ScalaGodTest extends MyJsonProtocol {
 
   def test4(): Unit = {
     SessionController.addGhost()
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:25:38 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:25:41 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"hero\":\"Linear Algebra\"}")) // Wed Aug 08 22:25:43 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"hero\":\"Calculus\"}")) // Wed Aug 08 22:25:46 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:25:46 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:25:46 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:25:56 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:25:56 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:02 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":1}")) // Wed Aug 08 22:26:04 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:04 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:04 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:04 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:05 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:05 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:05 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:05 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:08 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:08 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:08 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:08 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:08 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:11 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:13 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[1,2,3,4,5]}")) // Wed Aug 08 22:26:22 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:22 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:22 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:22 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:22 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:25 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}")) // Wed Aug 08 22:26:27 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:27 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:27 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:28 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:28 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:28 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:28 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:28 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[0,1,2,3,4]}")) // Wed Aug 08 22:26:33 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:33 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:33 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:33 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:33 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"decision\":0,\"moveDirection\":1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:35 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:38 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[0,1,2]}")) // Wed Aug 08 22:26:45 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:45 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:45 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:45 CST 2018
-    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:45 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:55 CST 2018
-    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":1}")) // Wed Aug 08 22:27:03 CST 2018
+    for (_ <- SessionController.gameRequest(RequestGame(1, "{}")); // Wed Aug 08 22:25:38 CST 2018
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"hero\":\"Linear Algebra\"}")); // Wed Aug 08 22:25:43 CST 2018
+         _ <- SessionController.gameRequest(RequestGame(1, "{}")); // Wed Aug 08 22:25:46 CST 2018
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")); // Wed Aug 08 22:25:56 CST 2018
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"seenCard\":1}")); // Wed Aug 08 22:26:04 CST 2018
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[1,2,3,4,5]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[0,1,2,3,4]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"decision\":0,\"moveDirection\":1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[0,1,2]}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(1, "{\"seenCard\":1}"))
+    ){
+
+    }
+
+    for (_ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"hero\":\"Calculus\"}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}"));
+         _ <- SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}"))
+    ){}
+    return ();
   }
 
   def main(args: Array[String]): Unit = {
-    test1()
+    test4()
   }
 }
