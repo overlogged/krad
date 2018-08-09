@@ -224,10 +224,12 @@ public class God {
         teamResult[zombie] = Player.ZOMBIE;
         for (int i = 0; i < allPlayers.length; i++) {
             if (i != zombie) {
+                allPlayers[i].handCards = new int[allPlayers[i].healthPoint];
                 allPlayers[i].team = Player.HUMAN;
                 teamResult[i] = Player.HUMAN;
                 allPlayers[i].range = 3;
                 allPlayers[i].firePow = 3;
+
             }
         }
     }
@@ -519,7 +521,6 @@ public class God {
             allPlayers[i].healthPoint = 6;
             allPlayers[i].mot = 4;
             allPlayers[i].energy = 0;
-            allPlayers[i].handCards = new int[allPlayers[i].healthPoint + 4];
             allPlayers[i].fireTarget = -1;
             allPlayers[i].moveDirection = -1;
             playerState[i] = 0;

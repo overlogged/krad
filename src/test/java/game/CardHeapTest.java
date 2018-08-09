@@ -50,24 +50,28 @@ public class CardHeapTest {
         int[] cardHeap;
         int playerNum = 4;
         Player playerMain = new Player();
-        playerMain.healthPoint = 12;
+        playerMain.healthPoint = 6;
         playerMain.handCards = new int[4 + playerMain.healthPoint];
         cardHeap = new int[40 * playerNum];
-        int[] cardDesertList = new int[40 * playerNum];
-
-        for(int i = 0; i < cardDesertList.length; i++)
-            cardDesertList[i] = -1;
+        GambleChecker.cardHeapInit(cardHeap,playerNum);
+        GambleChecker.cardHeapStir(cardHeap);
+        ct.cardDis(playerMain,cardHeap);
+        ct.cardDis(playerMain,cardHeap);
+        int[] cardDesertList = new int[5];
+        cardDesertList[0] = 1;
+        cardDesertList[1] = 2;
+        cardDesertList[2] = 3;
+        cardDesertList[3] = 4;
+        cardDesertList[4] = 5;
+        GambleChecker.cardDesert(playerMain,cardHeap,cardDesertList);
+        ct.cardDis(playerMain,cardHeap);
         cardDesertList[0] = 0;
         cardDesertList[1] = 1;
         cardDesertList[2] = 2;
-        GambleChecker.cardHeapInit(cardHeap,playerNum);
-        GambleChecker.cardHeapStir(cardHeap);
-        for(int i = 0; i < 100; i++) {
-            ct.cycleDis(playerMain, cardHeap, ct, cardDesertList);
-        }
+        cardDesertList[3] = 3;
+        cardDesertList[4] = 4;
+        GambleChecker.cardDesert(playerMain,cardHeap,cardDesertList);
         ct.cardDis(playerMain,cardHeap);
-        System.out.println(playerMain.handCardsNum);
         ct.cyclePrint(playerMain.handCards);
-        ct.cyclePrint(cardHeap);
     }
 }

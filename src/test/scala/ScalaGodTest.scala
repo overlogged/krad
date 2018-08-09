@@ -8,7 +8,7 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
-object ScalaGodTest extends MyJsonProtocol{
+object ScalaGodTest extends MyJsonProtocol {
   def testSample(): Unit = {
     val god = new God
     val sid = Array(1, 2, 3, 4)
@@ -23,9 +23,9 @@ object ScalaGodTest extends MyJsonProtocol{
       Thread.sleep(100)
     }
   }
-  
 
-  def exper(): Unit ={
+
+  def exper(): Unit = {
     val f1 = Future {
       Thread.sleep(1000)
       1
@@ -47,15 +47,15 @@ object ScalaGodTest extends MyJsonProtocol{
     Thread.sleep(8000)
   }
 
-  def test1(): Unit ={
+  def test1(): Unit = {
     MapGenerator.map1()
     val sids = 0 to 1
     val god = new God
     var i = 0
     god.initialPlayer(sids.toArray)
-    val fs = for(sid<-sids)
-      yield Future{
-        for(i<-1 to 20) {
+    val fs = for (sid <- sids)
+      yield Future {
+        for (i <- 1 to 20) {
           println(sid, god.request(sid, "{}"))
           println(sid, god.request(sid,
             """{"hero":"hero1"}"""
@@ -105,29 +105,99 @@ object ScalaGodTest extends MyJsonProtocol{
           ))
         }
       }
-    for(f<-fs) {
+    for (f <- fs) {
       f onComplete println
-      Await.ready(f,Duration.Inf)
+      Await.ready(f, Duration.Inf)
     }
   }
 
-  def test2(): Unit ={
+  def test2(): Unit = {
     SessionController.addGhost()
-    val fs = for(sid<-0 to 1)
+    val fs = for (sid <- 0 to 1)
       yield
-        for(data1<-SessionController.gameRequest(RequestGame(sid,"{}"));
-            data2<-SessionController.gameRequest(RequestGame(sid,"{\"hero\":\"hero\"}"));
-            data3<-SessionController.gameRequest(RequestGame(sid,"{}"))) yield (data1,data2,data3)
-    for(f<-fs){
+        for (data1 <- SessionController.gameRequest(RequestGame(sid, "{}"));
+             data2 <- SessionController.gameRequest(RequestGame(sid, "{\"hero\":\"hero\"}"));
+             data3 <- SessionController.gameRequest(RequestGame(sid, "{}"))) yield (data1, data2, data3)
+    for (f <- fs) {
       f onComplete println
-      Await.ready(f,Duration.Inf)
+      Await.ready(f, Duration.Inf)
     }
   }
 
   def test3(): Unit = {
     SessionController.addGhost()
-    SessionController.gameRequest(RequestGame(2,"{}"))
-    SessionController.gameRequest(RequestGame(1,"{}"))
+    SessionController.gameRequest(RequestGame(2, "{}"))
+    SessionController.gameRequest(RequestGame(1, "{}"))
+  }
+
+  def test4(): Unit = {
+    SessionController.addGhost()
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:25:38 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:25:41 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"hero\":\"Linear Algebra\"}")) // Wed Aug 08 22:25:43 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"hero\":\"Calculus\"}")) // Wed Aug 08 22:25:46 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:25:46 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:25:46 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:25:56 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:25:56 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:02 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":1}")) // Wed Aug 08 22:26:04 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:04 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:04 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:04 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:05 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:05 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:05 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:05 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:08 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:08 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:08 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:08 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:08 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:11 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:13 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[1,2,3,4,5]}")) // Wed Aug 08 22:26:22 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:22 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:22 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:22 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:22 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:25 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}")) // Wed Aug 08 22:26:27 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:27 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:27 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:28 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:28 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:28 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:28 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:28 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[0,1,2,3,4]}")) // Wed Aug 08 22:26:33 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:33 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:33 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:33 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:33 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"decision\":0,\"moveDirection\":1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:35 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":2}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"gambleCard\":[-1]}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"desertCardList\":[-1]}")) // Wed Aug 08 22:26:38 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"desertCardList\":[0,1,2]}")) // Wed Aug 08 22:26:45 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{}")) // Wed Aug 08 22:26:45 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{}")) // Wed Aug 08 22:26:45 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:45 CST 2018
+    SessionController.gameRequest(RequestGame(2, "{\"seenCard\":1}")) // Wed Aug 08 22:26:45 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"decision\":-1,\"moveDirection\":-1,\"fireTarget\":-1}")) // Wed Aug 08 22:26:55 CST 2018
+    SessionController.gameRequest(RequestGame(1, "{\"seenCard\":1}")) // Wed Aug 08 22:27:03 CST 2018
   }
 
   def main(args: Array[String]): Unit = {
