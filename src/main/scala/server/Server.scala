@@ -60,7 +60,7 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   }
 
   def gamelog(req:RequestGame): Unit ={
-    game_log_file.write(s"""SessionController.gameRequest(RequestGame(${req.sid},"${req.msg.replace("\"","\\\"")}")) // ${new Date()}\n""")
+    game_log_file.write(s"""_ <- SessionController.gameRequest(RequestGame(${req.sid},"${req.msg.replace("\"","\\\"")}")); // ${new Date()}\n""")
     game_log_file.flush()
   }
 
