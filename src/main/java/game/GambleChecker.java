@@ -104,6 +104,7 @@ public class GambleChecker {
             int s = (int)(Math.floor(Math.random()*4))+1;
             cardToPlayer(s,playerMain);
         }
+        cardSort(playerMain.handCards);
 //        int distributedCardNum = 0;
 //        for (int i = 0; i < cardHeap.length; i++) {
 //            // dirty hack
