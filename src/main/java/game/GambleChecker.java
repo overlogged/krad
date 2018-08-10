@@ -102,22 +102,26 @@ public class GambleChecker {
     }
 
     static void cardDistribute(int[] cardHeap, Player playerMain, int cardNum) {
-        int distributedCardNum = 0;
-        for (int i = 0; i < cardHeap.length; i++) {
-            // dirty hack
-            if ((cardHeap[i] == 7) || (cardHeap[i] == -1))
-                cardHeap[i] = NOTHING;
-
-            if (cardHeap[i] != NOTHING) {
-                cardToPlayer(cardHeap[i], playerMain);
-                cardHeap[i] = NOTHING;
-                distributedCardNum++;
-            }
-            if (distributedCardNum == cardNum) {
-                cardSort(playerMain.handCards);
-                break;
-            }
+        for(int i=0;i<cardNum;i++){
+            int s = (int)(Math.random()*4)%4 + 1;
+            cardToPlayer(s,playerMain);
         }
+//        int distributedCardNum = 0;
+//        for (int i = 0; i < cardHeap.length; i++) {
+//            // dirty hack
+//            if ((cardHeap[i] == 7) || (cardHeap[i] == -1))
+//                cardHeap[i] = NOTHING;
+//
+//            if (cardHeap[i] != NOTHING) {
+//                cardToPlayer(cardHeap[i], playerMain);
+//                cardHeap[i] = NOTHING;
+//                distributedCardNum++;
+//            }
+//            if (distributedCardNum == cardNum) {
+//                cardSort(playerMain.handCards);
+//                break;
+//            }
+//        }
     }
 
     static void cardDesert(Player playerMain, int[] cardHeap, int[] desertList) {
