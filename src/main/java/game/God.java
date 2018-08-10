@@ -66,8 +66,6 @@ public class God {
                 switch (phaseState) {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
-                            wait_count = 0;
-
                             synchronized (this) {
                                 if (allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
                                     GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
@@ -297,9 +295,9 @@ public class God {
                     }
                 }
             } else {
-                this.notifyAll();
                 for (int i = 0; i < playerNum; i++)
                     fireList[i] = allPlayers[i].fireTarget;
+                this.notifyAll();
             }
         }
     }
@@ -459,6 +457,7 @@ public class God {
                     }
                 }
             } else {
+                wait_count = 0;
                 this.notifyAll();
             }
         }
