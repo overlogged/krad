@@ -53,7 +53,7 @@ public class GambleCheckerTest {
         int[] cardType = new int[7];
         for(i = 0;i < 7;i++)
             cardType[i] = 0;
-        cardHeap = GambleChecker.cardHeapInit(cardHeap,playerNum);
+        GambleChecker.cardHeapInit(cardHeap,playerNum);
         for(j = 0;j < 7;j++) {
             for (i = 0; i < cardHeap.length; i++) {
                 if (cardHeap[i] == j)
