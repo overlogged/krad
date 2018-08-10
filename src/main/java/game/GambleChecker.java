@@ -101,7 +101,7 @@ public class GambleChecker {
 
     static void cardDistribute(int[] cardHeap, Player playerMain, int cardNum) {
         for(int i=0;i<cardNum;i++){
-            int s = (int)(Math.random()*4)%4 + 1;
+            int s = (int)(Math.floor(Math.random()*4))+1;
             cardToPlayer(s,playerMain);
         }
 //        int distributedCardNum = 0;

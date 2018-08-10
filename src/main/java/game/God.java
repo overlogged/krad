@@ -67,10 +67,8 @@ public class God {
                     case PREPARE:
                         if (playerState[playerIndex] == 0) {
                             synchronized (this) {
-                                if (allPlayers[playerIndex].handCardsNum + 4 <= allPlayers[playerIndex].healthPoint)
-                                    GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], 4);
-                                else
-                                    GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
+                                int card_num = Math.min(4,allPlayers[playerIndex].healthPoint - allPlayers[playerIndex].handCardsNum);
+                                GambleChecker.cardDistribute(cardHeap, allPlayers[playerIndex], card_num);
                             }
 
                             int[] playerHandCard = new int[allPlayers[playerIndex].handCardsNum];
