@@ -696,12 +696,7 @@
         pointer[people].x = player[people].body.x - 15;
         pointer[people].y = player[people].body.y - 63;
       }
-      if (player[myIndex].y < 260 || player[myIndex].y > 600) {
-        document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 215;
-      }
-      else {
-        document.getElementById('gamecontainer').scrollTop = player[myIndex].y - 215;
-      }
+      document.getElementById('gamecontainer').scrollTop = player[myIndex].body.y - 215;
     }
 
     function do_poison(people) {
