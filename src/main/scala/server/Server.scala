@@ -111,20 +111,20 @@ object Server extends Directives with SprayJsonSupport with MyJsonProtocol {
   val route: Route =
   //---------------------------------------------------
   // route for debug
-    path("log") {
-      get {
-        log("get", "log")
-        val content = "<html><body>" + Source.fromFile("log.txt", "utf8").mkString.split("\n").fold("")(_ + "<br></br>" + _) + "</body></html>"
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
-      }
-    } ~
-    path("gamelog"){
-      get{
-        log("get", "gamelog")
-        val content = "<html><body>" + Source.fromFile("game-log.txt", "utf8").mkString.split("\n").fold("")(_ + "<br></br>" + _) + "</body></html>"
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
-      }
-    }~
+//    path("log") {
+//      get {
+//        log("get", "log")
+//        val content = "<html><body>" + Source.fromFile("log.txt", "utf8").mkString.split("\n").fold("")(_ + "<br></br>" + _) + "</body></html>"
+//        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
+//      }
+//    } ~
+//    path("gamelog"){
+//      get{
+//        log("get", "gamelog")
+//        val content = "<html><body>" + Source.fromFile("game-log.txt", "utf8").mkString.split("\n").fold("")(_ + "<br></br>" + _) + "</body></html>"
+//        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
+//      }
+//    }~
       path("restart") {
         post {
           SessionController.addGhost()

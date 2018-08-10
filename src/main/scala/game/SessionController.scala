@@ -40,26 +40,26 @@ object SessionController {
   val states = new mutable.TreeMap[Int, SessionState]()
 
   /**
-    * create a session or return an existing session for user
+    * create a session
     *
     * @param uid user id
     * @return session id
     */
   def createSession(uid: String): Int = {
+    map.map_b2a.remove(uid).map(map.map_a2b.remove)
     val sid = s"${new Date().getTime}$uid".hashCode
-    map.getA(uid).getOrElse {
-      if (map.getB(sid).isEmpty) {
-        this.synchronized {
-          map.set(sid, uid)
-          states += (sid -> SessionState())
-        }
-        sid
-      } else {
-        Thread.sleep(10)
-        createSession(uid)
+    if (map.getB(sid).isEmpty) {
+      this.synchronized {
+        map.set(sid, uid)
+        states += (sid -> SessionState())
       }
+      sid
+    } else {
+      Thread.sleep(10)
+      createSession(uid)
     }
   }
+
 
   def routine(): Unit = Future {
     while (true) {
