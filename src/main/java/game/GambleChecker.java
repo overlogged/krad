@@ -70,15 +70,15 @@ public class GambleChecker {
 
     //cards operation
     static void cardSort(int[] cardHeap) {
-//        for (int i = 0; i < cardHeap.length; i++) {
-//            for (int j = i + 1; j < cardHeap.length; j++) {
-//                if (cardHeap[i] < cardHeap[j]) {
-//                    int tmp = cardHeap[i];
-//                    cardHeap[i] = cardHeap[j];
-//                    cardHeap[j] = tmp;
-//                }
-//            }
-//        }
+        for (int i = 0; i < cardHeap.length; i++) {
+            for (int j = i + 1; j < cardHeap.length; j++) {
+                if (cardHeap[i] < cardHeap[j]) {
+                    int tmp = cardHeap[i];
+                    cardHeap[i] = cardHeap[j];
+                    cardHeap[j] = tmp;
+                }
+            }
+        }
     }
 
     static void cardToPlayer(int card, Player playerMain) {
