@@ -123,14 +123,14 @@ public class GambleChecker {
     }
 
     static void cardDesert(Player playerMain, int[] cardHeap, int[] desertList) {
-//        for (int i = 0; i < desertList.length; i++) {
-//            if (desertList[i] == -1)
-//                break;
+        for (int i = 0; i < desertList.length; i++) {
+            if (desertList[i] == -1)
+                break;
 //            cardToHeap(cardHeap, playerMain.handCards[desertList[i]]);
-//            playerMain.handCards[desertList[i]] = NOTHING;
-//            playerMain.handCardsNum--;
-//        }
-//        cardSort(playerMain.handCards);
+            playerMain.handCards[desertList[i]] = NOTHING;
+            playerMain.handCardsNum--;
+        }
+        cardSort(playerMain.handCards);
 //        cardHeapStir(cardHeap);
     }
 
