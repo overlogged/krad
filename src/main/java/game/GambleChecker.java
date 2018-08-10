@@ -15,70 +15,70 @@ public class GambleChecker {
     public static final int DEPOSIT = 7;
 
     // generate an ordered card heap
-    static int[] cardHeapInit(int[] cardHeap, int playerNum) {
-        //count variable i
-        int i, j;
-        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 8:12:8:4:4:4
-        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 0:10:0:10:10:10
-        for (i = 0; i < 0 * playerNum; i++) {
-            cardHeap[i] = FIRE;
-        }
-        j = i;
-        for (; i < j + 10 * playerNum; i++) {
-            cardHeap[i] = MOVE;
-        }
-        j = i;
-        for (; i < j + 0 * playerNum; i++) {
-            cardHeap[i] = SKILLS;
-        }
-        j = i;
-        for (; i < j + 10 * playerNum; i++) {
-            cardHeap[i] = PAPER;
-        }
-        j = i;
-        for (; i < j + 10 * playerNum; i++) {
-            cardHeap[i] = SCISSORS;
-        }
-        j = i;
-        for (; i < j + 10 * playerNum; i++) {
-            cardHeap[i] = ROCK;
-        }
-        return cardHeap;
+    static void cardHeapInit(int[] cardHeap, int playerNum) {
+//        //count variable i
+//        int i, j;
+//        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 8:12:8:4:4:4
+//        //the ratio of all kinds of cards is FIRE:MOVE:SKILLS:PAPER:SCISSORS:ROCK = 0:10:0:10:10:10
+//        for (i = 0; i < 0 * playerNum; i++) {
+//            cardHeap[i] = FIRE;
+//        }
+//        j = i;
+//        for (; i < j + 10 * playerNum; i++) {
+//            cardHeap[i] = MOVE;
+//        }
+//        j = i;
+//        for (; i < j + 0 * playerNum; i++) {
+//            cardHeap[i] = SKILLS;
+//        }
+//        j = i;
+//        for (; i < j + 10 * playerNum; i++) {
+//            cardHeap[i] = PAPER;
+//        }
+//        j = i;
+//        for (; i < j + 10 * playerNum; i++) {
+//            cardHeap[i] = SCISSORS;
+//        }
+//        j = i;
+//        for (; i < j + 10 * playerNum; i++) {
+//            cardHeap[i] = ROCK;
+//        }
+//        return cardHeap;
     }
 
     //mix the card heap up using random number
     static void cardHeapStir(int[] cardHeap) {
-        int len = cardHeap.length;
-        Double[] aid_arr = new Double[len];
-        for (int i = 0; i < len; i++) {
-            aid_arr[i] = Math.random();
-        }
-        for (int i = 0; i < len; i++) {
-            for (int j = i + 1; j < len; j++) {
-                if (aid_arr[i] > aid_arr[j]) {
-                    double minv = aid_arr[j];
-                    aid_arr[j] = aid_arr[i];
-                    aid_arr[i] = minv;
-
-                    int card = cardHeap[j];
-                    cardHeap[j] = cardHeap[i];
-                    cardHeap[i] = card;
-                }
-            }
-        }
+//        int len = cardHeap.length;
+//        Double[] aid_arr = new Double[len];
+//        for (int i = 0; i < len; i++) {
+//            aid_arr[i] = Math.random();
+//        }
+//        for (int i = 0; i < len; i++) {
+//            for (int j = i + 1; j < len; j++) {
+//                if (aid_arr[i] > aid_arr[j]) {
+//                    double minv = aid_arr[j];
+//                    aid_arr[j] = aid_arr[i];
+//                    aid_arr[i] = minv;
+//
+//                    int card = cardHeap[j];
+//                    cardHeap[j] = cardHeap[i];
+//                    cardHeap[i] = card;
+//                }
+//            }
+//        }
     }
 
     //cards operation
     static void cardSort(int[] cardHeap) {
-        for (int i = 0; i < cardHeap.length; i++) {
-            for (int j = i + 1; j < cardHeap.length; j++) {
-                if (cardHeap[i] < cardHeap[j]) {
-                    int tmp = cardHeap[i];
-                    cardHeap[i] = cardHeap[j];
-                    cardHeap[j] = tmp;
-                }
-            }
-        }
+//        for (int i = 0; i < cardHeap.length; i++) {
+//            for (int j = i + 1; j < cardHeap.length; j++) {
+//                if (cardHeap[i] < cardHeap[j]) {
+//                    int tmp = cardHeap[i];
+//                    cardHeap[i] = cardHeap[j];
+//                    cardHeap[j] = tmp;
+//                }
+//            }
+//        }
     }
 
     static void cardToPlayer(int card, Player playerMain) {
@@ -92,13 +92,11 @@ public class GambleChecker {
     }
 
     static void cardToHeap(int[] cardHeap, int card) {
-        // dirty hack
-        if (card == 7) return;
-
-        int i = (int) (Math.random() * cardHeap.length) % cardHeap.length;
-        while (cardHeap[i] != NOTHING) i = (i + 1) % cardHeap.length;
-
-        cardHeap[i] = card;
+//
+//        int i = (int) (Math.random() * cardHeap.length) % cardHeap.length;
+//        while (cardHeap[i] != NOTHING) i = (i + 1) % cardHeap.length;
+//
+//        cardHeap[i] = card;
     }
 
     static void cardDistribute(int[] cardHeap, Player playerMain, int cardNum) {
@@ -125,15 +123,15 @@ public class GambleChecker {
     }
 
     static void cardDesert(Player playerMain, int[] cardHeap, int[] desertList) {
-        for (int i = 0; i < desertList.length; i++) {
-            if (desertList[i] == -1)
-                break;
-            cardToHeap(cardHeap, playerMain.handCards[desertList[i]]);
-            playerMain.handCards[desertList[i]] = NOTHING;
-            playerMain.handCardsNum--;
-        }
-        cardSort(playerMain.handCards);
-        cardHeapStir(cardHeap);
+//        for (int i = 0; i < desertList.length; i++) {
+//            if (desertList[i] == -1)
+//                break;
+//            cardToHeap(cardHeap, playerMain.handCards[desertList[i]]);
+//            playerMain.handCards[desertList[i]] = NOTHING;
+//            playerMain.handCardsNum--;
+//        }
+//        cardSort(playerMain.handCards);
+//        cardHeapStir(cardHeap);
     }
 
     /*
