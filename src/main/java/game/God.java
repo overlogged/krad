@@ -182,6 +182,10 @@ public class God {
             System.out.printf("%d %s %s\n", sid, msg, gameState.toString());
         }
 
+//        synchronized (this){
+//            System.out.print(sid);
+//            System.out.println(result);
+//        }
         return result;
     }
 
