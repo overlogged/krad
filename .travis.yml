@@ -25,6 +25,6 @@ notifications:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target ubuntu@119.29.32.204:/home/ubuntu/krad && ssh ubuntu@119.29.32.204 "sudo systemctl restart krad"
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target ubuntu@119.29.32.204:/home/ubuntu/krad && ssh ubuntu@119.29.32.204 "sudo systemctl restart krad" && ssh ubuntu@119.29.32.204 "ln -s /home/ubuntu/krad/log.txt /var/www/html/log.txt" && ssh ubuntu@119.29.32.204 "ln -s /home/ubuntu/krad/game-log.txt /var/www/html/gamelog.txt"
   on:
     branch: dev
