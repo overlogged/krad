@@ -429,7 +429,7 @@
     var dynamicinvalidcard = [];
     var act;
     var san; //how many cards was chosen
-    var pedometer = 1; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
+    var pedometer = 0; //0 - anyother stage; 1 - prepare stage; 5-seencard stage; 2 - just before RPS stage; 3 - just after RPS stage; 4 - desert stage
     var slots;
     var statepad;
     var statepadtext_head;
@@ -526,8 +526,8 @@
       var j;
       var lookup_table = ['石头', '剪刀', ' 布', '跳过'];
       for (j = 0; j <= 3; j++) {
-        seencardslot[j] = card.add.button(100 + 150 * j, 80, 'seen', checkseencard, this, 0, 1, 1, 0);
-        seencardtext[j] = card.add.text(130 + 150 * j, 80, lookup_table[j]);
+        seencardslot[j] = card.add.button(100 + 150 * j, 130, 'seen', checkseencard, this, 0, 1, 1, 0);
+        seencardtext[j] = card.add.text(130 + 150 * j, 130, lookup_table[j]);
         seencardtext[j].fontSize = 20;
       }
       if (state == "must choose seen card") {
