@@ -190,7 +190,8 @@
       x: 525,
       y: 530
     }
-    ];
+      ];
+      var handcardmode = 0;
       var playerpad;
     var mp_union = [0, 0, 0, 0];
     var hp_union = [6, 6, 6, 6];
@@ -561,14 +562,14 @@
         var lookup_table = ['blank', 'paper', 'scissors', 'rock', 'move', 'shoot', 'skill'];
         j = 'handcard_' + lookup_table[cardlist[i]];
         if ((cardlist[i] == 0) && (howmany == 17)) howmany = i;
-        handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
-        if (staticinvalidcard[i]) handcardslot[i].setFrames(2, 2, 2, 2);
-        else handcardslot[i].setFrames(0, 0, 0, 0);
+          handcardslot[i].loadTexture(j, 1 + staticinvalidcard[i]);
+          if (staticinvalidcard[i]) handcardslot[i].setFrames(2 + handcardmode, 2 + handcardmode, 2 + handcardmode, 2 + handcardmode);
+          else handcardslot[i].setFrames(0 + handcardmode, 0 + handcardmode, 0 + handcardmode, 0 + handcardmode);
       }
       //alert(howmany);
       if (pedometer == 5) do_seencardslot();
-      for (i = howmany; i < hp; i++) handcardslot[i].setFrames(0, 0, 0, 0);
-      for (i = hp; i <= 17; i++)handcardslot[i].setFrames(2, 2, 2, 2);
+        for (i = howmany; i < hp; i++) handcardslot[i].setFrames(0 + handcardmode, 0 + handcardmode, 0 + handcardmode, 0 + handcardmode);
+        for (i = hp; i <= 17; i++)handcardslot[i].setFrames(2 + handcardmode, 2 + handcardmode, 2 + handcardmode, 2 + handcardmode);
     }
 
     function targetcard(button) {
@@ -577,7 +578,7 @@
       if (staticinvalidcard[num]); //is it a locked button?
       else if (cardtargeted[num]) { //a button is about to be untargeted
         cardtargeted[num] = 0;
-        button.setFrames(0, 0, 0, 0);
+          button.setFrames(0 + handcardmode, 0 + handcardmode, 0 + handcardmode, 0 + handcardmode);
         san--;
         if (pedometer == 2) if (san == 0) checkcardlock(checkbutton);
         if (san == 0) dynamicunlock(num);
@@ -588,7 +589,7 @@
       }
       else { //a button is about to be targeted
         cardtargeted[num] = 1;
-        button.setFrames(1, 1, 1, 1);
+          button.setFrames(1 + handcardmode, 1 + handcardmode, 1 + handcardmode, 1 + handcardmode);
         san++;
         if (pedometer == 2) if (san) checkcardunlock(checkbutton);
         dynamiclock(num);
@@ -659,7 +660,7 @@
             if ((j != targeter) && (staticinvalidcard[j] != 1)) {
               staticinvalidcard[j] = 1;
               dynamicinvalidcard[j] = 1;
-              handcardslot[j].setFrames(2, 2, 2, 2);
+                handcardslot[j].setFrames(2 + handcardmode, 2 + handcardmode, 2 + handcardmode, 2 + handcardmode);
             }
           }
           break;
@@ -668,7 +669,7 @@
             if ((cardlist[j] != cardlist[targeter]) && (staticinvalidcard[j] != 1)) {
               staticinvalidcard[j] = 1;
               dynamicinvalidcard[j] = 1;
-              handcardslot[j].setFrames(2, 2, 2, 2);
+                handcardslot[j].setFrames(2 + handcardmode, 2 + handcardmode, 2 + handcardmode, 2 + handcardmode);
             }
           }
           break;
@@ -681,7 +682,7 @@
         if (dynamicinvalidcard[j] == 1) {
           staticinvalidcard[j] = 0;
           dynamicinvalidcard[j] = 0;
-          handcardslot[j].setFrames(0, 0, 0, 0);
+            handcardslot[j].setFrames(0 + handcardmode, 0 + handcardmode, 0 + handcardmode, 0 + handcardmode);
         }
       }
     }
@@ -1008,7 +1009,8 @@
           }
           if(i==myIndex)
           {
-            pointer[i] = game.add.sprite(player[i].body.x - 15, player[i].body.y - 62, 'pointer');
+              pointer[i] = game.add.sprite(player[i].body.x - 15, player[i].body.y - 62, 'pointer');
+              handcardmode = team_result[i] * 3;
           }
           else{
           pointer[i] = game.add.sprite(player[i].body.x - 15, player[i].body.y - 62, 'pointer' + (i).toString());
@@ -1167,7 +1169,8 @@
           }
           else {
             // statusbox.text += player_lookup[i] + ": 身份为战术小队\n";
-          }
+            }
+            if (i == myIndex) handcardmode = data.teamList[i] * 3;
         }
         team_result = data.teamList;
         checkcardunlock(checkbutton);
