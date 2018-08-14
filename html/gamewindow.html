@@ -215,7 +215,7 @@
 
     function loadedcheck() {
       if (loadingcomplete) {
-        setTimeout("{countdown(10);checkcardunlock(checkbutton);}", 5000);
+        setTimeout("{countdown(5);checkcardunlock(checkbutton);}", 2000);
       }
       else loadingcomplete = 1;
     }
@@ -1178,7 +1178,7 @@
         do_fillcardlist();
         pedometer = 4;
         refreshcard();
-        countdown(25);
+        countdown(20);
       }
       else if (state == "Game Over, human wins") {
         checkcardunlock(checkbutton);
